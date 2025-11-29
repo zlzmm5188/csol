@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <!-- APP适配 -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>财经快讯 - PROVIDENCE</title>
+    <link rel="icon" href="../favicon.ico" />
+    <link rel="stylesheet" href="styles.css?v=1763897782" />
+    <style>
+        /* 全局重置 - 移动端和APP适配 */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: pan-y;
+        }
+
+        /* 页面进入动画 - 流畅过渡 */
+        body {
+            opacity: 0;
+            animation: pageFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            will-change: opacity;
+        }
+
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 内容区域进入动画 */
+        #app {
+            opacity: 0;
+            animation: contentFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
+            will-change: opacity;
+        }
+
+        @keyframes contentFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 顶部栏 - 固定定位，参考 lawyer-team.html 和 projects.html 风格 */
+        .topbar {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 1000 !important;
+            padding: 14px 16px;
+            padding-top: calc(14px + env(safe-area-inset-top, 0));
+            padding-left: max(16px, env(safe-area-inset-left));
+            padding-right: max(16px, env(safe-area-inset-right));
+            background: rgba(10, 23, 35, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            /* 顶部栏进入动画 */
+            opacity: 0;
+            transform: translateY(-10px);
+            animation: topbarSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            will-change: opacity, transform;
+        }
+
+        @keyframes topbarSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .brand .back-btn {
+            width: 32px !important;
+            height: 32px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 8px !important;
+            background: rgba(232, 201, 145, 0.15) !important;
+            border: 1px solid rgba(232, 201, 145, 0.3) !important;
+            color: #e8c991 !important;
+            font-size: 20px !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.12) !important;
+        }
+
+        .back-btn:active {
+            transform: scale(0.95) !important;
+        }
+
+        .brand h1 {
+            display: inline-block;
+            margin: 0;
+            white-space: nowrap;
+            flex-shrink: 1;
+            font-size: 18px;
+            letter-spacing: 0.3px;
+            color: var(--gold2, #c7b58a);
+            font-weight: 600;
+        }
+
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: rgba(199, 181, 138, 0.8);
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .live-dot-small {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #25d0a6;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.2);
+            }
+        }
+
+        /* 内容区域 - 添加顶部 padding 避免被固定顶部栏遮挡 */
+        .content-other {
+            padding-top: calc(60px + env(safe-area-inset-top, 0) + 20px);
+            padding-left: max(16px, env(safe-area-inset-left));
+            padding-right: max(16px, env(safe-area-inset-right));
+            padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
+        }
+
+        /* 快讯卡片进入动画 */
+        .flash-item {
+            opacity: 0;
+            transform: translateY(20px) translateZ(0);
+            animation: cardFadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            will-change: opacity, transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        @keyframes cardFadeInUp {
+            to {
+            opacity: 1;
+                transform: translateY(0) translateZ(0);
+            }
+        }
+
+        /* 快讯卡片延迟动画 - 交错效果 */
+        .flash-item:nth-child(1) { animation-delay: 0.05s; }
+        .flash-item:nth-child(2) { animation-delay: 0.1s; }
+        .flash-item:nth-child(3) { animation-delay: 0.15s; }
+        .flash-item:nth-child(4) { animation-delay: 0.2s; }
+        .flash-item:nth-child(5) { animation-delay: 0.25s; }
+        .flash-item:nth-child(6) { animation-delay: 0.3s; }
+        .flash-item:nth-child(7) { animation-delay: 0.35s; }
+        .flash-item:nth-child(n+8) { animation-delay: 0.4s; }
+
+        /* 筛选标签进入动画 */
+        .news-filter-tabs {
+            opacity: 0;
+            transform: translateY(20px) translateZ(0);
+            animation: cardFadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+            will-change: opacity, transform;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        /* 筛选按钮优化 */
+        .news-filter-btn {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transform: translateZ(0);
+            will-change: transform;
+        }
+
+        .news-filter-btn:active {
+            transform: scale(0.95) translateZ(0);
+        }
+
+        /* 快讯列表优化 */
+        .news-flash-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* 快讯卡片优化 */
+        .flash-item {
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .flash-item:hover {
+            transform: translateY(-2px) translateZ(0);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border-color: rgba(212, 175, 55, 0.2);
+        }
+
+        .flash-item:active {
+            transform: scale(0.98) translateZ(0);
+        }
+
+        /* 高亮卡片特殊样式 */
+        .flash-item.flash-highlight {
+            border-left: 4px solid #d4af37;
+            background: linear-gradient(135deg, #fff 0%, #fffef8 100%);
+        }
+
+        /* 加载容器优化 */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            opacity: 0;
+            animation: cardFadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+        }
+
+        /* 加载更多按钮优化 */
+        .load-more-wrap {
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+            margin-top: 12px;
+        }
+
+        .load-more-btn {
+            padding: 12px 32px;
+            border-radius: 24px;
+            border: 1px solid #d4af37;
+            background: linear-gradient(135deg, #d4af37, #c9a732);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transform: translateZ(0);
+            will-change: transform;
+            box-shadow: 0 2px 8px rgba(212, 175, 55, 0.25);
+        }
+
+        .load-more-btn:hover {
+            transform: translateY(-2px) translateZ(0);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.35);
+        }
+
+        .load-more-btn:active {
+            transform: scale(0.95) translateZ(0);
+        }
+
+        /* 确保所有section对齐整齐 */
+        .news-filter-tabs,
+        .news-flash-list,
+        .load-more-wrap {
+            width: 100%;
+            box-sizing: border-box;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 快讯卡片内容对齐优化 */
+        .flash-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .flash-title {
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .flash-desc {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .flash-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+
+        /* 移动端和APP优化 */
+        @media screen and (max-width: 480px) {
+            .content-other {
+                padding: 12px;
+                padding-top: calc(12px + 60px + env(safe-area-inset-top, 0));
+            }
+
+            .brand h1 {
+                font-size: 16px;
+            }
+
+            .live-status {
+                font-size: 10px;
+            }
+
+            .news-filter-tabs {
+                padding: 10px 12px;
+                margin-bottom: 12px;
+            }
+
+            .news-filter-btn {
+                padding: 6px 14px;
+                font-size: 12px;
+            }
+
+            .flash-item {
+                padding: 12px;
+                margin-bottom: 10px;
+            }
+
+            .flash-time {
+                min-width: 38px;
+                font-size: 11px;
+            }
+
+            .flash-title {
+                font-size: 14px;
+            }
+
+            .flash-desc {
+                font-size: 13px;
+            }
+
+            .flash-tags {
+                gap: 4px;
+            }
+
+            .tag {
+                padding: 3px 8px;
+                font-size: 11px;
+            }
+
+            .load-more-btn {
+                padding: 10px 24px;
+                font-size: 13px;
+            }
+        }
+
+        /* 小屏幕设备优化 */
+        @media screen and (max-width: 360px) {
+            .brand h1 {
+                font-size: 15px;
+            }
+
+            .live-status {
+                display: none; /* 小屏幕隐藏实时状态 */
+            }
+
+            .news-filter-tabs {
+                padding: 8px 10px;
+            }
+
+            .news-filter-btn {
+                padding: 5px 12px;
+                font-size: 11px;
+            }
+        }
+
+        /* APP端优化 - 安全区域适配 */
+        @supports (padding: max(0px)) {
+            .content-other {
+                padding-left: max(16px, env(safe-area-inset-left));
+                padding-right: max(16px, env(safe-area-inset-right));
+            }
+        }
+    </style>
+</head>
+
+<body class="page-news-flash">
+    <div id="app">
+        <!-- 固定顶部栏 - 参考 lawyer-team.html 和 projects.html 风格 -->
+        <div class="topbar">
+                <div class="brand">
+                <a href="javascript:void(0);" onclick="history.back(); return false;" class="back-btn">‹</a>
+                <h1>财经快讯</h1>
+                    <span class="live-status">
+                        <span class="live-dot-small"></span>
+                        实时更新中...
+                    </span>
+                </div>
+            </div>
+
+        <!-- 主要内容区 -->
+        <main class="content-other">
+            <!-- 分类筛选标签 -->
+            <section class="news-filter-tabs">
+                <button class="news-filter-btn active" data-category="all">全部</button>
+                <button class="news-filter-btn" data-category="forex">外汇</button>
+                <button class="news-filter-btn" data-category="stock">股票</button>
+                <button class="news-filter-btn" data-category="commodity">商品</button>
+                <button class="news-filter-btn" data-category="crypto">加密</button>
+            </section>
+
+            <!-- 快讯列表 -->
+            <section class="news-flash-list" id="newsFlashList">
+                <!-- 快讯内容将从API加载 -->
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">加载中...</div>
+                </div>
+
+                <!-- 🔥 投资案例新闻 1 - TVB -->
+                <div class="flash-item flash-highlight">
+                    <div class="flash-time">2011-12</div>
+                    <div class="flash-content">
+                        <div class="flash-title">🏆 Providence完成香港TVB重大战略投资</div>
+                        <div class="flash-desc">Providence Equity
+                            Partners携手王雪红财团、陈国强，以每股55港元成功收购香港电视广播有限公司（TVB）26%股权，总交易额达62.6亿港元。此次投资标志着Providence在亚洲传媒领域的战略性布局，为TVB带来国际化运营经验和资本支持，助力其数字化转型和内容升级。这一里程碑式交易展现了Providence对优质传媒资产的精准洞察力和长期投资价值。
+                        </div>
+                        <div class="flash-tags">
+                            <span class="tag important">重大投资</span>
+                            <span class="tag">传媒</span>
+                            <span class="tag">香港</span>
+                            <span class="tag">62.6亿</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🔥 投资案例新闻 2 - 爱奇艺 -->
+                <div class="flash-item flash-highlight">
+                    <div class="flash-time">2013-05</div>
+                    <div class="flash-content">
+                        <div class="flash-title">🚀 Providence投资中国领先视频平台爱奇艺</div>
+                        <div class="flash-desc">Providence Equity
+                            Partners战略投资百度旗下网络视频公司爱奇艺，成为其重要股东之一。爱奇艺作为中国最大的在线视频平台之一，月活跃用户数亿计，Providence的加入为其带来丰富的媒体行业资源和国际化运营经验。此次投资彰显了Providence对中国互联网视频行业高速成长的前瞻性判断，以及对优质内容平台长期价值的坚定信心。
+                        </div>
+                        <div class="flash-tags">
+                            <span class="tag important">战略投资</span>
+                            <span class="tag">互联网</span>
+                            <span class="tag">视频平台</span>
+                            <span class="tag">爱奇艺</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🔥 投资案例新闻 3 - 新和盛 -->
+                <div class="flash-item flash-highlight">
+                    <div class="flash-time">2022-08</div>
+                    <div class="flash-content">
+                        <div class="flash-title">💎 Providence领投新和盛农牧B轮数千万融资</div>
+                        <div class="flash-desc">Providence Equity
+                            Partners成功领投肉鸡养殖加工熟食综合农业公司新和盛农牧数千万人民币B轮融资。新和盛农牧是中国领先的肉鸡全产业链企业，Providence的投资将助力其扩大养殖规模、升级加工设施、强化食品安全管理体系。此次投资体现了Providence对中国农业现代化和食品产业升级的深刻洞察，以及对高成长性农业企业的专业判断力。
+                        </div>
+                        <div class="flash-tags">
+                            <span class="tag important">B轮融资</span>
+                            <span class="tag">农业</span>
+                            <span class="tag">食品</span>
+                            <span class="tag">新和盛</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快讯项目 2 -->
+                <div class="flash-item">
+                    <div class="flash-time">14:58</div>
+                    <div class="flash-content">
+                        <div class="flash-title">沪深两市成交额突破1.2万亿元</div>
+                        <div class="flash-desc">创近3个月新高，市场情绪回暖明显</div>
+                        <div class="flash-tags">
+                            <span class="tag important">重要</span>
+                            <span class="tag">股市</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快讯项目 3 -->
+                <div class="flash-item">
+                    <div class="flash-time">14:15</div>
+                    <div class="flash-content">
+                        <div class="flash-title">美联储主席鲍威尔讲话</div>
+                        <div class="flash-desc">将继续关注通胀数据，保持货币政策灵活性</div>
+                        <div class="flash-tags">
+                            <span class="tag">美联储</span>
+                            <span class="tag">外汇</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快讯项目 4 -->
+                <div class="flash-item">
+                    <div class="flash-time">13:42</div>
+                    <div class="flash-content">
+                        <div class="flash-title">国际油价大涨3.2%</div>
+                        <div class="flash-desc">布伦特原油突破85美元/桶，供应担忧推动价格上涨</div>
+                        <div class="flash-tags">
+                            <span class="tag">商品</span>
+                            <span class="tag">原油</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快讯项目 5 -->
+                <div class="flash-item">
+                    <div class="flash-time">13:08</div>
+                    <div class="flash-content">
+                        <div class="flash-title">科技板块领涨</div>
+                        <div class="flash-desc">人工智能概念股集体走强，多只个股涨停</div>
+                        <div class="flash-tags">
+                            <span class="tag">科技股</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快讯项目 6 -->
+                <div class="flash-item">
+                    <div class="flash-time">12:35</div>
+                    <div class="flash-content">
+                        <div class="flash-title">黄金价格突破4300美元/盎司</div>
+                        <div class="flash-desc">避险情绪升温，贵金属持续走强</div>
+                        <div class="flash-tags">
+                            <span class="tag">黄金</span>
+                            <span class="tag">商品</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快讯项目 7 -->
+                <div class="flash-item">
+                    <div class="flash-time">12:02</div>
+                    <div class="flash-content">
+                        <div class="flash-title">比特币突破108000美元</div>
+                        <div class="flash-desc">加密货币市场整体上涨，市场情绪乐观</div>
+                        <div class="flash-tags">
+                            <span class="tag">加密货币</span>
+                            <span class="tag">BTC</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 加载更多按钮 -->
+            <div class="load-more-wrap">
+                <button class="load-more-btn" id="loadMoreNews">加载更多</button>
+            </div>
+        </main>
+
+        <!-- 底部导航栏 -->
+        <!-- 底部导航已移除 -->
+    </div>
+    <script src="news-flash.js?v=1763897782"></script>
+    <script>
+        // 优化页面进入流畅度
+        document.addEventListener('DOMContentLoaded', function() {
+            // 预加载关键资源
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(() => {
+                    // 预加载字体和关键资源
+                    const link = document.createElement('link');
+                    link.rel = 'preload';
+                    link.as = 'style';
+                    link.href = 'styles.css';
+                    document.head.appendChild(link);
+                });
+            }
+
+            // 优化滚动性能
+            if ('scrollBehavior' in document.documentElement.style) {
+                document.documentElement.style.scrollBehavior = 'smooth';
+            }
+
+            // 为快讯卡片添加进入动画（如果动态加载）
+            const observer = new MutationObserver(function () {
+                const items = document.querySelectorAll('.flash-item:not([data-animated])');
+                if (items && items.length > 0) {
+                    items.forEach((item, index) => {
+                        item.setAttribute('data-animated', 'true');
+                        item.style.opacity = '0';
+                        item.style.transform = 'translateY(20px)';
+                        item.style.animation = `cardFadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${0.1 + index * 0.05}s forwards`;
+                    });
+                }
+            });
+
+            const flashList = document.getElementById('newsFlashList');
+            if (flashList) {
+                observer.observe(flashList, {
+                    childList: true,
+                    subtree: true
+                });
+            }
+
+            // 隐藏加载容器（如果已有内容）
+            const loadingContainer = document.querySelector('.loading-container');
+            const existingItems = document.querySelectorAll('.flash-item');
+            if (loadingContainer && existingItems.length > 0) {
+                setTimeout(() => {
+                    loadingContainer.style.display = 'none';
+                }, 500);
+            }
+
+            // 优化筛选按钮点击效果
+            const filterButtons = document.querySelectorAll('.news-filter-btn');
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 移除所有active类
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    // 添加active类到当前按钮
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script src="smart-swipe-control.js?v=1763897782"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>图片上传工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-
+
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+
+        }
+
+        .subtitle {
+            color: #666;
+
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px;
+
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9ff;
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f2ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #e8ebff;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .upload-hint {
+            color: #999;
+            font-size: 12px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .preview {
+            margin-top: 20px;
+
+        }
+
+        .preview img {
+            max-
+            max-height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .result.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .result-url {
+            margin-top: 10px;
+            word-break: break-all;
+            font-size: 12px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .loading {
+            display: none;
+
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+
+            height: 40px;
+            animation: spin 1s linear infinite;
+
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+          .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📸 图片上传</h1>
+        <p class="subtitle">上传到 /providence/img 目录</p>
+
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">点击或拖拽图片到这里</div>
+            <div class="upload-hint">支持 JPG、PNG、GIF、WEBP，最大 5MB</div>
+        </div>
+
+        <input type="file" id="fileInput" accept="image/*" />
+
+        <button class="btn" id="uploadBtn" disabled>上传图片</button>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #666;">上传中...</p>
+        </div>
+
+        <div class="preview" id="preview"></div>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const preview = document.getElementById('preview');
+        const result = document.getElementById('result');
+        const loading = document.getElementById('loading');
+
+        let selectedFile = null;
+
+        // 点击上传区域
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // 文件选择
+        fileInput.addEventListener('change', (e) => {
+            handleFile(e.target.files[0]);
+        });
+
+        // 拖拽上传
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFile(e.dataTransfer.files[0]);
+        });
+
+        // 处理文件
+        function handleFile(file) {
+            if (!file) return;
+
+            // 验证文件类型
+            if (!file.type.startsWith('image/')) {
+                showResult('错误：请选择图片文件', false);
+                return;
+            }
+
+            // 验证文件大小
+            if (file.size > 5 * 1024 * 1024) {
+                showResult('错误：文件大小不能超过5MB', false);
+                return;
+            }
+
+            selectedFile = file;
+            uploadBtn.disabled = false;
+            result.style.display = 'none';
+
+            // 显示预览
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                preview.innerHTML = `<img src="${e.target.result}" alt="预览" />`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 上传按钮
+        uploadBtn.addEventListener('click', async () => {
+            if (!selectedFile) return;
+
+            uploadBtn.disabled = true;
+            loading.style.display = 'block';
+            result.style.display = 'none';
+
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+
+            try {
+                const response = await fetch('upload-image.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showResult(`✅ ${data.msg}\n文件路径：${data.path}`, true, data.url);
+                } else {
+                    showResult(`❌ ${data.msg}`, false);
+                }
+            } catch (error) {
+                showResult(`❌ 上传失败：${error.message}`, false);
+            } finally {
+                loading.style.display = 'none';
+                uploadBtn.disabled = false;
+            }
+        });
+
+        // 显示结果
+        function showResult(message, isSuccess, url = null) {
+            result.className = `result ${isSuccess ? 'success' : 'error'}`;
+            result.innerHTML = message;
+            if (url) {
+                result.innerHTML += `<div class="result-url">访问地址：<a href="${url}" target="_blank">${url}</a></div>`;
+            }
+            result.style.display = 'block';
+        }
+    </script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script src="smart-swipe-control.js?v=1763813622"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>测试 - 启动图检查</title>
+    <style>
+        body { margin: 0; padding: 20px; font-family: sans-serif; }
+        .test-box { border: 2px solid #3b82f6; padding: 20px; margin: 10px 0; }
+        img { max-width: 200px; }
+    </style>
+</head>
+<body>
+    <h1>启动图测试页面</h1>
+    
+    <div class="test-box">
+        <h2>Logo图片测试</h2>
+        <p>Logo文件路径: /logo.png</p>
+        <img src="/logo.png" alt="Logo" />
+    </div>
+    
+    <div class="test-box">
+        <h2>主应用链接</h2>
+        <p><a href="/" style="color: #3b82f6; font-size: 18px;">点击这里访问主应用</a></p>
+    </div>
+    
+    <div class="test-box">
+        <h2>设备信息</h2>
+        <p>User Agent: <span id="ua"></span></p>
+        <p>屏幕宽度: <span id="width"></span>px</p>
+        <p>屏幕高度: <span id="height"></span>px</p>
+        <p>设备像素比: <span id="dpr"></span></p>
+        <p>触摸支持: <span id="touch"></span></p>
+    </div>
+    
+    <script>
+        document.getElementById('ua').textContent = navigator.userAgent;
+        document.getElementById('width').textContent = window.screen.width;
+        document.getElementById('height').textContent = window.screen.height;
+        document.getElementById('dpr').textContent = window.devicePixelRatio;
+        document.getElementById('touch').textContent = ('ontouchstart' in window) ? '是' : '否';
+    </script>
+</body>
+</html>

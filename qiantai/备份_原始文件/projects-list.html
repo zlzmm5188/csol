@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+<title>PROVIDENCE · 固收优选系列</title>
+<style>
+/* 充值页面配色方案 */
+:root{
+  --bg-dark: #0a1020;
+  --bg-card-blue: #1c2f4d;
+  --bg-card-blue-end: #102135;
+  --gold-light: #f8e7c1;
+  --gold-normal: #e8c991;
+  --gold-deep: #d6b97a;
+  --text-main: #f2f5ff;
+  --text-sub: #9da9be;
+  --text-dark: #2f3847;
+  --white-card: #faf8f4;
+  --lineD: rgba(255,255,255,.08);
+}
+
+*{box-sizing:border-box}
+
+html,body{height:100%
+  padding-top: 60px;}
+
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC",sans-serif;
+  color:var(--text-main);
+  background: transparent;    radial-gradient(900px 420px at 120% -10%, rgba(28, 47, 77, 0.3), transparent 60%),
+    linear-gradient(180deg, #0d1624 0%, var(--bg-dark) 100%);
+  padding-bottom:40px;
+}
+
+/* 顶部栏 */
+.topbar{
+  position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important;top:0;z-index:40;padding:14px 16px;
+  background:linear-gradient(180deg,rgba(10,16,32,0.95),rgba(10,16,32,0.75));
+  backdrop-filter:blur(6px);border-bottom:1px solid var(--lineD);
+}
+
+.brand {
+  display:flex;align-items:center;gap:10px;
+}
+
+.back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+
+.back-btn:hover {background:rgba(255,255,255,.12)}
+
+.back-btn:active {transform:scale(0.95)}
+
+.logo{
+  height:26px;width:26px;border-radius:8px;
+  background:url('img/logo.png') center/contain no-repeat;
+  flex-shrink:0;
+}
+
+.page-title {
+  margin:0;font-size:18px;font-weight:600;color:var(--gold-normal);letter-spacing:0.3px;
+}
+
+.badge{
+  margin-left:auto;font-size:11px;padding:6px 10px;border-radius:999px;
+  border:1px solid rgba(232,201,145,.4);background:rgba(232,201,145,.15);
+  color:var(--gold-normal);flex-shrink:0;
+}
+
+/* Hero 区域 - 蓝色渐变卡片 */
+.hero{padding:20px 16px 18px;border-bottom:1px solid var(--lineD)}
+
+.hero-card {
+  background:linear-gradient(145deg, var(--bg-card-blue), var(--bg-card-blue-end));
+  border-radius:16px;padding:16px;margin-bottom:12px;
+  border:1px solid rgba(28, 47, 77, 0.5);
+  box-shadow:0 8px 32px rgba(0,0,0,0.3), 0 2px 8px rgba(28, 47, 77, 0.4);
+  transition:all 0.3s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-normal), transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.hero-card:hover {
+  transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(0,0,0,0.4), 0 4px 12px rgba(28, 47, 77, 0.6);
+  border-color:rgba(232,201,145,0.3);
+}
+
+.hero-header {
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;
+}
+
+.hero-title{
+  margin:0;font-size:18px;font-weight:600;
+  background:linear-gradient(90deg, var(--gold-normal), var(--gold-light));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.hero-desc {
+  line-height:1.6;color:var(--text-sub);font-size:13px;margin:0 0 12px;
+}
+
+.hero-stats {
+  background:rgba(10,16,32,0.6);border-radius:10px;padding:12px;
+  border:1px solid rgba(232,201,145,0.15);
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+
+.stat-label {font-size:11px;color:var(--text-sub);margin-bottom:4px}
+
+.stat-value {
+  font-size:16px;font-weight:700;
+  font-family:'Courier New',monospace;
+  background:linear-gradient(90deg, var(--gold-normal), var(--gold-light));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  text-shadow:0 0 8px rgba(232,201,145,0.3);
+}
+
+.stat-value.white {color:var(--text-main);-webkit-text-fill-color:var(--text-main);text-shadow:none}
+
+/* 筛选条 */
+.filters{
+  position:sticky;top:60px;z-index:35;padding:10px 16px;
+  background:linear-gradient(180deg,rgba(10,16,32,0.92),rgba(10,16,32,0.72));
+  border-bottom:1px solid var(--lineD);backdrop-filter:blur(6px);
+}
+
+.row{display:flex;gap:8px;flex-wrap:wrap}
+
+.chip{
+  font-size:12px;padding:8px 12px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--lineD);color:var(--text-sub);
+  background:rgba(255,255,255,.06);
+  transition:all 0.2s ease;
+}
+
+.chip:hover {border-color:rgba(232,201,145,0.3);background:rgba(255,255,255,.08)}
+
+.chip.active{
+  color:var(--text-dark);
+  border-color:var(--gold-normal);
+  background:linear-gradient(90deg, var(--gold-normal), var(--gold-light));
+  box-shadow:0 2px 8px rgba(232,201,145,0.4);
+  font-weight:600;
+}
+
+/* 列表容器 - 2列网格 */
+.list{
+  padding:12px 16px;
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:12px;
+}
+
+@media (max-width: 480px) {
+  .list {grid-template-columns:1fr}
+}
+
+/* 项目卡片 - 白色卡片 */
+.card {
+  background:var(--white-card);
+  color:var(--text-dark);
+  border:1px solid #ebe6df;
+  border-radius:16px;
+  padding:16px;
+  cursor:pointer;
+  transition:all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 8px 18px rgba(0,0,0,0.15);
+  display:flex;
+  flex-direction:column;
+}
+
+.card:hover {
+  transform:translateY(-4px);
+  box-shadow:0 12px 28px rgba(0,0,0,0.25);
+  border-color:#d6c9b5;
+}
+
+.card:active {
+  transform:translateY(-2px) scale(0.98);
+}
+
+/* 卡片标题 */
+.card-header {
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:8px;gap:8px;
+}
+
+.card-title {
+  margin:0;font-size:16px;font-weight:600;
+  color:var(--text-dark);
+  line-height:1.4;flex:1;min-width:0;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;text-overflow:ellipsis;
+}
+
+.card-tag {
+  background:rgba(232,201,145,0.2);
+  border:1px solid rgba(232,201,145,0.4);
+  color:var(--gold-deep);
+  padding:3px 8px;border-radius:8px;font-size:10px;font-weight:600;
+  white-space:nowrap;flex-shrink:0;
+}
+
+.card-tag.vip {
+  background:linear-gradient(90deg, var(--gold-normal), var(--gold-light));
+  color:var(--text-dark);border-color:var(--gold-deep);
+  box-shadow:0 2px 6px rgba(232,201,145,0.3);
+}
+
+/* 卡片分类 */
+.card-cat {
+  font-size:12px;color:#7b8495;margin-bottom:12px;
+}
+
+/* 卡片指标 */
+.card-stats {
+  display:flex;flex-direction:column;gap:8px;margin-bottom:12px;flex:1;
+}
+
+.card-stat {
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:13px;
+}
+
+.card-stat-label {color:#7b8495}
+
+.card-stat-value {
+  color:var(--gold-deep);font-weight:600;font-family:'Courier New',monospace;
+}
+
+.card-stat-value.big {
+  font-size:20px;font-weight:700;
+  background:linear-gradient(90deg, var(--gold-normal), var(--gold-deep));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* 卡片按钮 */
+.card-btn {
+  width:100%;padding:10px;border-radius:10px;border:none;
+  background:linear-gradient(90deg, var(--gold-normal), var(--gold-light));
+  color:var(--text-dark);font-size:13px;font-weight:600;cursor:pointer;
+  transition:all 0.3s ease;margin-top:auto;
+  box-shadow:0 2px 8px rgba(232,201,145,0.3);
+}
+
+.card-btn:hover {
+  transform:translateY(-2px);
+  box-shadow:0 6px 16px rgba(232,201,145,0.5);
+  filter:brightness(1.1);
+}
+
+.card-btn:active {transform:scale(0.98)}
+
+/* 加载状态 */
+.loading-state {
+  grid-column:1 / -1;text-align:center;padding:40px 20px;color:var(--text-sub);
+}
+
+.spinner {
+  width:32px;height:32px;
+  border:3px solid rgba(232,201,145,0.2);
+  border-top-color:var(--gold-normal);border-radius:50%;
+  animation:spin 0.8s linear infinite;margin:0 auto 12px;
+}
+
+@keyframes spin {to {transform:rotate(360deg)}}
+
+.loadmore{
+  grid-column:1 / -1;
+  margin:16px auto;padding:10px 14px;border-radius:12px;
+  border:1px solid var(--lineD);background:rgba(255,255,255,.06);
+  color:var(--text-main);font-size:13px;cursor:pointer;transition:all 0.2s ease;
+}
+
+.loadmore:hover {background:rgba(255,255,255,.08);border-color:rgba(232,201,145,0.3)}
+
+</style>
+</head>
+<body>
+
+<!-- 顶部 -->
+<div class="topbar">
+  <div class="brand">
+    <a href="javascript:history.back()" class="back-btn">←</a>
+    <div class="logo"></div>
+    <h1 class="page-title">固收优选系列</h1>
+    <div class="badge">PROVIDENCE</div>
+  </div>
+</div>
+
+<!-- Hero - 蓝色卡片 -->
+<section class="hero">
+  <div class="hero-card">
+    <div class="hero-header">
+      <h2 class="hero-title">固收优选系列</h2>
+    </div>
+    <p class="hero-desc">以固收为核心，辅以可转债、基金与精选 IPO 配售，追求长期稳健复利。</p>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-label">目前募集资金</div>
+        <div class="stat-value" id="totalAmount">¥97,538,437</div>
+      </div>
+      <div style="text-align:right">
+        <div class="stat-label">当前参与人数</div>
+        <div class="stat-value white" id="participantCount">1,234</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 筛选 -->
+<div class="filters">
+  <div class="row">
+    <div class="chip active" data-chip="all">全部</div>
+    <div class="chip" data-chip="ipo">IPO配售</div>
+    <div class="chip" data-chip="bond">债券</div>
+    <div class="chip" data-chip="newbie">新手</div>
+    <div class="chip" data-chip="vip">VIP</div>
+  </div>
+</div>
+
+<!-- 列表 - 白色卡片 -->
+<section class="list" id="list">
+  <div id="loading" class="loading-state">
+    <div class="spinner"></div>
+    <div>加载中...</div>
+  </div>
+  <button class="loadmore" id="more" style="display:none">加载更多</button>
+</section>
+
+<script src="api-new.js?v=1763813622"></script>
+<script>
+function waitForAPI() {
+    return new Promise((resolve) => {
+        if (window.API && window.API_CONFIG) {resolve();return}
+        let attempts = 0;
+        const check = setInterval(() => {
+            if (window.API && window.API_CONFIG || attempts++ > 6) {
+                clearInterval(check);resolve();
+            }
+        }, 50);
+    });
+}
+
+let projectData = {projects: []};
+const chips = document.querySelectorAll('.chip');
+const list = document.getElementById('list');
+const loading = document.getElementById('loading');
+
+function applyFilter(){
+  const active = document.querySelector('.chip.active')?.dataset.chip || 'all';
+  [...list.querySelectorAll('.card')].forEach(card=>{
+    const type = card.dataset.type;
+    const isVip = card.dataset.vip === 'true';
+    const title = card.innerText.toLowerCase();
+    let show = true;
+    if(active==='ipo') show = type==='ipo';
+    if(active==='bond') show = type==='bond';
+    if(active==='newbie') show = title.includes('新手');
+    if(active==='vip') show = isVip;
+    card.style.display = show ? '' : 'none';
+  });
+}
+
+chips.forEach(c=>c.addEventListener('click',()=>{
+  chips.forEach(x=>x.classList.remove('active'));
+  c.classList.add('active'); applyFilter();
+}));
+
+async function loadProjects() {
+    try {
+        await waitForAPI();
+
+        const API_BASE = window.API_CONFIG?.baseURL || "https://api.4kp3l0iq.top/api;
+        const token = localStorage.getItem('providence_token') || localStorage.getItem('token') || '';
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+        try {
+            let data = null;
+
+            // 优先使用统一API封装（如果存在）
+            if (window.ApiService && window.ApiService.project && window.ApiService.project.getList) {
+                try {
+                    const result = await Promise.race([
+                        window.ApiService.project.getList(),
+                        new Promise((_, reject) => setTimeout(() => reject(new Error('超时')), 8000))
+                    ]);
+                    if (result && result.code === 1 && result.data) {
+                        data = result;
+                    }
+                } catch (e) {
+                    console.warn('[Projects] ApiService调用失败:', e);
+                }
+            }
+
+            // 降级方案：直接调用API
+            if (!data) {
+                const url = `${API_BASE}/fund/api/project/all`;
+                console.log('[Projects] 请求项目列表:', url);
+
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        "token": token
+                    },
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const text = await response.text();
+                try {
+                    data = JSON.parse(text);
+                    console.log('[Projects] API响应:', data);
+                } catch (parseError) {
+                    console.error('[Projects] JSON解析失败:', text.substring(0, 100));
+                    throw new Error('服务器返回格式错误');
+                }
+            }
+
+            // 处理响应数据
+            let projectList = null;
+            if (data && data.code === 1 && data.data) {
+                // 标准格式：{ code: 1, data: { list: [...] } }
+                projectList = data.data.list || (Array.isArray(data.data) ? data.data : null);
+            } else if (data && Array.isArray(data)) {
+                // 直接数组格式
+                projectList = data;
+            } else if (data && data.code === 1 && Array.isArray(data.data)) {
+                // 另一种格式：{ code: 1, data: [...] }
+                projectList = data.data;
+            }
+
+            if (projectList && projectList.length > 0) {
+                projectData.projects = projectList.map(p => ({
+                    id: p.id,
+                    title: p.name || p.title || "投资项目",
+                    rate: parseFloat(p.daily_rate || p.base_rate || p.rate || 0),
+                    vip_rate: parseFloat(p.added_rate || p.vip_rate || 0),
+                    day: parseInt(p.total_days || p.cycle_days || p.day || 0),
+                    min: parseFloat(p.min_invest || p.min || 0),
+                    max: parseFloat(p.max_invest || p.max || 0),
+                    vip: parseInt(p.vip_min || p.vip || 0),
+                    categoryName: p.category || p.categoryName || "固收优选",
+                    currency: p.currency || 'CNY',
+                    status: p.status || 1
+                }));
+                renderProjects();
+                loading.style.display = "none";
+            } else {
+                loading.innerHTML = '<div style="text-align:center;padding:40px;color:#8a95a6;">暂无项目</div>';
+            }
+        } catch (e) {
+            clearTimeout(timeoutId);
+            console.error('[Projects] 加载失败:', e);
+            loading.innerHTML = `<div style="text-align:center;padding:40px;color:#ff6b6b;">加载失败: ${e.message || '网络错误'}</div>`;
+        }
+    } catch (error) {
+        console.error('[Projects] 初始化失败:', error);
+        loading.innerHTML = `<div style="text-align:center;padding:40px;color:#ff6b6b;">加载失败: ${error.message || '未知错误'}</div>`;
+    }
+}
+
+function renderProjects() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isNewbieMode = urlParams.get('type') === 'newbie';
+
+    if (isNewbieMode) {
+        const titleEl = document.querySelector('.page-title');
+        const heroTitleEl = document.querySelector('.hero-title');
+        const heroDescEl = document.querySelector('.hero-desc');
+        if (titleEl) titleEl.textContent = '新人体验金';
+        if (heroTitleEl) heroTitleEl.textContent = '新人体验金专区';
+        if (heroDescEl) heroDescEl.textContent = '专为新手打造，低门槛高收益。';
+    }
+
+    list.querySelectorAll('.card').forEach(c => c.remove());
+
+    if (projectData.projects.length === 0) {
+        loading.innerHTML = '<div>暂无项目</div>';
+        loading.style.display = 'block';
+        return;
+    }
+
+    let projectsToShow = projectData.projects;
+    if (isNewbieMode) {
+        projectsToShow = projectData.projects.filter(p => {
+            const min = parseFloat(p.min || 0);
+            const day = parseInt(p.day || 0);
+            const rate = parseFloat(p.rate || 0);
+            return min <= 20000 && day >= 15 && day <= 90 && rate >= 7 && rate <= 12;
+        });
+
+        if (projectsToShow.length === 0) {
+            loading.innerHTML = '<div style="text-align:center;padding:40px">暂无新手项目</div>';
+            loading.style.display = 'block';
+            return;
+        }
+    }
+
+    projectsToShow.forEach(project => {
+        const card = createProjectCard(project);
+        list.insertBefore(card, document.getElementById('more'));
+    });
+}
+
+function createProjectCard(project) {
+    const rate = parseFloat(project.rate || 0);
+    const vipRate = parseFloat(project.vip_rate || 0);
+    const totalRate = rate + vipRate;
+    const day = parseInt(project.day || 0);
+    const min = parseFloat(project.min || 0);
+    const vipReq = parseInt(project.vip || 0);
+    const isVipOnly = vipReq > 0;
+
+    let type = 'bond';
+    const catName = (project.categoryName || '').toLowerCase();
+    const title = (project.title || '').toLowerCase();
+    if (catName.includes('ipo') || title.includes('ipo') || title.includes('配售')) type = 'ipo';
+
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.dataset.type = type;
+    card.dataset.vip = isVipOnly ? 'true' : 'false';
+
+    let cycleText = '灵活';
+    if (day > 0) {
+        if (day < 30) cycleText = `${day}天`;
+        else if (day < 365) cycleText = `${Math.floor(day/30)}个月`;
+        else cycleText = `${Math.floor(day/365)}年`;
+    }
+
+    const rateText = totalRate > 0 ? `${totalRate.toFixed(2)}%` : '—';
+
+    let tagHtml = '';
+    if (isVipOnly) {
+        tagHtml = `<span class="card-tag vip">VIP${vipReq}+</span>`;
+    } else if (type === 'ipo') {
+        tagHtml = '<span class="card-tag">IPO</span>';
+    }
+
+    card.innerHTML = `
+    <div class="card-header">
+      <h3 class="card-title">${project.title || '投资项目'}</h3>
+      ${tagHtml}
+    </div>
+    <div class="card-cat">${project.categoryName || '固收优选'}</div>
+    <div class="card-stats">
+      <div class="card-stat">
+        <span class="card-stat-label">年化收益</span>
+        <span class="card-stat-value big">${rateText}</span>
+      </div>
+      <div class="card-stat">
+        <span class="card-stat-label">投资周期</span>
+        <span class="card-stat-value">${cycleText}</span>
+      </div>
+      <div class="card-stat">
+        <span class="card-stat-label">起投金额</span>
+        <span class="card-stat-value">¥${min.toLocaleString('zh-CN')}</span>
+      </div>
+    </div>
+    <button class="card-btn" onclick="location.href='project-detail.html?id=${project.id}'">查看详情</button>
+    `;
+
+    return card;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadProjects();
+});
+</script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script src="smart-swipe-control.js?v=1763813622"></script>
+
+
+
+</body>
+</html>

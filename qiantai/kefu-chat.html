@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimum-scale=1,maximum-scale=1,viewport-fit=cover">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>在线客服</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+        body {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        #kefu-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        /* 修复iframe全屏 */
+        iframe {
+            width: 100% !important;
+            height: 100% !important;
+            border: none !important;
+        }
+        /* 隐藏可能的浮动按钮 */
+        .kefu-btn,
+        .kefu-float-btn,
+        [class*="float"] {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="kefu-container"></div>
+
+    <script type="text/javascript">
+        // 客服弹框初始化
+        (function(a, b, c, d) {
+            let h = b.getElementsByTagName('head')[0];
+            let s = b.createElement('script');
+            let host = "https://114.67.83.197:41927";
+
+            s.type = 'text/javascript';
+            s.src = host + "/static/js/kefu-front.js";
+            s.onload = s.onreadystatechange = function () {
+                if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete") {
+                    d(host);
+                }
+            };
+            h.appendChild(s);
+        })(window, document, "", function(u) {
+            var config = {
+                KEFU_URL: u,
+                KEFU_KEFU_ID: "MzY",
+                KEFU_AUTO_OPEN: true,
+                KEFU_SHOW_TYPES: 1,
+                KEFU_WITHOUT_BOX: true,
+                WINDOWS_LOCATION: false,
+                WINDOWS_OPEN: false,
+            };
+            
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split("=");
+                    if (pair[0] == variable) {
+                        var value = vars[i].substring(variable.length + 1);
+                        return decodeURIComponent(value);
+                    }
+                }
+                return "";
+            }
+            
+            var visitorId = getQueryVariable("id");
+            if (visitorId) config.VISITOR_ID = visitorId;
+            
+            var visitorName = getQueryVariable("name");
+            if (visitorName) config.VISITOR_NAME = visitorName;
+            
+            var visitorAvatar = getQueryVariable("visitor_avatar");
+            if (visitorAvatar) config.VISITOR_AVATAR = visitorAvatar;
+            
+            var visitorExtra = getQueryVariable("visitor_extra");
+            if (visitorExtra) config.VISITOR_EXTRA = visitorExtra;
+
+            function decryptVisitorData(encryptedStr) {
+                try {
+                    var urlDecodedStr = decodeURIComponent(encryptedStr);
+                    
+                    if (urlDecodedStr.startsWith('NE_')) {
+                        var unreversed = urlDecodedStr.split('').reverse().join('');
+                        if (unreversed.startsWith('YK_') && unreversed.endsWith('_EN')) {
+                            var content = unreversed.substring(3, unreversed.length - 3);
+                            var decoded = atob(content);
+                            var xorKey = "kefu2025";
+                            var decrypted = '';
+                            for (var i = 0; i < decoded.length; i++) {
+                                decrypted += String.fromCharCode(decoded.charCodeAt(i) ^ xorKey.charCodeAt(i % xorKey.length));
+                            }
+                            return parseKeyValuePairs(decrypted);
+                        }
+                    }
+                    
+                    if (urlDecodedStr.startsWith('YK_') && urlDecodedStr.endsWith('_EN')) {
+                        var content = urlDecodedStr.substring(3, urlDecodedStr.length - 3);
+                        var decoded = atob(content);
+                        var xorKey = "kefu2025";
+                        var decrypted = '';
+                        for (var i = 0; i < decoded.length; i++) {
+                            decrypted += String.fromCharCode(decoded.charCodeAt(i) ^ xorKey.charCodeAt(i % xorKey.length));
+                        }
+                        return parseKeyValuePairs(decrypted);
+                    }
+                    
+                    return null;
+                } catch (e) {
+                    console.error("解密失败:", e);
+                    return null;
+                }
+            }
+
+            function parseKeyValuePairs(str) {
+                var result = {};
+                var pairs = str.split('&');
+                for (var j = 0; j < pairs.length; j++) {
+                    var kv = pairs[j].split('=');
+                    if (kv.length >= 2) {
+                        result[kv[0]] = decodeURIComponent(kv.slice(1).join('='));
+                    }
+                }
+                return result;
+            }
+
+            var visitorDataEncrypted = getQueryVariable("visitor_data");
+            if (visitorDataEncrypted) {
+                if (!visitorDataEncrypted.endsWith('_EN') && visitorDataEncrypted.length > 10) {
+                    visitorDataEncrypted += '_EN';
+                }
+                var decryptedData = decryptVisitorData(visitorDataEncrypted);
+                if (decryptedData) {
+                    if (decryptedData.id) config.VISITOR_ID = decryptedData.id;
+                    if (decryptedData.name) config.VISITOR_NAME = decryptedData.name;
+                    if (decryptedData.first_name) config.VISITOR_NAME = decryptedData.first_name;
+                    if (decryptedData.visitor_avatar) config.VISITOR_AVATAR = decryptedData.visitor_avatar;
+                    if (decryptedData.visitor_extra) config.VISITOR_EXTRA = decryptedData.visitor_extra;
+                }
+            }
+
+            KEFU.init(config);
+        });
+    </script>
+</body>
+</html>

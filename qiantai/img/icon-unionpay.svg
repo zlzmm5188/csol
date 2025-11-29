@@ -1,0 +1,7 @@
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <rect width="24" height="24" rx="4" fill="#1a56a8"/>
+  <path d="M6 8h12v2H6z" fill="#d32f2f"/>
+  <path d="M8 12h8v1H8z" fill="white"/>
+  <path d="M8 14h8v1H8z" fill="white"/>
+  <text x="12" y="19" font-size="6" fill="white" text-anchor="middle" font-weight="bold">银联</text>
+</svg>

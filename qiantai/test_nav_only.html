@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试底部导航</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .content {
+            padding-bottom: 80px;
+        }
+        h1 { color: #333; margin-bottom: 20px; }
+        .info { background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px; }
+        
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            background: rgba(12, 21, 38, 0.95) !important;
+            backdrop-filter: blur(20px);
+            display: flex !important;
+            justify-content: space-around !important;
+            padding: 8px 0 max(env(safe-area-inset-bottom), 8px) !important;
+            border-top: 1px solid rgba(214, 178, 90, 0.1);
+            z-index: 9999 !important;
+        }
+        
+        .bottom-nav .nav-item {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            text-decoration: none !important;
+            color: rgba(255, 255, 255, 0.6) !important;
+            transition: all 0.3s;
+            padding: 4px 12px !important;
+            min-
+        }
+        
+        .bottom-nav .nav-item.active {
+            color: #D6B25A !important;
+        }
+        
+        .bottom-nav .nav-icon {
+            font-size: 22px;
+            margin-bottom: 2px;
+        }
+        
+        .bottom-nav .nav-label {
+            font-size: 11px;
+        }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+          .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>🧪 底部导航测试页面</h1>
+        <div class="info">如果您能看到底部有一个<strong>深蓝色导航栏</strong>，说明CSS生效了。</div>
+        <div class="info">如果只看到文字列表，说明CSS没生效。</div>
+        <div class="info">请向下滚动查看...</div>
+        <div class="info">1</div>
+        <div class="info">2</div>
+        <div class="info">3</div>
+        <div class="info">4</div>
+        <div class="info">5</div>
+        <div class="info">6</div>
+        <div class="info">7</div>
+        <div class="info">8</div>
+        <div class="info">9</div>
+        <div class="info">10</div>
+        <div class="info">底部应该有固定的深蓝色导航栏</div>
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">首页</span>
+        </a>
+        <a href="data.html" class="nav-item">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">数据</span>
+        </a>
+        <a href="projects-list.html" class="nav-item">
+            <span class="nav-icon">💼</span>
+            <span class="nav-label">项目</span>
+        </a>
+        <a href="messages.html" class="nav-item">
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">消息</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <span class="nav-icon">👤</span>
+            <span class="nav-label">我的</span>
+        </a>
+    </div>
+</body>
+</html>

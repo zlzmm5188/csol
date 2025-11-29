@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>上传测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-
+            
+        }
+        .upload-box {
+            border: 2px dashed #4CAF50;
+            padding: 40px;
+            
+            cursor: pointer;
+            margin: 20px 0;
+            background: #f5f5f5;
+        }
+        .upload-box:hover {
+            background: #e8f5e9;
+        }
+        .log {
+            background: #000;
+            color: #0f0;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .preview {
+            max-
+            margin-top: 20px;
+        }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+          .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+<body>
+    <h1>🧪 文件上传测试</h1>
+
+    <div class="upload-box" id="uploadBox">
+        <h2>👆 点击这里上传文件</h2>
+        <p>支持拍照或相册选择</p>
+    </div>
+
+    <input type="file" id="fileInput" accept="image/*" style="display:none;">
+
+    <div id="result"></div>
+    <img id="preview" class="preview" style="display:none;">
+
+    <h3>控制台日志:</h3>
+    <div class="log" id="log"></div>
+
+    <script>
+        const log = document.getElementById('log');
+        const uploadBox = document.getElementById('uploadBox');
+        const fileInput = document.getElementById('fileInput');
+        const result = document.getElementById('result');
+        const preview = document.getElementById('preview');
+
+        function addLog(message) {
+            const time = new Date().toLocaleTimeString();
+            log.innerHTML += `[${time}] ${message}<br>`;
+            log.scrollTop = log.scrollHeight;
+            console.log(message);
+        }
+
+        // 页面加载
+        window.addEventListener('DOMContentLoaded', function() {
+            addLog('✅ 页面加载完成');
+            addLog('📍 uploadBox 元素: ' + (uploadBox ? '找到' : '未找到'));
+            addLog('📍 fileInput 元素: ' + (fileInput ? '找到' : '未找到'));
+        });
+
+        // 点击上传区域
+        uploadBox.addEventListener('click', function() {
+            addLog('🔥 上传区域被点击！');
+            addLog('📱 准备打开文件选择器...');
+            fileInput.click();
+        });
+
+        // 文件选择变化
+        fileInput.addEventListener('change', function(e) {
+            addLog('🔥 文件选择事件触发！');
+
+            const file = e.target.files[0];
+            if (!file) {
+                addLog('❌ 没有选择文件');
+                return;
+            }
+
+            addLog('✅ 文件已选择:');
+            addLog('  - 名称: ' + file.name);
+            addLog('  - 大小: ' + (file.size / 1024).toFixed(2) + ' KB');
+            addLog('  - 类型: ' + file.type);
+
+            result.innerHTML = `
+                <h3>✅ 上传成功！</h3>
+                <p>文件名: ${file.name}</p>
+                <p>大小: ${(file.size / 1024).toFixed(2)} KB</p>
+                <p>类型: ${file.type}</p>
+            `;
+
+            // 预览图片
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                addLog('📸 图片预览已生成');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        addLog('🚀 脚本加载完成，等待用户操作...');
+    </script>
+</body>
+</html>

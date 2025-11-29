@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>登录测试 - Providence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            
+            max-
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .remember-me input[type="checkbox"] {
+            
+            height: 18px;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .remember-me label {
+            margin: 0;
+            cursor: pointer;
+        }
+
+        button {
+            
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .debug-panel {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .debug-panel h3 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .debug-log {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .success {
+            color: #4caf50;
+        }
+
+        .error {
+            color: #f44336;
+        }
+
+        .info {
+            color: #2196f3;
+        }
+
+        .clear-btn {
+            background: #f44336;
+            padding: 8px 16px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+          
+          .page-title, 
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 登录测试</h1>
+
+        <form id="loginForm" onsubmit="return false;">
+            <div class="form-group">
+                <label for="username">账号</label>
+                <input type="text" id="username" placeholder="请输入账号" autocomplete="username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" placeholder="请输入密码" autocomplete="current-password">
+            </div>
+
+            <div class="remember-me">
+                <input type="checkbox" id="rememberMe" checked>
+                <label for="rememberMe">记住密码</label>
+            </div>
+
+            <button type="submit" onclick="handleLogin()">登录</button>
+        </form>
+
+        <div class="debug-panel">
+            <h3>📊 调试信息</h3>
+            <div id="debugLog" class="debug-log">等待操作...</div>
+            <button class="clear-btn" onclick="clearStorage()">清除所有保存数据</button>
+        </div>
+    </div>
+
+    <script>
+        const DEBUG_LOG = document.getElementById('debugLog');
+
+        // 日志函数
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            const icon = type === 'success' ? '✓' : type === 'error' ? '✗' : '•';
+
+            const logEntry = `[${timestamp}] ${icon} ${message}\n`;
+            DEBUG_LOG.innerHTML += `<span class="${className}">${logEntry}</span>`;
+            DEBUG_LOG.scrollTop = DEBUG_LOG.scrollHeight;
+
+            console.log(`[${timestamp}] ${message}`);
+        }
+
+        // 页面加载时执行
+        document.addEventListener('DOMContentLoaded', function() {
+            log('页面加载完成', 'info');
+
+            // 检查localStorage是否可用
+            if (typeof(Storage) !== "undefined") {
+                log('✓ localStorage 可用', 'success');
+            } else {
+                log('✗ localStorage 不可用（可能是隐私模式）', 'error');
+                return;
+            }
+
+            // 尝试加载保存的凭据
+            loadCredentials();
+        });
+
+        // 加载保存的凭据
+        function loadCredentials() {
+            try {
+                log('开始加载保存的凭据...', 'info');
+
+                const savedData = localStorage.getItem('test_credentials');
+                log(`localStorage 数据: ${savedData || '(空)'}`, 'info');
+
+                if (savedData) {
+                    const credentials = JSON.parse(savedData);
+
+                    log(`找到保存的账号: ${credentials.username}`, 'success');
+                    log(`密码长度: ${credentials.password ? credentials.password.length : 0}`, 'info');
+                    log(`保存时间: ${credentials.savedAt}`, 'info');
+
+                    // 填充表单
+                    document.getElementById('username').value = credentials.username || '';
+                    document.getElementById('password').value = credentials.password || '';
+                    document.getElementById('rememberMe').checked = true;
+
+                    log('✓ 自动填充完成', 'success');
+                } else {
+                    log('没有找到保存的凭据', 'info');
+                }
+            } catch (error) {
+                log(`✗ 加载失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 登录处理
+        function handleLogin() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const rememberMe = document.getElementById('rememberMe').checked;
+
+            log('--- 开始登录 ---', 'info');
+            log(`账号: ${username}`, 'info');
+            log(`密码长度: ${password.length}`, 'info');
+            log(`记住密码: ${rememberMe ? '是' : '否'}`, 'info');
+
+            // 验证输入
+            if (!username) {
+                log('✗ 请输入账号', 'error');
+                alert('请输入账号');
+                return;
+            }
+
+            if (!password) {
+                log('✗ 请输入密码', 'error');
+                alert('请输入密码');
+                return;
+            }
+
+            // 保存凭据
+            if (rememberMe) {
+                try {
+                    const credentials = {
+                        username: username,
+                        password: password,
+                        savedAt: new Date().toISOString()
+                    };
+
+                    const jsonData = JSON.stringify(credentials);
+                    log(`准备保存数据: ${jsonData.substring(0, 100)}...`, 'info');
+
+                    localStorage.setItem('test_credentials', jsonData);
+                    log('✓ 数据已保存到 localStorage', 'success');
+
+                    // 立即验证
+                    const verify = localStorage.getItem('test_credentials');
+                    if (verify) {
+                        log('✓ 验证成功：数据确实已保存', 'success');
+
+                        // 再次解析验证
+                        const parsed = JSON.parse(verify);
+                        log(`验证账号: ${parsed.username}`, 'info');
+                        log(`验证密码长度: ${parsed.password.length}`, 'info');
+                    } else {
+                        log('✗ 验证失败：数据未保存！', 'error');
+                    }
+                } catch (error) {
+                    log(`✗ 保存失败: ${error.message}`, 'error');
+                    alert('保存密码失败：' + error.message);
+                }
+            } else {
+                localStorage.removeItem('test_credentials');
+                log('已清除保存的凭据', 'info');
+            }
+
+            log('✓ 登录成功（模拟）', 'success');
+            log('--- 登录完成 ---', 'info');
+            log('请关闭浏览器重新打开此页面测试自动填充', 'info');
+
+            alert('登录成功！\n请关闭浏览器，然后重新打开此页面\n查看是否自动填充账号密码');
+        }
+
+        // 清除所有数据
+        function clearStorage() {
+            if (confirm('确定要清除所有保存的数据吗？')) {
+                localStorage.clear();
+                log('✓ 已清除所有 localStorage 数据', 'success');
+                log('页面将刷新...', 'info');
+                setTimeout(() => location.reload(), 1000);
+            }
+        }
+    </script>
+</body>
+</html>

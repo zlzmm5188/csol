@@ -1,0 +1,253 @@
+/**
+ * iframe内页面样式修复
+ * 防止页面在iframe中变形
+ * 隐藏所有底部导航栏（只在app.html外层显示）
+ */
+
+/* 重置页面定位 */
+html, body {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100vh;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    /* 禁止左右滑动返回 */
+    overscroll-behavior-x: none !important;
+    touch-action: pan-y !important;
+    /* 确保页面内容可以全部显示，不被底部导航栏遮挡 */
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* 修复fixed定位在iframe中的问题 */
+/* 排除对话框等需要fixed定位的元素 */
+body > *:not(.custom-modal-overlay):not(.modal-overlay):not(.modal):not(.ios-toast-overlay):not(.ios-toast) {
+    position: relative !important;
+}
+
+/* 聊天容器特殊处理 */
+.chat-container {
+    height: auto !important;
+    min-height: 100vh !important;
+    max-height: none !important;
+    position: relative !important;
+}
+
+/* 消息区域 */
+.messages-area {
+    height: auto !important;
+    min-height: 60vh !important;
+    max-height: none !important;
+}
+
+/* 输入区域 */
+.input-area {
+    position: relative !important;
+    bottom: auto !important;
+}
+
+/* 禁止水平滚动 */
+* {
+    overscroll-behavior-x: none !important;
+}
+
+/* ========== 隐藏所有底部导航栏 ========== */
+/* 在iframe中加载的页面不应该显示导航栏 */
+/* 使用最高优先级覆盖所有样式 */
+html body .tabbar,
+html body #tabbar,
+html body .tabbar-container,
+html body .bottom-nav,
+html body nav.tabbar,
+html body nav#tabbar,
+body .tabbar,
+body #tabbar,
+body .tabbar-container,
+body .bottom-nav,
+body nav.tabbar,
+body nav#tabbar,
+.tabbar,
+#tabbar,
+.tabbar-container,
+.bottom-nav,
+nav.tabbar,
+nav#tabbar {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    max-height: 0 !important;
+    max-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    z-index: -9999 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+}
+
+/* 确保所有tabbar子元素也隐藏 */
+.tabbar *,
+#tabbar *,
+.tabbar-container *,
+.bottom-nav * {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* ========== 修复对话框在iframe中的定位 ========== */
+/* 确保对话框在iframe中正确居中显示 */
+.custom-modal-overlay,
+.custom-modal-overlay.active {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 99999 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.custom-modal-overlay:not(.active) {
+    display: none !important;
+}
+
+/* 确保对话框内容区域正常显示 */
+.custom-modal-header {
+    padding: 20px 20px 12px !important;
+    text-align: center !important;
+    border-bottom: 1px solid rgba(212,175,55,0.2) !important;
+}
+
+.custom-modal-title {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: #1a2332 !important;
+    margin: 0 !important;
+}
+
+.custom-modal-body {
+    padding: 20px !important;
+    min-height: 60px !important;
+}
+
+.custom-modal-message {
+    font-size: 15px !important;
+    color: #6c757d !important;
+    line-height: 1.6 !important;
+    margin: 0 !important;
+    text-align: center !important;
+}
+
+.custom-modal {
+    position: relative !important;
+    margin: auto !important;
+    transform: none !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    width: 90% !important;
+    max-width: 360px !important;
+}
+
+/* ========== iOS弹窗修复（登录页面等使用） ========== */
+/* 确保iOS弹窗在登录页面中正确显示 */
+.ios-toast-overlay,
+.ios-toast-overlay.show {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 999998 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.ios-toast,
+.ios-toast.show {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 999999 !important;
+    margin: 0 !important;
+}
+
+.ios-toast.show {
+    transform: translate(-50%, -50%) scale(1) !important;
+}
+
+/* ========== 移动端对话框按钮优化 ========== */
+.custom-modal-footer {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 12px !important;
+    padding: 16px 20px 20px !important;
+    align-items: stretch !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.custom-modal-btn {
+    flex: 1 !important;
+    min-width: 0 !important;
+    padding: 14px 16px !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.2s !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+}
+
+.custom-modal-btn-cancel {
+    background: #f1f3f5 !important;
+    color: #6c757d !important;
+    margin-right: 0 !important;
+}
+
+.custom-modal-btn-confirm {
+    background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%) !important;
+    color: #1a1a1a !important;
+    box-shadow: 0 4px 12px rgba(212,175,55,0.3) !important;
+    margin-left: 0 !important;
+}
+
+/* 移动端小屏优化 */
+@media (max-width: 375px) {
+    .custom-modal {
+        width: 85% !important;
+        max-width: 320px !important;
+    }
+
+    .custom-modal-footer {
+        padding: 14px 16px 18px !important;
+        gap: 10px !important;
+    }
+
+    .custom-modal-btn {
+        padding: 12px 14px !important;
+        font-size: 15px !important;
+    }
+}

@@ -1,0 +1,702 @@
+/* ========================================
+   PROVIDENCE 移动端APP全局样式
+   适用于所有Providence页面
+   创建时间: 2025-11-03
+   设计标准: 纯移动端APP体验
+   ======================================== */
+
+/* ===== 1. 全局重置和基础样式 ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; /* 移除点击高亮 */
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    "PingFang SC", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #222;
+  background: linear-gradient(180deg, #0e2b44, #091c2e);
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  /* 适配安全区域 */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+#app {
+  position: relative;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  padding-bottom: 80px; /* 底部导航栏高度 */
+}
+
+/* ===== 2. 顶部导航栏（统一样式） ===== */
+.hero-simple {
+  background: linear-gradient(180deg, #0e2b44, #091c2e);
+  padding: 12px 16px 16px;
+  padding-top: max(12px, env(safe-area-inset-top) + 8px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.hero-simple .hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-simple .back-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #e8edf3;
+  text-decoration: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.hero-simple .back-btn:active {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0.95);
+}
+
+.hero-simple .brand {
+  flex: 1;
+  margin-left: 12px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #e8edf3;
+  letter-spacing: 1px;
+  text-align: left;
+}
+
+/* ===== 3. 标签导航（Tabs） ===== */
+.tabs-bar {
+  background: rgba(14, 43, 68, 0.8);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  display: flex;
+  height: 48px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  position: sticky;
+  top: 56px;
+  z-index: 90;
+  scrollbar-width: none; /* Firefox */
+}
+
+.tabs-bar::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.tab-btn {
+  flex: 0 0 auto;
+  padding: 0 24px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 500;
+  position: relative;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.tab-btn:active {
+  transform: scale(0.95);
+}
+
+.tab-btn.active {
+  color: #fff;
+  font-weight: 600;
+}
+
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 3px;
+  background: linear-gradient(90deg, #d4af37, #c9a732);
+  border-radius: 2px 2px 0 0;
+}
+
+/* ===== 4. 卡片样式 ===== */
+.card {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.card:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+
+/* 项目卡片 */
+.project-card {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.project-card:active {
+  transform: scale(0.98);
+}
+
+.project-card .project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.project-card .project-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a2332;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.project-card .project-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.project-tag {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #f0f4f8;
+  color: #64748b;
+}
+
+.project-tag.hot {
+  background: linear-gradient(135deg, #ff4d4f, #ff7875);
+  color: #fff;
+}
+
+.project-tag.new {
+  background: linear-gradient(135deg, #22c55e, #4ade80);
+  color: #fff;
+}
+
+/* ===== 5. 按钮样式 ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+  user-select: none;
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #d4af37 0%, #c9a732 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+}
+
+.btn-primary:active {
+  box-shadow: 0 2px 6px rgba(212, 175, 55, 0.3);
+}
+
+.btn-secondary {
+  background: #f0f4f8;
+  color: #1a2332;
+}
+
+.btn-secondary:active {
+  background: #e2e8f0;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid #d4af37;
+  color: #d4af37;
+}
+
+.btn-block {
+  width: 100%;
+  display: flex;
+}
+
+.btn-large {
+  padding: 16px 28px;
+  font-size: 17px;
+}
+
+.btn-small {
+  padding: 10px 18px;
+  font-size: 14px;
+}
+
+/* ===== 6. 表单元素 ===== */
+.form-control {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 16px; /* 防止iOS放大 */
+  color: #222;
+  background: #ffffff;
+  transition: all 0.3s ease;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+.form-control::placeholder {
+  color: #94a3b8;
+}
+
+.form-control:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+}
+
+/* ===== 7. 底部导航栏 ===== */
+/* 导航栏样式已统一到 styles.css，此处注释避免冲突 */
+/* .tabbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    height: calc(60px + env(safe-area-inset-bottom));
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding-top: 8px;
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 1000;
+}
+
+.tabbar-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    text-decoration: none;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    padding: 4px 0;
+    cursor: pointer;
+}
+
+.tabbar-item:active {
+    transform: scale(0.95);
+}
+
+.tabbar-item.active {
+    color: #d4af37;
+}
+
+.tabbar-icon {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.tabbar-label {
+    font-size: 11px;
+    line-height: 1;
+} */
+
+/* ===== 8. 列表样式 ===== */
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f4f8;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.list-item:active {
+  background: #f8fafc;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #f0f4f8;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.list-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.list-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a2332;
+  margin-bottom: 4px;
+}
+
+.list-desc {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.list-arrow {
+  font-size: 18px;
+  color: #cbd5e1;
+  margin-left: 8px;
+}
+
+/* ===== 9. 加载和空状态 ===== */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f0f4f8;
+  border-top-color: #d4af37;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 64px;
+  color: #cbd5e1;
+  margin-bottom: 16px;
+}
+
+.empty-text {
+  font-size: 15px;
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+/* ===== 10. Toast提示 ===== */
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: rgba(0, 0, 0, 0.85);
+  color: #ffffff;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  z-index: 10000;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  max-width: 80%;
+  text-align: center;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* ===== 11. 滑动操作 ===== */
+.swipe-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.swipe-content {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.swipe-actions {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  transform: translateX(100%);
+}
+
+.swipe-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+
+.swipe-action.delete {
+  background: #ef4444;
+}
+
+/* ===== 12. 下拉刷新和上拉加载 ===== */
+.pull-to-refresh {
+  text-align: center;
+  padding: 16px;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.load-more {
+  text-align: center;
+  padding: 20px;
+}
+
+.load-more-btn {
+  color: #d4af37;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ===== 13. 骨架屏 ===== */
+.skeleton {
+  background: linear-gradient(90deg, #f0f4f8 25%, #e2e8f0 50%, #f0f4f8 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-line {
+  height: 16px;
+  margin-bottom: 12px;
+}
+
+.skeleton-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+/* ===== 14. 工具类 ===== */
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+
+.mt-8 {
+  margin-top: 8px;
+}
+.mt-12 {
+  margin-top: 12px;
+}
+.mt-16 {
+  margin-top: 16px;
+}
+.mt-24 {
+  margin-top: 24px;
+}
+
+.mb-8 {
+  margin-bottom: 8px;
+}
+.mb-12 {
+  margin-bottom: 12px;
+}
+.mb-16 {
+  margin-bottom: 16px;
+}
+.mb-24 {
+  margin-bottom: 24px;
+}
+
+.p-16 {
+  padding: 16px;
+}
+.p-20 {
+  padding: 20px;
+}
+.p-24 {
+  padding: 24px;
+}
+
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.items-center {
+  align-items: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-center {
+  justify-content: center;
+}
+.gap-8 {
+  gap: 8px;
+}
+.gap-12 {
+  gap: 12px;
+}
+.gap-16 {
+  gap: 16px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ===== 15. 动画类 ===== */
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.slide-up {
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-down {
+  animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 16. 深色模式支持（预留） ===== */
+@media (prefers-color-scheme: dark) {
+  /* 暂不实现，保持浅色主题 */
+}
+
+/* ===== 17. 性能优化 ===== */
+.will-change-transform {
+  will-change: transform;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}

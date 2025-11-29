@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>交易记录 | PROVIDENCE</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="styles.css?v=1763897782" />
+    <style>
+      /* ===== 导航栏样式 ===== */
+      .nav-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: clamp(48px, 12vw, 56px);
+        padding-top: env(safe-area-inset-top);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+        background: rgba(10, 16, 32, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        padding-left: clamp(12px, 3vw, 16px);
+        padding-right: clamp(12px, 3vw, 16px);
+        box-sizing: content-box;
+        z-index: 1000;
+      }
+
+      .nav-back {
+        width: clamp(36px, 9vw, 40px);
+        height: clamp(36px, 9vw, 40px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: clamp(22px, 5.5vw, 26px);
+        color: #e8c991;
+        cursor: pointer;
+        background: rgba(232, 201, 145, 0.1);
+        border-radius: 10px;
+        transition: all 0.2s;
+        border: none;
+        padding: 0;
+      }
+
+      .nav-back:active {
+        transform: scale(0.92);
+        background: rgba(232, 201, 145, 0.15);
+      }
+
+      .nav-title {
+        flex: 1;
+        width: 100%;
+        text-align: center;
+        font-size: clamp(17px, 4.2vw, 19px);
+        font-weight: 600;
+        color: #e8c991;
+        margin-right: clamp(36px, 9vw, 40px);
+      }
+
+      body.page-other {
+        background: linear-gradient(180deg, #0e2b44, #091c2e) !important;
+      }
+
+      /* 内容区域背景图片 */
+      .content-white {
+        background: transparent !important;
+        padding: 0 !important;
+        min-height: calc(100vh - clamp(60px, 15vw, 80px));
+        position: relative;
+      }
+
+      .content-white::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url("assets/a180d44deaf8c.jpg");
+        background-size: 110% 110%;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-color: #000;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .content-white > * {
+        position: relative;
+        z-index: 1;
+        padding-left: clamp(16px, 4vw, 20px) !important;
+        padding-right: clamp(16px, 4vw, 20px) !important;
+        padding-top: clamp(16px, 4vw, 20px) !important;
+      }
+
+      @media (max-
+        }
+      }
+
+      /* 筛选按钮 */
+      .records-filter {
+        display: flex;
+        gap: clamp(8px, 2vw, 12px);
+        margin-bottom: clamp(16px, 4vw, 20px);
+        overflow-x: auto;
+        padding-bottom: 20px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .records-filter::-webkit-scrollbar {
+        display: none;
+      }
+
+      .filter-btn {
+
+        padding: clamp(8px, 2vw, 10px) clamp(16px, 4vw, 20px);
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        color: #fff;
+        font-size: clamp(13px, 3.25vw, 14px);
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+      }
+
+      .filter-btn:hover {
+        background: rgba(255, 255, 255, 0.35);
+      }
+
+      .filter-btn.active {
+        background: linear-gradient(
+          135deg,
+          #f6c952 0%,
+          #d4a574 50%,
+          #c9a884 100%
+        );
+        border-color: rgba(246, 201, 82, 0.6);
+        color: #1a1a1a;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(246, 201, 82, 0.4);
+      }
+
+      /* 记录列表 */
+      .records-list {
+        display: flex;
+        flex-direction: column;
+        gap: clamp(12px, 3vw, 16px);
+      }
+
+      .record-item {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        padding: clamp(14px, 3.5vw, 16px);
+        display: flex;
+        align-items: center;
+        gap: clamp(12px, 3vw, 16px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .record-item:active {
+        transform: scale(0.98);
+      }
+
+      .record-icon {
+        font-size: clamp(28px, 7vw, 32px);
+
+        height: clamp(48px, 12vw, 56px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+
+      }
+
+      .record-content {
+        flex: 1;
+        min-
+      }
+
+      .record-title {
+        font-size: clamp(15px, 3.75vw, 16px);
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 4px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      }
+
+      .record-desc {
+        font-size: clamp(12px, 3vw, 13px);
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 4px;
+      }
+
+      .record-time {
+        font-size: clamp(11px, 2.75vw, 12px);
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .record-amount {
+        font-size: clamp(16px, 4vw, 18px);
+        font-weight: 700;
+        white-space: nowrap;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      }
+
+      .record-amount.income {
+        color: #10b981;
+      }
+
+      .record-amount.outcome {
+        color: #ef4444;
+      }
+
+      /* 加载更多 */
+      .load-more {
+
+        padding: clamp(20px, 5vw, 24px) 0;
+      }
+
+      .btn-load-more {
+        padding: clamp(10px, 2.5vw, 12px) clamp(24px, 6vw, 32px);
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        color: #fff;
+        font-size: clamp(13px, 3.25vw, 14px);
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-load-more:hover {
+        background: rgba(255, 255, 255, 0.35);
+      }
+
+      .btn-load-more:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* 空状态 */
+      .empty-state {
+
+        padding: clamp(40px, 10vw, 60px) clamp(20px, 5vw, 40px);
+        color: rgba(255, 255, 255, 0.6);
+        font-size: clamp(14px, 3.5vw, 16px);
+      }
+
+      .empty-icon {
+        font-size: clamp(48px, 12vw, 64px);
+        margin-bottom: clamp(12px, 3vw, 16px);
+        opacity: 0.5;
+      }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+      .brand .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .back-btn:active {
+        transform: scale(0.95) !important;
+    }
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+      .brand .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+      <!-- <script src="api-config.js?v=1763897782"></script> (已包含在api-new.js) -->
+    <!-- <script src="token-manager.js?v=1763897782"></script> (已包含在api-new.js) -->
+    <!-- 统一API客户端 v2.0 -->
+    <script src="api-unified-v2.js"></script>
+    <!-- Token检查中间件 -->
+    <script src="token-check-middleware.js"></script>
+</head>
+
+  <body class="page-other">
+    <div id="app">
+      <div class="nav-bar">
+        <div class="nav-back" onclick="goBack()">‹</div>
+        <div class="nav-title">交易记录</div>
+      </div>
+      <main class="content-white">
+        <div class="records-filter">
+          <button class="filter-btn active" data-filter="all">全部</button>
+          <button class="filter-btn" data-filter="recharge">充值</button>
+          <button class="filter-btn" data-filter="withdraw">提现</button>
+          <button class="filter-btn" data-filter="income">收益</button>
+          <button class="filter-btn" data-filter="expense">支出</button>
+        </div>
+
+        <div class="records-list" id="recordsList">
+          <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">加载中...</div>
+          </div>
+        </div>
+
+        <div class="load-more">
+          <button class="btn-load-more" id="loadMoreBtn" style="display: none">
+            加载更多
+          </button>
+        </div>
+      </main>
+
+      <!-- 底部导航已移除 -->
+    </div>
+
+    <script src="api-new.js?v=1763897782"></script>
+    <script src="ios-toast.js?v=1763897782"></script>
+    <script>
+      // ========== 导航函数 ==========
+      function goBack() {
+        window.history.back();
+      }
+
+      (function () {
+          const API_BASE = window.API_CONFIG?.baseURL || 'https://api.4kp3l0iq.top';
+          const TOKEN_KEY = 'providence_token';
+
+          let currentFilter = 'all';
+          let currentPage = 1;
+          let hasMore = true;
+          let isLoading = false;
+          let allRecords = [];
+
+          const recordsList = document.getElementById('recordsList');
+          const loadMoreBtn = document.getElementById('loadMoreBtn');
+          const loadingState = document.getElementById('loadingState');
+
+          // 类型映射
+          const typeMap = {
+              'recharge': ['充值', '银行转账', 'USDT充值'],
+              'withdraw': ['提现', '提现到银行卡'],
+              'income': ['收益', '理财收益', '签到奖励', '日利宝收益'],
+              'expense': ['支出', '申购', '购买']
+          };
+
+          // 图标映射
+          const iconMap = {
+              '充值': '📥',
+              '提现': '💸',
+              '收益': '💰',
+              '理财收益': '💰',
+              '签到奖励': '🎁',
+              '申购': '🛒',
+              '购买': '🛒',
+              '日利宝': '💎',
+              '转出': '💸',
+              '转入': '📥'
+          };
+
+          // 初始化
+          document.addEventListener('DOMContentLoaded', async function () {
+              const token = localStorage.getItem(TOKEN_KEY);
+              if (!token) {
+                  await showToast('提示', '请先登录');
+                  setTimeout(() => {
+                      window.location.href = 'login.html';
+                  }, 1500);
+                  return;
+              }
+
+              await loadRecords();
+              bindEvents();
+          });
+
+          // 绑定事件
+          function bindEvents() {
+              // 筛选按钮
+              document.querySelectorAll('.filter-btn').forEach(btn => {
+                  btn.addEventListener('click', function () {
+                      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                      this.classList.add('active');
+                      currentFilter = this.dataset.filter;
+                      currentPage = 1;
+                      filterRecords();
+                  });
+              });
+
+              // 加载更多
+              loadMoreBtn.addEventListener('click', async function () {
+                  if (!isLoading && hasMore) {
+                      currentPage++;
+                      await loadRecords();
+                  }
+              });
+          }
+
+          // 加载交易记录
+          async function loadRecords() {
+              if (isLoading) return;
+
+              isLoading = true;
+              const token = localStorage.getItem(TOKEN_KEY);
+
+              try {
+                  if (currentPage === 1) {
+                      loadingState.style.display = 'block';
+                      recordsList.innerHTML = '';
+                  }
+
+                  // 使用统一的API客户端
+                  const API_BASE = window.API_CONFIG?.baseURL || 'https://api.4kp3l0iq.top';
+                  let data;
+
+                  // 优先使用ApiClient
+                  if (window.ApiClient && window.ApiClient.get) {
+                      try {
+                          const response = await window.ApiClient.get('/api/user/transaction/records', {
+                              params: { page: currentPage, pageSize: 20 }
+                          });
+                          if (response && (response.code === 1 || response.code === 200)) {
+                              data = response;
+                          }
+                      } catch (e) {
+                          console.warn('[Records] ApiClient调用失败，使用fallback:', e);
+                      }
+                  }
+
+                  // Fallback: 直接使用fetch
+                  if (!data) {
+                      const response = await fetch(`${API_BASE}/api/user/transaction/records?page=${currentPage}&pageSize=20`, {
+                          method: 'GET',
+                          headers: {
+                              'Content-Type': 'application/json',
+                              'Token': token,
+                              'Authorization': `Bearer ${token}`
+                          }
+                      });
+
+                      if (!response.ok) {
+                          throw new Error(`HTTP错误: ${response.status}`);
+                      }
+
+                      const text = await response.text();
+
+                      // 检查是否是HTML错误页面
+                      if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html') || text.includes('系统发生错误') || text.includes('ThinkPHP')) {
+                          loadingState.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div>服务器内部错误，请联系客服</div></div>';
+                          return;
+                      }
+
+                      try {
+                          data = JSON.parse(text);
+                      } catch (e) {
+                          loadingState.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div>数据格式错误</div></div>';
+                          return;
+                      }
+                  }
+
+                  if ((data.code === 1 || data.code === 200) && data.data && Array.isArray(data.data)) {
+                      const newRecords = data.data;
+
+                      if (currentPage === 1) {
+                          allRecords = newRecords;
+                      } else {
+                          allRecords = allRecords.concat(newRecords);
+                      }
+
+                      hasMore = newRecords.length >= 20; // 每页20条
+
+                      loadingState.style.display = 'none';
+                      renderRecords();
+
+                      if (hasMore) {
+                          loadMoreBtn.style.display = 'block';
+                      } else {
+                          loadMoreBtn.style.display = 'none';
+                      }
+                  } else {
+                      loadingState.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div>暂无交易记录</div></div>';
+                      loadMoreBtn.style.display = 'none';
+                  }
+              } catch (error) {
+                  console.error('❌ 加载交易记录失败:', error);
+                  console.error('错误详情:', {
+                      message: error.message,
+                      stack: error.stack,
+                      name: error.name
+                  });
+                  loadingState.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div>加载失败：' + error.message + '</div><div style="font-size: 12px; margin-top: 8px; opacity: 0.7;">请检查网络连接或联系客服</div></div>';
+                  await showToast('错误', '加载失败：' + error.message);
+              } finally {
+                  isLoading = false;
+              }
+          }
+
+          // 渲染记录
+          function renderRecords() {
+              if (allRecords.length === 0) {
+                  recordsList.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div>暂无交易记录</div></div>';
+                  return;
+              }
+
+              const filtered = currentFilter === 'all'
+                  ? allRecords
+                  : allRecords.filter(record => {
+                      const typeName = record.type_name || record.remark || '';
+                      const types = typeMap[currentFilter] || [];
+                      return types.some(t => typeName.includes(t));
+                  });
+
+              if (filtered.length === 0) {
+                  recordsList.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div>该类型暂无记录</div></div>';
+                  return;
+              }
+
+              recordsList.innerHTML = filtered.map(record => {
+                  const typeName = record.type_name || record.remark || '未知';
+                  const amount = parseFloat(record.money || 0);
+                  const isIncome = amount > 0;
+                  const icon = getIcon(typeName);
+                  const time = record.created_at || record.time || '';
+
+                  return `
+              <div class="record-item" data-type="${getRecordType(typeName)}">
+                  <div class="record-icon">${icon}</div>
+                  <div class="record-content">
+                      <div class="record-title">${typeName}</div>
+                      <div class="record-desc">${record.desc || record.remark || ''}</div>
+                      <div class="record-time">${time}</div>
+                  </div>
+                  <div class="record-amount ${isIncome ? 'income' : 'outcome'}">
+                      ${isIncome ? '+' : '-'}${Math.abs(amount).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </div>
+              </div>
+          `;
+              }).join('');
+          }
+
+          // 筛选记录
+          function filterRecords() {
+              renderRecords();
+          }
+
+          // 获取图标
+          function getIcon(typeName) {
+              for (const [key, icon] of Object.entries(iconMap)) {
+                  if (typeName.includes(key)) {
+                      return icon;
+                  }
+              }
+              return '💰';
+          }
+
+          // 获取记录类型
+          function getRecordType(typeName) {
+              if (typeName.includes('充值') || typeName.includes('转账')) return 'recharge';
+              if (typeName.includes('提现')) return 'withdraw';
+              if (typeName.includes('收益') || typeName.includes('奖励')) return 'income';
+              return 'expense';
+          }
+      })();
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script src="smart-swipe-control.js?v=1763897782"></script>
+
+
+  </body>
+</html>

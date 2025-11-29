@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>我的投资 | PROVIDENCE</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="design-tokens.css?v=1763813622" />
+    <style>
+
+* {
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+html,
+body {
+    touch-action: pan-y !important;
+    -ms-touch-action: pan-y !important;
+    overscroll-behavior: none !important;
+    -webkit-overscroll-behavior: none !important;
+    background: linear-gradient(180deg, #0e2b44 0%, #091c2e 100%) !important;
+        background-attachment: fixed;
+  padding-top: 60px;}
+
+body {
+    -webkit-overflow-scrolling: touch;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#app {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        touch-action: pan-x pan-y;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      html,
+      body {
+        touch-action: pan-x pan-y !important;
+        -ms-touch-action: pan-x pan-y !important;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "PingFang SC", Arial, sans-serif;
+        background: var(--gradient-navy);
+        background-size: 200% 200%;
+        animation: gradientShift 15s ease infinite;
+        padding-bottom: 20px;
+        min-height: 100vh;
+      }
+
+      @keyframes gradientShift {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      .topbar {
+        position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important;
+        top: 0;
+        z-index: var(--z-sticky);
+        background: rgba(12, 21, 38, 0.85);
+        backdrop-filter: var(--blur-md);
+        border-bottom: 1px solid var(--border-white);
+        padding: var(--space-3) var(--space-4);
+      }
+
+      .topbar-inner {
+        max-width: 600px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+      }
+
+      .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+
+      .back-btn:active {
+        transform: scale(0.95) translateZ(0);
+      }
+
+      .page-title {
+        flex: 1;
+        text-align: center;
+        font-size: var(--font-lg);
+        font-weight: var(--font-semibold);
+        color: var(--gold-1);
+      }
+
+      .nav-spacer {
+        width: 36px;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: var(--space-4);
+      }
+
+      /* 总览卡片（白色+金边框） */
+      .summary-card {
+        background: var(--white);
+        border: 2px solid var(--gold-light);
+        border-radius: var(--radius-lg);
+        padding: var(--space-6);
+        margin-bottom: var(--space-5);
+        box-shadow: var(--shadow-gold);
+      }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-4);
+      }
+
+      .summary-item {
+        text-align: center;
+        padding: var(--space-4);
+        background: var(--ink);
+        border-radius: var(--radius-md);
+      }
+
+      .summary-label {
+        font-size: var(--font-sm);
+        color: var(--text-secondary);
+        margin-bottom: var(--space-2);
+      }
+
+      .summary-value {
+        font-size: var(--font-2xl);
+        font-weight: var(--font-bold);
+        background: var(--gradient-gold);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* Tab 切换 */
+      .tabs {
+        display: flex;
+        gap: var(--space-3);
+        margin-bottom: var(--space-4);
+        background: rgba(255, 255, 255, 0.08);
+        padding: var(--space-2);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-white);
+      }
+
+      .tab-btn {
+        flex: 1;
+        padding: var(--space-2) var(--space-3);
+        background: transparent;
+        border: none;
+        color: var(--muted-light);
+        font-size: var(--font-base);
+        font-weight: var(--font-medium);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        transition: all var(--duration-fast);
+        transform: translateZ(0);
+      }
+
+      .tab-btn:active {
+        transform: scale(0.96) translateZ(0);
+      }
+
+      .tab-btn.active {
+        background: var(--gradient-gold);
+        color: var(--navy);
+        font-weight: var(--font-semibold);
+      }
+
+      /* 投资列表 */
+      .investment-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3);
+      }
+
+      .investment-card {
+        background: var(--white);
+        border: 2px solid var(--gold-light);
+        border-radius: var(--radius-lg);
+        padding: var(--space-4);
+        box-shadow: var(--shadow-md);
+        transition: all var(--duration-fast);
+        transform: translateZ(0);
+      }
+
+      .investment-card:active {
+        transform: scale(0.98) translateZ(0);
+      }
+
+      .investment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: var(--space-3);
+      }
+
+      .investment-title {
+        font-size: var(--font-lg);
+        font-weight: var(--font-semibold);
+        color: var(--text-primary);
+        margin-bottom: 4px;
+      }
+
+      .investment-date {
+        font-size: var(--font-xs);
+        color: var(--text-muted);
+      }
+
+      .investment-status {
+        padding: 6px 12px;
+        border-radius: var(--radius-full);
+        font-size: var(--font-xs);
+        font-weight: var(--font-semibold);
+      }
+
+      .status-active {
+        background: rgba(34, 197, 94, 0.1);
+        color: #16a34a;
+      }
+
+      .status-completed {
+        background: rgba(214, 178, 90, 0.1);
+        color: var(--gold-2);
+      }
+
+      .status-expired {
+        background: rgba(156, 163, 175, 0.1);
+        color: #6b7280;
+      }
+
+      .investment-details {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-3);
+        padding: var(--space-3);
+        background: var(--ink);
+        border-radius: var(--radius-sm);
+      }
+
+      .detail-item {
+        text-align: center;
+      }
+
+      .detail-label {
+        font-size: var(--font-xs);
+        color: var(--text-muted);
+        margin-bottom: 4px;
+      }
+
+      .detail-value {
+        font-size: var(--font-base);
+        font-weight: var(--font-semibold);
+        color: var(--text-primary);
+      }
+
+      .profit-value {
+        color: var(--gold-2);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: var(--space-12) var(--space-4);
+        color: var(--muted-light);
+      }
+
+      .empty-icon {
+        font-size: 64px;
+        margin-bottom: var(--space-4);
+      }
+
+      .empty-text {
+        font-size: var(--font-base);
+        margin-bottom: var(--space-4);
+      }
+
+      .empty-btn {
+        display: inline-block;
+        padding: var(--space-3) var(--space-6);
+        background: var(--gradient-gold);
+        color: var(--navy);
+        font-size: var(--font-base);
+        font-weight: var(--font-semibold);
+        border-radius: var(--radius-lg);
+        text-decoration: none;
+      }
+
+      .tabbar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        border-top: 1px solid #e5e7eb;
+        padding: 8px 0 env(safe-area-inset-bottom, 8px);
+        z-index: var(--z-fixed);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .tab {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 4px 0;
+        text-decoration: none;
+      }
+
+      .ico {
+        width: 24px;
+        height: 24px;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        margin-bottom: 4px;
+      }
+
+      .txt {
+        font-size: 10px;
+        color: #8a8a8a;
+      }
+      .tab.active .txt {
+        color: var(--gold-1);
+        font-weight: var(--font-semibold);
+      }
+      .tab.active .ico {
+        transform: scale(1.1);
+      }
+    </style>
+      <!-- <script src="api-config.js?v=1763813622"></script> (已包含在api-new.js) -->
+    <!-- <script src="token-manager.js?v=1763813622"></script> (已包含在api-new.js) -->
+    <script src="smart-swipe-control.js?v=1763813622"></script>
+    </head>
+  <body>
+    <div class="topbar">
+      <div class="topbar-inner">
+        <a href="profile.html" class="back-btn">‹</a>
+        <div class="page-title">我的投资</div>
+        <div class="nav-spacer"></div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="summary-card">
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-label">投资总额</div>
+            <div class="summary-value" id="totalInvest">¥0.00</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">累计收益</div>
+            <div class="summary-value" id="totalProfit">¥0.00</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">进行中</div>
+            <div class="summary-value" id="activeCount">0</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">已完成</div>
+            <div class="summary-value" id="completedCount">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('all')">全部</button>
+        <button class="tab-btn" onclick="switchTab('active')">进行中</button>
+        <button class="tab-btn" onclick="switchTab('completed')">已完成</button>
+      </div>
+
+      <div class="investment-list" id="investmentList">
+        <div class="empty-state">
+          <div class="empty-icon">📊</div>
+          <div class="empty-text">暂无投资记录</div>
+          <a href="projects.html" class="empty-btn">去投资</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="ios-toast.js?v=1763813622"></script>
+    <script>
+      let currentTab = "all";
+      let allInvestments = [];
+
+      async function loadInvestments() {
+        try {
+          const token = localStorage.getItem("providence_token");
+          if (!token) {
+            window.location.href = "login.html";
+            return;
+          }
+
+          const API_BASE =
+            window.API_CONFIG?.baseURL || "https://api.4kp3l0iq.top/api";
+          const response = await fetch(`${API_BASE}/api/project/list`, {
+            headers: {
+              token: token,
+              "Content-Type": "application/json",
+            },
+          });
+          const data = await response.json();
+
+          if ((data.code === 1 || data.code === 1 || data.code === 200) && data.data) {
+            allInvestments = data.data.list || [];
+            updateSummary();
+            renderInvestments();
+          }
+        } catch (error) {
+          console.error("加载投资记录失败:", error);
+        }
+      }
+
+      function updateSummary() {
+        const totalInvest = allInvestments.reduce(
+          (sum, item) => sum + parseFloat(item.amount || 0),
+          0
+        );
+        const totalProfit = allInvestments.reduce(
+          (sum, item) => sum + parseFloat(item.profit || 0),
+          0
+        );
+        const activeCount = allInvestments.filter(
+          (item) => item.status === "active"
+        ).length;
+        const completedCount = allInvestments.filter(
+          (item) => item.status === "completed"
+        ).length;
+
+        document.getElementById("totalInvest").textContent =
+          `¥${totalInvest.toLocaleString("zh-CN", { minimumFractionDigits: 2 })}`;
+        document.getElementById("totalProfit").textContent =
+          `¥${totalProfit.toLocaleString("zh-CN", { minimumFractionDigits: 2 })}`;
+        document.getElementById("activeCount").textContent = activeCount;
+        document.getElementById("completedCount").textContent = completedCount;
+      }
+
+      function renderInvestments() {
+        const container = document.getElementById("investmentList");
+        let filtered = allInvestments;
+
+        if (currentTab === "active") {
+          filtered = allInvestments.filter((item) => item.status === "active");
+        } else if (currentTab === "completed") {
+          filtered = allInvestments.filter(
+            (item) => item.status === "completed"
+          );
+        }
+
+        if (filtered.length === 0) {
+          container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📊</div>
+            <div class="empty-text">暂无投资记录</div>
+            <a href="projects.html" class="empty-btn">去投资</a>
+          </div>
+        `;
+          return;
+        }
+
+        container.innerHTML = filtered
+          .map(
+            (item) => `
+        <div class="investment-card" onclick="window.location.href='project-detail.html?id=${item.project_id}'">
+          <div class="investment-header">
+            <div>
+              <div class="investment-title">${item.project_name || "投资项目"}</div>
+              <div class="investment-date">${item.create_time || ""}</div>
+            </div>
+            <span class="investment-status ${item.status === "active" ? "status-active" : item.status === "completed" ? "status-completed" : "status-expired"}">
+              ${item.status === "active" ? "进行中" : item.status === "completed" ? "已完成" : "已到期"}
+            </span>
+          </div>
+          <div class="investment-details">
+            <div class="detail-item">
+              <div class="detail-label">投资金额</div>
+              <div class="detail-value">¥${parseFloat(item.amount || 0).toLocaleString("zh-CN", { minimumFractionDigits: 2 })}</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">预期收益</div>
+              <div class="detail-value profit-value">¥${parseFloat(item.profit || 0).toLocaleString("zh-CN", { minimumFractionDigits: 2 })}</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">剩余天数</div>
+              <div class="detail-value">${item.remain_days || 0}天</div>
+            </div>
+          </div>
+        </div>
+      `
+          )
+          .join("");
+      }
+
+      function switchTab(tab) {
+        currentTab = tab;
+        document
+          .querySelectorAll(".tab-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
+        renderInvestments();
+      }
+
+      document.addEventListener("DOMContentLoaded", loadInvestments);
+    </script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+
+  </body>
+</html>

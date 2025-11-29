@@ -1,0 +1,2295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
+    />
+    <title>我的 - Providence</title>
+    <link rel="stylesheet" href="styles.css?v=1763710508" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      html {
+        height: 100%;
+        overflow: hidden; /* 防止整个html滚动 */
+        overscroll-behavior: none; /* 禁用"橡皮筋"效果 */
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden; /* body不滚动 */
+        background: linear-gradient(180deg, #0e2b44, #091c2e); /* 恢复深蓝色渐变 */
+        overscroll-behavior: none; /* 禁用"橡皮筋"效果 */
+      }
+
+      #app {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden; /* app容器不滚动 */
+      }
+
+      /* 固定标题栏 - 统一规范（参考 projects-list.html） */
+      .fixed-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 14px 16px;
+        background: linear-gradient(180deg, rgba(10, 16, 32, 0.95), rgba(10, 16, 32, 0.75));
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .fixed-header .logo-full {
+        display: flex;
+        align-items: center;
+      }
+
+      .fixed-header .logo-img {
+        height: 26px;
+        width: 26px;
+        border-radius: 8px;
+        object-fit: contain;
+        background: url('img/logo.png') center/contain no-repeat;
+      }
+
+      .fixed-header .brand {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .fixed-header .brand-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #e8c991;
+        letter-spacing: 0.3px;
+        line-height: 1.2;
+      }
+
+      .fixed-header .brand-subtitle-animated {
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.2;
+      }
+
+      /* 可滚动内容容器 */
+      .scrollable-content {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: auto; /* 允许原生滚动行为，iOS会自动处理弹性 */
+        padding-top: 60px; /* 为固定标题栏留空间 */
+        padding-bottom: 100px; /* 为固定底部导航栏留更多空间，防止按钮被遮住 */
+        scroll-behavior: smooth; /* 平滑滚动 */
+      }
+
+      /* 确保底部导航栏固定 */
+      .tabbar {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 1000 !important;
+        background: #ffffff;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      /* 强制九宫格文字可见 - 移动端适配 */
+      .grid-item .text,
+      #profile-grid .grid-item .text,
+      .action-grid .grid-item .text {
+        color: #1a2332 !important;
+        font-size: clamp(11px, 2.8vw, 13px) !important;
+        font-weight: 600 !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9) !important;
+        z-index: 999 !important;
+        height: auto !important;
+        line-height: 1.3 !important;
+        margin-top: clamp(6px, 1.5vw, 8px) !important;
+      }
+
+      /* 移除可能的顶部空白 */
+      body::before,
+      body::after,
+      #app::before,
+      #app::after {
+        display: none !important;
+      }
+
+      /* VIP升级进度 - 移动端自适应 */
+      .vip-progress-container {
+        position: relative;
+        z-index: 2;
+        margin-top: 0;
+        padding: 0 clamp(12px, 3vw, 16px) clamp(10px, 2.5vw, 12px);
+        display: block;
+      }
+
+      .vip-progress-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: clamp(11px, 2.8vw, 12px);
+        color: rgba(255, 255, 255, 0.95);
+        margin-bottom: clamp(6px, 1.5vw, 8px);
+        font-weight: 500;
+      }
+
+      .vip-progress-label span:first-child {
+        color: rgba(255, 255, 255, 0.95);
+      }
+
+      .vip-progress-label span:last-child {
+        color: #fbbf24;
+        font-weight: 700;
+        font-size: clamp(12px, 3vw, 14px);
+        text-shadow: 0 1px 3px rgba(251, 191, 36, 0.5);
+      }
+
+      .vip-progress-bar {
+        height: clamp(10px, 2.5vw, 12px);
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: clamp(5px, 1.25vw, 6px);
+        overflow: hidden;
+        position: relative;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        margin: 0;
+        padding: 0;
+        z-index: 20;
+        
+      }
+
+      .vip-progress-fill {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          #d2b48c,
+          #e6d3a3,
+          #d4a574,
+          #c9a884,
+          #d2b48c
+        );
+        background-size: 200% 100%;
+        animation: progress-shine 2s linear infinite;
+        border-radius: clamp(5px, 1.25vw, 6px);
+        transition: width 0.5s ease;
+        min-width: 5%;
+        width: 0%;
+        box-shadow: 0 0 15px rgba(210, 180, 140, 0.8),
+          0 2px 10px rgba(196, 154, 108, 0.6),
+          inset 0 1px 2px rgba(255, 255, 255, 0.3);
+        position: relative;
+        z-index: 21;
+      }
+
+      @keyframes progress-shine {
+        0% {
+          background-position: 200% 0;
+        }
+
+        100% {
+          background-position: -200% 0;
+        }
+      }
+
+      /* 退出 */
+      .logout {
+        margin: clamp(12px, 3vw, 16px) clamp(16px, 4vw, 20px)
+          clamp(100px, 25vw, 120px);
+        padding: clamp(8px, 2vw, 10px) clamp(12px, 3vw, 14px);
+        background: linear-gradient(180deg, #dbeafe, #bfdbfe, #93c5fd);
+        border-radius: 12px;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        
+        color: #2563eb;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        min-height: clamp(44px, 11vw, 52px);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        /* 文字层级 */
+        z-index: 2;
+        /* 立体阴影效果 */
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2),
+          0 2px 4px rgba(37, 99, 235, 0.15),
+          inset 0 1px 2px rgba(255, 255, 255, 0.6),
+          inset 0 -2px 4px rgba(37, 99, 235, 0.2);
+      }
+
+      /* 顶部高光 */
+      .logout::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50%;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.3) 0%,
+          rgba(255, 255, 255, 0.05) 100%
+        );
+        border-radius: 12px 12px 50% 50%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      /* 底部阴影 */
+      .logout::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 30%;
+        background: linear-gradient(
+          180deg,
+          transparent 0%,
+          rgba(0, 0, 0, 0.15) 100%
+        );
+        border-radius: 0 0 12px 12px;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .logout:active {
+        transform: translateY(2px) scale(0.98);
+        box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12),
+          0 1px 2px rgba(37, 99, 235, 0.08), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .logout:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.2),
+          0 3px 6px rgba(37, 99, 235, 0.15),
+          inset 0 1px 2px rgba(255, 255, 255, 0.3),
+          inset 0 -2px 4px rgba(37, 99, 235, 0.2);
+      }
+
+      /* Profile 页面九宫格图标颜色和背景 - 强制覆盖缓存 - 移动端适配 */
+      #profile-grid .grid-item .icon {
+        background: #f8f9fa !important;
+        box-shadow: none !important;
+        border: 2px solid rgba(201, 169, 97, 0.8) !important;
+        position: relative !important;
+        width: clamp(44px, 11vw, 52px) !important;
+        height: clamp(44px, 11vw, 52px) !important;
+        min-width: clamp(44px, 11vw, 52px) !important;
+        min-height: clamp(44px, 11vw, 52px) !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        border-radius: 50% !important;
+      }
+
+      /* 金色圆圈内圈 - 在图标内部 */
+      #profile-grid .grid-item .icon::before {
+        content: "" !important;
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: calc(100% - 14px) !important;
+        height: calc(100% - 14px) !important;
+        border: 2px solid rgba(201, 169, 97, 0.6) !important;
+        border-radius: 50% !important;
+        z-index: 1 !important;
+        pointer-events: none !important;
+      }
+
+      #profile-grid .grid-item .icon svg {
+        position: relative !important;
+        z-index: 2 !important;
+        filter: none !important;
+      }
+
+      /* 移除 SVG 元素上的滤镜属性 */
+      #profile-grid .grid-item .icon svg path[filter],
+      #profile-grid .grid-item .icon svg circle[filter],
+      #profile-grid .grid-item .icon svg rect[filter],
+      #profile-grid .grid-item .icon svg ellipse[filter],
+      #profile-grid .grid-item .icon svg g[filter] {
+        filter: none !important;
+      }
+
+      /* 移除 SVG 内部的滤镜元素，但保留渐变定义 */
+      #profile-grid .grid-item .icon svg defs filter {
+        display: none !important;
+        display: none !important;
+      }
+
+      #profile-grid .grid-item .icon svg defs feGaussianBlur,
+      #profile-grid .grid-item .icon svg defs feDropShadow,
+      #profile-grid .grid-item .icon svg defs feOffset,
+      #profile-grid .grid-item .icon svg defs feComponentTransfer,
+      #profile-grid .grid-item .icon svg defs feMerge {
+        display: none !important;
+      }
+
+      /* 图标颜色 - 温暖棕褐色/金色渐变 - 保留图标清晰度和层次 */
+      /* 只修改渐变定义，不强制覆盖所有元素 */
+      #profile-grid .grid-item .icon svg linearGradient stop[offset="0%"] {
+        stop-color: #d2b48c !important;
+      }
+
+      #profile-grid .grid-item .icon svg linearGradient stop[offset="30%"],
+      #profile-grid .grid-item .icon svg linearGradient stop[offset="40%"] {
+        stop-color: #e6d3a3 !important;
+      }
+
+      #profile-grid .grid-item .icon svg linearGradient stop[offset="50%"],
+      #profile-grid .grid-item .icon svg linearGradient stop[offset="70%"] {
+        stop-color: #d4a574 !important;
+      }
+
+      #profile-grid .grid-item .icon svg linearGradient stop[offset="100%"] {
+        stop-color: #c9a884 !important;
+      }
+
+      #profile-grid .grid-item .icon svg radialGradient stop[offset="0%"] {
+        stop-color: #d2b48c !important;
+      }
+
+      #profile-grid .grid-item .icon svg radialGradient stop[offset="30%"],
+      #profile-grid .grid-item .icon svg radialGradient stop[offset="40%"] {
+        stop-color: #d4a574 !important;
+      }
+
+      #profile-grid .grid-item .icon svg radialGradient stop[offset="100%"] {
+        stop-color: #c9a884 !important;
+      }
+
+      /* 统一描边颜色，添加金色反光效果 */
+      #profile-grid .grid-item .icon svg path[stroke],
+      #profile-grid .grid-item .icon svg circle[stroke],
+      #profile-grid .grid-item .icon svg rect[stroke],
+      #profile-grid .grid-item .icon svg ellipse[stroke] {
+        stroke: #d4af37 !important;
+        stroke-width: 1.5px !important;
+      }
+
+      /* 在SVG外层添加金色描边圆环 */
+      #profile-grid .grid-item .icon svg {
+        position: relative !important;
+        z-index: 2 !important;
+        filter: none !important;
+      }
+
+      /* 底部其他功能列表样式 */
+      .other-functions {
+        padding: clamp(8px, 2vw, 10px) clamp(16px, 4vw, 16px)
+          clamp(12px, 3vw, 16px);
+        margin-top: clamp(-12px, -3vw, -8px);
+        position: relative;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: clamp(12px, 3vw, 16px);
+        overflow: visible;
+        z-index: 1;
+        margin-left: clamp(12px, 3vw, 16px);
+        margin-right: clamp(12px, 3vw, 16px);
+      }
+
+      /* 功能列表背景容器 - 只包含功能列表和退出登录按钮 */
+      .other-functions::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: clamp(12px, 3vw, 16px);
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      /* 移除原有背景遮罩 */
+      .other-functions::before {
+        display: none;
+      }
+
+      /* 资产区域布局 - 参考图样式 */
+      .assets {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: clamp(8px, 2vw, 10px);
+        position: relative;
+        border-radius: clamp(10px, 2.5vw, 12px);
+        overflow: visible;
+        margin-top: clamp(0px, 0vw, 2px);
+        margin-bottom: 0;
+        margin-left: 16px;
+        margin-right: 16px;
+        z-index: 10;
+        padding-top: clamp(6px, 1.5vw, 8px);
+        padding-bottom: clamp(8px, 2vw, 10px);
+        padding-left: 0;
+        padding-right: 0;
+        min-height: auto;
+      }
+
+      .assets .brand {
+        position: relative;
+        z-index: 1;
+        
+        display: none; /* 隐藏空div */
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: clamp(6px, 1.5vw, 8px);
+        margin-bottom: clamp(8px, 2vw, 12px);
+        margin-top: clamp(-8px, -2vw, -6px);
+      }
+
+      .assets .brand-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: clamp(4px, 1vw, 6px);
+        min-width: 0;
+        flex: 0 0 auto;
+        justify-content: flex-start;
+      }
+
+      .assets .brand-name-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        min-width: 0;
+      }
+
+      .assets .brand-name-logo {
+        width: clamp(32px, 8vw, 40px);
+        height: clamp(32px, 8vw, 40px);
+        object-fit: contain;
+        flex-shrink: 0;
+        background: none;
+        border: none;
+        padding: 0;
+        box-shadow: none;
+      }
+
+      .assets .brand-name {
+        font-size: clamp(22px, 5.5vw, 26px);
+        font-weight: 700;
+        color: #fff !important;
+        line-height: 1.4;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        min-width: 0;
+      }
+
+      .assets .brand-subtitle {
+        font-size: clamp(16px, 4vw, 18px);
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.4;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        min-width: 0;
+      }
+
+      .assets .asset-wrapper {
+        display: flex;
+        align-items: stretch;
+        gap: clamp(10px, 2.5vw, 12px);
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        
+        margin-top: 0;
+      }
+
+      .assets::before {
+        /* 移除背景地球图片 */
+        display: none;
+      }
+
+      .assets::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.15);
+        z-index: -1;
+        pointer-events: none;
+        border-radius: clamp(12px, 3vw, 14px);
+      }
+
+      /* 资产卡片 - 淡淡毛玻璃效果 */
+      .asset {
+        flex: 1 1 0;
+        position: relative;
+        z-index: 1;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-radius: clamp(8px, 2vw, 10px);
+        padding: clamp(16px, 4vw, 20px) clamp(18px, 4.5vw, 22px);
+        min-height: clamp(80px, 20vw, 100px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: clamp(2px, 0.5vw, 3px);
+      }
+
+      /* 确保三个资产卡片等宽 */
+      .assets .asset-wrapper .asset {
+        flex: 1 1 0;
+        min-width: 0;
+      }
+
+      /* 账号和ID卡片 - 固定为长方形（宽度大于高度） */
+      .account-id-card {
+        flex: 1 1 0;
+        min-width: 0;
+        min-height: clamp(80px, 20vw, 100px) !important;
+        height: clamp(80px, 20vw, 100px) !important;
+      }
+
+      /* 合并的资产卡片 - 固定为长方形（宽度大于高度） */
+      .merged-asset {
+        min-height: clamp(80px, 20vw, 100px) !important;
+        height: clamp(80px, 20vw, 100px) !important;
+      }
+
+      /* 合并的资产和收益卡片 - 与账号ID卡片等高 */
+      .merged-asset-income {
+        min-height: clamp(120px, 30vw, 150px) !important;
+        height: auto !important;
+      }
+
+      /* 所有资产卡片统一大小 - 固定为长方形（宽度大于高度） */
+      .assets .asset-wrapper .asset {
+        min-height: clamp(80px, 20vw, 100px) !important;
+        height: clamp(80px, 20vw, 100px) !important;
+      }
+
+      /* 翻转卡片样式 */
+      .flip-card {
+        background-color: transparent;
+        perspective: 1000px;
+        cursor: pointer;
+        padding: 0 !important;
+      }
+
+      .flip-card .asset {
+        padding: clamp(16px, 4vw, 20px) clamp(18px, 4.5vw, 22px) !important;
+      }
+
+      .flip-card-inner {
+        position: relative;
+        
+        height: 100%;
+        
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+      }
+
+      .flip-card.flipped .flip-card-inner {
+        transform: rotateX(180deg);
+      }
+
+      .flip-card-front,
+      .flip-card-back {
+        position: absolute;
+        
+        height: 100%;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: clamp(16px, 4vw, 20px) clamp(18px, 4.5vw, 22px);
+      }
+
+      .flip-card-back {
+        transform: rotateX(180deg);
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: clamp(8px, 2vw, 10px);
+      }
+
+      /* 图标样式 */
+      .card-icon {
+        width: 32px;
+        height: 32px;
+        margin: 0 auto clamp(8px, 2vw, 10px);
+        opacity: 0.8;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
+
+      .card-icon img {
+        
+        height: 100%;
+        object-fit: contain;
+        filter: brightness(0) invert(1);
+        opacity: 0.9;
+      }
+
+      .card-icon svg {
+        
+        height: 100%;
+        fill: rgba(255, 255, 255, 0.9);
+      }
+
+      /* USDT资产顶部卡片样式 */
+      .usdt-asset-top .label {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .usdt-asset-top .value {
+        font-size: 15px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.95);
+      }
+
+      /* 总资产和总收益的金额字体调小 */
+      .assets .asset-wrapper .asset .value {
+        font-size: clamp(14px, 3.5vw, 16px) !important;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.95);
+        line-height: 1.3;
+        word-break: break-all;
+        overflow-wrap: break-word;
+      }
+
+      .assets .asset-wrapper .asset .value.green {
+        color: #4ade80;
+      }
+
+      .other-functions .func-list {
+        position: relative;
+        z-index: 1;
+        max-width: clamp(600px, 90vw, 720px);
+        margin: 0 auto;
+      }
+
+      .func-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(8px, 2vw, 10px);
+        row-gap: clamp(6px, 1.5vw, 8px);
+        align-items: stretch;
+      }
+
+      /* 会员等级也放第二排，保持2列整齐排列 */
+      /* 简化按钮样式 - 减少背景层次 */
+      .func-list .payment-method-card {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-height: 72px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+      }
+
+      .func-list .payment-method-card:active {
+        transform: scale(0.98);
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .func-list .payment-method-card:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      /* 图标 - 参考充值页面风格 */
+      .func-list .payment-icon {
+        font-size: 24px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-shrink: 0;
+      }
+
+      /* 文字信息容器 */
+      .func-list .payment-info {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      /* 标题 */
+      .func-list .payment-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.95);
+        line-height: 1.3;
+      }
+
+      /* 描述文字 */
+      .func-list .payment-desc {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.3;
+      }
+
+      /* 九宫格响应式布局 - 紧急修复 2025-11-13 */
+      .grid-9,
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        padding: 20px 15px;
+      }
+
+      .grid-item,
+      .feature-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 20px 10px;
+        min-height: 100px;
+        
+        background: linear-gradient(
+          135deg,
+          rgba(26, 58, 92, 0.05) 0%,
+          rgba(26, 58, 92, 0.1) 100%
+        );
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .grid-icon,
+      .feature-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 10px;
+      }
+
+      .grid-title,
+      .feature-title {
+        font-size: 15px;
+        font-weight: 500;
+        color: #1a3a5c;
+      }
+
+      /* 小屏幕适配 */
+      @media (max-width: 768px) {
+        .grid-9,
+        .feature-grid {
+          gap: 12px;
+          padding: 15px 10px;
+        }
+
+        .grid-item,
+        .feature-item {
+          padding: 15px 8px;
+          min-height: 90px;
+        }
+
+        .grid-icon,
+        .feature-icon {
+          width: 42px;
+          height: 42px;
+        }
+
+        .grid-title,
+        .feature-title {
+          font-size: 14px;
+        }
+      }
+
+      /* 超小屏幕适配 */
+      @media (max-width: 360px) {
+        .grid-9,
+        .feature-grid {
+          gap: 10px;
+          padding: 12px 8px;
+        }
+
+        .grid-item,
+        .feature-item {
+          padding: 12px 5px;
+          min-height: 80px;
+        }
+
+        .grid-icon,
+        .feature-icon {
+          width: 36px;
+          height: 36px;
+          margin-bottom: 8px;
+        }
+
+        .grid-title,
+        .feature-title {
+          font-size: 13px;
+        }
+      }
+
+      /* 卡片优化 */
+      .scrollable-content > div:first-child {
+        gap: 10px !important;
+        margin: 6px 12px 10px !important;
+
+      /* === 卡片优化 v2 === */
+      
+      /* 卡片容器 - 进一步缩短高度 */
+      .scrollable-content > div:first-child {
+        gap: 8px !important;
+
+      /* === 卡片优化 v3 - 紧凑布局 === */
+      
+      /* 卡片容器 - 继续缩小 */
+      .scrollable-content > div:first-child {
+        gap: 8px !important;
+        margin: 2px 12px 6px !important;
+        height: 85px !important;
+      }
+      
+      /* 卡片内部布局 - 绝对定位 */
+      .account-id-card,
+      .flip-card,
+      .usdt-card {
+        position: relative !important;
+        padding: 8px 10px !important;
+      }
+      
+      /* 标签 - 贴左上角 */
+      .account-id-card .label,
+      .flip-card .label,
+      .usdt-card .label,
+      .flip-card-front .label,
+      .flip-card-back .label {
+        position: absolute !important;
+        top: 8px !important;
+        left: 10px !important;
+        font-size: clamp(10px, 2.5vw, 11px) !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+
+      /* === 卡片优化 v4 - 超紧凑布局 === */
+      
+      /* 卡片容器 - 进一步缩小 */
+      .scrollable-content > div:first-child {
+        gap: 4px !important;
+        margin: -20px 8px 2px !important;
+        height: 45px !important;
+      }
+      
+      /* 卡片内部 - 取消所有内边距 */
+      .account-id-card,
+      .flip-card,
+      .usdt-card {
+        position: relative !important;
+        padding: 4px 8px 0px 8px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+      }
+      
+      /* 翻转卡片内部容器 */
+      .flip-card-inner {
+        height: 100% !important;
+      }
+      
+      .flip-card-front,
+      .flip-card-back {
+        padding: 4px 8px 0px 8px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+      }
+      
+      /* 标签 - 固定在顶部 */
+      .account-id-card .label,
+      .flip-card .label,
+      .usdt-card .label,
+      .flip-card-front > .label,
+      .flip-card-back > .label,
+      .flip-card-front > div:first-child,
+      .flip-card-back > div:first-child {
+        position: absolute !important;
+        top: 4px !important;
+        left: 8px !important;
+        font-size: clamp(9px, 2.2vw, 10px) !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+        font-weight: 500 !important;
+        margin: 0 !important;
+
+      /* === 卡片优化 v5 - 超强制布局 === */
+      
+      /* 所有四张卡片容器 - 统一高度 */
+      .scrollable-content > div:first-child {
+        gap: 4px !important;
+        margin: -20px 8px 2px !important;
+        height: 45px !important;
+      }
+      
+      /* 所有卡片内部 - 强制高度和布局 */
+      .account-id-card,
+      .flip-card,
+      .usdt-card,
+      [data-flip-id],
+      .scrollable-content > div:first-child > div {
+        position: relative !important;
+        padding: 4px 8px 0px 8px !important;
+        height: 45px !important;
+        min-height: 45px !important;
+        max-height: 45px !important;
+        box-sizing: border-box !important;
+      }
+      
+      /* 翻转卡片内部 */
+      .flip-card-inner,
+      .flip-card-front,
+      .flip-card-back {
+        height: 100% !important;
+        position: relative !important;
+      }
+      
+      /* 所有标签 - 强制左上 */
+      .account-id-card .label,
+      .account-id-card > div:first-of-type,
+      .flip-card .label,
+      .flip-card > div:first-of-type,
+      .flip-card-front > div:first-of-type,
+      .flip-card-back > div:first-of-type,
+      [data-flip-id] > div:first-of-type {
+        position: absolute !important;
+        top: 4px !important;
+        left: 8px !important;
+        font-size: clamp(9px, 2.2vw, 10px) !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+        font-weight: 500 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: 1 !important;
+        z-index: 1 !important;
+      }
+      
+      /* 所有数值 - 强制贴底 */
+      #userNameDisplay,
+      #totalAsset,
+      #totalUsdtAsset,
+      #totalIncomeCny,
+      #totalUsdtIncome,
+      .account-id-card > span,
+      .account-id-card .value,
+      .flip-card .value,
+      .flip-card > .value,
+      .flip-card-front .value,
+      .flip-card-back .value,
+      [data-flip-id] .value {
+        position: absolute !important;
+        bottom: 0px !important;
+        left: 8px !important;
+        right: 30px !important;
+        font-size: clamp(16px, 4vw, 18px) !important;
+        font-weight: 700 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: 1.1 !important;
+        z-index: 1 !important;
+      }
+      
+      /* 所有图标 - 右上角圆角 */
+      .flip-toggle-icon,
+      .account-id-card img,
+      .flip-card img,
+      .flip-card-front img,
+      .flip-card-back img,
+      [data-flip-id] img {
+        position: absolute !important;
+        top: 4px !important;
+        right: 8px !important;
+        width: clamp(18px, 4.5vw, 20px) !important;
+        height: clamp(18px, 4.5vw, 20px) !important;
+        border-radius: 5px !important;
+        object-fit: cover !important;
+        z-index: 2 !important;
+      }
+      
+      /* 四个卡片背景颜色 */
+      .account-id-card {
+        background: rgba(255, 255, 255, 0.12) !important;
+      }
+      
+      [data-flip-id="usdt"] {
+        background: rgba(255, 255, 255, 0.10) !important;
+      }
+      
+      .scrollable-content > div:first-child > div:nth-child(3) {
+        background: rgba(255, 255, 255, 0.14) !important;
+      }
+      
+      .scrollable-content > div:first-child > div:nth-child(4) {
+        background: rgba(255, 255, 255, 0.11) !important;
+      }
+
+      /* === 最高优先级 - 强制数字贴底 === */
+      #totalAsset,
+      #totalUsdtAsset,
+      #totalIncomeCny,
+      #totalUsdtIncome {
+        position: absolute !important;
+        bottom: 0px !important;
+        left: 8px !important;
+        top: auto !important;
+        transform: none !important;
+        text-align: left !important;
+        width: auto !important;
+        max-width: calc(100% - 40px) !important;
+      }
+
+      /* === 数字自适应毛玻璃空间 === */
+      #totalAsset,
+      #totalUsdtAsset,
+      #totalIncomeCny,
+      #totalUsdtIncome,
+      #userNameDisplay {
+        font-size: clamp(14px, 5vw, 22px) !important;
+        height: auto !important;
+        max-height: 30px !important;
+        display: flex !important;
+        align-items: flex-end !important;
+        line-height: 1 !important;
+        white-space: nowrap !important;
+        overflow: visible !important;
+      }
+      
+      /* 根据卡片空间自动调整 */
+      @media (max-width: 375px) {
+        #totalAsset,
+        #totalUsdtAsset,
+        #totalIncomeCny,
+        #totalUsdtIncome,
+        #userNameDisplay {
+          font-size: clamp(12px, 4vw, 16px) !important;
+        }
+      }
+      
+      @media (min-width: 376px) and (max-width: 768px) {
+        #totalAsset,
+        #totalUsdtAsset,
+        #totalIncomeCny,
+        #totalUsdtIncome,
+        #userNameDisplay {
+          font-size: clamp(14px, 4.5vw, 20px) !important;
+        }
+      }
+      
+      @media (min-width: 769px) {
+        #totalAsset,
+        #totalUsdtAsset,
+        #totalIncomeCny,
+        #totalUsdtIncome,
+        #userNameDisplay {
+          font-size: clamp(16px, 3vw, 24px) !important;
+        }
+      }
+    </style>
+      <script src="api-config.js?v=1763690550"></script>
+    <script src="token-manager.js?v=1763690550"></script>
+</head>
+
+  <body>
+    <!-- 固定标题栏 -->
+    <div class="fixed-header">
+      <div class="logo-full">
+        <div class="logo-img"></div>
+      </div>
+      <div class="brand">
+        <div class="brand-name">PROVIDENCE</div>
+        <div class="brand-subtitle-animated">EQUITY PARTNERS</div>
+      </div>
+    </div>
+
+    <svg width="0" height="0" style="position: absolute">
+      <defs>
+        <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color: #d9b45d" />
+          <stop offset="100%" style="stop-color: #c9a647" />
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <div id="app">
+      <!-- 可滚动内容容器 -->
+      <div class="scrollable-content">
+      <header class="hero">
+        <!-- 四个长条卡片：2x2网格布局 -->
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: clamp(12px, 3vw, 16px);
+            margin: clamp(8px, 2vw, 12px) 16px clamp(12px, 3vw, 16px);
+            height: clamp(160px, 40vw, 200px);
+          "
+        >
+          <!-- 左上：账号ID卡片（可翻转） -->
+          <div
+            class="account-id-card flip-card"
+            data-flip-id="account"
+            style="
+              padding: clamp(14px, 3.5vw, 18px);
+              background: rgba(255, 255, 255, 0.12);
+              backdrop-filter: blur(12px);
+              -webkit-backdrop-filter: blur(12px);
+              border-radius: clamp(12px, 3vw, 16px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              position: relative;
+              overflow: hidden;
+              z-index: 2;
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-start;
+              box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+              cursor: pointer;
+            "
+          >
+            <div
+              class="flip-card-inner"
+              style="
+                position: relative;
+                
+                height: 100%;
+                transform-style: preserve-3d;
+                transition: transform 0.6s;
+              "
+            >
+              <!-- 正面：显示账号 -->
+              <div
+                class="flip-card-front"
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: flex-start;
+                  align-items: center;
+                  backface-visibility: hidden;
+                  padding: clamp(14px, 3.5vw, 18px);
+                "
+              >
+                <div
+                  style="
+                    font-size: clamp(10px, 2.5vw, 11px);
+                    color: rgba(255, 255, 255, 0.6);
+                    font-weight: 500;
+                    position: absolute;
+                    top: clamp(8px, 2vw, 10px);
+                    left: clamp(8px, 2vw, 10px);
+                  "
+                >
+                  账号
+                </div>
+                <span
+                  id="userNameDisplay"
+                  style="
+                    font-size: clamp(24px, 6vw, 28px);
+                    font-weight: 700;
+                    background: linear-gradient(
+                      135deg,
+                      #fff 0%,
+                      rgba(201, 169, 97, 0.9) 100%
+                    );
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    word-break: break-all;
+                    overflow-wrap: break-word;
+                    line-height: 1.3;
+                    
+                    
+                  "
+                >
+                  加载中...
+                </span>
+              </div>
+              <!-- 背面：空白 -->
+              <div
+                class="flip-card-back"
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: flex-start;
+                  align-items: center;
+                  backface-visibility: hidden;
+                  transform: rotateX(180deg);
+                "
+              ></div>
+            </div>
+          </div>
+
+          <!-- 右上：USDT余额（默认翻过去，只显示影子） -->
+          <div
+            class="usdt-card flip-card"
+            data-flip-id="usdt"
+            style="
+              padding: clamp(24px, 6vw, 32px) clamp(14px, 3.5vw, 18px) clamp(14px, 3.5vw, 18px);
+              background: rgba(255, 255, 255, 0.12);
+              backdrop-filter: blur(12px);
+              -webkit-backdrop-filter: blur(12px);
+              border-radius: clamp(12px, 3vw, 16px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              position: relative;
+              overflow: hidden;
+              z-index: 2;
+              box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+              cursor: pointer;
+            "
+          >
+            <div
+              class="flip-card-inner"
+              style="
+                position: relative;
+                
+                height: 100%;
+                transform-style: preserve-3d;
+                transition: transform 0.6s;
+              "
+            >
+              <!-- 状态1：显示USDT余额（默认显示） -->
+              <div
+                class="flip-card-front"
+                data-usdt-state="balance"
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: flex-start;
+                  align-items: center;
+                  backface-visibility: hidden;
+                  padding: clamp(14px, 3.5vw, 18px);
+                  opacity: 1;
+                  transition: opacity 0.3s ease;
+                  pointer-events: auto;
+                "
+              >
+                <img
+                  src="tp/usdt.png"
+                  alt="USDT"
+                  onerror="this.src='tp/usdt.jpg';"
+                  style="
+                    width: clamp(24px, 6vw, 28px);
+                    height: clamp(24px, 6vw, 28px);
+                    object-fit: contain;
+                    flex-shrink: 0;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    border-radius: 6px;
+                    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+                  "
+                />
+                <div
+                  style="
+                    font-size: clamp(12px, 3vw, 13px);
+                    color: rgba(255, 255, 255, 0.6);
+                    font-weight: 600;
+                    position: absolute;
+                    top: clamp(8px, 2vw, 10px);
+                    left: clamp(8px, 2vw, 10px);
+                  "
+                >
+                  USDT(余额)
+                </div>
+                <div
+                  class="value"
+                  id="totalUsdtAsset"
+                  style="
+                    font-size: clamp(22px, 5.5vw, 26px);
+                    font-weight: 700;
+                    color: #4ade80;
+                    line-height: 1.3;
+                    letter-spacing: 0.5px;
+                    
+                    
+                  "
+                >
+                  0.00
+                </div>
+              </div>
+              <!-- 状态2：显示USDT收益 -->
+              <div
+                class="flip-card-back"
+                data-usdt-state="income"
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: flex-start;
+                  align-items: center;
+                  backface-visibility: hidden;
+                  transform: rotateX(0deg);
+                  opacity: 1;
+                  transition: opacity 0.3s ease;
+                  pointer-events: auto;
+                "
+              >
+                <img
+                  src="tp/usdt.png"
+                  alt="USDT"
+                  onerror="this.src='tp/usdt.jpg';"
+                  style="
+                    width: clamp(24px, 6vw, 28px);
+                    height: clamp(24px, 6vw, 28px);
+                    object-fit: contain;
+                    flex-shrink: 0;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    border-radius: 6px;
+                    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+                  "
+                />
+                <div
+                  style="
+                    font-size: clamp(12px, 3vw, 13px);
+                    color: rgba(255, 255, 255, 0.6);
+                    font-weight: 600;
+                    position: absolute;
+                    top: clamp(8px, 2vw, 10px);
+                    left: clamp(8px, 2vw, 10px);
+                  "
+                >
+                  USDT(收益)
+                </div>
+                <div
+                  class="value"
+                  id="totalUsdtIncome"
+                  style="
+                    font-size: clamp(22px, 5.5vw, 26px);
+                    font-weight: 400;
+                    color: #4ade80;
+                    line-height: 1.3;
+                    letter-spacing: 0.5px;
+                    
+                    
+                  "
+                >
+                  0.00
+                </div>
+              </div>
+              <!-- 状态3：空白 -->
+              <div
+                class="flip-card-empty"
+                data-usdt-state="empty"
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: flex-start;
+                  align-items: center;
+                  backface-visibility: hidden;
+                  opacity: 0;
+                  transition: opacity 0.3s ease;
+                  pointer-events: none;
+                "
+              ></div>
+            </div>
+          </div>
+
+          <!-- 左下：银行卡+人民币余额（可翻转） -->
+          <div
+            class="cny-card flip-card"
+            data-flip-id="cny"
+            style="
+              padding: clamp(24px, 6vw, 32px) clamp(14px, 3.5vw, 18px) clamp(14px, 3.5vw, 18px);
+              background: rgba(255, 255, 255, 0.12);
+              backdrop-filter: blur(12px);
+              -webkit-backdrop-filter: blur(12px);
+              border-radius: clamp(12px, 3vw, 16px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              position: relative;
+              overflow: hidden;
+              z-index: 2;
+              box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+              cursor: pointer;
+            "
+          >
+            <div
+              class="flip-card-inner"
+              style="
+                position: relative;
+                
+                height: 100%;
+                transform-style: preserve-3d;
+                transition: transform 0.6s;
+              "
+            >
+              <!-- 正面：显示余额(人民币) -->
+              <div
+                class="flip-card-front"
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: flex-start;
+                  align-items: center;
+                  backface-visibility: hidden;
+                  padding: clamp(14px, 3.5vw, 18px);
+                "
+              >
+                <img
+                  src="tp/bank.jpg"
+                  alt="银行卡"
+                  style="
+                    width: clamp(24px, 6vw, 28px);
+                    height: clamp(24px, 6vw, 28px);
+                    object-fit: contain;
+                    flex-shrink: 0;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    border-radius: 6px;
+                  "
+                />
+                <div
+                  style="
+                    font-size: clamp(12px, 3vw, 13px);
+                    color: rgba(255, 255, 255, 0.6);
+                    font-weight: 600;
+                    position: absolute;
+                    top: clamp(8px, 2vw, 10px);
+                    left: clamp(8px, 2vw, 10px);
+                  "
+                >
+                  余额(人民币)
+                </div>
+                <div
+                  class="value"
+                  id="totalAsset"
+                  style="
+                    font-size: clamp(22px, 5.5vw, 26px);
+                    font-weight: 400;
+                    background: linear-gradient(
+                      135deg,
+                      #fff 0%,
+                      rgba(201, 169, 97, 0.9) 100%
+                    );
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    line-height: 1.3;
+                    letter-spacing: 0.5px;
+                    
+                    
+                  "
+                >
+                  0.00
+                </div>
+              </div>
+              <!-- 背面：空白 -->
+              <div
+                class="flip-card-back"
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: flex-start;
+                  align-items: center;
+                  backface-visibility: hidden;
+                  transform: rotateX(180deg);
+                "
+              ></div>
+            </div>
+          </div>
+
+          <!-- 右下：盈利（可翻转） -->
+          <div
+            class="income-card flip-card"
+            data-flip-id="income"
+            style="
+              padding: clamp(14px, 3.5vw, 18px);
+              background: rgba(255, 255, 255, 0.12);
+              backdrop-filter: blur(12px);
+              -webkit-backdrop-filter: blur(12px);
+              border-radius: clamp(12px, 3vw, 16px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              position: relative;
+              overflow: hidden;
+              z-index: 2;
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-start;
+              gap: clamp(8px, 2vw, 10px);
+              box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+              cursor: pointer;
+            "
+          >
+            <div
+              class="flip-card-inner"
+              style="
+                position: relative;
+                
+                height: 100%;
+                transform-style: preserve-3d;
+                transition: transform 0.6s;
+              "
+            >
+              <!-- 正面：显示收益(人民币) -->
+              <div
+                class="flip-card-front"
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: flex-start;
+                  align-items: center;
+                  backface-visibility: hidden;
+                  padding: clamp(14px, 3.5vw, 18px);
+                "
+              >
+                <div
+                  style="
+                    font-size: clamp(12px, 3vw, 13px);
+                    color: rgba(255, 255, 255, 0.6);
+                    font-weight: 600;
+                    position: absolute;
+                    top: clamp(8px, 2vw, 10px);
+                    left: clamp(8px, 2vw, 10px);
+                  "
+                >
+                  收益
+                </div>
+                <div
+                  class="value"
+                  id="totalIncomeCny"
+                  style="
+                    font-size: clamp(22px, 5.5vw, 26px);
+                    font-weight: 400;
+                    background: linear-gradient(
+                      135deg,
+                      #fff 0%,
+                      rgba(201, 169, 97, 0.9) 100%
+                    );
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    line-height: 1.3;
+                    letter-spacing: 0.5px;
+                    
+                    
+                  "
+                >
+                  0.00
+                </div>
+              </div>
+              <!-- 背面：空白 -->
+              <div
+                class="flip-card-back"
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: flex-start;
+                  align-items: center;
+                  backface-visibility: hidden;
+                  transform: rotateX(180deg);
+                "
+              ></div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <main class="content">
+        <section
+          class="vipcard"
+          data-vip-level="1"
+          id="vipCard"
+          style="
+            margin: -100px 16px 0 16px !important;
+            height: 120px !important;
+            max-height: 120px !important;
+            min-height: 120px !important;
+            padding: 12px 16px !important;
+            overflow: visible !important;
+            width: calc(100% - 32px) !important;
+            border: none !important;
+            box-shadow: none !important;
+            z-index: 2 !important;
+          "
+        >
+          <!-- 左上角距离升级信息 -->
+          <div
+            style="
+              position: absolute;
+              top: clamp(8px, 2vw, 10px);
+              left: clamp(8px, 2vw, 10px);
+              font-size: clamp(10px, 2.5vw, 11px);
+              color: rgba(255, 255, 255, 0.9);
+              z-index: 3;
+              line-height: 1.3;
+            "
+          >
+            <div>
+              距离
+              <span id="nextVipLevel" style="color: #fcd34d; font-weight: 700"
+                >VIP2</span
+              >
+              还需
+            </div>
+            <div style="color: #fcd34d; font-weight: 700; margin-top: 2px">
+              <span id="needInvestAmount">0</span>元
+            </div>
+          </div>
+          <!-- VIP升级进度条 - 从左边到右边，位于VIP图标原位置（右上角区域） -->
+          <div
+            class="vip-progress-container"
+            style="
+              position: absolute;
+              top: auto;
+              bottom: clamp(8px, 2vw, 12px);
+              left: clamp(8px, 2vw, 12px);
+              right: clamp(8px, 2vw, 12px);
+              z-index: 3;
+              padding: 0;
+            "
+          >
+            <div
+              class="vip-progress-bar"
+              id="vipProgressBar"
+              style="
+                position: relative;
+                height: clamp(10px, 2.5vw, 12px);
+                
+                background: rgba(0, 0, 0, 0.4);
+                border-radius: clamp(5px, 1.25vw, 6px);
+                overflow: hidden;
+              "
+            >
+              <div
+                class="vip-progress-fill"
+                id="vipProgressFill"
+                style="
+                  width: 5%;
+                  height: 100%;
+                  background: linear-gradient(
+                    90deg,
+                    #d2b48c,
+                    #e6d3a3,
+                    #d4a574,
+                    #c9a884
+                  );
+                  transition: width 0.3s ease;
+                "
+              ></div>
+            </div>
+          </div>
+        </section>
+
+        <style>
+          @keyframes shimmer {
+            0% {
+              transform: translateX(-100%);
+            }
+
+            100% {
+              transform: translateX(100%);
+            }
+          }
+
+          /* 九宫格响应式布局 - 紧急修复 2025-11-13 */
+          .grid-9,
+          .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 20px 15px;
+          }
+
+          .grid-item,
+          .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px 10px;
+            min-height: 100px;
+            
+            background: linear-gradient(
+              135deg,
+              rgba(26, 58, 92, 0.05) 0%,
+              rgba(26, 58, 92, 0.1) 100%
+            );
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+          }
+
+          .grid-icon,
+          .feature-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 10px;
+          }
+
+          .grid-title,
+          .feature-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: #1a3a5c;
+          }
+
+          /* 小屏幕适配 */
+          @media (max-width: 768px) {
+            .grid-9,
+            .feature-grid {
+              gap: 12px;
+              padding: 15px 10px;
+            }
+
+            .grid-item,
+            .feature-item {
+              padding: 15px 8px;
+              min-height: 90px;
+            }
+
+            .grid-icon,
+            .feature-icon {
+              width: 42px;
+              height: 42px;
+            }
+
+            .grid-title,
+            .feature-title {
+              font-size: 14px;
+            }
+          }
+
+          /* 超小屏幕适配 */
+          @media (max-width: 360px) {
+            .grid-9,
+            .feature-grid {
+              gap: 10px;
+              padding: 12px 8px;
+            }
+
+            .grid-item,
+            .feature-item {
+              padding: 12px 5px;
+              min-height: 80px;
+            }
+
+            .grid-icon,
+            .feature-icon {
+              width: 36px;
+              height: 36px;
+              margin-bottom: 8px;
+            }
+
+            .grid-title,
+            .feature-title {
+              font-size: 13px;
+            }
+          }
+
+          /* 导航栏使用全局样式，不在此页面覆盖 */
+
+          /* 九宫格图标图片大小适配 - 只显示图片中间圆形部分 */
+          #profile-grid .grid-item .icon {
+            overflow: hidden !important;
+            border-radius: 50% !important;
+          }
+          #profile-grid .grid-item .icon img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            object-position: center center !important;
+            display: block !important;
+            image-rendering: auto !important;
+            transform: scale(1.5) !important;
+            transform-origin: center center !important;
+            filter: none !important;
+            padding: 0 !important;
+            position: relative !important;
+            border-radius: 50% !important;
+          }
+
+          /* 九宫格间距适配 - 参考首页样式 */
+          #profile-grid {
+            column-gap: clamp(8px, 2vw, 24px) !important;
+            row-gap: clamp(12px, 3vw, 22px) !important;
+            padding: clamp(6px, 1.5vw, 12px) clamp(2px, 1vw, 8px)
+              clamp(4px, 2vw, 8px) !important;
+          }
+
+          /* grid-item容器 - 参考首页样式 */
+          #profile-grid .grid-item {
+            padding: 0 !important;
+            min-height: auto !important;
+          }
+
+          /* 小屏幕优化 */
+          @media (max-width: 375px) {
+            #profile-grid .grid-item .icon {
+              width: clamp(40px, 10vw, 48px) !important;
+              height: clamp(40px, 10vw, 48px) !important;
+            }
+          }
+
+          /* 超小屏幕优化 */
+          @media (max-width: 320px) {
+            #profile-grid .grid-item .icon {
+              width: clamp(36px, 9vw, 44px) !important;
+              height: clamp(36px, 9vw, 44px) !important;
+            }
+          }
+        </style>
+
+        <div
+          class="grid-container"
+          style="
+            margin-top: -60px !important;
+            position: relative;
+            z-index: 10 !important;
+          "
+        >
+          <div class="grid-wrap">
+            <section class="grid" id="profile-grid">
+              <!-- 第一排：充值、提款、兑换、日利宝 -->
+              <a class="grid-item" href="recharge.html">
+                <div class="icon">
+                  <img
+                    src="assets/a9e4a0eb5efb1.png?v=1763081296"
+                    alt="充值"
+                    onerror="this.style.display='none'"
+                  />
+                </div>
+                <div class="text">充值</div>
+              </a>
+              <a class="grid-item" href="withdraw.html">
+                <div class="icon">
+                  <img
+                    src="assets/a903f31571d7d.png?v=1763081296"
+                    alt="提款"
+                    onerror="this.style.display='none'"
+                  />
+                </div>
+                <div class="text">提款</div>
+              </a>
+              <a class="grid-item" href="points-exchange.html">
+                <div class="icon">
+                  <img
+                    src="assets/a112a6eb7beca.png?v=1763081296"
+                    alt="兑换"
+                    onerror="this.style.display='none'"
+                  />
+                </div>
+                <div class="text">兑换</div>
+              </a>
+              <a class="grid-item" href="ribao.html">
+                <div class="icon">
+                  <img
+                    src="assets/ad090479be846.png?v=1763081296"
+                    alt="日利宝"
+                    onerror="this.style.display='none'"
+                  />
+                </div>
+                <div class="text">日利宝</div>
+              </a>
+              <!-- 第二排：团队、项目（我的投资）、邀请、签到 -->
+              <a class="grid-item" href="invite.html">
+                <div class="icon">
+                  <img
+                    src="assets/a219e12250507.png?v=1763081296"
+                    alt="团队"
+                    onerror="this.style.display='none'"
+                  />
+                </div>
+                <div class="text">团队</div>
+              </a>
+              <a class="grid-item" href="my-investments.html">
+                <div class="icon">
+                  <img
+                    src="assets/a1d5935a3bde0.png?v=1763081296"
+                    alt="项目"
+                    onerror="this.style.display='none'"
+                  />
+                </div>
+                <div class="text">项目</div>
+              </a>
+              <a class="grid-item" href="invite-share.html">
+                <div class="icon">
+                  <img
+                    src="assets/a3b391327f247.png?v=1763081296"
+                    alt="邀请"
+                    onerror="this.style.display='none'"
+                  />
+                </div>
+                <div class="text">邀请</div>
+              </a>
+              <a class="grid-item" href="daily-checkin.html">
+                <div class="icon">
+                  <img
+                    src="assets/a8c7f9f435de7.png?v=1763081296"
+                    alt="签到"
+                    onerror="this.style.display='none'"
+                  />
+                </div>
+                <div class="text">签到</div>
+              </a>
+            </section>
+          </div>
+        </div>
+
+        <!-- 底部其他功能列表 - 简化背景层次 -->
+        <div
+          class="other-functions"
+          style="
+            margin-top: clamp(-8px, -2vw, -4px);
+            padding: 0 16px 4px;
+          "
+        >
+          <div
+            class="func-list-wrapper"
+            style="
+              background: rgba(26, 35, 50, 0.6);
+              border-radius: 16px;
+              padding: 18px;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              max-width: 720px;
+              margin: 0 auto;
+            "
+          >
+            <div
+              class="func-list"
+              style="
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+              "
+            >
+            <!-- 第一排：银行卡绑定、实名认证 -->
+            <a class="func-item payment-method-card" href="bank-cards.html">
+              <div class="payment-icon">💳</div>
+              <div class="payment-info">
+                <div class="payment-name">银行卡</div>
+                <div class="payment-desc">管理提现银行卡</div>
+              </div>
+            </a>
+            <a
+              class="func-item payment-method-card"
+              href="kyc-verification.html"
+            >
+              <div class="payment-icon">🆔</div>
+              <div class="payment-info">
+                <div class="payment-name">实名认证</div>
+                <div class="payment-desc">完成身份验证</div>
+              </div>
+            </a>
+            <!-- 第二排：交易记录 -->
+            <a class="func-item payment-method-card" href="records.html">
+              <div class="payment-icon">📋</div>
+              <div class="payment-info">
+                <div class="payment-name">交易记录</div>
+                <div class="payment-desc">查看充值提现记录</div>
+              </div>
+            </a>
+            <!-- 第三排：会员等级 -->
+            <a class="func-item payment-method-card" href="vip-level.html">
+              <div class="payment-icon">👑</div>
+              <div class="payment-info">
+                <div class="payment-name">会员等级</div>
+                <div class="payment-desc">查看VIP等级与权益</div>
+              </div>
+            </a>
+            </div>
+          </div>
+        </div>
+        <!-- 退出登录按钮 -->
+        <div
+          class="logout"
+          onclick="handleLogout()"
+          style="
+            margin: 16px;
+            margin-bottom: 24px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #333;
+            font-weight: 600;
+            font-size: 15px;
+            
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+          "
+        >
+          退出登录
+        </div>
+      </div> <!-- 结束 .scrollable-content -->
+    </div> <!-- 结束 #app -->
+
+    <nav class="tabbar">
+      <a class="tab" href="index.html">
+        <div class="ico ico-home"></div>
+        <div class="txt">首页</div>
+      </a>
+      <a class="tab" href="market.html">
+        <div class="ico ico-finance"></div>
+        <div class="txt">数据</div>
+      </a>
+      <a class="tab" href="projects.html">
+        <div class="ico ico-market"></div>
+        <div class="txt">项目</div>
+      </a>
+      <a class="tab" href="messages.html">
+        <div class="ico ico-message"></div>
+        <div class="txt">消息</div>
+      </a>
+      <a class="tab active" href="profile.html">
+        <div class="ico ico-me"></div>
+        <div class="txt">我的</div>
+      </a>
+    </nav>
+
+    <script src="config.js?v=1763690550"></script>
+    <script src="custom-modal.js?v=1762754400"></script>
+    <script src="ios-toast.js?v=1763685589"></script>
+    <script src="profile.js?v=1763710615"></script>
+    <script>
+      // 所有卡片翻转功能（点击翻转，状态持久化）
+      document.addEventListener("DOMContentLoaded", function () {
+        const flipCards = document.querySelectorAll(".flip-card");
+
+        flipCards.forEach((card) => {
+          const flipId = card.dataset.flipId;
+          if (!flipId) return;
+
+          // USDT卡片特殊处理：三态循环（余额 -> 收益 -> 空白 -> 余额）
+          if (flipId === "usdt") {
+            const usdtCard = card;
+            let currentState = "balance"; // balance, income, empty
+
+            // 从localStorage恢复状态
+            const savedState = localStorage.getItem("flip_card_usdt_state");
+            if (savedState) {
+              currentState = savedState;
+            } else {
+              // 默认显示余额
+              currentState = "balance";
+            }
+
+            // 更新显示状态
+            function updateUsdtDisplay() {
+              const balanceEl = usdtCard.querySelector(
+                '[data-usdt-state="balance"]'
+              );
+              const incomeEl = usdtCard.querySelector(
+                '[data-usdt-state="income"]'
+              );
+              const emptyEl = usdtCard.querySelector(
+                '[data-usdt-state="empty"]'
+              );
+
+              // 重置所有状态
+              if (balanceEl) {
+                balanceEl.style.opacity = "0";
+                balanceEl.style.pointerEvents = "none";
+              }
+              if (incomeEl) {
+                incomeEl.style.opacity = "0";
+                incomeEl.style.pointerEvents = "none";
+              }
+              if (emptyEl) {
+                emptyEl.style.opacity = "0";
+                emptyEl.style.pointerEvents = "none";
+              }
+
+              // 显示当前状态
+              if (currentState === "balance" && balanceEl) {
+                balanceEl.style.opacity = "1";
+                balanceEl.style.pointerEvents = "auto";
+              } else if (currentState === "income" && incomeEl) {
+                incomeEl.style.opacity = "1";
+                incomeEl.style.pointerEvents = "auto";
+              } else if (currentState === "empty" && emptyEl) {
+                emptyEl.style.opacity = "1";
+                emptyEl.style.pointerEvents = "auto";
+              }
+            }
+
+            // 初始化显示
+            updateUsdtDisplay();
+
+            // 点击切换状态：余额 -> 收益 -> 空白 -> 余额
+            usdtCard.addEventListener("click", function () {
+              if (currentState === "balance") {
+                currentState = "income";
+              } else if (currentState === "income") {
+                currentState = "empty";
+              } else if (currentState === "empty") {
+                currentState = "balance";
+              }
+              updateUsdtDisplay();
+              localStorage.setItem("flip_card_usdt_state", currentState);
+            });
+
+            // 监听USDT收益数据更新
+            function updateUsdtIncomeDisplay() {
+              const incomeEl = usdtCard.querySelector("#totalUsdtIncome");
+              if (incomeEl) {
+                const totalIncomeUsdtEl =
+                  document.getElementById("totalIncomeUsdt");
+                if (totalIncomeUsdtEl) {
+                  const value = parseFloat(
+                    totalIncomeUsdtEl.textContent || "0"
+                  );
+                  incomeEl.textContent = value.toFixed(2);
+                  // 如果金额为0，使用白色；否则使用绿色
+                  if (value === 0) {
+                    incomeEl.style.color = "#ffffff";
+                  } else {
+                    incomeEl.style.color = "#4ade80";
+                  }
+                } else {
+                  // 如果没有totalIncomeUsdt元素，直接显示0.00
+                  incomeEl.textContent = "0.00";
+                  incomeEl.style.color = "#ffffff";
+                }
+              }
+            }
+
+            const observer = new MutationObserver(function () {
+              updateUsdtIncomeDisplay();
+            });
+            const totalIncomeUsdtEl =
+              document.getElementById("totalIncomeUsdt");
+            if (totalIncomeUsdtEl) {
+              observer.observe(totalIncomeUsdtEl, {
+                childList: true,
+                characterData: true,
+                subtree: true,
+              });
+              // 初始化USDT收益显示
+              updateUsdtIncomeDisplay();
+            } else {
+              // 如果没有totalIncomeUsdt元素，也初始化显示
+              updateUsdtIncomeDisplay();
+            }
+            return;
+          }
+
+          // 其他卡片：普通翻转
+          const inner = card.querySelector(".flip-card-inner");
+          if (!inner) return;
+
+          // 从localStorage恢复翻转状态
+          const savedState = localStorage.getItem(`flip_card_${flipId}`);
+          const isFlipped = savedState === "flipped";
+
+          if (isFlipped) {
+            inner.style.transform = "rotateX(180deg)";
+          }
+
+          // 点击翻转
+          card.addEventListener("click", function () {
+            const currentTransform = inner.style.transform;
+            const isCurrentlyFlipped = currentTransform === "rotateX(180deg)";
+
+            if (isCurrentlyFlipped) {
+              inner.style.transform = "rotateX(0deg)";
+              localStorage.setItem(`flip_card_${flipId}`, "normal");
+            } else {
+              inner.style.transform = "rotateX(180deg)";
+              localStorage.setItem(`flip_card_${flipId}`, "flipped");
+            }
+          });
+        });
+      });
+
+      async function handleLogout() {
+        const ok = await customConfirm("确定退出登录吗？", "退出登录");
+        if (ok) {
+          localStorage.removeItem("providence_token");
+          window.location.href = "login.html";
+        }
+      }
+    </script>
+  </body>
+</html>

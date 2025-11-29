@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-11-17T07:17:43+00:00",
+  "summary": {
+    "totalPages": 19,
+    "testedPages": 19,
+    "errors": 0,
+    "warnings": 3
+  },
+  "errors": [
+  ]
+}

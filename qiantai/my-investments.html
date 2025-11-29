@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>我的投资 | PROVIDENCE</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="design-tokens.css?v=1763897782" />
+    <style>
+/* ===== 导航栏样式 ===== */
+.nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: clamp(48px, 12vw, 56px);
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    background: rgba(10, 16, 32, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    padding-left: clamp(12px, 3vw, 16px);
+    padding-right: clamp(12px, 3vw, 16px);
+    box-sizing: content-box;
+    z-index: 1000;
+}
+
+.nav-back {
+    width: clamp(36px, 9vw, 40px);
+    height: clamp(36px, 9vw, 40px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(22px, 5.5vw, 26px);
+    color: #e8c991;
+    cursor: pointer;
+    background: rgba(232, 201, 145, 0.1);
+    border-radius: 10px;
+    transition: all 0.2s;
+    border: none;
+    padding: 0;
+}
+
+.nav-back:active {
+    transform: scale(0.92);
+    background: rgba(232, 201, 145, 0.15);
+}
+
+.nav-title {
+    flex: 1;
+    width: 100%;
+    text-align: center;
+    font-size: clamp(17px, 4.2vw, 19px);
+    font-weight: 600;
+    color: #e8c991;
+    margin-right: clamp(36px, 9vw, 40px);
+}
+
+* {
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+html,
+body {
+    touch-action: pan-y !important;
+    -ms-touch-action: pan-y !important;
+    overscroll-behavior: none !important;
+    -webkit-overscroll-behavior: none !important;
+    background: linear-gradient(180deg, #0e2b44 0%, #091c2e 100%) !important;
+        background-attachment: fixed;
+            padding-top: 0;
+        }
+
+body {
+    -webkit-overflow-scrolling: touch;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", Arial, sans-serif;
+}
+
+#app {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+            padding-top: 60px;
+}
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: var(--gradient-navy);
+        background-size: 200% 200%;
+        animation: gradientShift 15s ease infinite;
+            padding-bottom: 0;
+        min-height: 100vh;
+      }
+
+      @keyframes gradientShift {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+        /* 顶部栏 */
+      .topbar {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 1000 !important;
+        background: rgba(12, 21, 38, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+      }
+
+      .topbar-inner {
+        max-width: 600px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+            gap: 12px;
+      }
+
+      .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+
+.back-btn:active {
+    transform: scale(0.95) !important;
+      }
+
+      .page-title {
+        flex: 1;
+        text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #e8c991;
+      }
+
+      .nav-spacer {
+        width: 36px;
+      }
+
+        /* 容器 */
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+            padding: 0 16px 12px 16px;
+      }
+
+        /* 总览卡片 */
+      .summary-card {
+            background: #fff;
+            border: 2px solid #d9b45d;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 16px rgba(217, 180, 93, 0.2);
+      }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+      }
+
+      .summary-item {
+        text-align: center;
+            padding: 14px;
+            background: #f5f5f5;
+            border-radius: 8px;
+      }
+
+      .summary-label {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 6px;
+            font-weight: 500;
+      }
+
+      .summary-value {
+            font-size: 19px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #d9b45d, #e8c991);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* Tab 切换 */
+      .tabs {
+        display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+        background: rgba(255, 255, 255, 0.08);
+            padding: 6px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .tab-btn {
+        flex: 1;
+            padding: 8px 10px;
+        background: transparent;
+        border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 6px;
+        cursor: pointer;
+            transition: all 0.3s;
+      }
+
+      .tab-btn:active {
+            transform: scale(0.96);
+      }
+
+      .tab-btn.active {
+            background: linear-gradient(135deg, #d9b45d, #e8c991);
+            color: #0e2b44;
+            font-weight: 600;
+      }
+
+      /* 投资列表 */
+      .investment-list {
+        display: flex;
+        flex-direction: column;
+            gap: 10px;
+      }
+
+      .investment-card {
+            background: #fff;
+            border: 2px solid #d9b45d;
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+      }
+
+      .investment-card:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 12px rgba(217, 180, 93, 0.3);
+      }
+
+      .investment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+            margin-bottom: 10px;
+      }
+
+      .investment-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 3px;
+            word-break: break-word;
+      }
+
+      .investment-date {
+            font-size: 11px;
+            color: #999;
+      }
+
+      .investment-status {
+            padding: 5px 10px;
+            border-radius: 18px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+      }
+
+      .status-active {
+        background: rgba(34, 197, 94, 0.1);
+        color: #16a34a;
+      }
+
+      .status-completed {
+            background: rgba(217, 180, 93, 0.1);
+            color: #d9b45d;
+      }
+
+      .status-expired {
+        background: rgba(156, 163, 175, 0.1);
+        color: #6b7280;
+      }
+
+      .investment-details {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 8px;
+      }
+
+      .detail-item {
+        text-align: center;
+      }
+
+      .detail-label {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 3px;
+      }
+
+      .detail-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a1a;
+      }
+
+      .profit-value {
+            color: #d9b45d;
+      }
+
+        /* 空状态 */
+      .empty-state {
+        text-align: center;
+            padding: 40px 16px;
+            color: rgba(255, 255, 255, 0.6);
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+      }
+
+      .empty-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.7;
+      }
+
+      .empty-text {
+            font-size: 14px;
+            margin-bottom: 20px;
+            opacity: 0.8;
+      }
+
+      .empty-btn {
+        display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #d9b45d, #e8c991);
+            color: #0e2b44;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 12px;
+        text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .empty-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 12px rgba(217, 180, 93, 0.3);
+      }
+
+        /* 加载状态 */
+        .loading-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+      }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #e8c991;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+      }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+      }
+
+        .loading-text {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+      }
+
+        .error-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.6);
+      }
+    </style>
+    <script src="smart-swipe-control.js?v=1763897782"></script>
+    </head>
+
+  <body>
+    <div class="nav-bar">
+      <div class="nav-back" onclick="goBack()">‹</div>
+      <div class="nav-title">我的投资</div>
+    </div>
+
+    <div id="app">
+    <div class="container">
+            <!-- 总览卡片 -->
+      <div class="summary-card">
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-label">投资总额</div>
+            <div class="summary-value" id="totalInvest">¥0.00</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">累计收益</div>
+            <div class="summary-value" id="totalProfit">¥0.00</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">进行中</div>
+            <div class="summary-value" id="activeCount">0</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">已完成</div>
+            <div class="summary-value" id="completedCount">0</div>
+          </div>
+        </div>
+      </div>
+
+            <!-- Tab 切换 -->
+      <div class="tabs">
+                <button class="tab-btn active" data-tab="all" onclick="switchTab(event)">全部</button>
+                <button class="tab-btn" data-tab="active" onclick="switchTab(event)">进行中</button>
+                <button class="tab-btn" data-tab="completed" onclick="switchTab(event)">已完成</button>
+      </div>
+
+            <!-- 投资列表 -->
+      <div class="investment-list" id="investmentList">
+                <div class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">加载中...</div>
+                </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 脚本 -->
+    <script src="api-new.js?v=1763897782"></script>
+    <script src="ios-toast.js?v=1763897782"></script>
+    <script>
+        // ============================================
+        // 配置
+        // ============================================
+        const API_BASE = window.API_CONFIG?.baseURL || 'https://api.4kp3l0iq.top';
+        const TOKEN_KEY = window.API_CONFIG?.tokenKey || 'providence_token';
+        let currentTab = 'all';
+      let allInvestments = [];
+
+        // ============================================
+        // 初始化
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function () {
+            // 检查登录状态
+            const token = localStorage.getItem(TOKEN_KEY);
+            if (!token) {
+                console.warn('[投资] 未登录，跳转到登录页');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1000);
+                return;
+            }
+
+            // 加载投资数据
+            loadInvestments();
+        });
+
+        // ============================================
+        // API 调用
+        // ============================================
+
+        /**
+         * 加载投资列表
+         */
+      async function loadInvestments() {
+            const investmentList = document.getElementById('investmentList');
+
+        try {
+                const token = localStorage.getItem(TOKEN_KEY);
+          if (!token) {
+                    console.error('[投资] Token 已失效');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1000);
+            return;
+          }
+
+                console.log('[投资] 开始加载投资列表...');
+                // 修改为获取用户的投资记录，而不是项目列表
+                const response = await fetch(`${API_BASE}/api/orders/my-investments`, {
+                    method: 'GET',
+            headers: {
+                        'Content-Type': 'application/json',
+                        'Token': token  // 首字母大写
+                    }
+                });
+
+                console.log('[投资] API响应状态:', response.status, response.statusText);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const text = await response.text();
+                console.log('[投资] 原始响应:', text.substring(0, 500));
+
+                // 检查是否是HTML错误页面
+                if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html') || text.includes('系统发生错误')) {
+                    console.error('[投资] 服务器返回HTML错误页面');
+                    investmentList.innerHTML = '<div class="error-state">服务器错误，请稍后重试</div>';
+                    return;
+                }
+
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    console.error('[投资] JSON解析失败:', e);
+                    investmentList.innerHTML = '<div class="error-state">数据格式错误，请联系客服</div>';
+                    return;
+                }
+
+                console.log('[投资] 投资列表响应:', data);
+
+                // 检查响应码
+                if (data.code === 1 || data.code === 200) {
+                    // 提取投资列表
+                    const listData = data.data?.list || data.data || [];
+
+                    if (Array.isArray(listData) && listData.length > 0) {
+                        allInvestments = listData;
+                        console.log('[投资] 加载成功，共', allInvestments.length, '条投资记录');
+                        updateSummary();
+                        renderInvestments();
+                    } else {
+                        console.log('[投资] 暂无投资记录');
+                        allInvestments = [];
+            updateSummary();
+            renderInvestments();
+                    }
+                } else if (data.code === -1 || data.code === 401) {
+                    // 未登录或 token 过期
+                    console.warn('[投资] Token 过期或未登录');
+                    localStorage.removeItem(TOKEN_KEY);
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1000);
+                } else {
+                    console.error('[投资] API错误:', data.message || data.msg);
+                    investmentList.innerHTML = `<div class="error-state">${data.message || data.msg || '加载失败'}</div>`;
+          }
+        } catch (error) {
+                console.error('[投资] 加载失败:', error);
+                if (error.message.includes('401') || error.message.includes('403')) {
+                    investmentList.innerHTML = `<div class="error-state">登录已过期，请重新登录</div>`;
+                    setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+                } else {
+                    investmentList.innerHTML = `<div class="error-state">暂无投资记录</div>`;
+                }
+            }
+        }
+
+        /**
+         * 更新统计信息
+         */
+      function updateSummary() {
+            try {
+                // 计算总投资额
+                const totalInvest = allInvestments.reduce((sum, item) => {
+                    const amount = parseFloat(item.amount || 0);
+                    return sum + (isNaN(amount) ? 0 : amount);
+                }, 0);
+
+                // 计算总收益
+                const totalProfit = allInvestments.reduce((sum, item) => {
+                    const profit = parseFloat(item.profit || 0);
+                    return sum + (isNaN(profit) ? 0 : profit);
+                }, 0);
+
+                // 计数进行中和已完成
+                const activeCount = allInvestments.filter(item => item.status === 'active' || item.status === 1).length;
+                const completedCount = allInvestments.filter(item => item.status === 'completed' || item.status === 2).length;
+
+                // 更新 DOM
+                const totalInvestEl = document.getElementById('totalInvest');
+                const totalProfitEl = document.getElementById('totalProfit');
+                const activeCountEl = document.getElementById('activeCount');
+                const completedCountEl = document.getElementById('completedCount');
+
+                if (totalInvestEl) {
+                    totalInvestEl.textContent = `¥${totalInvest.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }
+                if (totalProfitEl) {
+                    totalProfitEl.textContent = `¥${totalProfit.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }
+                if (activeCountEl) {
+                    activeCountEl.textContent = activeCount;
+                }
+                if (completedCountEl) {
+                    completedCountEl.textContent = completedCount;
+                }
+
+                console.log('[投资] 统计更新:', { totalInvest, totalProfit, activeCount, completedCount });
+            } catch (error) {
+                console.error('[投资] 更新统计失败:', error);
+            }
+        }
+
+        /**
+         * 渲染投资列表
+         */
+      function renderInvestments() {
+            const container = document.getElementById('investmentList');
+
+            try {
+                // 过滤投资
+        let filtered = allInvestments;
+                if (currentTab === 'active') {
+                    filtered = allInvestments.filter(item => item.status === 'active' || item.status === 1);
+                } else if (currentTab === 'completed') {
+                    filtered = allInvestments.filter(item => item.status === 'completed' || item.status === 2);
+        }
+
+                console.log('[投资] 渲染列表，当前Tab:', currentTab, '过滤后:', filtered.length, '条');
+
+                // 空状态
+        if (filtered.length === 0) {
+          container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📊</div>
+            <div class="empty-text">暂无投资记录</div>
+            <a href="projects.html" class="empty-btn">去投资</a>
+          </div>
+        `;
+          return;
+        }
+
+                // 渲染卡片
+                container.innerHTML = filtered.map(item => {
+                    const projectId = item.project_id || item.id;
+                    // 项目名称 - 支持多种字段名
+                    const projectName = item.project_name || item.project_title || item.name || '投资项目';
+                    // 投资金额
+                    const amount = parseFloat(item.amount || item.money || 0);
+                    // 预期收益/已赚取收益 - 支持多种字段名
+                    const profit = parseFloat(item.estimated_profit || item.estimated_earning || item.profit || item.earned_amount || 0);
+                    // 剩余天数 - 计算或直接获取
+                    let remainDays = item.remain_days || item.day || 0;
+                    if (remainDays === 0 && item.cycle_days && item.start_time) {
+                        // 如果没有 remain_days，根据 cycle_days 和 start_time 计算
+                        const startDate = new Date(item.start_time);
+                        const endDate = new Date(startDate.getTime() + item.cycle_days * 24 * 60 * 60 * 1000);
+                        const now = new Date();
+                        remainDays = Math.max(0, Math.ceil((endDate - now) / (24 * 60 * 60 * 1000)));
+                    }
+                    // 创建时间 - 支持多种字段名
+                    const createTime = item.create_time || item.created_at || item.start_time || '';
+
+                    // 确定状态类和文本
+                    let statusClass = 'status-active';
+                    let statusText = '进行中';
+                    if (item.status === 'completed' || item.status === 'finished' || item.status === 2) {
+                        statusClass = 'status-completed';
+                        statusText = '已完成';
+                    } else if (item.status === 'expired' || item.status === 'cancelled' || item.status === 3) {
+                        statusClass = 'status-expired';
+                        statusText = '已到期';
+                    }
+
+                    return `
+                        <div class="investment-card" onclick="window.location.href='project-detail.html?id=${projectId}'">
+          <div class="investment-header">
+            <div>
+                                    <div class="investment-title">${escapeHtml(projectName)}</div>
+                                    <div class="investment-date">${createTime}</div>
+            </div>
+                                <span class="investment-status ${statusClass}">${statusText}</span>
+          </div>
+          <div class="investment-details">
+            <div class="detail-item">
+              <div class="detail-label">投资金额</div>
+                                    <div class="detail-value">¥${amount.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">预期收益</div>
+                                    <div class="detail-value profit-value">¥${profit.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">剩余天数</div>
+                                    <div class="detail-value">${remainDays}天</div>
+            </div>
+          </div>
+        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('[投资] 渲染失败:', error);
+                container.innerHTML = '<div class="error-state">渲染失败，请刷新重试</div>';
+      }
+        }
+
+        // ============================================
+        // UI 交互
+        // ============================================
+
+        /**
+         * 切换 Tab
+         */
+        function switchTab(event) {
+            event.preventDefault();
+
+            // 获取目标 tab
+            const tabName = event.target.dataset.tab;
+            if (!tabName) return;
+
+            console.log('[投资] 切换Tab:', tabName);
+
+            // 更新当前 tab
+            currentTab = tabName;
+
+            // 更新按钮样式
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // 重新渲染
+        renderInvestments();
+      }
+
+        /**
+         * HTML 转义
+         */
+        // ========== 导航函数 ==========
+        function goBack() {
+            window.history.back();
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, char => map[char]);
+        }
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+  </body>
+
+</html>

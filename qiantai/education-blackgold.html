@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <title>PROVIDENCE · 黑金投资学堂</title>
+    <link rel="icon" href="favicon.ico">
+    <script src="ios-toast.js?v=1763897782b227"></script>
+    <style>
+        /* ========== 支付宝黑金风格配色 ========== */
+        :root {
+            /* 黑金配色 */
+            --black-bg: #000000;
+            --black-card: #0a0a0a;
+            --black-hover: #1a1a1a;
+            --gold-primary: #D4AF37;
+            --gold-light: #FFD700;
+            --gold-dark: #C9A961;
+            --gold-glow: rgba(212, 175, 55, 0.3);
+
+            /* 文字 */
+            --text-primary: #FFFFFF;
+            --text-secondary: #B8B8B8;
+            --text-muted: #7A7A7A;
+
+            /* 边框和线条 */
+            --border-light: rgba(212, 175, 55, 0.2);
+            --border-medium: rgba(212, 175, 55, 0.4);
+            --border-strong: rgba(212, 175, 55, 0.6);
+
+            /* 毛玻璃 */
+            --glass-dark: rgba(10, 10, 10, 0.85);
+            --glass-darker: rgba(0, 0, 0, 0.95);
+
+            /* 圆角 */
+            --radius-s: 8px;
+            --radius-m: 12px;
+            --radius-l: 16px;
+            --radius-xl: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            background: var(--black-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+        }
+
+        /* ========== 顶部导航栏 ========== */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--glass-darker);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--border-light);
+            padding: 12px 16px;
+        }
+
+        .topbar-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-
+            
+        }
+
+        .back-btn {
+            
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--black-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-s);
+            color: var(--gold-primary);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--black-hover);
+            border-color: var(--border-medium);
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        .topbar-title {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .topbar-spacer {
+            
+        }
+
+        /* ========== Hero Banner ========== */
+        .hero-banner {
+            position: relative;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--black-bg) 0%, var(--black-card) 100%);
+            border-bottom: 1px solid var(--border-light);
+            overflow: hidden;
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            
+            height: 400px;
+            background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: heroGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes heroGlow {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: translate(-20px, 20px) scale(1.1);
+                opacity: 0.5;
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-
+            
+            
+        }
+
+        .hero-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 20px var(--gold-glow));
+        }
+
+        .hero-title {
+            font-size: clamp(24px, 5vw, 32px);
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+            line-height: 1.6;
+        }
+
+        /* ========== 分类标签 ========== */
+        .category-tabs {
+            display: flex;
+            gap: 12px;
+            padding: 20px 16px;
+            overflow-x: auto;
+            scrollbar-
+            max-
+            
+        }
+
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-tab {
+            
+            padding: 12px 24px;
+            background: var(--black-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-xl);
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-tab::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .category-tab span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-tab.active {
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-primary) 100%);
+            border-color: var(--gold-primary);
+            color: #000;
+            font-weight: 600;
+            box-shadow: 0 4px 20px var(--gold-glow);
+        }
+
+        .category-tab:not(.active):hover {
+            background: var(--black-hover);
+            border-color: var(--border-medium);
+            transform: translateY(-2px);
+        }
+
+        /* ========== 课程网格 ========== */
+        .courses-container {
+            max-
+            
+            padding: 0 16px 40px;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        /* ========== 课程卡片 ========== */
+        .course-card {
+            background: var(--glass-dark);
+            backdrop-filter: blur(10px) saturate(120%);
+            -webkit-backdrop-filter: blur(10px) saturate(120%);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-l);
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-primary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .course-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .course-card:hover {
+            background: var(--black-hover);
+            border-color: var(--border-strong);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        .course-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .course-card.locked:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .course-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+            
+            filter: grayscale(0.3) brightness(1.2);
+        }
+
+        .course-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .course-level {
+            padding: 4px 10px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(255, 215, 0, 0.2));
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gold-light);
+            letter-spacing: 0.5px;
+        }
+
+        .course-status {
+            padding: 4px 10px;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(56, 142, 60, 0.2));
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #66BB6A;
+            letter-spacing: 0.5px;
+        }
+
+        .course-lock {
+            margin-left: auto;
+            font-size: 16px;
+            color: var(--text-muted);
+        }
+
+        .course-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .course-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .course-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .course-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* ========== 课程详情模态框 ========== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 200;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            
+            max-
+            max-height: 90vh;
+            
+            background: var(--black-card);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            position: relative;
+            padding: 40px 24px;
+            background: linear-gradient(135deg, var(--black-bg) 0%, var(--black-card) 100%);
+            border-bottom: 1px solid var(--border-light);
+            
+        }
+
+        .modal-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+            border-radius: 2px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--black-card);
+            border: 1px solid var(--border-light);
+            border-radius: 50%;
+            color: var(--text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--black-hover);
+            border-color: var(--gold-primary);
+            color: var(--gold-primary);
+            transform: rotate(90deg);
+        }
+
+        .modal-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 30px var(--gold-glow));
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .modal-intro {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .modal-body {
+            padding: 24px;
+            max-height: calc(90vh - 250px);
+            overflow-y: auto;
+        }
+
+        .modal-body::-webkit-scrollbar {
+            
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: var(--black-bg);
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: var(--gold-dark);
+            border-radius: 3px;
+        }
+
+        /* ========== 课程内容卡片 ========== */
+        .content-card {
+            background: var(--glass-dark);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-m);
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .content-card:hover {
+            background: var(--black-hover);
+            border-color: var(--border-medium);
+        }
+
+        .content-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gold-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content-card-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .content-card-tip {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 3px solid var(--gold-primary);
+            padding: 12px 16px;
+            border-radius: var(--radius-s);
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .objectives-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .objectives-list li {
+            padding: 10px 0;
+            padding-left: 24px;
+            position: relative;
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .objectives-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--gold-primary);
+            font-weight: bold;
+        }
+
+        .next-steps-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 8px;
+        }
+
+        .next-steps-list li {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-s);
+            padding: 12px 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            position: relative;
+            padding-left: 36px;
+        }
+
+        .next-steps-list li::before {
+            content: '→';
+            position: absolute;
+            left: 16px;
+            color: var(--gold-primary);
+            font-weight: bold;
+        }
+
+        /* ========== 行动按钮 ========== */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .action-btn {
+            padding: 14px 24px;
+            border-radius: var(--radius-m);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold-primary));
+            color: #000;
+            box-shadow: 0 4px 20px var(--gold-glow);
+        }
+
+        .action-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(212, 175, 55, 0.4);
+        }
+
+        .action-btn-secondary {
+            background: var(--black-card);
+            border: 1px solid var(--border-medium);
+            color: var(--text-primary);
+        }
+
+        .action-btn-secondary:hover {
+            background: var(--black-hover);
+            border-color: var(--gold-primary);
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .modal-content {
+                max-
+                max-height: calc(100vh - 40px);
+            }
+
+            .modal-header {
+                padding: 30px 20px;
+            }
+
+            .modal-body {
+                padding: 20px;
+                max-height: calc(100vh - 220px);
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ========== 加载动画 ========== */
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        .loading {
+            
+            padding: 60px 20px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .loading::before {
+            content: '⌛';
+            
+            font-size: 40px;
+            margin-bottom: 16px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+.brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }      .brand .back-btn { flex: 0 0 auto; margin-right: 8px; }      .brand .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="topbar">
+        <div class="topbar-inner">
+            <a href="index.html" class="back-btn">←</a>
+            <div class="topbar-title">PROVIDENCE 黑金学堂</div>
+            <div class="topbar-spacer"></div>
+        </div>
+    </div>
+
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+        <div class="hero-content">
+            <div class="hero-icon">🎓</div>
+            <h1 class="hero-title">专业投资知识体系</h1>
+            <p class="hero-subtitle">系统学习 · 实战技巧 · 风险防控 · 持续进阶</p>
+        </div>
+    </div>
+
+    <!-- 分类标签 -->
+    <div class="category-tabs">
+        <div class="category-tab active" data-category="fund">
+            <span>📈 基金投资</span>
+        </div>
+        <div class="category-tab" data-category="ipo">
+            <span>🎯 IPO新股</span>
+        </div>
+        <div class="category-tab" data-category="bond">
+            <span>💰 债券投资</span>
+        </div>
+    </div>
+
+    <!-- 课程网格 -->
+    <div class="courses-container">
+        <div class="courses-grid" id="coursesGrid">
+            <div class="loading">加载课程中...</div>
+        </div>
+    </div>
+
+    <!-- 课程详情模态框 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content" id="modalContent">
+            <!-- 动态内容 -->
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <nav
+        style="position:fixed;bottom:0;left:0;right:0;background:var(--glass-darker);backdrop-filter:blur(20px);border-top:1px solid var(--border-light);padding:12px 0;z-index:50">
+        <div style="display:flex;justify-content:space-around;max-margin:0 auto">
+            <a href="index.html"
+                style="display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-muted);text-decoration:none;font-size:12px">
+                <span style="font-size:20px">🏠</span>
+                <span>首页</span>
+            </a>
+            <a href="projects.html"
+                style="display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-muted);text-decoration:none;font-size:12px">
+                <span style="font-size:20px">💼</span>
+                <span>项目</span>
+            </a>
+            <a href="education.html"
+                style="display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--gold-primary);text-decoration:none;font-size:12px">
+                <span style="font-size:20px">🎓</span>
+                <span>课堂</span>
+            </a>
+            <a href="profile.html"
+                style="display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-muted);text-decoration:none;font-size:12px">
+                <span style="font-size:20px">👤</span>
+                <span>我的</span>
+            </a>
+        </div>
+    </nav>
+
+    <script src="education-data.js?v=1763897782"></script>
+    <script src="education-content.js?v=1763897782"></script>
+    <script>
+        // ========== 学习进度管理 ==========
+        const PROGRESS_KEY = 'education_progress_blackgold';
+
+        function getProgress() {
+            const data = localStorage.getItem(PROGRESS_KEY);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function saveProgress(completed) {
+            localStorage.setItem(PROGRESS_KEY, JSON.stringify(completed));
+        }
+
+        function isCourseCompleted(courseId) {
+            return getProgress().includes(courseId);
+        }
+
+        function markCourseComplete(courseId) {
+            const completed = getProgress();
+            if (!completed.includes(courseId)) {
+                completed.push(courseId);
+                saveProgress(completed);
+            }
+        }
+
+        function isCourseUnlocked(courseId) {
+            const course = COURSES.find(c => c.id === courseId);
+            if (!course) return false;
+
+            // 每个分类的第一门课始终解锁
+            const sameCategoryCourses = COURSES
+                .filter(c => c.category === course.category)
+                .sort((a, b) => a.order - b.order);
+
+            if (sameCategoryCourses[0].id === courseId) return true;
+
+            // 检查上一门课是否完成
+            const courseIndex = sameCategoryCourses.findIndex(c => c.id === courseId);
+            if (courseIndex <= 0) return false;
+
+            const prevCourse = sameCategoryCourses[courseIndex - 1];
+            return isCourseCompleted(prevCourse.id);
+        }
+
+        // ========== 页面逻辑 ==========
+        let currentCategory = 'fund';
+
+        // 初始化页面
+        function initPage() {
+            // 分类切换
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.addEventListener('click', function () {
+                    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCategory = this.getAttribute('data-category');
+                    renderCourses();
+                });
+            });
+
+            // 模态框关闭
+            document.getElementById('modalOverlay').addEventListener('click', function (e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+
+            // 初始渲染
+            renderCourses();
+        }
+
+        // 通用内容生成
+        function generateGenericContent(course) {
+            const levelDesc = {
+                '入门': '本课程适合投资新手，从零开始系统学习',
+                '进阶': '本课程需要一定基础，帮助你进一步提升投资能力',
+                '高级': '本课程面向有经验的投资者，深入探讨高级投资策略'
+            };
+
+            const categoryNames = {
+                'fund': '基金投资',
+                'ipo': 'IPO新股',
+                'bond': '债券投资'
+            };
+
+            return {
+                intro: `欢迎学习《${course.title}》！${levelDesc[course.level]}。通过本课程的学习，你将掌握关键的投资知识和实战技巧。`,
+                objectives: [
+                    `深入理解"${course.title}"的核心概念和原理`,
+                    `掌握${categoryNames[course.category]}领域的实用技巧`,
+                    `学会运用所学知识进行实际投资决策`,
+                    `提升${course.level}阶段的专业投资能力`
+                ],
+                sections: [
+                    {
+                        title: "核心概念讲解",
+                        text: `在本章节中，我们将系统学习《${course.title}》的基本定义、发展历程和重要意义。理解这些基础概念是掌握后续知识的关键。通过本节的学习，你将建立起扎实的理论基础。`,
+                        tips: `建议先理解核心概念，再进入实战应用阶段。可以多读几遍，确保完全掌握。`
+                    },
+                    {
+                        title: "关键要点分析",
+                        text: `本节重点分析《${course.title}》中的关键要点和注意事项。我们将通过实际案例，帮助你深入理解这些要点在实战中的应用。案例都来自真实的投资场景，具有很强的参考价值。`,
+                        tips: `重点关注案例分析，思考如何将理论应用到实际投资中。建议做笔记记录关键点。`
+                    },
+                    {
+                        title: "实战技巧分享",
+                        text: `在掌握了理论知识后，本节将分享实用的投资技巧和策略。这些技巧都是经过市场验证的，可以直接应用到你的投资实践中。我们还会分享一些常见的误区和陷阱，帮助你避免不必要的损失。`,
+                        tips: `建议边学边实践，通过模拟投资来验证所学技巧。实践是检验真理的唯一标准。`
+                    },
+                    {
+                        title: "风险管理要点",
+                        text: `任何投资都伴随风险，本节将详细讲解${categoryNames[course.category]}中的常见风险，以及相应的防范和应对策略。学会风险管理是长期成功的关键。我们将教你如何识别风险、评估风险、控制风险。`,
+                        tips: `风险管理永远是第一位的，不要为了追求高收益而忽视风险。保住本金比赚钱更重要！`
+                    }
+                ],
+                summary: `通过本课程的系统学习，你已经掌握了《${course.title}》的核心知识和实战技巧。记住，投资是一个持续学习的过程，建议定期回顾本课程内容，并结合市场实践不断深化理解。理论联系实际，才能真正提升投资水平。`,
+                nextSteps: [
+                    `复习本课程的关键知识点，确保完全理解`,
+                    `继续学习下一课程，持续提升投资能力`,
+                    `将所学知识应用到实际投资中，积累经验`,
+                    `关注市场动态，保持学习热情，终身学习`
+                ]
+            };
+        }
+
+        // 渲染课程列表
+        function renderCourses() {
+            const grid = document.getElementById('coursesGrid');
+            const filtered = COURSES.filter(c => c.category === currentCategory).sort((a, b) => a.order - b.order);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="loading">暂无课程数据</div>';
+                return;
+            }
+
+            grid.innerHTML = filtered.map(course => {
+                const completed = isCourseCompleted(course.id);
+                const unlocked = isCourseUnlocked(course.id);
+
+                return `
+          <div class="course-card ${!unlocked ? 'locked' : ''}" onclick="${unlocked ? `openCourse(${course.id})` : ''}">
+            <div class="course-icon">${course.icon}</div>
+            <div class="course-header">
+              <span class="course-level">${course.level}</span>
+              ${completed ? '<span class="course-status">✓ 已完成</span>' : ''}
+              ${!unlocked ? '<span class="course-lock">🔒</span>' : ''}
+            </div>
+            <div class="course-title">${course.title}</div>
+            <div class="course-desc">${course.desc || '系统学习投资知识，掌握实战技巧'}</div>
+            <div class="course-meta">
+              <span>⏱️ ${course.duration}</span>
+              <span>📚 ${course.lessons}课时</span>
+            </div>
+          </div>
+        `;
+            }).join('');
+        }
+
+        // 打开课程详情
+        function openCourse(courseId) {
+            const course = COURSES.find(c => c.id === courseId);
+            if (!course) return;
+
+            let content = window.COURSE_CONTENTS && window.COURSE_CONTENTS[courseId];
+
+            if (!content) {
+                content = generateGenericContent(course);
+            }
+
+            const completed = isCourseCompleted(courseId);
+
+            const modalHTML = `
+        <div class="modal-header">
+          <div class="modal-close" onclick="closeModal()">×</div>
+          <div class="modal-icon">${course.icon}</div>
+          <h2 class="modal-title">${course.title}</h2>
+          <p class="modal-intro">${content.intro}</p>
+        </div>
+        <div class="modal-body">
+          <div class="content-card">
+            <div class="content-card-title">🎯 学习目标</div>
+            <ul class="objectives-list">
+              ${content.objectives.map(obj => `<li>${obj}</li>`).join('')}
+            </ul>
+          </div>
+
+          ${content.sections.map((section, idx) => `
+            <div class="content-card">
+              <div class="content-card-title">${idx + 1}️⃣ ${section.title}</div>
+              <div class="content-card-text">${section.text}</div>
+              ${section.tips ? `<div class="content-card-tip">💡 ${section.tips}</div>` : ''}
+            </div>
+          `).join('')}
+
+          <div class="content-card">
+            <div class="content-card-title">📝 课程总结</div>
+            <div class="content-card-text">${content.summary}</div>
+          </div>
+
+          <div class="content-card">
+            <div class="content-card-title">🚀 下一步行动</div>
+            <ul class="next-steps-list">
+              ${content.nextSteps.map(step => `<li>${step}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div class="action-buttons">
+            ${!completed ?
+                    `<button class="action-btn action-btn-primary" onclick="completeCourse(${courseId})">✓ 标记为已完成</button>` :
+                    `<button class="action-btn action-btn-secondary" disabled style="opacity:0.5">✓ 已完成</button>`
+                }
+            <button class="action-btn action-btn-secondary" onclick="closeModal()">稍后学习</button>
+          </div>
+        </div>
+      `;
+
+            document.getElementById('modalContent').innerHTML = modalHTML;
+            document.getElementById('modalOverlay').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // 完成课程
+        function completeCourse(courseId) {
+            markCourseComplete(courseId);
+            showToast('🎉 恭喜完成本课程！');
+            closeModal();
+            renderCourses();
+        }
+
+        // 页面加载完成后初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPage);
+        } else {
+            initPage();
+        }
+    </script>
+</body>
+
+</html>

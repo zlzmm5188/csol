@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+  <title>PROVIDENCE · 引导顾问</title>
+  <link rel="icon" href="favicon.ico" />
+  <script src="ios-toast.js?v=1763813622"></script>
+  <style>
+    :root {
+      --navy: #08141f;
+      --navy2: #0f1f2e;
+      --navy3: #0a1723;
+      --paper: #f3f5f7;
+      --ink: #0f172a;
+      --muted: #6b7280;
+      --gold: #9f8b54;
+      --gold2: #c7b58a;
+      --lineL: #e2e6ed;
+      --lineD: rgba(255, 255, 255, .08);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%
+  padding-top: 60px;}
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color: #e9eef6;
+      background: transparent;        radial-gradient(900px 420px at 120% -10%, rgba(159, 139, 84, .22), transparent 55%),
+        linear-gradient(180deg, var(--navy3), var(--navy2) 40%, var(--navy));
+        background-attachment: fixed;
+      padding-bottom: 20px;
+    }
+
+    /* 顶部品牌栏 */
+    .topbar {
+      position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important;
+      top: 0;
+      z-index: 30;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--lineD);
+      background: linear-gradient(180deg, rgba(10, 23, 35, .95), rgba(10, 23, 35, .75));
+      backdrop-filter: blur(6px)
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .logo {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: url('img/logo.png') center/contain no-repeat;
+      background-color: transparent
+    }
+
+    .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+
+    .back-btn:active {
+      transform: scale(0.95)
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: .3px;
+      color: var(--gold2);
+      font-weight: 600;
+
+    }
+
+    .hero-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gold2);
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      color: #c8d2dd;
+      margin-bottom: 20px;
+    }
+
+    /* 内容区域 */
+    .content {
+      padding: 0 16px 24px
+    }
+
+    /* 卡片 */
+    .card {
+      background: rgba(243, 245, 247, .96);
+      color: var(--ink);
+      border: 1px solid var(--lineL);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* 引导项 */
+    .guide-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 20px;
+      padding: 16px;
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid var(--lineL);
+      transition: all 0.2s;
+    }
+
+    .guide-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .guide-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
+    }
+
+    .guide-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold2), var(--gold));
+      color: #0b1220;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(159, 139, 84, .3);
+    }
+
+    .guide-content {
+
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .guide-desc {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .guide-action {
+      display: inline-block;
+      padding: 6px 12px;
+      background: linear-gradient(135deg, rgba(159, 139, 84, .15), rgba(199, 181, 138, .1));
+      border: 1px solid rgba(159, 139, 84, .3);
+      border-radius: 8px;
+      font-size: 12px;
+      color: #9f8b54;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .guide-action:hover {
+      background: linear-gradient(135deg, rgba(159, 139, 84, .25), rgba(199, 181, 138, .2));
+    }
+
+    .guide-action:active {
+      transform: scale(0.98)
+    }
+
+    /* 底部导航栏 */
+    .tabbar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(11, 59, 94, 0.98) 0%, rgba(18, 76, 106, 0.98) 100%), url('img/photo_2025-10-20_05-38-52.jpg') center bottom/contain repeat-x;
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      height: 65px;
+      z-index: 100;
+      padding: 2px 0 2px;
+      box-shadow: 0 -2px 16px rgba(0, 0, 0, .15)
+    }
+
+    .tab {
+      width: 20%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      color: #8b9aa8;
+      text-decoration: none;
+      transition: color .2s ease;
+      position: relative;
+      padding: 0;
+      gap: 0;
+      -webkit-tap-highlight-color: transparent
+    }
+
+    .tab:active .ico {
+      transform: scale(0.92)
+    }
+
+    .tab.active {
+      color: #f5d771
+    }
+
+    .tab .ico {
+      width: 110px;
+      height: 110px;
+      background-image: url('assets/a75728afde83d.jpg');
+      background-size: 400% 400%;
+      background-repeat: no-repeat;
+      background-color: transparent;
+      margin-bottom: 0px;
+      transition: transform .15s ease, opacity .15s ease;
+      position: relative;
+      border-radius: 0;
+      overflow: visible;
+      will-change: transform, opacity
+    }
+
+    .tab:not(.active) .ico {
+      opacity: 0.7
+    }
+
+    .tab.active .ico {
+      opacity: 1;
+      transform: scale(1.15)
+    }
+
+    .tab .txt {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      margin-top: -30px;
+      line-height: 1;
+      padding-top: 0;
+      margin-bottom: 2px
+    }
+
+    .ico-home {
+      background-image: url('img/zy.png?v=1763340588') !important;
+      background-size: 75% !important;
+      background-position: center !important
+    }
+
+    .ico-finance {
+      background-image: url('img/w1.png?v=1763340588') !important;
+      background-size: 75% !important;
+      background-position: center !important
+    }
+
+    .ico-market {
+      background-image: url('img/xm.png?v=1763340588') !important;
+      background-size: 75% !important;
+      background-position: center !important
+    }
+
+    .ico-message {
+      background-image: url('img/34.png?v=1763340588') !important;
+      background-size: 75% !important;
+      background-position: center !important
+    }
+
+    .ico-me {
+      background-image: url('img/wd.png?v=1763340588') !important;
+      background-size: 75% !important;
+      background-position: center !important
+    }
+
+.brand { display: flex; align-items: center; }      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}      .brand .page-title, .brand .page-title, .brand h1 { margin: 0; font-size: 16px; white-space: nowrap; flex: 0 1 auto; }
+  </style>
+</head>
+
+<body>
+
+  <!-- 顶部 -->
+  <div class="topbar">
+    <div class="brand"><a href="javascript:history.back()" class="back-btn">←</a><h1 class="page-title">引导顾问</h1></div></div>
+      <div style="width:32px;"></div>
+    </div>
+  </div>
+
+  <!-- Hero 区域 -->
+  <section class="hero-section">
+    <div class="hero-title">👨‍💼 一对一引导顾问</div>
+    <div class="hero-subtitle">协助您完成合格投资人认证，了解平台功能</div>
+  </section>
+
+  <!-- 内容 -->
+  <section class="content">
+    <!-- 引导卡片 -->
+    <div class="card">
+      <div class="card-title">📋 新手引导</div>
+
+      <div class="guide-item">
+        <div class="guide-icon">🪪</div>
+        <div class="guide-content">
+          <div class="guide-title">实名认证</div>
+          <div class="guide-desc">完成实名认证后，您可以使用全部功能，包括领取体验金、投资、提现等。认证过程简单快捷，只需上传身份证和进行人脸识别。</div>
+          <a href="kyc-verification.html" class="guide-action">前往认证 →</a>
+        </div>
+      </div>
+
+      <div class="guide-item">
+        <div class="guide-icon">💰</div>
+        <div class="guide-content">
+          <div class="guide-title">充值</div>
+          <div class="guide-desc">支持多种充值方式，包括银行卡转账、USDT充值等。充值后资金即时到账，可用于购买投资项目。最低充值金额为100元。</div>
+          <a href="recharge.html" class="guide-action">立即充值 →</a>
+        </div>
+      </div>
+
+      <div class="guide-item">
+        <div class="guide-icon">💸</div>
+        <div class="guide-content">
+          <div class="guide-title">提现</div>
+          <div class="guide-desc">投资产生的收益可以随时提现。提现需要绑定银行卡，支持快速到账。提现手续费根据VIP等级不同而有所差异，VIP等级越高，手续费越低。</div>
+          <a href="withdraw.html" class="guide-action">查看详情 →</a>
+        </div>
+      </div>
+
+      <div class="guide-item">
+        <div class="guide-icon">👑</div>
+        <div class="guide-content">
+          <div class="guide-title">VIP加息</div>
+          <div class="guide-desc">VIP等级越高，享受的加息权益越多。VIP3+用户可享受额外0.3%~0.8%的年化收益率加成。通过投资累计金额可以提升VIP等级。</div>
+          <a href="vip-level.html" class="guide-action">查看VIP权益 →</a>
+        </div>
+      </div>
+
+      <div class="guide-item">
+        <div class="guide-icon">👥</div>
+        <div class="guide-content">
+          <div class="guide-title">团队奖励</div>
+          <div class="guide-desc">邀请好友注册并投资，您可获得团队奖励。一级下线投资额可获得0.5%的团队佣金，二级下线投资额可获得0.2%的团队佣金。奖励实时到账，可随时提现。</div>
+          <a href="team-rewards.html" class="guide-action">查看奖励规则 →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 底部间距，避免按钮被遮挡 -->
+  <div style="height:100px;"></div>
+
+  <!-- 底部导航栏 -->
+  <!-- 底部导航已移除 -->
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script defer src="smart-swipe-control.js?v=1763813622"></script>
+
+
+</body>
+
+</html>

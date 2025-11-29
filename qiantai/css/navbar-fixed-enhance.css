@@ -1,0 +1,208 @@
+/**
+ * 导航栏固定增强样式
+ * 确保顶部标题栏和底部导航栏在所有页面都能正确固定
+ * 优先级最高，覆盖所有其他样式
+ */
+
+/* ============================================
+   顶部标题栏固定 - 强制覆盖
+   ============================================ */
+
+header,
+.header,
+.top-nav,
+.topbar,
+.fixed-header,
+.header-fixed,
+[class*="header"],
+[class*="topbar"],
+[class*="top-nav"],
+.top-navbar {
+    position: fixed !important;
+    position: -webkit-fixed !important; /* iOS Safari */
+    top: 0 !important;
+    top: env(safe-area-inset-top, 0) !important; /* 刘海屏适配 */
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    z-index: 10000 !important; /* 最高优先级 */
+
+    /* 确保在父容器transform下也能fixed */
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    will-change: transform !important;
+
+    /* 防止被其他样式覆盖 */
+    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* ============================================
+   底部导航栏固定 - 强制覆盖
+   ============================================ */
+
+footer,
+.footer,
+.tabbar,
+.bottom-nav,
+.bottom-tabbar,
+.navbar-fixed,
+.bottom-navbar,
+[class*="tabbar"],
+[class*="bottom-nav"],
+nav.tabbar {
+    /* 核心：固定在视口底部，不随页面滚动 */
+    position: fixed !important;
+    position: -webkit-fixed !important; /* iOS Safari */
+    bottom: 0 !important;
+    bottom: env(safe-area-inset-bottom, 0) !important; /* 底部安全区 */
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    z-index: 9999 !important; /* 低于顶部导航 */
+
+    /* 确保在父容器transform下也能fixed */
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    will-change: transform !important;
+
+    /* 防止被其他样式覆盖 */
+    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* ============================================
+   主内容区 - 为导航栏预留空间
+   ============================================ */
+
+/* 确保主内容区可以滚动，并为导航栏预留空间 */
+#app,
+.app-wrapper,
+.main-content,
+.content-wrapper,
+.scroll-content,
+[class*="content"],
+main {
+    /* 为顶部导航栏预留空间（默认50px，可根据实际高度调整） */
+    padding-top: 50px !important;
+    padding-top: calc(50px + env(safe-area-inset-top, 0)) !important;
+
+    /* 为底部导航栏预留空间（默认60px，可根据实际高度调整） */
+    padding-bottom: 60px !important;
+    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0)) !important;
+
+    /* 确保内容可以滚动 */
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+
+    /* 高度设置 */
+    min-height: 100vh !important;
+    min-height: calc(100vh - 50px - 60px) !important;
+    box-sizing: border-box !important;
+}
+
+/* ============================================
+   禁止body和html滚动
+   ============================================ */
+
+html,
+body {
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+    height: 100% !important;
+    position: relative !important;
+}
+
+/* ============================================
+   移除可能破坏fixed定位的样式
+   ============================================ */
+
+/* 移除父容器的transform，确保fixed定位正常工作 */
+body,
+html,
+#app,
+.app-wrapper {
+    transform: none !important;
+    -webkit-transform: none !important;
+    perspective: none !important;
+    -webkit-perspective: none !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+}
+
+/* 但允许导航栏内部使用transform */
+header *,
+.fixed-header *,
+.tabbar *,
+.bottom-nav * {
+    transform: initial !important;
+    -webkit-transform: initial !important;
+}
+
+/* ============================================
+   特殊页面处理
+   ============================================ */
+
+/* 没有顶部导航栏的页面 */
+.no-header #app,
+.no-header .main-content {
+    padding-top: 0 !important;
+    padding-top: env(safe-area-inset-top, 0) !important;
+}
+
+/* 没有底部导航栏的页面 */
+.no-tabbar #app,
+.no-tabbar .main-content {
+    padding-bottom: 0 !important;
+    padding-bottom: env(safe-area-inset-bottom, 0) !important;
+}
+
+/* 全屏页面（登录、注册等） */
+.fullscreen header,
+.fullscreen .fixed-header,
+.fullscreen .tabbar,
+.fullscreen .bottom-nav {
+    display: none !important;
+}
+
+.fullscreen #app,
+.fullscreen .main-content {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* ============================================
+   移动端100vh修复
+   ============================================ */
+
+/* 使用CSS变量动态设置高度 */
+:root {
+    --vh: 1vh;
+}
+
+html {
+    height: calc(var(--vh, 1vh) * 100);
+}
+
+body,
+#app {
+    height: calc(var(--vh, 1vh) * 100);
+    min-height: calc(var(--vh, 1vh) * 100);
+}
+
+/* iOS Safari特殊处理 */
+@supports (-webkit-touch-callout: none) {
+    body {
+        height: -webkit-fill-available;
+    }
+
+    #app,
+    .app-wrapper {
+        min-height: -webkit-fill-available;
+    }
+}

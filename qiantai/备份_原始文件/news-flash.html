@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>财经快讯 - PROVIDENCE</title>
+    <link rel="icon" href="../favicon.ico" />
+    <link rel="stylesheet" href="styles.css?v=1763813622" />
+    <style>
+        /* 去掉Spotlight滚动效果 */
+        .flash-item {
+            transform: none;
+            opacity: 1;
+            will-change: transform, opacity;
+        }
+
+        .flash-item .tag {
+            opacity: 0.6;
+            transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* 固定标题栏 */
+        .hero-simple {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-overlay, rgba(10, 23, 35, 0.95));
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+    </style>
+</head>
+
+<body class="page-news-flash">
+    <div id="app">
+        <!-- 顶部导航 -->
+        <header class="hero-simple">
+            <div class="hero-top">
+                <a href="index.html" class="back-btn">‹</a>
+                <div class="brand">
+                    <span class="b1">财经快讯</span>
+                    <span class="live-status">
+                        <span class="live-dot-small"></span>
+                        实时更新中...
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主要内容区 -->
+        <main class="content-other">
+            <!-- 分类筛选标签 -->
+            <section class="news-filter-tabs">
+                <button class="news-filter-btn active" data-category="all">全部</button>
+                <button class="news-filter-btn" data-category="forex">外汇</button>
+                <button class="news-filter-btn" data-category="stock">股票</button>
+                <button class="news-filter-btn" data-category="commodity">商品</button>
+                <button class="news-filter-btn" data-category="crypto">加密</button>
+            </section>
+
+            <!-- 快讯列表 -->
+            <section class="news-flash-list" id="newsFlashList">
+                <!-- 快讯内容将从API加载 -->
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">加载中...</div>
+                </div>
+
+                <!-- 🔥 投资案例新闻 1 - TVB -->
+                <div class="flash-item flash-highlight">
+                    <div class="flash-time">2011-12</div>
+                    <div class="flash-content">
+                        <div class="flash-title">🏆 Providence完成香港TVB重大战略投资</div>
+                        <div class="flash-desc">Providence Equity
+                            Partners携手王雪红财团、陈国强，以每股55港元成功收购香港电视广播有限公司（TVB）26%股权，总交易额达62.6亿港元。此次投资标志着Providence在亚洲传媒领域的战略性布局，为TVB带来国际化运营经验和资本支持，助力其数字化转型和内容升级。这一里程碑式交易展现了Providence对优质传媒资产的精准洞察力和长期投资价值。
+                        </div>
+                        <div class="flash-tags">
+                            <span class="tag important">重大投资</span>
+                            <span class="tag">传媒</span>
+                            <span class="tag">香港</span>
+                            <span class="tag">62.6亿</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🔥 投资案例新闻 2 - 爱奇艺 -->
+                <div class="flash-item flash-highlight">
+                    <div class="flash-time">2013-05</div>
+                    <div class="flash-content">
+                        <div class="flash-title">🚀 Providence投资中国领先视频平台爱奇艺</div>
+                        <div class="flash-desc">Providence Equity
+                            Partners战略投资百度旗下网络视频公司爱奇艺，成为其重要股东之一。爱奇艺作为中国最大的在线视频平台之一，月活跃用户数亿计，Providence的加入为其带来丰富的媒体行业资源和国际化运营经验。此次投资彰显了Providence对中国互联网视频行业高速成长的前瞻性判断，以及对优质内容平台长期价值的坚定信心。
+                        </div>
+                        <div class="flash-tags">
+                            <span class="tag important">战略投资</span>
+                            <span class="tag">互联网</span>
+                            <span class="tag">视频平台</span>
+                            <span class="tag">爱奇艺</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🔥 投资案例新闻 3 - 新和盛 -->
+                <div class="flash-item flash-highlight">
+                    <div class="flash-time">2022-08</div>
+                    <div class="flash-content">
+                        <div class="flash-title">💎 Providence领投新和盛农牧B轮数千万融资</div>
+                        <div class="flash-desc">Providence Equity
+                            Partners成功领投肉鸡养殖加工熟食综合农业公司新和盛农牧数千万人民币B轮融资。新和盛农牧是中国领先的肉鸡全产业链企业，Providence的投资将助力其扩大养殖规模、升级加工设施、强化食品安全管理体系。此次投资体现了Providence对中国农业现代化和食品产业升级的深刻洞察，以及对高成长性农业企业的专业判断力。
+                        </div>
+                        <div class="flash-tags">
+                            <span class="tag important">B轮融资</span>
+                            <span class="tag">农业</span>
+                            <span class="tag">食品</span>
+                            <span class="tag">新和盛</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快讯项目 2 -->
+                <div class="flash-item">
+                    <div class="flash-time">14:58</div>
+                    <div class="flash-content">
+                        <div class="flash-title">沪深两市成交额突破1.2万亿元</div>
+                        <div class="flash-desc">创近3个月新高，市场情绪回暖明显</div>
+                        <div class="flash-tags">
+                            <span class="tag important">重要</span>
+                            <span class="tag">股市</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快讯项目 3 -->
+                <div class="flash-item">
+                    <div class="flash-time">14:15</div>
+                    <div class="flash-content">
+                        <div class="flash-title">美联储主席鲍威尔讲话</div>
+                        <div class="flash-desc">将继续关注通胀数据，保持货币政策灵活性</div>
+                        <div class="flash-tags">
+                            <span class="tag">美联储</span>
+                            <span class="tag">外汇</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快讯项目 4 -->
+                <div class="flash-item">
+                    <div class="flash-time">13:42</div>
+                    <div class="flash-content">
+                        <div class="flash-title">国际油价大涨3.2%</div>
+                        <div class="flash-desc">布伦特原油突破85美元/桶，供应担忧推动价格上涨</div>
+                        <div class="flash-tags">
+                            <span class="tag">商品</span>
+                            <span class="tag">原油</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快讯项目 5 -->
+                <div class="flash-item">
+                    <div class="flash-time">13:08</div>
+                    <div class="flash-content">
+                        <div class="flash-title">科技板块领涨</div>
+                        <div class="flash-desc">人工智能概念股集体走强，多只个股涨停</div>
+                        <div class="flash-tags">
+                            <span class="tag">科技股</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快讯项目 6 -->
+                <div class="flash-item">
+                    <div class="flash-time">12:35</div>
+                    <div class="flash-content">
+                        <div class="flash-title">黄金价格突破4300美元/盎司</div>
+                        <div class="flash-desc">避险情绪升温，贵金属持续走强</div>
+                        <div class="flash-tags">
+                            <span class="tag">黄金</span>
+                            <span class="tag">商品</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快讯项目 7 -->
+                <div class="flash-item">
+                    <div class="flash-time">12:02</div>
+                    <div class="flash-content">
+                        <div class="flash-title">比特币突破108000美元</div>
+                        <div class="flash-desc">加密货币市场整体上涨，市场情绪乐观</div>
+                        <div class="flash-tags">
+                            <span class="tag">加密货币</span>
+                            <span class="tag">BTC</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 加载更多按钮 -->
+            <div class="load-more-wrap">
+                <button class="load-more-btn" id="loadMoreNews">加载更多</button>
+            </div>
+        </main>
+
+        <!-- 底部导航栏 -->
+        <!-- 底部导航已移除 -->
+    </div>
+    <script src="news-flash.js?v=1763813622"></script>
+    <script>
+        // 已去掉Spotlight滚动效果
+    </script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script src="smart-swipe-control.js?v=1763813622"></script>
+
+
+</body>
+
+</html>

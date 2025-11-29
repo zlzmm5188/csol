@@ -1,0 +1,375 @@
+/**
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Providence 新人红包样式
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ */
+
+/* ========== 红包弹窗容器 ========== */
+.redpacket-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.redpacket-modal.show {
+    opacity: 1;
+}
+
+/* ========== 遮罩层 ========== */
+.redpacket-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* ========== 红包容器 ========== */
+.redpacket-container {
+    position: relative;
+    z-index: 1;
+    animation: redpacketBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes redpacketBounce {
+    0% {
+        transform: scale(0) rotate(-15deg);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.1) rotate(5deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+/* ========== 红包主体 ========== */
+.redpacket-body {
+    position: relative;
+    width: clamp(320px, 85vw, 380px);
+    background: linear-gradient(
+        180deg,
+        #ff4d4f 0%,
+        #ff7875 30%,
+        #ff4d4f 60%,
+        #cf1322 100%
+    );
+    border-radius: 24px;
+    padding: clamp(32px, 8vw, 40px) clamp(24px, 6vw, 28px);
+    box-shadow:
+        0 20px 60px rgba(255, 77, 79, 0.4),
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.2),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    overflow: hidden;
+}
+
+/* 红包顶部装饰 */
+.redpacket-top-decoration {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    border-radius: 50%;
+    border: 4px solid #ff4d4f;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+.redpacket-top-decoration::before {
+    content: '福';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 28px;
+    font-weight: bold;
+    color: #ff4d4f;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 红包底部装饰 */
+.redpacket-bottom-decoration {
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 30px;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.3) 0%, transparent 70%);
+    filter: blur(8px);
+}
+
+/* ========== 关闭按钮 ========== */
+.redpacket-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    border-radius: 50%;
+    color: #ffffff;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.redpacket-close:hover {
+    background: rgba(0, 0, 0, 0.4);
+    transform: rotate(90deg);
+}
+
+/* ========== 红包图标 ========== */
+.redpacket-icon-wrapper {
+    position: relative;
+    margin: 0 auto 20px;
+    width: 100px;
+    height: 100px;
+}
+
+.redpacket-icon {
+    font-size: 80px;
+    line-height: 100px;
+    animation: iconBounce 2s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-10px) scale(1.05);
+    }
+}
+
+.redpacket-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(255, 237, 78, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+    0%, 100% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+}
+
+/* ========== 标题 ========== */
+.redpacket-title {
+    font-size: clamp(22px, 5.5vw, 26px);
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.redpacket-subtitle {
+    font-size: clamp(14px, 3.5vw, 16px);
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 24px;
+}
+
+/* ========== 金额显示 ========== */
+.redpacket-amount-wrapper {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.redpacket-amount {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 8px;
+}
+
+.amount-value {
+    font-size: clamp(48px, 12vw, 56px);
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(255, 215, 0, 0.5);
+    line-height: 1;
+    animation: amountShine 3s ease-in-out infinite;
+}
+
+@keyframes amountShine {
+    0%, 100% {
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(1.2);
+    }
+}
+
+.amount-currency {
+    font-size: clamp(18px, 4.5vw, 22px);
+    font-weight: 600;
+    color: #ffed4e;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ========== 说明文字 ========== */
+.redpacket-desc {
+    margin-bottom: 24px;
+}
+
+.redpacket-desc p {
+    font-size: clamp(13px, 3.2vw, 15px);
+    color: rgba(255, 255, 255, 0.9);
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+/* ========== 领取按钮 ========== */
+.redpacket-claim-btn {
+    position: relative;
+    width: 100%;
+    max-width: 280px;
+    height: 52px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    border: none;
+    border-radius: 26px;
+    font-size: clamp(16px, 4vw, 18px);
+    font-weight: bold;
+    color: #ff4d4f;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow:
+        0 8px 20px rgba(255, 215, 0, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    margin: 0 auto;
+    display: block;
+}
+
+.redpacket-claim-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 12px 28px rgba(255, 215, 0, 0.5),
+        inset 0 2px 4px rgba(255, 255, 255, 0.4);
+}
+
+.redpacket-claim-btn:active {
+    transform: translateY(0);
+}
+
+.redpacket-claim-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-text {
+    position: relative;
+    z-index: 1;
+}
+
+.btn-shine {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+    );
+    transform: rotate(45deg);
+    animation: btnShine 3s ease-in-out infinite;
+}
+
+@keyframes btnShine {
+    0% {
+        left: -150%;
+    }
+    50%, 100% {
+        left: 150%;
+    }
+}
+
+/* ========== 底部提示 ========== */
+.redpacket-footer {
+    margin-top: 16px;
+    font-size: clamp(11px, 2.8vw, 12px);
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.4;
+}
+
+/* ========== 金币飘落动画 ========== */
+.coins-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.coin {
+    position: absolute;
+    top: -50px;
+    font-size: 24px;
+    animation: coinFall linear forwards;
+    opacity: 0;
+}
+
+@keyframes coinFall {
+    0% {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(calc(100vh + 50px)) rotate(720deg);
+    }
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 375px) {
+    .redpacket-body {
+        padding: 28px 20px;
+    }
+
+    .redpacket-icon {
+        font-size: 70px;
+    }
+}

@@ -1,0 +1,217 @@
+/**
+ * PROVIDENCE Design Tokens
+ * 全站统一设计变量
+ *
+ * 风格参考：Navy / Gold / White 国际金融体系
+ * 情绪氛围：Private Wealth / Institutional Portfolio Management / Premium Banking
+ *
+ * 禁止：明亮黄、霓虹蓝、电竞感、科幻感
+ */
+
+:root {
+  /* ========== 品牌色 - Navy 海军蓝 ========== */
+  --navy: #0C1526;
+  --navy-2: #101A30;
+  --navy-light: #1a2642;
+  --navy-lighter: #253450;
+
+  /* ========== 品牌色 - Gold 香槟金 ========== */
+  --gold-1: #D6B25A;
+  --gold-2: #B79846;
+  --gold-light: #E8D099;
+  --gold-dark: #9A7D32;
+
+  /* ========== 中性色 ========== */
+  --white: #FFFFFF;
+  --ink: #F5F6FA;
+  --muted: #9CA2B3;
+  --muted-light: #C5CAD6;
+  --muted-dark: #6B7280;
+
+  /* ========== 背景色 ========== */
+  --bg-navy: var(--navy);
+  --bg-navy-2: var(--navy-2);
+  --bg-white: var(--white);
+  --bg-ink: var(--ink);
+  --bg-card: var(--white);
+
+  /* ========== 文字色 ========== */
+  --text-primary: #1a1a1a;
+  --text-secondary: #4b5563;
+  --text-muted: var(--muted);
+  --text-inverse: var(--white);
+  --text-gold: var(--gold-1);
+
+  /* ========== 边框 ========== */
+  --border-light: rgba(214, 178, 90, 0.15);
+  --border-normal: rgba(214, 178, 90, 0.3);
+  --border-strong: rgba(214, 178, 90, 0.5);
+  --border-white: rgba(255, 255, 255, 0.1);
+
+  /* ========== 圆角 Token ========== */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ========== 阴影 Token ========== */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.15);
+  --shadow-2xl: 0 20px 40px rgba(0, 0, 0, 0.2);
+  --shadow-gold: 0 8px 24px rgba(214, 178, 90, 0.25);
+  --shadow-gold-strong: 0 12px 32px rgba(214, 178, 90, 0.35);
+
+  /* ========== 渐变 Token ========== */
+  --gradient-navy: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 50%, var(--navy) 100%);
+  --gradient-navy-vertical: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 60%, var(--navy-light) 100%);
+  --gradient-gold: linear-gradient(135deg, var(--gold-1) 0%, var(--gold-2) 100%);
+  --gradient-gold-shimmer: linear-gradient(90deg, transparent 0%, rgba(214, 178, 90, 0.3) 50%, transparent 100%);
+  --gradient-overlay: linear-gradient(180deg, rgba(12, 21, 38, 0) 0%, rgba(12, 21, 38, 0.8) 100%);
+
+  /* ========== 模糊 Token ========== */
+  --blur-sm: blur(8px);
+  --blur-md: blur(16px);
+  --blur-lg: blur(24px);
+
+  /* ========== 间距 Token ========== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ========== 字体 Token ========== */
+  --font-xs: 11px;
+  --font-sm: 12px;
+  --font-base: 14px;
+  --font-lg: 16px;
+  --font-xl: 18px;
+  --font-2xl: 20px;
+  --font-3xl: 24px;
+  --font-4xl: 28px;
+
+  /* ========== 行高 Token ========== */
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+
+  /* ========== 字重 Token ========== */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* ========== 动画时长 Token ========== */
+  --duration-fast: 0.15s;
+  --duration-normal: 0.3s;
+  --duration-slow: 0.5s;
+
+  /* ========== 动画曲线 Token ========== */
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* ========== Z-index Token ========== */
+  --z-base: 1;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-fixed: 1200;
+  --z-modal-backdrop: 1300;
+  --z-modal: 1400;
+  --z-popover: 1500;
+  --z-tooltip: 1600;
+}
+
+/* ========== 核心组件样式 Token ========== */
+
+/* 核心数据卡片（白色+金边框） */
+.value-card {
+  background: var(--white);
+  border: 2px solid var(--gold-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-gold);
+  transition: transform var(--duration-normal) var(--ease-smooth),
+              box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+.value-card:hover {
+  transform: translateY(-2px) translateZ(0);
+  box-shadow: var(--shadow-gold-strong);
+}
+
+/* 信息卡片（白色） */
+.info-card {
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 海军蓝卡片 */
+.navy-card {
+  background: var(--navy-2);
+  border: 1px solid var(--border-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  color: var(--text-inverse);
+}
+
+/* 金色强调文字 */
+.text-gold {
+  color: var(--gold-1);
+  font-weight: var(--font-semibold);
+}
+
+/* 金色徽章 */
+.badge-gold {
+  display: inline-block;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+  color: var(--navy);
+  border-radius: var(--radius-full);
+  font-size: var(--font-xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: 0.5px;
+}
+
+/* 动画规范（仅 transform/opacity） */
+.animated-card {
+  transform: scale(1) translateZ(0);
+  opacity: 1;
+  transition: transform var(--duration-normal) var(--ease-smooth),
+              opacity var(--duration-normal) var(--ease-smooth);
+  will-change: transform, opacity;
+}
+
+.animated-card.inactive {
+  transform: scale(0.96) translateZ(0);
+  opacity: 0.7;
+}
+
+/* 移动端滚动优化 */
+.scroll-container {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* 触摸响应优化 */
+button, a, .interactive {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}

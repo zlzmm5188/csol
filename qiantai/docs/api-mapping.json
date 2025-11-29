@@ -1,0 +1,302 @@
+{
+  "metadata": {
+    "project": "Providence - 前后端API映射表",
+    "frontend_root": "/www/wwwroot/f.abcmall.one/providence",
+    "backend_root": "/www/wwwroot/gmo/gmo.com/app/api/controller",
+    "last_updated": "2025-10-27",
+    "version": "1.0.0"
+  },
+  "apis": [
+    {
+      "module": "登录注册",
+      "frontend_file": "/login.js",
+      "method": "POST",
+      "endpoint": "/login/login/login",
+      "backend_file": "Login.php::login()",
+      "status": "✅ 已对接",
+      "notes": "已验证可用"
+    },
+    {
+      "module": "登录注册",
+      "frontend_file": "/register.js",
+      "method": "POST",
+      "endpoint": "/login/reg/nosms",
+      "backend_file": "Login.php::reg()",
+      "status": "✅ 已对接",
+      "notes": "无短信验证注册"
+    },
+    {
+      "module": "用户信息",
+      "frontend_file": "/profile.js",
+      "method": "GET",
+      "endpoint": "/user/user/index",
+      "backend_file": "User.php::user_index()",
+      "status": "⚠️ 待修复",
+      "notes": "返回501错误,需要修复认证逻辑"
+    },
+    {
+      "module": "用户信息",
+      "frontend_file": "/profile.js",
+      "method": "GET",
+      "endpoint": "/user/user/vip_progress",
+      "backend_file": "User.php::vip_progress()",
+      "status": "❌ 404错误",
+      "notes": "方法存在但路由未配置,需要修复路由"
+    },
+    {
+      "module": "投资产品",
+      "frontend_file": "/projects.js",
+      "method": "GET",
+      "endpoint": "/fund/project/all",
+      "backend_file": "Fund.php::project_all()",
+      "status": "✅ 已对接",
+      "notes": "产品列表"
+    },
+    {
+      "module": "投资产品",
+      "frontend_file": "/project-detail.js",
+      "method": "POST",
+      "endpoint": "/fund/fund/add",
+      "backend_file": "Fund.php::fund_add()",
+      "status": "✅ 已对接",
+      "notes": "人民币购买,已添加购买限制验证"
+    },
+    {
+      "module": "投资产品",
+      "frontend_file": "/project-detail.js",
+      "method": "POST",
+      "endpoint": "/fund/fund/usdt_add",
+      "backend_file": "Fund.php::fund_usdt_add()",
+      "status": "✅ 已对接",
+      "notes": "USDT购买,已添加购买限制验证"
+    },
+    {
+      "module": "投资产品",
+      "frontend_file": "/my-investments.js",
+      "method": "GET",
+      "endpoint": "/user/project/list",
+      "backend_file": "User.php::project_list()",
+      "status": "✅ 已对接",
+      "notes": "我的投资列表"
+    },
+    {
+      "module": "充值",
+      "frontend_file": "/deposit.js",
+      "method": "POST",
+      "endpoint": "/user/recharge/add",
+      "backend_file": "User.php::recharge_add()",
+      "status": "✅ 已对接",
+      "notes": "充值申请,USDT显示+2%奖励"
+    },
+    {
+      "module": "充值",
+      "frontend_file": "/deposit.js",
+      "method": "GET",
+      "endpoint": "/user/bank/list",
+      "backend_file": "User.php::bank_list()",
+      "status": "✅ 已对接",
+      "notes": "获取银行卡列表"
+    },
+    {
+      "module": "提现",
+      "frontend_file": "/withdraw.js",
+      "method": "POST",
+      "endpoint": "/user/withdraw/add",
+      "backend_file": "User.php::withdraw_add()",
+      "status": "✅ 已对接",
+      "notes": "提现申请"
+    },
+    {
+      "module": "日利宝",
+      "frontend_file": "/ribao.js",
+      "method": "GET",
+      "endpoint": "/user/ribao/head",
+      "backend_file": "User.php::ribao_head()",
+      "status": "✅ 已对接",
+      "notes": "日利宝头部数据"
+    },
+    {
+      "module": "日利宝",
+      "frontend_file": "/ribao.js",
+      "method": "GET",
+      "endpoint": "/user/ribao/list",
+      "backend_file": "User.php::ribao_list()",
+      "status": "✅ 已对接",
+      "notes": "日利宝记录列表"
+    },
+    {
+      "module": "日利宝",
+      "frontend_file": "/ribao.js",
+      "method": "POST",
+      "endpoint": "/user/ribao/in",
+      "backend_file": "User.php::ribao_in()",
+      "status": "✅ 已对接",
+      "notes": "转入日利宝"
+    },
+    {
+      "module": "日利宝",
+      "frontend_file": "/ribao.js",
+      "method": "POST",
+      "endpoint": "/user/ribao/out",
+      "backend_file": "User.php::ribao_out()",
+      "status": "✅ 已对接",
+      "notes": "转出日利宝"
+    },
+    {
+      "module": "收益明细",
+      "frontend_file": "/profit-calendar.js",
+      "method": "POST",
+      "endpoint": "/user/profit/calendar",
+      "backend_file": "User.php::profit_calendar()",
+      "status": "⚠️ 待开发",
+      "notes": "收益日历接口需要开发"
+    },
+    {
+      "module": "邀请分享",
+      "frontend_file": "/invite-share.js",
+      "method": "GET",
+      "endpoint": "/user/user/invite",
+      "backend_file": "User.php::user_invite()",
+      "status": "✅ 已对接",
+      "notes": "获取邀请码"
+    },
+    {
+      "module": "邀请分享",
+      "frontend_file": "/invite-share.js",
+      "method": "GET",
+      "endpoint": "/user/invite/rewards_config",
+      "backend_file": "User.php::invite_rewards_config()",
+      "status": "⚠️ 待开发",
+      "notes": "邀请奖励配置需要开发"
+    },
+    {
+      "module": "团队管理",
+      "frontend_file": "/invite.js",
+      "method": "GET",
+      "endpoint": "/user/team/team",
+      "backend_file": "User.php::team_info()",
+      "status": "✅ 已对接",
+      "notes": "团队信息"
+    },
+    {
+      "module": "团队管理",
+      "frontend_file": "/team-rewards.js",
+      "method": "GET",
+      "endpoint": "/user/team/reward_rules",
+      "backend_file": "User.php::team_reward_rules()",
+      "status": "✅ 已对接",
+      "notes": "团队奖励规则"
+    },
+    {
+      "module": "团队管理",
+      "frontend_file": "/team-rewards.js",
+      "method": "GET",
+      "endpoint": "/user/team/members",
+      "backend_file": "User.php::team_members()",
+      "status": "✅ 已对接",
+      "notes": "团队成员列表"
+    },
+    {
+      "module": "团队管理",
+      "frontend_file": "/team-rewards.js",
+      "method": "POST",
+      "endpoint": "/user/team/rewards_claim",
+      "backend_file": "User.php::team_rewards_claim()",
+      "status": "✅ 已对接",
+      "notes": "领取团队奖励"
+    },
+    {
+      "module": "签到",
+      "frontend_file": "/checkin.js",
+      "method": "GET",
+      "endpoint": "/user/checkin/status",
+      "backend_file": "User.php::checkin_status()",
+      "status": "✅ 已对接",
+      "notes": "签到状态"
+    },
+    {
+      "module": "签到",
+      "frontend_file": "/checkin.js",
+      "method": "POST",
+      "endpoint": "/user/checkin/do",
+      "backend_file": "User.php::checkin_do()",
+      "status": "✅ 已对接",
+      "notes": "执行签到"
+    },
+    {
+      "module": "积分商城",
+      "frontend_file": "/shop.js",
+      "method": "GET",
+      "endpoint": "/user/points/goods_list",
+      "backend_file": "User.php::points_goods_list()",
+      "status": "✅ 已对接",
+      "notes": "积分商品列表"
+    },
+    {
+      "module": "积分商城",
+      "frontend_file": "/shop.js",
+      "method": "POST",
+      "endpoint": "/user/points/exchange_do",
+      "backend_file": "User.php::points_exchange_do()",
+      "status": "✅ 已对接",
+      "notes": "积分兑换"
+    },
+    {
+      "module": "市场数据",
+      "frontend_file": "/market.js",
+      "method": "GET",
+      "endpoint": "/data/market/bonds",
+      "backend_file": "Data.php::market_bonds()",
+      "status": "⚠️ 待开发",
+      "notes": "可转债数据(原国债数据)"
+    },
+    {
+      "module": "快讯",
+      "frontend_file": "/news-flash.js",
+      "method": "GET",
+      "endpoint": "/data/news/flash",
+      "backend_file": "Data.php::news_flash()",
+      "status": "⚠️ 使用静态文件",
+      "notes": "当前使用news-data.json静态文件"
+    }
+  ],
+  "summary": {
+    "total": 30,
+    "completed": 22,
+    "pending": 5,
+    "error": 3,
+    "completion_rate": "73%"
+  },
+  "todo_list": [
+    {
+      "priority": "🔴 高",
+      "task": "修复 /user/user/index 的501错误",
+      "file": "User.php::user_index()",
+      "issue": "认证失败返回501,需要修复is_verify方法"
+    },
+    {
+      "priority": "🔴 高",
+      "task": "修复 /user/user/vip_progress 的404错误",
+      "file": "User.php::vip_progress()",
+      "issue": "ThinkPHP路由未正确配置或方法名不匹配"
+    },
+    {
+      "priority": "🟡 中",
+      "task": "开发收益日历接口",
+      "file": "User.php::profit_calendar()",
+      "issue": "需要新增方法,返回用户每日收益数据"
+    },
+    {
+      "priority": "🟡 中",
+      "task": "开发邀请奖励配置接口",
+      "file": "User.php::invite_rewards_config()",
+      "issue": "需要新增方法,返回邀请奖励规则配置"
+    },
+    {
+      "priority": "🟢 低",
+      "task": "开发可转债市场数据接口",
+      "file": "Data.php::market_bonds()",
+      "issue": "需要新增控制器和方法,替换静态数据"
+    }
+  ]
+}

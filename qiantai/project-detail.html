@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0a1020" />
+  <title>产品详情</title>
+  <link rel="icon" href="favicon.ico" />
+  <script src="ios-toast.js?v=1763897782"></script>
+  <style>
+    :root {
+      --navy: #08141f;
+      --navy2: #0f1f2e;
+      --navy3: #0a1723;
+      --paper: #f3f5f7;
+      --ink: #0f172a;
+      --muted: #6b7280;
+      --gold: #9f8b54;
+      --gold2: #c7b58a;
+      --lineL: #e2e6ed;
+      --lineD: rgba(255, 255, 255, 0.08);
+      --radius: 14px;
+      --green: #059669;
+      --blue: #3b82f6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html { height: 100%; }
+
+    body {
+      min-height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
+      color: #e9eef6;
+      background: linear-gradient(180deg, var(--navy3), var(--navy2) 40%, var(--navy));
+      background-attachment: fixed;
+      padding-bottom: 100px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* 顶部栏 - 高端金融风格 */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: calc(56px + env(safe-area-inset-top, 0));
+      padding: 0 18px;
+      padding-top: env(safe-area-inset-top, 0);
+      background: linear-gradient(180deg, rgba(10, 23, 35, 0.98), rgba(10, 23, 35, 0.95));
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(199, 181, 138, 0.12);
+      display: flex;
+      align-items: center;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 56px;
+      gap: 14px;
+    }
+
+    .back-btn {
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: linear-gradient(145deg, rgba(199, 181, 138, 0.18), rgba(199, 181, 138, 0.08));
+      border: 1px solid rgba(199, 181, 138, 0.25);
+      color: var(--gold2);
+      font-size: 22px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .back-btn:hover {
+      background: rgba(199, 181, 138, 0.25);
+      transform: translateX(-2px);
+    }
+
+    .back-btn:active {
+      transform: scale(0.95);
+    }
+
+    .topbar-title {
+      flex: 1;
+      text-align: center;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--gold2);
+      margin-right: 32px;
+    }
+
+    /* 主内容 */
+    .main-content {
+      padding-top: calc(52px + env(safe-area-inset-top, 0));
+    }
+
+    /* Hero - 高端金融风格 */
+    .hero {
+      padding: 24px 16px 28px;
+      border-bottom: 1px solid var(--lineD);
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(ellipse at top center, rgba(199, 181, 138, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .product-tag {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #0b1220;
+      background: linear-gradient(135deg, #f7d774, var(--gold));
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(199, 181, 138, 0.4);
+      letter-spacing: 0.5px;
+    }
+
+    .product-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .product-desc {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    /* 收益率卡片 - 立体感 */
+    .rate-card {
+      background: linear-gradient(145deg, rgba(199, 181, 138, 0.18), rgba(199, 181, 138, 0.06));
+      border: 1px solid rgba(199, 181, 138, 0.25);
+      border-radius: 20px;
+      padding: 28px 20px;
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rate-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(199, 181, 138, 0.4), transparent);
+    }
+
+    .rate-display {
+      text-align: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(199, 181, 138, 0.15);
+      margin-bottom: 20px;
+    }
+
+    .rate-value {
+      font-size: 52px;
+      font-weight: 700;
+      color: var(--gold2);
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1;
+      text-shadow: 0 2px 8px rgba(199, 181, 138, 0.4);
+    }
+
+    .rate-value span { font-size: 24px; }
+
+    .rate-label {
+      font-size: 14px;
+      color: rgba(199, 181, 138, 0.8);
+      margin-top: 10px;
+      letter-spacing: 1px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: rgba(199, 181, 138, 0.1);
+      border-radius: 12px;
+      padding: 2px;
+    }
+
+    .metric {
+      text-align: center;
+      padding: 14px 8px;
+      background: rgba(8, 20, 31, 0.6);
+      position: relative;
+    }
+
+    .metric:first-child {
+      border-radius: 10px 0 0 10px;
+    }
+
+    .metric:last-child {
+      border-radius: 0 10px 10px 0;
+    }
+
+    .metric-val {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .metric-lab {
+      font-size: 10px;
+      color: rgba(199, 181, 138, 0.8);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* 白色卡片 - 层次感优化 */
+    .section {
+      margin: 16px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(243, 245, 247, 0.95));
+      border: 1px solid rgba(200, 186, 148, 0.15);
+      border-radius: var(--radius);
+      box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.05),
+        0 8px 24px rgba(0, 0, 0, 0.15),
+        0 16px 48px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transform: translateZ(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .section:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.08),
+        0 12px 32px rgba(0, 0, 0, 0.18),
+        0 20px 56px rgba(0, 0, 0, 0.12);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(200, 186, 148, 0.2);
+      background: linear-gradient(135deg, rgba(200, 186, 148, 0.08), rgba(200, 186, 148, 0.02));
+    }
+
+    .section-head h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #0f172a;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-head small {
+      margin-left: auto;
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    /* 标题栏按钮 - 金融风格 */
+    .head-btn {
+      margin-left: auto;
+      padding: 8px 14px;
+      background: linear-gradient(135deg, rgba(199, 181, 138, 0.2), rgba(199, 181, 138, 0.1));
+      border: 1px solid rgba(199, 181, 138, 0.35);
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gold);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .head-btn:hover {
+      background: linear-gradient(135deg, rgba(199, 181, 138, 0.3), rgba(199, 181, 138, 0.15));
+      border-color: rgba(199, 181, 138, 0.5);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .head-btn:active {
+      transform: scale(0.97);
+    }
+
+    .section-body {
+      padding: 16px;
+    }
+
+    /* 收益规则概览 - 层次感 */
+    .rule-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .rule-item {
+      background: linear-gradient(145deg, #ffffff, #f8fafc);
+      border: 1px solid rgba(200, 186, 148, 0.2);
+      border-radius: 12px;
+      padding: 16px 14px;
+      text-align: center;
+      box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.04),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.02);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .rule-item:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .rule-item .value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 6px;
+      text-shadow: 0 1px 2px rgba(159, 139, 84, 0.2);
+    }
+
+    .rule-item .value.green {
+      color: var(--green);
+      text-shadow: 0 1px 2px rgba(5, 150, 105, 0.2);
+    }
+
+    .rule-item .label {
+      font-size: 11px;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* 进度区域 - 层次感 */
+    .progress-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .progress-stat {
+      background: linear-gradient(145deg, #ffffff, #f8fafc);
+      border: 1px solid rgba(200, 186, 148, 0.15);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-stat::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold2), var(--gold));
+      opacity: 0.6;
+    }
+
+    .progress-stat .num {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .progress-stat .num.gold {
+      color: var(--gold);
+      text-shadow: 0 1px 2px rgba(159, 139, 84, 0.15);
+    }
+
+    .progress-stat .txt {
+      font-size: 11px;
+      color: #6b7280;
+      letter-spacing: 0.3px;
+    }
+
+    .progress-wrap { padding: 4px 0; }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .progress-text {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .progress-pct {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gold);
+    }
+
+    .progress-bar {
+      height: 12px;
+      background: linear-gradient(180deg, #e8ecf0, #d8dce0);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(180deg, #f0d78c, var(--gold));
+      border-radius: 6px;
+      min-width: 3px;
+      transition: width 0.6s ease;
+      box-shadow: 0 2px 6px rgba(159, 139, 84, 0.4);
+      position: relative;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 4px;
+      right: 4px;
+      height: 4px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.4), transparent);
+      border-radius: 2px;
+    }
+
+    .progress-bottom {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+
+    /* 投资须知 - 专业风格 */
+    .notice-list {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .notice-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, rgba(248, 250, 252, 0.8), rgba(241, 245, 249, 0.6));
+      border: 1px solid rgba(200, 186, 148, 0.12);
+      border-radius: 10px;
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.6;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .notice-list li:hover {
+      transform: translateX(4px);
+      box-shadow: -4px 0 0 var(--gold);
+    }
+
+    .notice-list li .num {
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, var(--gold2), var(--gold));
+      color: #0b1220;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(159, 139, 84, 0.3);
+    }
+
+    /* 产品说明 - 专业风格 */
+    .desc-box {
+      background: linear-gradient(145deg, rgba(248, 250, 252, 0.95), rgba(241, 245, 249, 0.9));
+      border: 1px solid rgba(200, 186, 148, 0.15);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .desc-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--gold2), var(--gold));
+    }
+
+    .desc-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 12px;
+      padding-left: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .desc-text {
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.9;
+      padding-left: 8px;
+    }
+
+    /* 底部栏 - 层次感 */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: linear-gradient(180deg, rgba(8, 20, 31, 0.98), rgba(8, 20, 31, 1));
+      border-top: 1px solid rgba(199, 181, 138, 0.15);
+      padding: 14px 16px;
+      padding-bottom: calc(14px + env(safe-area-inset-bottom, 0));
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .bottom-bar-inner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .balance-info { flex: 1; }
+
+    .bal-row {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .bal-label {
+      color: #8a95a6;
+      width: 42px;
+    }
+
+    .bal-amount { font-weight: 600; }
+    .bal-amount.cny { color: var(--gold2); }
+    .bal-amount.usdt { color: #26a17b; }
+
+    .btn-buy {
+      width: 140px;
+      height: 50px;
+      background: linear-gradient(145deg, #f0d78c, var(--gold));
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #0b1220;
+      cursor: pointer;
+      box-shadow:
+        0 4px 12px rgba(159, 139, 84, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-buy:active {
+      transform: scale(0.97);
+      box-shadow:
+        0 2px 8px rgba(159, 139, 84, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    /* ========== 通用弹窗 - 金融级 ========== */
+    .sheet-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .sheet-overlay.show { display: flex; }
+
+    .sheet-content {
+      width: 100%;
+      max-width: 500px;
+      max-height: 85vh;
+      background: linear-gradient(180deg, #0f1f2e, #08141f);
+      border-radius: 24px 24px 0 0;
+      padding-bottom: env(safe-area-inset-bottom, 0);
+      animation: slideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(199, 181, 138, 0.15);
+      border-bottom: none;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0.5; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .sheet-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(199, 181, 138, 0.15);
+      flex-shrink: 0;
+      background: rgba(199, 181, 138, 0.03);
+    }
+
+    .sheet-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sheet-close {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #aeb8c6;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sheet-close:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .sheet-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* 弹窗内容样式 */
+    .sheet-section {
+      margin-bottom: 20px;
+    }
+
+    .sheet-section:last-child { margin-bottom: 0; }
+
+    .sheet-section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gold2);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sheet-list {
+      list-style: none;
+    }
+
+    .sheet-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: #c9d2dd;
+      line-height: 1.7;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .sheet-list li:last-child { border-bottom: none; }
+
+    .sheet-list li .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    .sheet-list li strong {
+      color: var(--gold2);
+    }
+
+    /* 试算器样式 */
+    .calc-input-group {
+      margin-bottom: 16px;
+    }
+
+    .calc-input-label {
+      font-size: 13px;
+      color: #8a95a6;
+      margin-bottom: 8px;
+    }
+
+    .calc-input-wrap {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(199, 181, 138, 0.3);
+      border-radius: 12px;
+      padding: 0 16px;
+      height: 50px;
+    }
+
+    .calc-input-prefix {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--gold2);
+      margin-right: 8px;
+    }
+
+    .calc-input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .calc-input::placeholder {
+      color: #6b7280;
+      font-size: 16px;
+    }
+
+    .calc-quick-btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .calc-quick-btn {
+      padding: 8px 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      font-size: 13px;
+      color: #c9d2dd;
+      cursor: pointer;
+    }
+
+    .calc-quick-btn:active {
+      background: rgba(199, 181, 138, 0.15);
+      border-color: var(--gold2);
+      color: var(--gold2);
+    }
+
+    .calc-result {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .calc-result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .calc-result-row:last-child { border-bottom: none; }
+
+    .calc-result-row .label {
+      font-size: 14px;
+      color: #8a95a6;
+    }
+
+    .calc-result-row .value {
+      font-size: 15px;
+      font-weight: 600;
+      color: #e9eef6;
+    }
+
+    .calc-result-row .value.highlight {
+      font-size: 20px;
+      color: var(--gold2);
+    }
+
+    /* ========== 认购弹窗 - 金融级UI ========== */
+    .modal-body {
+      padding: 24px;
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,0.1));
+    }
+
+    .currency-tabs {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .currency-tab {
+      flex: 1;
+      height: 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #6b7280;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .currency-tab::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: transparent;
+      transition: background 0.25s ease;
+    }
+
+    .currency-tab .balance-hint {
+      font-size: 11px;
+      color: #4b5563;
+    }
+
+    .currency-tab:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .currency-tab.active {
+      background: linear-gradient(145deg, rgba(199, 181, 138, 0.18), rgba(199, 181, 138, 0.08));
+      border-color: rgba(199, 181, 138, 0.5);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .currency-tab.active::before {
+      background: linear-gradient(90deg, var(--gold), var(--gold2));
+    }
+
+    .currency-tab.active .balance-hint {
+      color: var(--gold2);
+    }
+
+    .currency-tab.usdt.active {
+      background: linear-gradient(145deg, rgba(38, 161, 123, 0.2), rgba(38, 161, 123, 0.08));
+      border-color: rgba(38, 161, 123, 0.5);
+    }
+
+    .currency-tab.usdt.active::before {
+      background: linear-gradient(90deg, #26a17b, #2ecc71);
+    }
+
+    .currency-tab.usdt.active .balance-hint {
+      color: #4ade80;
+    }
+
+    .amount-section { margin-bottom: 20px; }
+
+    .amount-label {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .amount-input-wrap {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(199, 181, 138, 0.2);
+      border-radius: 16px;
+      padding: 0 18px;
+      height: 64px;
+      transition: all 0.25s ease;
+    }
+
+    .amount-input-wrap:focus-within {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 4px rgba(199, 181, 138, 0.12);
+    }
+
+    .amount-prefix {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gold2);
+      margin-right: 10px;
+    }
+
+    .amount-input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .amount-input::placeholder {
+      color: #374151;
+      font-size: 18px;
+      font-weight: 400;
+    }
+
+    .amount-all {
+      padding: 10px 16px;
+      background: linear-gradient(135deg, rgba(199, 181, 138, 0.25), rgba(199, 181, 138, 0.12));
+      border: 1px solid rgba(199, 181, 138, 0.4);
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gold2);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .amount-all:hover {
+      background: rgba(199, 181, 138, 0.35);
+    }
+
+    .quick-amounts {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .quick-btn {
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .quick-btn:hover {
+      background: rgba(199, 181, 138, 0.15);
+      border-color: rgba(199, 181, 138, 0.35);
+      color: var(--gold2);
+      transform: translateY(-2px);
+    }
+
+    .quick-btn:active {
+      transform: scale(0.95);
+    }
+
+    .invest-info {
+      background: linear-gradient(145deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.2));
+      border: 1px solid rgba(199, 181, 138, 0.12);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .invest-info::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 20px;
+      right: 20px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(199, 181, 138, 0.25), transparent);
+    }
+
+    .invest-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .invest-info-row:last-child {
+      border-bottom: none;
+    }
+
+    .invest-info-row .label {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 13px;
+    }
+
+    .invest-info-row .value {
+      color: #fff;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .invest-info-row .value.gold {
+      color: var(--gold2);
+      font-size: 17px;
+      text-shadow: 0 0 12px rgba(199, 181, 138, 0.3);
+    }
+
+    .btn-confirm {
+      width: 100%;
+      height: 58px;
+      background: linear-gradient(135deg, #f7d774 0%, var(--gold) 50%, #c7a750 100%);
+      border: none;
+      border-radius: 16px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0b1220;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 20px rgba(199, 181, 138, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-confirm::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .btn-confirm:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(199, 181, 138, 0.5);
+    }
+
+    .btn-confirm:hover::after {
+      left: 100%;
+    }
+
+    .btn-confirm:active {
+      transform: scale(0.98);
+    }
+
+    .btn-confirm:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .hide { display: none !important; }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="javascript:void(0)" class="back-btn" onclick="goBack()">‹</a>
+    <div class="topbar-title">产品详情</div>
+  </div>
+</header>
+
+<div class="main-content">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="product-tag">优选理财</div>
+    <h1 class="product-name" id="projName">加载中...</h1>
+    <p class="product-desc" id="projSub">稳健收益，专业管理</p>
+
+    <div class="rate-card">
+      <div class="rate-display">
+        <div class="rate-value" id="mainRate">—<span>%</span></div>
+        <div class="rate-label">日收益率</div>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-val" id="cycle">—</div>
+          <div class="metric-lab">投资周期</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val" id="minAmt">—</div>
+          <div class="metric-lab">起投金额</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val" id="maxAmt">—</div>
+          <div class="metric-lab">单笔上限</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 收益规则 -->
+  <div class="section">
+    <div class="section-head">
+      <h3>📊 收益规则</h3>
+      <button class="head-btn" onclick="openSheet('calc')">🧮 收益试算</button>
+    </div>
+    <div class="section-body">
+      <div class="rule-grid">
+        <div class="rule-item">
+          <div class="value" id="cnyRate">—</div>
+          <div class="label">CNY日收益率</div>
+        </div>
+        <div class="rule-item">
+          <div class="value green" id="usdtRate">—</div>
+          <div class="label">USDT日收益率</div>
+        </div>
+        <div class="rule-item">
+          <div class="value" id="rateVip">—</div>
+          <div class="label">VIP额外加息</div>
+        </div>
+        <div class="rule-item">
+          <div class="value" id="cnyRebate">—</div>
+          <div class="label">额外加息</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 募集进度 -->
+  <div class="section">
+    <div class="section-head">
+      <h3>📈 募集进度</h3>
+      <button class="head-btn" onclick="openSheet('rebate')">🎁 返利规则</button>
+    </div>
+    <div class="section-body">
+      <div class="progress-stats">
+        <div class="progress-stat">
+          <div class="num gold" id="soldDisplay">¥0</div>
+          <div class="txt">已募集金额</div>
+        </div>
+        <div class="progress-stat">
+          <div class="num" id="investorCount">0</div>
+          <div class="txt">参与投资人数</div>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span class="progress-text">募集进度</span>
+          <span class="progress-pct" id="progPercent">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="prog" style="width: 0%"></div>
+        </div>
+        <div class="progress-bottom">
+          <span id="soldInfo">已募集: ¥0</span>
+          <span id="totalInfo">目标: ¥0</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 投资须知 -->
+  <div class="section">
+    <div class="section-head">
+      <h3>📋 投资须知</h3>
+      <button class="head-btn" onclick="openSheet('rules')">📋 收益规则</button>
+    </div>
+    <div class="section-body">
+      <ul class="notice-list">
+        <li>
+          <span class="num">1</span>
+          <span>投资前请完成实名认证，确保账户安全</span>
+        </li>
+        <li>
+          <span class="num">2</span>
+          <span>请绑定银行卡或USDT钱包地址，用于提现到账</span>
+        </li>
+        <li>
+          <span class="num">3</span>
+          <span>投资确认后将锁定至到期日，到期自动结算本息</span>
+        </li>
+        <li>
+          <span class="num">4</span>
+          <span>收益每日计算，到期后本金+收益自动返还至余额</span>
+        </li>
+        <li>
+          <span class="num">5</span>
+          <span>推荐好友投资可获得返利奖励，实时到账</span>
+        </li>
+      </ul>
+
+      <!-- 风控说明 -->
+      <div class="desc-box" style="margin-top: 16px; background: linear-gradient(135deg, rgba(5, 150, 105, 0.08), rgba(5, 150, 105, 0.04)); border: 1px solid rgba(5, 150, 105, 0.2);">
+        <div class="desc-title" style="color: #059669;">🛡️ 风控保障</div>
+        <div class="desc-text" style="color: #374151; line-height: 1.8;">
+          所有投资项目均经过严格风控审核，资金全部定向投入合规运营项目，由第三方承保机构全程托底监管。
+        </div>
+      </div>
+
+      <!-- 产品说明 -->
+      <div class="desc-box">
+        <div class="desc-title">📝 产品说明</div>
+        <div class="desc-text" id="projectDesc">加载中...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 底部栏 -->
+<div class="bottom-bar">
+  <div class="bottom-bar-inner">
+    <div class="balance-info">
+      <div class="bal-row">
+        <span class="bal-label">CNY</span>
+        <span class="bal-amount cny" id="balanceCny">¥0.00</span>
+      </div>
+      <div class="bal-row">
+        <span class="bal-label">USDT</span>
+        <span class="bal-amount usdt" id="balanceUsdt">0.00</span>
+      </div>
+    </div>
+    <button class="btn-buy" id="applyBtn">立即认购</button>
+  </div>
+</div>
+
+<!-- ========== 收益试算弹窗 ========== -->
+<div class="sheet-overlay" id="calcSheet">
+  <div class="sheet-content">
+    <div class="sheet-header">
+      <div class="sheet-title">🧮 收益试算</div>
+      <button class="sheet-close" onclick="closeSheet('calc')">×</button>
+    </div>
+    <div class="sheet-body">
+      <div class="calc-input-group">
+        <div class="calc-input-label">输入投资金额</div>
+        <div class="calc-input-wrap">
+          <span class="calc-input-prefix">¥</span>
+          <input type="number" class="calc-input" id="calcAmountInput" placeholder="请输入金额" inputmode="decimal" oninput="updateCalc()">
+        </div>
+      </div>
+
+      <div class="calc-quick-btns">
+        <button class="calc-quick-btn" onclick="setCalcAmount(5000)">5,000</button>
+        <button class="calc-quick-btn" onclick="setCalcAmount(10000)">10,000</button>
+        <button class="calc-quick-btn" onclick="setCalcAmount(50000)">50,000</button>
+        <button class="calc-quick-btn" onclick="setCalcAmount(100000)">100,000</button>
+      </div>
+
+      <div class="calc-result">
+        <div class="calc-result-row">
+          <span class="label">投资金额</span>
+          <span class="value" id="calcDisplayAmount">¥0.00</span>
+        </div>
+        <div class="calc-result-row">
+          <span class="label">投资周期</span>
+          <span class="value" id="calcDisplayCycle">— 天</span>
+        </div>
+        <div class="calc-result-row">
+          <span class="label">日收益率</span>
+          <span class="value" id="calcDisplayRate">—%</span>
+        </div>
+        <div class="calc-result-row">
+          <span class="label">每日收益</span>
+          <span class="value highlight" id="calcDisplayDaily">¥0.00</span>
+        </div>
+        <div class="calc-result-row">
+          <span class="label">预期总收益</span>
+          <span class="value highlight" id="calcDisplayProfit">¥0.00</span>
+        </div>
+        <div class="calc-result-row">
+          <span class="label">到期本息合计</span>
+          <span class="value highlight" id="calcDisplayTotal">¥0.00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 返利规则弹窗 ========== -->
+<div class="sheet-overlay" id="rebateSheet">
+  <div class="sheet-content">
+    <div class="sheet-header">
+      <div class="sheet-title">🎁 推荐返利规则</div>
+      <button class="sheet-close" onclick="closeSheet('rebate')">×</button>
+    </div>
+    <div class="sheet-body">
+      <div class="sheet-section">
+        <div class="sheet-section-title">💰 返利比例</div>
+        <ul class="sheet-list">
+          <li><span class="dot"></span>一级推荐返利：好友投资金额 × <strong id="rebate1Rate">—</strong></li>
+          <li><span class="dot"></span>二级推荐返利：好友的好友投资 × <strong id="rebate2Rate">—</strong></li>
+        </ul>
+      </div>
+
+      <div class="sheet-section">
+        <div class="sheet-section-title">📈 VIP等级加成</div>
+        <ul class="sheet-list">
+          <li><span class="dot"></span>VIP等级越高，返利比例越高</li>
+          <li><span class="dot"></span>VIP1-VIP8 一级返利 1%-7%</li>
+          <li><span class="dot"></span>VIP3及以上可享受二级返利</li>
+        </ul>
+      </div>
+
+      <div class="sheet-section">
+        <div class="sheet-section-title">⏰ 到账规则</div>
+        <ul class="sheet-list">
+          <li><span class="dot"></span>返利在好友投资成功后<strong>实时到账</strong></li>
+          <li><span class="dot"></span>返利直接进入可用余额，可提现或继续投资</li>
+          <li><span class="dot"></span>体验金投资不产生返利</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 收益规则弹窗 ========== -->
+<div class="sheet-overlay" id="rulesSheet">
+  <div class="sheet-content">
+    <div class="sheet-header">
+      <div class="sheet-title">📋 收益计算规则</div>
+      <button class="sheet-close" onclick="closeSheet('rules')">×</button>
+    </div>
+    <div class="sheet-body">
+      <div class="sheet-section">
+        <div class="sheet-section-title">📊 收益计算公式</div>
+        <ul class="sheet-list">
+          <li><span class="dot"></span>每日收益 = 投资金额 × 日收益率</li>
+          <li><span class="dot"></span>总收益 = 每日收益 × 投资天数</li>
+          <li><span class="dot"></span>到期本息 = 投资本金 + 总收益</li>
+        </ul>
+      </div>
+
+      <div class="sheet-section">
+        <div class="sheet-section-title">⭐ VIP加息规则</div>
+        <ul class="sheet-list">
+          <li><span class="dot"></span>VIP等级越高，享受的加息越多</li>
+          <li><span class="dot"></span>VIP加息在基础收益率上额外叠加</li>
+          <li><span class="dot"></span>累计投资达标自动升级VIP</li>
+        </ul>
+      </div>
+
+      <div class="sheet-section">
+        <div class="sheet-section-title">💵 收益发放</div>
+        <ul class="sheet-list">
+          <li><span class="dot"></span>收益每日结算，系统自动计算</li>
+          <li><span class="dot"></span>投资到期后本金+收益自动返还余额</li>
+          <li><span class="dot"></span>返还资金可直接提现或继续投资</li>
+        </ul>
+      </div>
+
+      <div class="sheet-section">
+        <div class="sheet-section-title">💱 币种说明</div>
+        <ul class="sheet-list">
+          <li><span class="dot"></span>支持CNY（人民币）和USDT两种币种</li>
+          <li><span class="dot"></span>不同币种收益率可能不同</li>
+          <li><span class="dot"></span>USDT投资额外享受汇率优势</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 认购弹窗 ========== -->
+<div class="sheet-overlay" id="investModal">
+  <div class="sheet-content">
+    <div class="sheet-header">
+      <div class="sheet-title">认购产品</div>
+      <button class="sheet-close" onclick="closeInvestModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="currency-tabs">
+        <button class="currency-tab cny active" onclick="selectCurrency('CNY')">
+          <span>¥</span><span>人民币</span>
+        </button>
+        <button class="currency-tab usdt" onclick="selectCurrency('USDT')">
+          <span>₮</span><span>USDT</span>
+        </button>
+      </div>
+
+      <div class="amount-section">
+        <div class="amount-label">投资金额</div>
+        <div class="amount-input-wrap">
+          <span class="amount-prefix" id="currencyPrefix">¥</span>
+          <input type="number" class="amount-input" id="investAmount" placeholder="请输入金额" inputmode="decimal">
+          <button class="amount-all" onclick="setAllBalance()">全部</button>
+        </div>
+      </div>
+
+      <div class="quick-amounts" id="quickAmounts">
+        <button class="quick-btn" onclick="setQuickAmount(1000)">1,000</button>
+        <button class="quick-btn" onclick="setQuickAmount(5000)">5,000</button>
+        <button class="quick-btn" onclick="setQuickAmount(10000)">10,000</button>
+        <button class="quick-btn" onclick="setQuickAmount(50000)">50,000</button>
+        <button class="quick-btn" onclick="setQuickAmount(100000)">100,000</button>
+      </div>
+
+      <div class="invest-info">
+        <div class="invest-info-row">
+          <span class="label">产品名称</span>
+          <span class="value" id="modalProjName">—</span>
+        </div>
+        <div class="invest-info-row">
+          <span class="label">投资周期</span>
+          <span class="value" id="modalCycle">—</span>
+        </div>
+        <div class="invest-info-row">
+          <span class="label">日收益率</span>
+          <span class="value gold" id="modalRate">—</span>
+        </div>
+        <div class="invest-info-row">
+          <span class="label">可用余额</span>
+          <span class="value" id="modalBalance">—</span>
+        </div>
+      </div>
+
+      <button class="btn-confirm" id="confirmBtn" onclick="confirmInvest()">确认认购</button>
+    </div>
+  </div>
+</div>
+
+<!-- 隐藏字段 -->
+<div class="hide">
+  <span id="baseRate"></span>
+  <span id="vipRateText"></span>
+  <span id="usdtRebate"></span>
+  <span id="countdownBox"></span>
+  <span id="countdown"></span>
+  <span id="exchangeSection"></span>
+  <span id="exchangeCny"></span>
+  <span id="exchangeUsdt"></span>
+  <span id="exchangeRate"></span>
+  <span id="exchangeBtn"></span>
+  <span id="payCnyBtn"></span>
+  <span id="payUsdtBtn"></span>
+  <img id="pmAvatar" />
+  <span id="pmName"></span>
+  <span id="pmTitle"></span>
+  <span id="calcResult"></span>
+  <span id="calcProfit"></span>
+  <span id="calcTotal"></span>
+  <span id="calcDailyProfit"></span>
+  <span id="calcWarn"></span>
+</div>
+
+<script>
+// 返回上一页
+function goBack() {
+  if (document.referrer && document.referrer.includes(window.location.hostname)) {
+    history.back();
+  } else {
+    // 没有上一页或来自外部，跳转到项目列表
+    window.location.href = 'projects.html';
+  }
+}
+</script>
+<script src="api-config.js?v=1763897782"></script>
+<script src="api-new.js?v=1763897782"></script>
+<script src="project-detail-managers-data.js?v=1763897782"></script>
+<script src="project-detail.js?v=1763897782"></script>
+<script>
+// ========== 弹窗控制 ==========
+function openSheet(type) {
+  const sheetId = type + 'Sheet';
+  const sheet = document.getElementById(sheetId);
+  if (sheet) {
+    sheet.classList.add('show');
+    document.body.style.overflow = 'hidden';
+
+    // 如果是试算弹窗，初始化数据
+    if (type === 'calc') {
+      initCalcSheet();
+    }
+  }
+}
+
+function closeSheet(type) {
+  const sheetId = type + 'Sheet';
+  const sheet = document.getElementById(sheetId);
+  if (sheet) {
+    sheet.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+}
+
+// 点击遮罩关闭
+document.querySelectorAll('.sheet-overlay').forEach(sheet => {
+  sheet.addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+  });
+});
+
+// ========== 收益试算 ==========
+let calcDays = 0;
+let calcRate = 0;
+
+function initCalcSheet() {
+  const cycleEl = document.getElementById('cycle');
+  const rateEl = document.getElementById('cnyRate');
+
+  // 解析周期天数
+  const cycleText = cycleEl.textContent;
+  if (cycleText.includes('天')) {
+    calcDays = parseInt(cycleText);
+  } else if (cycleText.includes('个月')) {
+    calcDays = parseInt(cycleText) * 30;
+  } else if (cycleText.includes('年')) {
+    calcDays = parseInt(cycleText) * 365;
+  }
+
+  // 解析日收益率
+  calcRate = parseFloat(rateEl.textContent) || 0;
+
+  document.getElementById('calcDisplayCycle').textContent = calcDays + ' 天';
+  document.getElementById('calcDisplayRate').textContent = calcRate.toFixed(2) + '%';
+
+  // 默认计算10000
+  document.getElementById('calcAmountInput').value = 10000;
+  updateCalc();
+}
+
+function setCalcAmount(val) {
+  document.getElementById('calcAmountInput').value = val;
+  updateCalc();
+}
+
+function updateCalc() {
+  const amount = parseFloat(document.getElementById('calcAmountInput').value) || 0;
+
+  document.getElementById('calcDisplayAmount').textContent = '¥' + amount.toLocaleString('zh-CN', {minimumFractionDigits: 2});
+
+  if (amount > 0 && calcRate > 0 && calcDays > 0) {
+    const daily = amount * (calcRate / 100);
+    const profit = daily * calcDays;
+    const total = amount + profit;
+
+    document.getElementById('calcDisplayDaily').textContent = '¥' + daily.toFixed(2);
+    document.getElementById('calcDisplayProfit').textContent = '¥' + profit.toFixed(2);
+    document.getElementById('calcDisplayTotal').textContent = '¥' + total.toFixed(2);
+  } else {
+    document.getElementById('calcDisplayDaily').textContent = '¥0.00';
+    document.getElementById('calcDisplayProfit').textContent = '¥0.00';
+    document.getElementById('calcDisplayTotal').textContent = '¥0.00';
+  }
+}
+
+// ========== 更新返利显示 ==========
+function updateRebateDisplay() {
+  const rebate1 = document.getElementById('cnyRebate').textContent;
+  const rebate2 = document.getElementById('usdtRebate').textContent;
+
+  if (rebate1 && rebate1 !== '—') {
+    document.getElementById('rebate1Rate').textContent = rebate1;
+  }
+  if (rebate2 && rebate2 !== '—') {
+    document.getElementById('rebate2Rate').textContent = rebate2;
+  }
+}
+
+// 监听返利数据变化
+const rebateOb = new MutationObserver(updateRebateDisplay);
+['cnyRebate', 'usdtRebate'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) rebateOb.observe(el, {childList: true, characterData: true, subtree: true});
+});
+
+// ========== 更新募集金额显示 ==========
+function updateSoldDisplay() {
+  const soldInfo = document.getElementById('soldInfo');
+  const soldDisplay = document.getElementById('soldDisplay');
+  if (soldInfo && soldDisplay) {
+    const text = soldInfo.textContent;
+    const match = text.match(/¥[\d,\.]+/);
+    if (match) {
+      soldDisplay.textContent = match[0];
+    }
+  }
+
+  const investorCount = document.getElementById('investorCount');
+  if (investorCount && investorCount.textContent === '0') {
+    const rand = Math.floor(Math.random() * 500) + 100;
+    investorCount.textContent = rand.toLocaleString();
+  }
+}
+
+const soldObserver = new MutationObserver(updateSoldDisplay);
+const soldEl = document.getElementById('soldInfo');
+if (soldEl) soldObserver.observe(soldEl, {childList: true, characterData: true, subtree: true});
+
+setTimeout(updateSoldDisplay, 1000);
+setTimeout(updateRebateDisplay, 1000);
+
+// ========== 认购弹窗 ==========
+let selectedCurrency = 'CNY';
+let userBalanceCny = 0;
+let userBalanceUsdt = 0;
+
+function openInvestModal() {
+  const modal = document.getElementById('investModal');
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+
+  document.getElementById('modalProjName').textContent = document.getElementById('projName').textContent;
+  document.getElementById('modalCycle').textContent = document.getElementById('cycle').textContent;
+  document.getElementById('modalRate').textContent = document.getElementById('cnyRate').textContent;
+
+  updateModalBalance();
+  document.getElementById('investAmount').value = '';
+}
+
+function closeInvestModal() {
+  document.getElementById('investModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function selectCurrency(currency) {
+  selectedCurrency = currency;
+
+  document.querySelectorAll('.currency-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.currency-tab.${currency.toLowerCase()}`).classList.add('active');
+
+  document.getElementById('currencyPrefix').textContent = currency === 'CNY' ? '¥' : '₮';
+
+  const quickContainer = document.getElementById('quickAmounts');
+  if (currency === 'USDT') {
+    quickContainer.innerHTML = `
+      <button class="quick-btn" onclick="setQuickAmount(100)">100</button>
+      <button class="quick-btn" onclick="setQuickAmount(500)">500</button>
+      <button class="quick-btn" onclick="setQuickAmount(1000)">1,000</button>
+      <button class="quick-btn" onclick="setQuickAmount(5000)">5,000</button>
+    `;
+    document.getElementById('modalRate').textContent = document.getElementById('usdtRate').textContent;
+  } else {
+    quickContainer.innerHTML = `
+      <button class="quick-btn" onclick="setQuickAmount(1000)">1,000</button>
+      <button class="quick-btn" onclick="setQuickAmount(5000)">5,000</button>
+      <button class="quick-btn" onclick="setQuickAmount(10000)">10,000</button>
+      <button class="quick-btn" onclick="setQuickAmount(50000)">50,000</button>
+    `;
+    document.getElementById('modalRate').textContent = document.getElementById('cnyRate').textContent;
+  }
+
+  updateModalBalance();
+}
+
+function updateModalBalance() {
+  const balanceEl = document.getElementById('modalBalance');
+  if (selectedCurrency === 'CNY') {
+    const cnyText = document.getElementById('balanceCny').textContent;
+    balanceEl.textContent = cnyText;
+    userBalanceCny = parseFloat(cnyText.replace(/[¥,]/g, '')) || 0;
+  } else {
+    const usdtText = document.getElementById('balanceUsdt').textContent;
+    balanceEl.textContent = usdtText + ' USDT';
+    userBalanceUsdt = parseFloat(usdtText.replace(/,/g, '')) || 0;
+  }
+}
+
+function setQuickAmount(val) {
+  document.getElementById('investAmount').value = val;
+}
+
+function setAllBalance() {
+  const val = selectedCurrency === 'CNY' ? Math.floor(userBalanceCny) : Math.floor(userBalanceUsdt * 100) / 100;
+  document.getElementById('investAmount').value = val;
+}
+
+async function confirmInvest() {
+  const amount = parseFloat(document.getElementById('investAmount').value || 0);
+
+  if (amount <= 0) {
+    showToast('请输入投资金额', 2000);
+    return;
+  }
+
+  const balance = selectedCurrency === 'CNY' ? userBalanceCny : userBalanceUsdt;
+  if (amount > balance) {
+    showToast('余额不足，请先充值', 2000);
+    return;
+  }
+
+  const confirmBtn = document.getElementById('confirmBtn');
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = '处理中...';
+
+  try {
+    const projectId = new URLSearchParams(window.location.search).get('id');
+    const token = (typeof TokenManager !== 'undefined' && TokenManager.getToken()) || localStorage.getItem('providence_token') || '';
+    const API_BASE = (window.API_CONFIG && window.API_CONFIG.baseURL) || 'https://api.4kp3l0iq.top';
+
+    const response = await fetch(`${API_BASE}/api/invest/create`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Token': token },
+      body: JSON.stringify({ project_id: parseInt(projectId), amount: amount, currency: selectedCurrency })
+    });
+
+    const data = await response.json();
+
+    if (data.code === 1) {
+      showToast('认购成功！', 2000);
+      closeInvestModal();
+      if (typeof loadUserBalance === 'function') await loadUserBalance();
+      setTimeout(() => { window.location.href = 'my-investments.html'; }, 1500);
+    } else {
+      showToast(data.msg || '认购失败', 3000);
+    }
+  } catch (err) {
+    showToast('网络错误，请稍后重试', 3000);
+  } finally {
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = '确认认购';
+  }
+}
+
+document.getElementById('applyBtn').addEventListener('click', openInvestModal);
+
+// 收益率同步
+const ob = new MutationObserver(() => {
+  const r = document.getElementById('baseRate');
+  const m = document.getElementById('mainRate');
+  if (r && m && r.textContent && r.textContent !== '—') {
+    m.innerHTML = r.textContent.replace('%','') + '<span>%</span>';
+  }
+});
+const br = document.getElementById('baseRate');
+if (br) ob.observe(br, {childList:true, characterData:true, subtree:true});
+
+// 进度百分比
+const progOb = new MutationObserver(() => {
+  const prog = document.getElementById('prog');
+  const progPercent = document.getElementById('progPercent');
+  if (prog && progPercent) {
+    const width = prog.style.width;
+    if (width) progPercent.textContent = width;
+  }
+});
+const progEl = document.getElementById('prog');
+if (progEl) progOb.observe(progEl, {attributes: true, attributeFilter: ['style']});
+</script>
+<script src="page-lifecycle.js?v=1763897782"></script>
+</body>
+</html>

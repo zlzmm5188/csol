@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+<title>奖励规则 | PROVIDENCE</title>
+<link rel="icon" href="favicon.ico" />
+<link rel="stylesheet" href="styles.css?v=1763813622" />
+<style>
+.rules-page{background:#f7f8fa;min-height:100vh;padding-bottom:80px}
+
+/* 顶部深蓝渐变（参考积分页面） */
+.rules-hero{
+    background:linear-gradient(180deg,#0e2b44,#091c2e);
+    padding:50px 20px 25px;
+    position:relative;
+    overflow:hidden;
+    color:#fff;
+}
+
+.rules-hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle at top left,rgba(255,255,255,0.08),transparent 60%),
+               radial-gradient(circle at bottom right,rgba(212,175,55,0.08),transparent 60%);
+    opacity:0.8;
+}
+
+.rules-back{color:#fff;font-size:28px;cursor:pointer;position:static}
+
+.rules-title{font-size:18px;font-weight:700;color:#f5d771;margin:0 0 4px;color:rgba(255,255,255,0.7);margin:0;
+    border-radius:12px;
+    padding:16px;
+    margin-bottom:12px;
+    box-shadow:0 2px 6px rgba(0,0,0,.04);
+}
+
+.section-title{
+    font-size:15px;
+    font-weight:700;
+    color:#1a1a1a;
+    margin:0 0 12px;
+    padding-bottom: 20px;
+    border-bottom:2px solid #f0f0f0;
+}
+
+.rule-text{font-size:14px;color:#444;line-height:1.8;margin:0 0 10px;font-weight:400}
+
+.rule-text p{margin:0 0 8px}
+
+.rule-text strong{color:#d4af37;font-weight:600}
+
+.rule-highlight{
+    background:linear-gradient(135deg,rgba(212,175,55,0.08),rgba(212,175,55,0.05));
+    border-left:3px solid #d4af37;
+    padding:12px;
+    border-radius:8px;
+    margin:10px 0;
+}
+
+.highlight-title{font-size:14px;font-weight:600;color:#d4af37;margin:0 0 6px}
+
+.highlight-text{font-size:13px;color:#555;line-height:1.7;margin:0;font-weight:400}
+
+.reward-list{margin:10px 0}
+
+.reward-item{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:10px;
+    background:#fafafa;
+    border-radius:8px;
+    margin-bottom:8px;
+}
+
+.reward-icon{font-size:18px;font-weight:600;color:#333;margin:0 0 4px}
+
+.reward-desc{font-size:12px;color:#999;margin:0}
+
+.warning-box{
+    background:#fff5f5;
+    border:1px solid #ffccc7;
+    border-radius:8px;
+    padding:12px;
+    margin:10px 0;
+}
+
+.warning-title{font-size:13px;font-weight:600;color:#ff4d4f;margin:0 0 6px}
+
+.warning-text{font-size:12px;color:#666;line-height:1.6;margin:0}
+      .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+          .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+<body>
+<div id="app" class="rules-page">
+    <div class="rules-hero">
+        <div style="display:flex;align-items:center;gap:16px;position:relative;z-index:1;">
+            <div class="rules-back" onclick="history.back()">‹</div>
+            <div>
+                <h1 class="rules-title">🌐 推广与佣金奖励规则</h1>
+                <p class="rules-subtitle">诚信推广 · 合规经营 · 共同成长</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="rules-content">
+        <!-- 层级关系 -->
+        <div class="rule-section">
+            <div class="section-title">一、层级关系定义</div>
+            <div class="rule-text">
+                <p><strong>一级关系：</strong>当用户 A 直接推荐用户 B 注册时，B 为 A 的一级下线。</p>
+                <p><strong>二级关系：</strong>若用户 B 再推荐用户 C 注册，则 C 为 A 的二级下线。</p>
+            </div>
+            <div class="rule-highlight">
+                <div class="highlight-title">⚠️ 层级限制</div>
+                <div class="highlight-text">系统仅计算两级关系。用户 C 若再推荐用户 D，A 与 D 不存在佣金关系。该层级关系是面向中国大陆金融市场的合规化营销架构。</div>
+            </div>
+        </div>
+
+        <!-- 佣金奖励 -->
+        <div class="rule-section">
+            <div class="section-title">二、佣金奖励机制</div>
+
+            <div class="reward-list">
+                <div class="reward-item">
+                    <div class="reward-icon" style="font-size:20px">🎁</div>
+                    <div class="reward-content">
+                        <div class="reward-title">1. 推广奖励（首投奖励）</div>
+                        <div class="reward-desc">当用户成功邀请新用户注册并完成首次投资（首投）后：</div>
+                    </div>
+                </div>
+            </div>
+            <div class="rule-text" style="padding-left:36px">
+                <p style="margin:4px 0">• 推荐人将获得被推荐人首投金额 <strong>1%</strong> 的奖励；</p>
+                <p style="margin:4px 0">• 奖励将在项目到期结算后发放至推荐人的佣金账户。</p>
+            </div>
+
+            <div class="reward-list" style="margin-top:20px">
+                <div class="reward-item">
+                    <div class="reward-icon" style="font-size:20px">💎</div>
+                    <div class="reward-content">
+                        <div class="reward-title">2. 团队奖励（持续佣金）</div>
+                        <div class="reward-desc">在下线用户进行任何投资时，推荐人可获得如下比例的团队佣金：</div>
+                    </div>
+                </div>
+            </div>
+            <div class="rule-text" style="padding-left:36px" id="commissionRateText">
+                <p style="margin:4px 0">加载中...</p>
+            </div>
+
+            <!-- VIP返佣比例表格 -->
+            <div style="padding-left:36px;margin-top:16px;">
+                <div class="highlight-title" style="color:#d4af37;margin-bottom:8px;">📊 VIP等级返佣比例表</div>
+                <div id="commissionTableContainer" style="overflow-x:auto;"></div>
+            </div>
+
+            <div class="rule-highlight" style="margin-top:16px">
+                <div class="highlight-title">⚠️ 佣金产生规则</div>
+                <div class="highlight-text">佣金仅在下线发生真实投资行为后产生，若投资撤销、退款或违规操作，系统将自动回收对应佣金。</div>
+            </div>
+        </div>
+
+        <!-- 佣金结算 -->
+        <div class="rule-section">
+            <div class="section-title">三、佣金结算与发放</div>
+            <div class="rule-text">
+                <p>佣金将在下线用户投资项目到期结算后，自动计入推荐人的<strong>【佣金账户】</strong>。</p>
+            </div>
+            <div class="highlight-title" style="color:#d4af37;margin:12px 0 8px;">💎 佣金可用于：</div>
+            <div class="reward-list">
+                <div class="reward-item">
+                    <div class="reward-icon">💸</div>
+                    <div class="reward-content">
+                        <div class="reward-title">直接提现</div>
+                        <div class="reward-desc">实时到账，灵活使用</div>
+                    </div>
+                </div>
+                <div class="reward-item">
+                    <div class="reward-icon">🔄</div>
+                    <div class="reward-content">
+                        <div class="reward-title">投资项目复投</div>
+                        <div class="reward-desc">收益再投资，复利增长</div>
+                    </div>
+                </div>
+                <div class="reward-item">
+                    <div class="reward-icon">🎁</div>
+                    <div class="reward-content">
+                        <div class="reward-title">抵扣平台手续费</div>
+                        <div class="reward-desc">降低投资成本</div>
+                    </div>
+                </div>
+            </div>
+            <div class="rule-text" style="margin-top:12px;">
+                系统将实时计算并在"我的团队 / 我的推广"中展示佣金明细与层级结构。
+            </div>
+        </div>
+
+        <!-- 合规提示 -->
+        <div class="rule-section">
+            <div class="section-title">四、合规与风险提示</div>
+            <div class="rule-text">
+                <p>✓ 本制度仅限用于平台内部推广激励，不构成任何形式的多层营销或返利活动。</p>
+                <p>✓ 平台严格限定奖励层级（最多两级），以确保合规性与透明性。</p>
+                <p>✓ 若发现用户存在虚假注册、刷单等违规行为，平台有权撤销其佣金及推广资格。</p>
+            </div>
+        </div>
+
+        <!-- 简版规则 -->
+        <div class="rule-section" style="background:linear-gradient(135deg,#fffbf0,#fff9e6);border:2px solid #d4af37">
+            <div class="section-title" style="color:#d4af37">💰 推广奖励规则（简版）</div>
+            <div class="rule-text" style="color:#666">
+                <p>用户成功邀请好友注册并完成首投，可获得好友首投金额 <strong style="color:#d4af37">1%</strong> 的推广奖励。</p>
+                <p>此外，推荐人还可获得：</p>
+                <p>• 一级下线投资额 <strong style="color:#d4af37">0.5%</strong> 的团队佣金</p>
+                <p>• 二级下线投资额 <strong style="color:#d4af37">0.2%</strong> 的团队佣金</p>
+                <p style="margin-top:12px;">佣金在项目到期结算后自动发放至"佣金账户"。仅限两级关系，超过二级不计佣金。</p>
+                <p style="color:#ff4d4f;margin-top:8px;">平台严禁虚假注册、循环邀请等违规行为，一经发现将取消推广资格。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <!-- 底部导航已移除 -->
+</div>
+
+<!-- <script src="api-config.js?v=1763813622"></script> (已包含在api-new.js) -->
+<script src="ios-toast.js?v=1763813622"></script>
+<script>
+// 动态加载VIP返佣比例
+document.addEventListener('DOMContentLoaded', function() {
+    loadCommissionRules();
+});
+
+async function loadCommissionRules() {
+    try {
+        const API_BASE = window.API_CONFIG?.baseURL || 'https://api.4kp3l0iq.top/api;
+        const response = await fetch(API_BASE + '/user/vip/commission_rules');
+        const data = await response.json();
+
+        if (data.code === 1 && data.data && data.data.rules) {
+            const rules = data.data.rules;
+
+            // 更新简要说明文本（显示当前用户VIP等级的返佣比例）
+            // 这里简化为VIP0的比例
+            const vip0 = rules.find(r => r.level === 0) || {l1_rate: 1, l2_rate: 0};
+            document.getElementById('commissionRateText').innerHTML = `
+                <p style="margin:4px 0">• <strong>返佣比例根据您的VIP等级而定</strong>，等级越高，返佣越多；</p>
+                <p style="margin:4px 0">• 例如VIP0用户：一级返佣 <strong>${vip0.l1_rate}%</strong>，二级返佣 <strong>${vip0.l2_rate}%</strong>。</p>
+            `;
+
+            // 生成完整的VIP返佣比例表格
+            let tableHTML = `
+                <table style="width:100%;border-collapse:collapse;margin-top:8px;font-size:13px;background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.05);">
+                    <thead>
+                        <tr style="background:linear-gradient(135deg,#0e2b44,#091c2e);color:white;">
+                            <th style="padding:10px;text-align:left;">VIP等级</th>
+                            <th style="padding:10px;text-align:right;">累计投资门槛</th>
+                            <th style="padding:10px;text-align:right;">一级返佣</th>
+                            <th style="padding:10px;text-align:right;">二级返佣</th>
+                            <th style="padding:10px;text-align:right;">额外加息</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            rules.forEach((rule, index) => {
+                const bgColor = index % 2 === 0 ? '#fafafa' : 'white';
+                tableHTML += `
+                    <tr style="background:${bgColor};">
+                        <td style="padding:10px;font-weight:600;color:#d4af37;">${rule.name}</td>
+                        <td style="padding:10px;text-align:right;">¥${formatMoney(rule.min_invest)}</td>
+                        <td style="padding:10px;text-align:right;color:#48bb78;font-weight:600;">${rule.l1_rate}%</td>
+                        <td style="padding:10px;text-align:right;color:#48bb78;font-weight:600;">${rule.l2_rate}%</td>
+                        <td style="padding:10px;text-align:right;color:#667eea;font-weight:600;">${rule.extra_rate_display}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            document.getElementById('commissionTableContainer').innerHTML = tableHTML;
+        } else {
+            console.error('加载VIP返佣规则失败:', data.msg);
+            document.getElementById('commissionRateText').innerHTML = `
+                <p style="margin:4px 0;color:#f56565;">⚠️ 返佣比例加载失败，请刷新重试</p>
+            `;
+        }
+    } catch (error) {
+        console.error('加载VIP返佣规则失败:', error);
+        document.getElementById('commissionRateText').innerHTML = `
+            <p style="margin:4px 0;color:#f56565;">⚠️ 返佣比例加载失败，请刷新重试</p>
+        `;
+    }
+}
+
+function formatMoney(amount) {
+    return parseFloat(amount).toLocaleString('zh-CN', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    });
+}
+
+</script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script src="smart-swipe-control.js?v=1763813622"></script>
+
+
+</body>
+</html>

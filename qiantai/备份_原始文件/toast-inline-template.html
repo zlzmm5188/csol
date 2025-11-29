@@ -1,0 +1,292 @@
+<!-- iOS弹窗元素 - 统一模板 -->
+<style id="ios-toast-inline-styles">
+/* iOS风格弹窗样式 - 强制最高优先级 */
+#iosToast,
+.ios-toast{
+    position:fixed !important;
+    top:50% !important;
+    left:50% !important;
+    transform:translate(-50%,-50%) scale(0.9) !important;
+    background:linear-gradient(to bottom, #ffffff, #f8f9fa) !important;
+    background-color:#ffffff !important;
+    border-radius:16px !important;
+    width:280px !important;
+    max-width:90% !important;
+    box-shadow:0 12px 40px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.05) !important;
+    z-index:9999999 !important;
+    opacity:0 !important;
+    pointer-events:none !important;
+    transition:all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    overflow:hidden !important;
+    visibility:hidden !important;
+    color:#000000 !important;
+    display:block !important;
+}
+
+#iosToast.show,
+.ios-toast.show{
+    visibility:visible !important;
+    opacity:1 !important;
+    transform:translate(-50%,-50%) scale(1) !important;
+    pointer-events:auto !important;
+    display:block !important;
+}
+
+.ios-toast-overlay{
+    position:fixed !important;
+    top:0 !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+    background:rgba(0,0,0,0.45) !important;
+    backdrop-filter:blur(4px) !important;
+    -webkit-backdrop-filter:blur(4px) !important;
+    z-index:9999998 !important;
+    opacity:0 !important;
+    pointer-events:none !important;
+    transition:opacity 0.3s !important;
+    visibility:hidden !important;
+}
+
+.ios-toast-overlay.show{
+    visibility:visible !important;
+    opacity:1 !important;
+    pointer-events:auto !important;
+}
+
+.ios-toast.show .ios-toast-buttons,
+.ios-toast.show .ios-toast-button{
+    pointer-events:auto !important;
+}
+
+#iosToastTitle,
+.ios-toast-title{
+    font-size:17px !important;
+    font-weight:600 !important;
+    color:#000000 !important;
+    text-align:center !important;
+    padding:18px 20px 0 !important;
+    line-height:1.4 !important;
+    margin:0 !important;
+    background:transparent !important;
+}
+
+.ios-toast-title:empty{
+    display:none !important;
+    padding:0 !important;
+    margin:0 !important;
+}
+
+#iosToastMessage,
+.ios-toast-message{
+    font-size:16px !important;
+    color:#000000 !important;
+    text-align:center !important;
+    line-height:1.6 !important;
+    padding:18px 20px 20px !important;
+    white-space:pre-line !important;
+    word-break:break-word !important;
+    min-height:auto !important;
+    font-weight:500 !important;
+    background:transparent !important;
+}
+
+.ios-toast-buttons{
+    display:flex !important;
+    border-top:1px solid #e5e7eb !important;
+    background:#ffffff !important;
+    border-radius:0 0 16px 16px !important;
+    position:relative !important;
+    overflow:hidden !important;
+}
+
+.ios-toast-button{
+    flex:1 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:14px 16px !important;
+    font-size:16px !important;
+    color:#007AFF !important;
+    background:transparent !important;
+    border:none !important;
+    cursor:pointer !important;
+    transition:background 0.15s !important;
+    position:relative !important;
+    user-select:none !important;
+    -webkit-user-select:none !important;
+    -webkit-tap-highlight-color:transparent !important;
+    font-weight:600 !important;
+}
+
+.ios-toast-button#iosToastCancel{
+    display:none !important;
+}
+
+.ios-toast-button::after{
+    content:'';
+    position:absolute;
+    right:0;
+    top:0;
+    bottom:0;
+    width:0.5px;
+    background:rgba(60,60,67,0.29);
+}
+
+.ios-toast-button:last-child::after{
+    display:none;
+}
+
+.ios-toast-button.only-button::after{
+    display:none;
+}
+
+.ios-toast-button:active{
+    background:rgba(0,0,0,0.1);
+    opacity:0.7;
+}
+
+.ios-toast-button#iosToastCancel{
+    color:#000;
+    font-weight:400;
+}
+
+.ios-toast-button#iosToastConfirm{
+    color:#007AFF;
+    font-weight:600;
+}
+</style>
+
+<div class="ios-toast-overlay" id="iosToastOverlay"></div>
+<div class="ios-toast" id="iosToast">
+    <div class="ios-toast-title" id="iosToastTitle"></div>
+    <div class="ios-toast-message" id="iosToastMessage"></div>
+    <div class="ios-toast-buttons">
+        <div class="ios-toast-button" id="iosToastCancel" style="display:none">取消</div>
+        <div class="ios-toast-button" id="iosToastConfirm">确定</div>
+    </div>
+</div>
+
+<script>
+// iOS弹窗函数 - 内联版本
+window.showToast = async function(title, message) {
+  const overlay = document.getElementById('iosToastOverlay');
+  const toast = document.getElementById('iosToast');
+  const titleEl = document.getElementById('iosToastTitle');
+  const msgEl = document.getElementById('iosToastMessage');
+  const cancelBtn = document.getElementById('iosToastCancel');
+  const confirmBtn = document.getElementById('iosToastConfirm');
+
+  if (!overlay || !toast || !titleEl || !msgEl || !confirmBtn) {
+    console.error('弹窗元素未找到');
+    return;
+  }
+
+  if (title && !title.includes('4kp3l0iq') && !title.includes('http') && !title.includes('www.')) {
+    titleEl.textContent = title;
+    titleEl.style.display = 'block';
+  } else {
+    titleEl.style.display = 'none';
+  }
+
+  msgEl.textContent = message || '';
+  msgEl.style.whiteSpace = 'pre-line';
+  msgEl.style.padding = title ? '0 16px 16px' : '20px 16px';
+
+  if (cancelBtn) cancelBtn.style.display = 'none';
+  if (confirmBtn) {
+    confirmBtn.textContent = '确定';
+    confirmBtn.classList.add('only-button');
+  }
+
+  overlay.classList.add('show');
+  toast.classList.add('show');
+
+  return new Promise((resolve) => {
+    let isResolved = false;
+    const closeToast = (e) => {
+      if (isResolved) return;
+      isResolved = true;
+      if (e) e.stopPropagation();
+      toast.classList.remove('show');
+      overlay.classList.remove('show');
+      if (confirmBtn) confirmBtn.classList.remove('only-button');
+      if (cancelBtn) cancelBtn.style.display = 'none';
+      resolve(true);
+    };
+
+    const autoTimer = setTimeout(() => {
+      if (!isResolved) {
+        closeToast();
+      }
+    }, 1500);
+
+    overlay.onclick = (e) => {
+      if (e.target === overlay) {
+        clearTimeout(autoTimer);
+        closeToast(e);
+      }
+    };
+  });
+};
+
+window.showConfirm = async function(title, message) {
+  const overlay = document.getElementById('iosToastOverlay');
+  const toast = document.getElementById('iosToast');
+  const titleEl = document.getElementById('iosToastTitle');
+  const msgEl = document.getElementById('iosToastMessage');
+  const cancelBtn = document.getElementById('iosToastCancel');
+  const confirmBtn = document.getElementById('iosToastConfirm');
+
+  if (!overlay || !toast || !titleEl || !msgEl || !confirmBtn || !cancelBtn) {
+    console.error('弹窗元素未找到');
+    return false;
+  }
+
+  const cleanTitle = (title && !title.includes('4kp3l0iq') && !title.includes('http') && !title.includes('www.')) ? title : '确认';
+  titleEl.textContent = cleanTitle;
+  titleEl.style.display = 'block';
+  msgEl.textContent = message || '';
+  msgEl.style.whiteSpace = 'pre-line';
+
+  cancelBtn.style.display = 'flex';
+  confirmBtn.textContent = '确定';
+  confirmBtn.classList.remove('only-button');
+  overlay.classList.add('show');
+  toast.classList.add('show');
+
+  return new Promise((resolve) => {
+    let isResolved = false;
+
+    const closeToast = (result) => {
+      if (isResolved) return;
+      isResolved = true;
+      toast.classList.remove('show');
+      overlay.classList.remove('show');
+      cancelBtn.style.display = 'none';
+      resolve(result);
+    };
+
+    const newConfirmBtn = confirmBtn.cloneNode(true);
+    const newCancelBtn = cancelBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+    cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+
+    const finalConfirmBtn = document.getElementById('iosToastConfirm');
+    const finalCancelBtn = document.getElementById('iosToastCancel');
+
+    finalConfirmBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeToast(true);
+    });
+
+    finalCancelBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeToast(false);
+    });
+  });
+};
+</script>
+

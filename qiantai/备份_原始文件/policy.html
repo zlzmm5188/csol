@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+<title>监管政策 | PROVIDENCE</title>
+<link rel="icon" href="favicon.ico" />
+<link rel="stylesheet" href="styles.css?v=1763813622" />
+<style>
+/* 页面背景 */
+body {
+    background: transparent;        radial-gradient(900px 420px at 120% -10%, rgba(159,139,84,.12), transparent 55%),
+        linear-gradient(180deg, #0a1723 0%, #0a1d2a 45%, #08141f 100%) !important;
+        background-attachment: fixed;
+    padding-bottom: 20px;
+  padding-top: 60px;}
+
+/* 顶部返回栏 */
+.top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: linear-gradient(180deg, rgba(10,23,35,0.95), rgba(10,29,42,0.92));
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.back-btn-simple {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    font-size: 18px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #c7b58a;
+
+}
+
+/* 主标题区 */
+.header-section {
+    background: #ffffff;
+    padding: clamp(28px, 6vh, 38px) 20px;
+    border-bottom: 4px solid #dc2626;
+}
+
+.main-title {
+    font-size: clamp(21px, 5.2vw, 26px);
+    font-weight: 900;
+    color: #dc2626;
+
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    font-size: clamp(12px, 3vw, 14px);
+    color: #6b7280;
+
+}
+
+/* 内容区 */
+.content {
+
+    padding: 16px;
+}
+
+/* 分类标题 */
+.category {
+    font-size: clamp(15px, 3.8vw, 17px);
+    font-weight: 700;
+    color: #1e40af;
+    margin: clamp(22px, 4.5vh, 28px) 0 clamp(12px, 2.5vh, 16px);
+    padding-left: 10px;
+    border-left: 3px solid #3b82f6;
+}
+
+/* 文件卡片 - 正式风格 */
+.doc {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid #1e40af;
+    border-radius: 0;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.doc:hover {
+    background: #f9fafb;
+    border-left-color: #3b82f6;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+.doc:active {
+    background: #f3f4f6;
+    transform: translateX(2px);
+}
+
+.doc-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0;
+    gap: 12px;
+}
+
+
+
+.doc-title {
+    font-size: clamp(14px, 3.5vw, 16px);
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.6;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.doc-num {
+    font-size: clamp(11px, 2.8vw, 12px);
+    color: #6b7280;
+    font-family: 'SimSun', '宋体', monospace;
+}
+
+.doc-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: clamp(11px, 2.8vw, 12px);
+    color: #6b7280;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.doc-date {
+    margin-left: auto;
+    color: #9ca3af;
+    font-size: clamp(10px, 2.5vw, 11px);
+}
+
+.tag {
+    display: none; /* 隐藏所有蓝色标签 */
+}
+
+.pdf-mark {
+    color: #dc2626;
+    font-weight: 600;
+    font-size: clamp(11px, 2.8vw, 12px);
+    margin-left: auto;
+}
+      .brand { display: flex; align-items: center; }
+      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+      .brand .page-title, .brand h1 { margin: 0; font-size: 16px; white-space: nowrap; flex: 0 1 auto; }
+
+</style>
+</head>
+<body class="page-other">
+<div id="app">
+    <!-- 顶部导航 -->
+    <div class="top-nav">
+        <button class="back-btn-simple" onclick="location.href='index.html'">‹</button>
+        <div class="page-title">监管政策文件</div>
+    </div>
+
+    <!-- 主标题 -->
+    <div class="header-section">
+        <h1 class="main-title">私募基金监管政策文件</h1>
+        <p class="subtitle">规范性文件汇编</p>
+    </div>
+
+    <!-- 文件列表 -->
+    <div class="content">
+        <!-- 国务院/证监会 -->
+        <h2 class="category">国务院 · 中国证监会</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-1.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">
+                        私募投资基金监督管理条例
+                        <span class="tag">行政法规</span>
+                    </div>
+                    <div class="doc-meta">
+                        <span class="doc-num">国务院令第762号</span>
+                        <span>2023-09-01起施行</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-2.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">
+                        私募投资基金监督管理办法
+                        <span class="tag">部门规章</span>
+                    </div>
+                    <div class="doc-meta">
+                        <span class="doc-num">证监会令第214号</span>
+                        <span>2024-10-01起施行</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-3.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">
+                        证券投资基金法
+                        <span class="tag">法律</span>
+                    </div>
+                    <div class="doc-meta">
+                        <span class="doc-num">主席令第九号</span>
+                        <span>2015年修订</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 基金业协会 -->
+        <h2 class="category">中国证券投资基金业协会</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-4.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="04"></div>
+                <div class="doc-info">
+                    <div class="doc-title">私募投资基金登记备案办法</div>
+                    <div class="doc-num">中基协发〔2023〕2号</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">自律规则</span>
+                <span>2023-05-01起施行</span>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-5.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="05"></div>
+                <div class="doc-info">
+                    <div class="doc-title">私募投资基金信息披露管理办法</div>
+                    <div class="doc-num">中基协发〔2023〕3号</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">自律规则</span>
+                <span>2023-05-01起施行</span>
+            </div>
+        </div>
+
+        <!-- 业务指引 -->
+        <h2 class="category">业务指引与规范</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-6.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="06"></div>
+                <div class="doc-info">
+                    <div class="doc-title">私募证券投资基金运作指引</div>
+                    <div class="doc-num">中基协发〔2024〕15号</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">运作指引</span>
+                <span>2024年发布</span>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-7.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="07"></div>
+                <div class="doc-info">
+                    <div class="doc-title">私募投资基金募集行为管理办法</div>
+                    <div class="doc-num">证监会令第105号</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">募集规范</span>
+                <span>2016年发布</span>
+            </div>
+        </div>
+
+        <!-- 投资者保护 -->
+        <h2 class="category">投资者保护</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-8.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="08"></div>
+                <div class="doc-info">
+                    <div class="doc-title">私募投资基金投资者适当性管理指引</div>
+                    <div class="doc-num">中基协发〔2024〕8号</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">投资者保护</span>
+                <span>2024年发布</span>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-9.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="09"></div>
+                <div class="doc-info">
+                    <div class="doc-title">私募基金管理人内部控制指引</div>
+                    <div class="doc-num">中基协发〔2016〕7号</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">内控规范</span>
+                <span>2016年发布</span>
+            </div>
+        </div>
+
+        <!-- 合同指引 -->
+        <h2 class="category">合同指引</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-10.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="10"></div>
+                <div class="doc-info">
+                    <div class="doc-title">私募投资基金合同指引（契约型）</div>
+                    <div class="doc-num">中基协发〔2023〕4号</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">合同范本</span>
+                <span>2023年发布</span>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-11.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="11"></div>
+                <div class="doc-info">
+                    <div class="doc-title">私募投资基金合同指引（公司型、合伙型）</div>
+                    <div class="doc-num">中基协发〔2023〕5号</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">合同范本</span>
+                <span>2023年发布</span>
+            </div>
+        </div>
+
+        <!-- 最新政策解读 -->
+        <h2 class="category">最新政策解读</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-12.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="12"></div>
+                <div class="doc-info">
+                    <div class="doc-title">关于进一步支持境外机构投资者在中国债券市场开展债券回购业务的公告</div>
+                    <div class="doc-num">人民银行 证监会 外汇局公告〔2025〕第5号</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">最新公告</span>
+                <span>2025-09-26发布</span>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-13.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="13"></div>
+                <div class="doc-info">
+                    <div class="doc-title">推动公募基金高质量发展行动方案</div>
+                    <div class="doc-num">证监会〔2025〕第12号</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">行动方案</span>
+                <span>2025-05-07发布</span>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-14.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="14"></div>
+                <div class="doc-info">
+                    <div class="doc-title">关于推动中长期资金入市工作的实施方案</div>
+                    <div class="doc-num">中央金融办等六部门联合印发</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">实施方案</span>
+                <span>2025-01-22发布</span>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-15.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="15"></div>
+                <div class="doc-info">
+                    <div class="doc-title">促进资本市场指数化投资高质量发展行动方案</div>
+                    <div class="doc-num">证监会〔2025〕第3号</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">行动方案</span>
+                <span>2025-01-26发布</span>
+            </div>
+        </div>
+
+        <!-- 国际证监会组织(IOSCO) -->
+        <h2 class="category">国际证监会组织 (IOSCO)</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-16.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="16"></div>
+                <div class="doc-info">
+                    <div class="doc-title">IOSCO简介</div>
+                    <div class="doc-num">国际证券委员会组织</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">组织介绍</span>
+                <span>2019年更新</span>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-17.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="17"></div>
+                <div class="doc-info">
+                    <div class="doc-title">IOSCO监管目标与原则</div>
+                    <div class="doc-num">国际监管标准</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">监管原则</span>
+                <span>核心准则</span>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-18.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="18"></div>
+                <div class="doc-info">
+                    <div class="doc-title">IOSCO多边谅解备忘录</div>
+                    <div class="doc-num">跨境监管合作</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">国际合作</span>
+                <span>信息共享机制</span>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-19.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="19"></div>
+                <div class="doc-info">
+                    <div class="doc-title">IOSCO工作动态</div>
+                    <div class="doc-num">最新工作进展</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">工作动态</span>
+                <span>持续更新</span>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-20.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="20"></div>
+                <div class="doc-info">
+                    <div class="doc-title">IOSCO公开文件</div>
+                    <div class="doc-num">标准与指引文件</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">公开文件</span>
+                <span>文件库</span>
+            </div>
+        </div>
+
+        <!-- 行政许可 -->
+        <h2 class="category">行政许可</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-21.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="21"></div>
+                <div class="doc-info">
+                    <div class="doc-title">证券公司设立审批</div>
+                    <div class="doc-num">行政许可事项</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">设立审批</span>
+                <span>许可事项</span>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-22.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="22"></div>
+                <div class="doc-info">
+                    <div class="doc-title">基金管理公司设立审批</div>
+                    <div class="doc-num">行政许可事项</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">设立审批</span>
+                <span>许可事项</span>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-23.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="23"></div>
+                <div class="doc-info">
+                    <div class="doc-title">证券投资咨询机构设立审批</div>
+                    <div class="doc-num">行政许可事项</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">设立审批</span>
+                <span>许可事项</span>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-24.html')">
+            <div class="doc-head">
+                <div class="doc-icon" data-num="24"></div>
+                <div class="doc-info">
+                    <div class="doc-title">证券公司业务范围许可</div>
+                    <div class="doc-num">行政许可事项</div>
+                </div>
+            </div>
+            <div class="doc-meta">
+                <span class="tag">业务许可</span>
+                <span>许可事项</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <!-- 底部导航已移除 -->
+</div>
+
+<script>
+// 打开政策详情（本地页面，避免外部链接安全警告）
+function openDoc(page) {
+    if (!page) return;
+    window.location.href = page;
+}
+
+</script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script src="smart-swipe-control.js?v=1763813622"></script>
+
+
+</body>
+</html>

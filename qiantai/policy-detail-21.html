@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+<title>行政许可 | PROVIDENCE</title>
+<link rel="icon" href="favicon.ico" />
+<link rel="stylesheet" href="styles.css?v=1763897782" />
+<style>
+body {
+    background: #fff !important;
+        background-attachment: fixed;
+    color: #1a1a1a;
+    padding-bottom: 20px;
+  padding-top: 60px;}
+
+.doc-container {
+
+    padding: 20px 16px;
+}
+
+.doc-header {
+
+    padding: clamp(24px, 5vh, 32px) 0 clamp(20px, 4vh, 28px);
+    border-bottom: 4px solid #dc2626;
+    margin-bottom: clamp(20px, 4vh, 28px);
+}
+
+.doc-number {
+    font-size: clamp(11px, 2.8vw, 12px);
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.doc-title {
+    font-size: clamp(20px, 5vw, 24px);
+    font-weight: 800;
+    color: #dc2626;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.doc-date {
+    font-size: clamp(11px, 2.8vw, 12px);
+    color: #6b7280;
+}
+
+.doc-body {
+    font-size: clamp(13px, 3.3vw, 15px);
+    line-height: 1.9;
+    color: #1a1a1a;
+}
+
+.doc-body h2 {
+    font-size: clamp(16px, 4vw, 18px);
+    font-weight: 700;
+    color: #dc2626;
+    margin: clamp(24px, 5vh, 30px) 0 clamp(12px, 2.5vh, 16px);
+    padding-left: 10px;
+    border-left: 3px solid #0e2b44;
+}
+
+.doc-body h3 {
+    font-size: clamp(14px, 3.5vw, 16px);
+    font-weight: 700;
+    color: #1a3a5f;
+    margin: clamp(18px, 3.5vh, 22px) 0 clamp(10px, 2vh, 14px);
+}
+
+.doc-body p {
+    margin: clamp(12px, 2.5vh, 16px) 0;
+    text-indent: 2em;
+}
+
+.doc-body ul, .doc-body ol {
+    margin: clamp(12px, 2.5vh, 16px) 0;
+    padding-left: 24px;
+}
+
+.doc-body li {
+    margin: clamp(8px, 1.5vh, 10px) 0;
+}
+
+.article {
+    margin: clamp(16px, 3vh, 20px) 0;
+    padding: clamp(12px, 2.5vh, 16px);
+    background: #f8f9fa;
+    border-left: 3px solid #9f8b54;
+    border-radius: 4px;
+}
+
+.article-title {
+    font-weight: 700;
+    color: #dc2626;
+    margin-bottom: 8px;
+}
+
+.back-btn-policy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 32px;
+    background: linear-gradient(135deg, rgba(200,186,148,0.95), rgba(158,138,87,0.95));
+    color: #0b1220;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    border: 1px solid rgba(158,138,87,0.4);
+    box-shadow: 0 4px 12px rgba(158,138,87,0.25);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    letter-spacing: 0.5px;
+}
+
+.back-btn-policy:hover {
+    background: linear-gradient(135deg, rgba(212,180,140,1), rgba(180,154,108,1));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(158,138,87,0.35);
+    border-color: rgba(158,138,87,0.6);
+}
+
+.back-btn-policy:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(158,138,87,0.2);
+}
+
+.back-btn-policy::before {
+    content: "←";
+    font-size: 18px;
+    font-weight: 700;
+}
+
+      .brand { display: flex; align-items: center; }
+      .brand .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .back-btn:active {
+        transform: scale(0.95) !important;
+    }
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+      .brand .page-title, .brand .page-title, .brand h1 { margin: 0; font-size: 16px; white-space: nowrap; flex: 0 1 auto; }
+
+</style>
+</head>
+<body>
+<div class="doc-container">
+<div class="doc-header">
+<h1 class="doc-title">证券行业行政许可事项</h1>
+</div>
+<div class="doc-body">
+<h2>许可概述</h2>
+<p>根据《中华人民共和国证券法》等法律法规，中国证监会依法对证券市场相关机构和业务实施行政许可管理，确保市场主体符合法定条件和监管要求。</p>
+
+<div class="highlight">
+<strong>许可原则</strong><br />
+• 依法行政，公开透明<br />
+• 简政放权，优化服务<br />
+• 审慎监管，防范风险<br />
+• 保护投资者合法权益
+</div>
+
+<h2>主要许可事项</h2>
+
+<h3>一、机构设立许可</h3>
+<ul>
+<li>证券公司设立及变更</li>
+<li>基金管理公司设立及变更</li>
+<li>证券投资咨询机构设立</li>
+<li>资信评级机构设立</li>
+</ul>
+
+<h3>二、业务资格许可</h3>
+<ul>
+<li>证券承销与保荐业务</li>
+<li>证券经纪业务</li>
+<li>证券自营业务</li>
+<li>证券资产管理业务</li>
+<li>融资融券业务</li>
+</ul>
+
+<h3>三、高级管理人员任职资格</h3>
+<p>证券公司、基金管理公司等机构的董事、监事、高级管理人员任职，需经证监会核准或备案。</p>
+
+<div class="process-box">
+<strong>许可流程</strong><br />
+1. 申请人提交申请材料<br />
+2. 证监会受理并审查<br />
+3. 必要时进行现场检查<br />
+4. 作出许可决定<br />
+5. 颁发许可证书
+</div>
+
+<h2>监管要求</h2>
+<p>获得行政许可的机构应当：</p>
+<ul>
+<li>持续符合许可条件</li>
+<li>接受证监会日常监管</li>
+<li>按要求报送监管报表</li>
+<li>配合现场检查和调查</li>
+<li>发生重大事项及时报告</li>
+</ul>
+
+<h2>法律责任</h2>
+<p>违反行政许可规定的，证监会可以采取监管措施或行政处罚，情节严重的，可以撤销许可或禁止从事相关业务。</p>
+
+<div style="border-top:2px solid #0e2b44;margin:40px 0 32px 0;"></div>
+        <a href="policy.html" class="back-btn-policy">返回列表</a>
+</div>
+</div>
+<!-- 底部导航已移除 -->
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script src="smart-swipe-control.js?v=1763897782"></script>
+
+
+</body>
+</html>

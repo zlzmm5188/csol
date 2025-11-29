@@ -1,0 +1,27 @@
+{
+  "name": "星空锁屏 - 高清动态壁纸",
+  "short_name": "星空锁屏",
+  "description": "精美的星空动态壁纸应用，提供多种高清锁屏主题和个性化设置",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait",
+  "categories": ["utilities", "personalization", "lifestyle"],
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}

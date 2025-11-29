@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>AI智能客服 - Providence</title>
+<link rel="icon" href="favicon.ico">
+<style>
+* {margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;position:fixed;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,"PingFang SC",sans-serif}
+body{background:linear-gradient(135deg,#0e2b44 0%,#1a3a5f 50%,#0e2b44 100%);background-size:200% 200%;animation:gradientShift 15s ease infinite}
+
+@keyframes gradientShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+.chat-container{display:flex;flex-direction:column;height:100vh;height:-webkit-fill-available;max-height:100vh;max-height:-webkit-fill-available;background:transparent}
+
+.chat-header{flex-shrink:0;background:rgba(14,43,68,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:max(12px,env(safe-area-inset-top)) 16px 12px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 20px rgba(0,0,0,0.25);border-bottom:1px solid rgba(201,169,97,0.15);position:relative;z-index:100}
+
+.back-btn{color:#fff;font-size:32px;font-weight:300;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:8px;transition:background 0.3s}
+.back-btn:active{background:rgba(255,255,255,0.1)}
+
+.ai-info{flex:1;display:flex;align-items:center;gap:10px}
+.ai-avatar{width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(217,180,93,0.5),0 0 0 2px rgba(201,169,97,0.3);font-size:24px}
+.ai-text{flex:1}
+.ai-name{font-size:16px;font-weight:700;color:#fff;margin-bottom:2px}
+.ai-status{font-size:12px;color:rgba(255,255,255,0.8);display:flex;align-items:center;gap:6px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#4caf50;animation:pulse 2s ease-in-out infinite}
+
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(0.9)}}
+
+/* 按钮式回复样式 */
+.ai-action-buttons{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px;padding-top:16px;border-top:1px dashed rgba(217,180,93,0.3)}
+.ai-action-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;background:linear-gradient(135deg,#D9B45D 0%,#E6C56E 100%);color:#0e2b44;border-radius:24px;text-decoration:none;font-weight:600;font-size:14px;box-shadow:0 4px 12px rgba(217,180,93,0.35);transition:all 0.3s;border:none;cursor:pointer}
+.ai-action-btn:active{transform:scale(0.95);box-shadow:0 2px 6px rgba(217,180,93,0.3)}
+.ai-action-btn.secondary{background:linear-gradient(135deg,rgba(14,43,68,0.08) 0%,rgba(14,43,68,0.12) 100%);color:#0e2b44;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+
+.messages-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px;padding-bottom:max(16px,env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch;background:transparent}
+
+.welcome-card{background:rgba(255,255,255,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);border:2px solid rgba(201,169,97,0.35)}
+.welcome-title{font-size:18px;font-weight:800;color:#0e2b44;margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.version-badge{display:inline-block;background:linear-gradient(135deg,#D9B45D 0%,#E6C56E 100%);color:#0e2b44;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;letter-spacing:0.5px}
+.welcome-desc{font-size:15px;color:#0e2b44;line-height:1.8;margin-bottom:16px;font-weight:600}
+.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.feature-item{display:flex;align-items:center;gap:8px;font-size:13px;color:#0e2b44;background:rgba(217,180,93,0.15);padding:8px 12px;border-radius:8px;font-weight:700}
+
+.msg{display:flex;gap:12px;margin-bottom:20px;animation:fadeIn 0.3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.msg.user{flex-direction:row-reverse}
+.msg.ai{flex-direction:column;align-items:flex-start}
+.msg-avatar{width:48px;height:48px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 2px 12px rgba(0,0,0,0.15)}
+.msg.ai .msg-avatar{background:#fff;padding:4px}
+.msg.ai .msg-avatar img{border-radius:50%}
+.msg.user .msg-avatar{background:#6FA3D9;padding:0;border:2px solid #fff}
+.msg-content{flex:1;max-width:80%}
+.msg.ai .msg-content{max-width:100%;width:100%}
+.msg-bubble{padding:16px 18px;border-radius:18px;font-size:15px;line-height:1.6;word-wrap:break-word;min-width:120px}
+.msg.ai .msg-bubble{background:rgba(255,255,255,0.98);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#0e2b44;border-radius:6px 18px 18px 18px;box-shadow:0 4px 20px rgba(0,0,0,0.15);border:1px solid rgba(201,169,97,0.25)}
+.msg.ai .msg-bubble strong{color:#C9A961;font-weight:700}
+.msg.ai .msg-bubble a{color:#1890ff;text-decoration:none;font-weight:600}
+.msg.user .msg-bubble{background:linear-gradient(135deg,#0e2b44 0%,#1a3a5f 100%);color:#fff;border-radius:18px 6px 18px 18px;box-shadow:0 3px 15px rgba(14,43,68,0.25);font-weight:500}
+.msg-time{font-size:11px;color:#999;margin-top:6px;padding:0 4px}
+
+.input-area{flex-shrink:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(201,169,97,0.2);padding:12px 16px;padding-bottom:max(12px,env(safe-area-inset-bottom));display:flex;gap:10px;align-items:center;position:relative;z-index:99;box-shadow:0 -2px 20px rgba(0,0,0,0.1)}
+.input-box{flex:1;padding:12px 16px;border:1px solid #e0e0e0;border-radius:24px;font-size:16px;outline:none;background:#f8f9fa;transition:all 0.3s;font-family:inherit}
+.input-box:focus{border-color:#D9B45D;background:#fff;box-shadow:0 0 0 3px rgba(217,180,93,0.1)}
+.send-btn{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#C9A961 0%,#D9B45D 100%);border:none;color:#0e2b44;font-size:20px;cursor:pointer;box-shadow:0 4px 16px rgba(201,169,97,0.5),0 0 0 2px rgba(201,169,97,0.2);transition:all 0.3s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.send-btn:active{transform:scale(0.9);box-shadow:0 2px 8px rgba(217,180,93,0.3)}
+.send-btn:disabled{opacity:0.5;cursor:not-allowed}
+
+.typing{display:flex;gap:4px;padding:12px 16px}
+.typing-dot{width:8px;height:8px;border-radius:50%;background:#D9B45D;animation:typing 1.4s ease-in-out infinite}
+.typing-dot:nth-child(2){animation-delay:0.2s}
+.typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes typing{0%,60%,100%{transform:translateY(0);opacity:0.4}30%{transform:translateY(-10px);opacity:1}}
+
+.toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.9);background:rgba(0,0,0,0.85);color:#fff;padding:14px 24px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:all 0.3s;max-width:80%;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+@media (max-width:768px){
+.chat-header{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+.input-area{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+.msg-bubble{font-size:15px;max-width:90%}
+.msg-content{max-width:90%}
+.messages-area{padding:12px}
+.welcome-card{padding:16px;margin-bottom:12px}
+.features-grid{gap:8px}
+.feature-item{font-size:12px;padding:7px 10px}
+.ai-action-btn{font-size:15px;padding:10px 16px}
+}
+
+@media (max-width:375px){
+.ai-name{font-size:15px}
+.quick-btn{font-size:12px;padding:6px 12px}
+.msg-bubble{font-size:14px;padding:14px 16px;line-height:1.6}
+.ai-action-btn{font-size:14px;padding:9px 14px}
+.messages-area{padding:10px}
+.welcome-title{font-size:16px}
+.welcome-desc{font-size:14px}
+.input-box{font-size:16px;padding:10px 14px}
+}
+/* AI回复卡片样式 */.ai-info-card{background:linear-gradient(135deg,rgba(245,245,250,0.92) 0%,rgba(250,250,255,0.95) 100%);border-radius:16px;padding:20px;margin:12px 0;box-shadow:0 8px 32px rgba(0,0,0,0.15),0 2px 8px rgba(201,169,97,0.18);border:1px solid rgba(201,169,97,0.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}.ai-info-card-title{font-size:16px;font-weight:700;color:#0e2b44;margin-bottom:16px;display:flex;align-items:center;gap:8px}.ai-info-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:12px}.ai-info-card-item{background:linear-gradient(135deg,rgba(217,180,93,0.12) 0%,rgba(201,169,97,0.1) 100%);border-radius:12px;padding:14px 12px;text-align:center;border:1px solid rgba(201,169,97,0.25);transition:all 0.3s}.ai-info-card-item:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(201,169,97,0.25);background:linear-gradient(135deg,rgba(217,180,93,0.15) 0%,rgba(201,169,97,0.12) 100%)}.ai-info-card-label{font-size:12px;color:#666;margin-bottom:6px;font-weight:500}.ai-info-card-value{font-size:20px;font-weight:700;color:#0e2b44;line-height:1.2}.ai-info-card-value.amount{color:#C9A961;font-size:22px}.ai-info-card-value.amount::before{content:¥;font-size:16px;margin-right:2px}.ai-info-card-value.usdt{color:#52c41a}.ai-info-card-value.usdt::after{content: USDT;font-size:14px;font-weight:500;margin-left:2px}.ai-info-card-footer{margin-top:16px;padding-top:16px;border-top:1px dashed rgba(201,169,97,0.3);font-size:13px;color:#666;text-align:center}@media (max-width:480px){.ai-info-card{padding:16px;margin:8px 0}.ai-info-card-grid{grid-template-columns:repeat(2,1fr);gap:10px}.ai-info-card-item{padding:12px 8px}.ai-info-card-value{font-size:18px}.ai-info-card-value.amount{font-size:20px}}
+.ai-text-message{line-height:1.8;color:#0e2b44}.ai-text-message strong{color:#C9A961;font-weight:700;font-size:1.05em}.ai-text-message .ai-feature-list{margin:16px 0;padding:0;list-style:none}.ai-text-message .ai-feature-item{display:flex;align-items:center;gap:10px;padding:10px 0;font-size:15px;color:#0e2b44;border-bottom:1px solid rgba(201,169,97,0.15)}.ai-text-message .ai-feature-item:last-child{border-bottom:none}.ai-text-message .ai-feature-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0}.ai-text-message .ai-step-list{margin:16px 0;padding:0;list-style:none}.ai-text-message .ai-step-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;font-size:15px;color:#0e2b44}.ai-text-message .ai-step-number{background:linear-gradient(135deg,#D9B45D 0%,#C9A961 100%);color:#0e2b44;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;box-shadow:0 2px 8px rgba(201,169,97,0.3)}.ai-text-message .ai-highlight-box{background:linear-gradient(135deg,rgba(217,180,93,0.1) 0%,rgba(201,169,97,0.08) 100%);border-left:3px solid #C9A961;padding:14px 16px;margin:16px 0;border-radius:8px;font-size:15px;color:#0e2b44}.ai-text-message .ai-warning-box{background:linear-gradient(135deg,rgba(255,193,7,0.1) 0%,rgba(255,152,0,0.08) 100%);border-left:3px solid #ff9800;padding:14px 16px;margin:16px 0;border-radius:8px;font-size:15px;color:#0e2b44}.ai-text-message .ai-info-box{background:linear-gradient(135deg,rgba(33,150,243,0.1) 0%,rgba(25,118,210,0.08) 100%);border-left:3px solid #2196f3;padding:14px 16px;margin:16px 0;border-radius:8px;font-size:15px;color:#0e2b44}
+</style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">
+        <div class="back-btn" onclick="history.back()">‹</div>
+        <div class="ai-info">
+            <div class="ai-avatar">
+                <img src="img/logo-new.png" alt="Providence" style="width:100%;height:100%;object-fit:contain;">
+            </div>
+            <div class="ai-text">
+                <div class="ai-name" id="aiName">Providence AI 金融顾问</div>
+                <div class="ai-status">
+                    <span class="status-dot"></span>
+                    <span id="aiStatus">本地AI v2.0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="messages-area" id="messagesArea">
+        <div class="welcome-card">
+            <div class="welcome-title">
+                🤖 Providence AI
+                <span class="version-badge">v2.0 本地</span>
+                </div>
+            <div class="welcome-desc">
+                我是您的专属本地AI金融顾问，可以实时查询您的账户、投资、VIP等级等信息，无需连接外部服务器，响应速度更快，数据更安全！
+                </div>
+            <div class="features-grid">
+                <div class="feature-item"><span>⚡</span><span>0.3秒响应</span></div>
+                <div class="feature-item"><span>🔒</span><span>数据本地处理</span></div>
+                <div class="feature-item"><span>💰</span><span>实时查询余额</span></div>
+                <div class="feature-item"><span>📊</span><span>查看投资收益</span></div>
+            </div>
+        </div>
+
+        <div class="msg ai">
+            <div class="msg-avatar">
+                <img src="img/logo-new.png" alt="Providence" style="width:100%;height:100%;object-fit:contain;">
+            </div>
+            <div class="msg-content">
+                <div class="msg-bubble">
+                    您好！我是 <strong>Providence AI v2.0</strong> 本地智能顾问 🎯<br><br>
+                    我可以帮您：<br><br>
+                    💰 实时查询账户余额<br>
+                    📊 查看投资项目收益<br>
+                    👑 了解VIP等级权益<br>
+                    👥 查询团队邀请数据<br>
+                    💳 充值提现操作指导<br><br>
+                    <div class="ai-action-buttons">
+                        <button class="ai-action-btn" onclick="quickAsk('我的余额')">💰 我的余额</button>
+                        <button class="ai-action-btn" onclick="quickAsk('我的投资')">📊 我的投资</button>
+                        <button class="ai-action-btn secondary" onclick="quickAsk('VIP等级')">👑 VIP等级</button>
+                        <button class="ai-action-btn secondary" onclick="quickAsk('我的团队')">👥 我的团队</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <input type="text" class="input-box" id="chatInput" placeholder="输入您的问题..."/>
+        <button class="send-btn" id="sendBtn" onclick="handleSend()">➤</button>
+</div>
+</div>
+
+<script src="config.js?v=99999999"></script>
+
+<!-- ===================================== -->
+<!-- Providence AI System v2.0 -->
+<!-- 混合AI系统（规则引擎 + OpenAI） -->
+<!-- ===================================== -->
+
+<!-- 1. AI配置中心（必须最先加载） -->
+<script src="ai-config.js?v=99999999"></script>
+
+<!-- 2. 增强规则引擎 -->
+<script src="ai-rules-engine-enhanced.js?v=20251117"></script>
+
+<!-- 3. OpenAI集成 -->
+<script src="ai-openai.js?v=20251117"></script>
+
+<!-- 4. 知识库 -->
+<script src="ai-knowledge-base.js?v=1762799842"></script>
+
+<!-- 5. 智能对话 -->
+<script src="ai-smart-conversation.js?v=1762799842"></script>
+
+<!-- 6. 原有AI服务（保留兼容） -->
+<script src="ai-service-local.js?v=1763342593"></script>
+
+<!-- 7. 混合AI调度器（统一入口，覆盖sendToAI） -->
+<script src="ai-hybrid-dispatcher.js?v=20251117"></script>
+<script>
+const messagesArea=document.getElementById('messagesArea'),chatInput=document.getElementById('chatInput'),sendBtn=document.getElementById('sendBtn');
+
+// 对话历史保存功能
+const CHAT_HISTORY_KEY='providence_chat_history';
+const MAX_HISTORY_MESSAGES=50;
+
+// 加载历史对话
+function loadChatHistory(){
+try{
+const history=localStorage.getItem(CHAT_HISTORY_KEY);
+if(history){
+const messages=JSON.parse(history);
+messages.forEach(msg=>{
+if(msg.type&&msg.text&&msg.timestamp){
+// 检查是否是今天的消息
+const msgDate=new Date(msg.timestamp);
+const today=new Date();
+if(msgDate.toDateString()===today.toDateString()){
+addMessage(msg.type,msg.text,msg.id,false);
+}
+}
+});
+}
+}catch(e){
+console.error('[历史记录]加载失败:',e);
+}
+}
+
+// 保存消息到历史
+function saveChatMessage(type,text,msgId){
+try{
+const history=JSON.parse(localStorage.getItem(CHAT_HISTORY_KEY)||'[]');
+history.push({
+type,
+text,
+id:msgId,
+timestamp:Date.now()
+});
+// 只保留最近的消息
+if(history.length>MAX_HISTORY_MESSAGES){
+history.splice(0,history.length-MAX_HISTORY_MESSAGES);
+}
+localStorage.setItem(CHAT_HISTORY_KEY,JSON.stringify(history));
+}catch(e){
+console.error('[历史记录]保存失败:',e);
+}
+}
+
+function quickAsk(question){chatInput.value=question;handleSend()}
+function handleActionButton(action){if(!action)return;console.log("[AI按钮] 执行操作:",action);if(action.startsWith("query:")){const query=action.replace("query:","");chatInput.value=query;handleSend();}else if(action.startsWith("navigate:")){const url=action.replace("navigate:","");window.location.href=url;}else if(action.startsWith("api:")){const apiAction=action.replace("api:","");handleApiAction(apiAction);}}function handleApiAction(action){const token=localStorage.getItem("providence_token");if(!token){showToast("请先登录");window.location.href="login.html";return;}console.log("[API操作]",action);switch(action){case "recharge":window.location.href="recharge.html";break;case "withdraw":window.location.href="withdraw.html";break;case "vip":window.location.href="vip.html";break;case "investment":window.location.href="my-investments.html";break;case "team":window.location.href="team-rewards.html";break;case "ribao":window.location.href="ribao.html";break;default:showToast("操作暂不支持");}}
+
+async function handleSend(){
+const message=chatInput.value.trim();
+if(!message)return;
+chatInput.disabled=true;sendBtn.disabled=true;
+const userMsgId=addMessage('user',message);
+saveChatMessage('user',message,userMsgId);
+chatInput.value='';
+const loadingId='loading-'+Date.now();
+addMessage('ai','<div class="typing"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>',loadingId,false);
+try{
+console.log('[AI] 发送消息:',message);
+const result=await sendToAI(message);
+console.log('[AI] 收到回复:',result);
+const loadingEl=document.getElementById(loadingId);
+if(loadingEl)loadingEl.remove();
+if(result&&result.message){
+const aiMsgId=addMessage('ai',result.message);
+saveChatMessage('ai',result.message,aiMsgId);
+if(result.actionButton){
+const lastBubble=messagesArea.querySelector('.msg.ai:last-child .msg-bubble');
+if(lastBubble){
+lastBubble.insertAdjacentHTML('beforeend',`<div class="ai-action-buttons"><a href="${result.actionButton.link}" class="ai-action-btn">${result.actionButton.text}</a></div>`);
+}
+}
+if(result.actionButtons && Array.isArray(result.actionButtons)){
+const lastBubble=messagesArea.querySelector('.msg.ai:last-child .msg-bubble');
+if(lastBubble){
+const buttonsHtml=result.actionButtons.map(btn=>{
+const action=btn.action||btn.onclick||(btn.link?"navigate:"+btn.link:"");
+const clickHandler=action?"handleActionButton(""+action+"")":"";
+return `<button class="ai-action-btn ${btn.type||""}" onclick="${clickHandler}">${btn.text}</button>`;
+}).join("");
+
+const buttonsHtml=result.actionButtons.map(btn=>{
+const action=btn.action||btn.onclick||(btn.link?"navigate:"+btn.link:"");
+const clickHandler=action?"handleActionButton(\""+action+"\")":"";
+return `<button class="ai-action-btn ${btn.type||""}" onclick="${clickHandler}">${btn.text}</button>`;
+}).join("");
+const clickHandler=action?"handleActionButton(\""+action+"\")":"";
+const buttonsHtml=result.actionButtons.map(btn=>{
+const action=btn.action||btn.onclick||(btn.link?"navigate:"+btn.link:"");
+const clickHandler=action?"handleActionButton(\""+action+"\")":"";
+return `<button class="ai-action-btn ${btn.type||""}" onclick="${clickHandler}">${btn.text}</button>`;
+}).join("");
+return `<button class="ai-action-btn ${btn.type||""}" onclick="${clickHandler}">${btn.text}</button>`;
+const buttonsHtml=result.actionButtons.map(btn=>{
+const action=btn.action||btn.onclick||(btn.link?"navigate:"+btn.link:"");
+const clickHandler=action?"handleActionButton(\""+action+"\")":"";
+return `<button class="ai-action-btn ${btn.type||""}" onclick="${clickHandler}">${btn.text}</button>`;
+}).join("");
+}).join("");
+const buttonsHtml=result.actionButtons.map(btn=>{
+const action=btn.action||btn.onclick||(btn.link?"navigate:"+btn.link:"");
+const clickHandler=action?"handleActionButton(\""+action+"\")":"";
+return `<button class="ai-action-btn ${btn.type||""}" onclick="${clickHandler}">${btn.text}</button>`;
+}).join("");
+return `<button class="ai-action-btn ${btn.type||''}" onclick="${btn.onclick}">${btn.text}</button>`;
+const buttonsHtml=result.actionButtons.map(btn=>{
+const action=btn.action||btn.onclick||(btn.link?"navigate:"+btn.link:"");
+const clickHandler=action?"handleActionButton(\""+action+"\")":"";
+return `<button class="ai-action-btn ${btn.type||""}" onclick="${clickHandler}">${btn.text}</button>`;
+}).join("");
+const buttonsHtml=result.actionButtons.map(btn=>{
+const buttonsHtml=result.actionButtons.map(btn=>{
+const action=btn.action||btn.onclick||(btn.link?"navigate:"+btn.link:"");
+const clickHandler=action?"handleActionButton(\""+action+"\")":"";
+return `<button class="ai-action-btn ${btn.type||""}" onclick="${clickHandler}">${btn.text}</button>`;
+}).join("");
+const action=btn.action||btn.onclick||(btn.link?"navigate:"+btn.link:"");
+const clickHandler=action?"handleActionButton(\""+action+"\")":"";
+return `<button class="ai-action-btn ${btn.type||""}" onclick="${clickHandler}">${btn.text}</button>`;
+}).join("");
+}else{
+const buttonsHtml=result.actionButtons.map(btn=>{
+const action=btn.action||btn.onclick||(btn.link?"navigate:"+btn.link:"");
+const clickHandler=action?"handleActionButton(\""+action+"\")":"";
+return `<button class="ai-action-btn ${btn.type||""}" onclick="${clickHandler}">${btn.text}</button>`;
+}).join("");
+return `<a href="${btn.link}" class="ai-action-btn ${btn.type||''}">${btn.text}</a>`;
+const buttonsHtml=result.actionButtons.map(btn=>{
+const action=btn.action||btn.onclick||(btn.link?"navigate:"+btn.link:"");
+const clickHandler=action?"handleActionButton(\""+action+"\")":"";
+return `<button class="ai-action-btn ${btn.type||""}" onclick="${clickHandler}">${btn.text}</button>`;
+}).join("");
+}
+const buttonsHtml=result.actionButtons.map(btn=>{
+const action=btn.action||btn.onclick||(btn.link?"navigate:"+btn.link:"");
+const clickHandler=action?"handleActionButton(\""+action+"\")":"";
+return `<button class="ai-action-btn ${btn.type||""}" onclick="${clickHandler}">${btn.text}</button>`;
+}).join("");
+}).join('');
+const buttonsHtml=result.actionButtons.map(btn=>{
+const action=btn.action||btn.onclick||(btn.link?"navigate:"+btn.link:"");
+const clickHandler=action?"handleActionButton(\""+action+"\")":"";
+return `<button class="ai-action-btn ${btn.type||""}" onclick="${clickHandler}">${btn.text}</button>`;
+}).join("");
+lastBubble.insertAdjacentHTML('beforeend',`<div class="ai-action-buttons">${buttonsHtml}</div>`);
+}
+}
+}else{
+addMessage('ai','抱歉，我暂时无法回答这个问题。');
+}
+}catch(error){
+console.error('[AI] 错误:',error);
+const loadingEl=document.getElementById(loadingId);
+if(loadingEl)loadingEl.remove();
+addMessage('ai','抱歉，服务暂时不可用，请稍后再试。');
+}finally{
+chatInput.disabled=false;sendBtn.disabled=false;chatInput.focus();
+}
+}
+
+function addMessage(type,text,msgId,shouldSave=true){
+const id=msgId||'msg-'+Date.now()+'-'+Math.random();
+const avatar=type==='ai'?'<img src="img/logo-new.png" alt="Providence" style="width:100%;height:100%;object-fit:contain;">':'<img src="img/user-avatar-default.svg" alt="用户" style="width:100%;height:100%;object-fit:contain;">';
+const time=new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
+const html=`<div class="msg ${type}" id="${id}"><div class="msg-avatar">${avatar}</div><div class="msg-content"><div class="msg-bubble">${text}</div><div class="msg-time">${time}</div></div></div>`;
+messagesArea.insertAdjacentHTML('beforeend',html);
+setTimeout(()=>{messagesArea.scrollTop=messagesArea.scrollHeight},50);
+return id;
+}
+
+chatInput.addEventListener('keypress',e=>{
+if(e.key==='Enter'&&!e.shiftKey){
+e.preventDefault();handleSend();
+}
+});
+
+window.addEventListener('DOMContentLoaded',()=>{
+// 检查URL参数，判断用户来源
+const urlParams=new URLSearchParams(window.location.search);
+const intent=urlParams.get('intent');
+const from=urlParams.get('from');
+
+// 如果是从找回密码页面来的，切换为密码找回AI
+if(intent==='password_reset'||from==='forgot'){
+// 修改页面标题和AI名称
+document.title='密码找回助手 - Providence';
+document.getElementById('aiName').textContent='🔐 Providence 密码找回助手';
+document.getElementById('aiStatus').textContent='密码找回专用 AI';
+
+// 清空默认欢迎卡片和消息
+messagesArea.innerHTML='';
+
+// 添加密码找回专用欢迎卡片 - 毛玻璃样式
+const passwordResetWelcome=`
+<div class="welcome-card" style="background:rgba(255,255,255,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:2px solid rgba(201,169,97,0.35);padding:24px;margin-bottom:20px;box-shadow:0 8px 32px rgba(0,0,0,0.2)">
+<div class="welcome-title" style="font-size:20px;font-weight:800;margin-bottom:16px;color:#0e2b44">
+🔐 密码找回助手
+<span class="version-badge">AI引导</span>
+</div>
+<div class="welcome-desc" style="font-size:16px;line-height:1.9;margin-bottom:18px;color:#0e2b44;font-weight:600">
+我是您的专属密码找回AI助手，将引导您安全、快速地完成密码重置。
+
+整个过程只需3-5分钟。
+</div>
+<div class="features-grid" style="gap:12px">
+<div class="feature-item" style="padding:10px 14px;background:rgba(201,169,97,0.18);color:#0e2b44;font-weight:700"><span>🤖</span><span>智能引导</span></div>
+<div class="feature-item" style="padding:10px 14px;background:rgba(201,169,97,0.18);color:#0e2b44;font-weight:700"><span>👤</span><span>人脸验证</span></div>
+<div class="feature-item" style="padding:10px 14px;background:rgba(201,169,97,0.18);color:#0e2b44;font-weight:700"><span>🔒</span><span>安全可靠</span></div>
+<div class="feature-item" style="padding:10px 14px;background:rgba(201,169,97,0.18);color:#0e2b44;font-weight:700"><span>⚡</span><span>3分钟完成</span></div>
+</div>
+</div>`;
+
+messagesArea.insertAdjacentHTML('beforeend',passwordResetWelcome);
+
+// 添加AI引导消息 - iOS标准字体
+setTimeout(()=>{
+const welcomeMsg=`<div style="padding:6px 0">
+<div style="font-size:17px;font-weight:600;margin-bottom:16px;color:#0e2b44;line-height:1.5">
+您好！我是<strong style="color:#C9A961">Providence密码找回助手</strong> 🔐 将引导您安全、快速地完成密码重置，整个过程只需3-5分钟。
+</div>
+
+<div style="font-size:15px;font-weight:600;margin:18px 0 12px;color:#0e2b44">📋 找回密码流程：</div>
+
+<div style="background:rgba(201,169,97,0.15);padding:14px;border-radius:10px;margin:10px 0;border-left:3px solid #C9A961;box-shadow:0 2px 6px rgba(0,0,0,0.06)">
+<div style="font-size:15px;font-weight:700;margin-bottom:6px;color:#C9A961">1️⃣ 身份验证</div>
+<div style="font-size:13px;color:#666;font-weight:500">请提供您的账号</div>
+</div>
+
+<div style="background:rgba(201,169,97,0.15);padding:14px;border-radius:10px;margin:10px 0;border-left:3px solid #C9A961;box-shadow:0 2px 6px rgba(0,0,0,0.06)">
+<div style="font-size:15px;font-weight:700;margin-bottom:6px;color:#C9A961">2️⃣ 人脸识别</div>
+<div style="font-size:13px;color:#666;font-weight:500">通过人脸比对验证您的身份</div>
+</div>
+
+<div style="background:rgba(201,169,97,0.15);padding:14px;border-radius:10px;margin:10px 0;border-left:3px solid #C9A961;box-shadow:0 2px 6px rgba(0,0,0,0.06)">
+<div style="font-size:15px;font-weight:700;margin-bottom:6px;color:#C9A961">3️⃣ 重置密码</div>
+<div style="font-size:13px;color:#666;font-weight:500">设置新密码，完成找回</div>
+</div>
+
+<div style="background:rgba(255,152,0,0.1);padding:14px;border-radius:10px;margin-top:16px;border-left:3px solid #ff9800;box-shadow:0 2px 6px rgba(0,0,0,0.06)">
+<div style="font-size:15px;font-weight:700;margin-bottom:8px;color:#ff9800">⚠️ 重要提示</div>
+<div style="font-size:13px;color:#666;line-height:1.8;font-weight:500">
+• 需要先完成<strong style="color:#0e2b44">KYC实名认证</strong>才能使用此服务
+
+• 请在光线充足的环境下进行人脸识别
+
+• 请使用本人证件和手机操作
+</div>
+</div>
+</div>
+<div class="ai-action-buttons" style="margin-top:18px">
+<button class="ai-action-btn" onclick="quickAsk('开始找回密码')" style="font-size:15px;padding:10px 18px;font-weight:600">🚀 开始找回密码</button>
+<button class="ai-action-btn secondary" onclick="quickAsk('我没有实名认证')" style="font-size:15px;padding:10px 18px;font-weight:600">❓ 没有实名认证</button>
+<a href="forgot.html" class="ai-action-btn secondary" style="font-size:15px;padding:10px 18px;font-weight:600">🔙 返回选择页</a>
+</div>`;
+const aiMsgId=addMessage('ai',welcomeMsg);
+saveChatMessage('ai',welcomeMsg,aiMsgId);
+},300);
+
+// 限制AI功能，只能处理密码找回相关
+window.AI_MODE='password_reset_only';
+console.log('🔐 密码找回专用AI已启用');
+}else{
+// 正常模式 - 金融顾问AI（含客服功能）
+loadChatHistory();
+window.AI_MODE='normal';
+console.log('💰 Providence AI 金融顾问（含客服）已就绪');
+}
+
+chatInput.focus();
+console.log('🤖 Providence AI v2.0 本地智能顾问已就绪');
+console.log('📊 可以查询：余额、投资、VIP、团队等实时数据');
+console.log('💾 对话历史已启用');
+});
+</script>
+</body>
+</html>

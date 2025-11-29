@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>邀请好友 - Providence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+            background: linear-gradient(135deg, #0a1723 0%, #0f1f2e 50%, #08141f 100%);
+            background-attachment: fixed;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .invite-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                        0 0 0 1px rgba(200, 186, 148, 0.2);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: cardFadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes cardFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .invite-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(232, 201, 145, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(232, 201, 145, 0.3);
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #e8c991, #c7b58a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .invite-code-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(232, 201, 145, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .invite-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 12px;
+        }
+
+        .invite-code {
+            font-size: 36px;
+            font-weight: 700;
+            color: #e8c991;
+            letter-spacing: 4px;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 20px rgba(232, 201, 145, 0.5);
+        }
+
+        .benefits {
+            text-align: left;
+            margin: 30px 0;
+            padding: 0;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .benefit-item::before {
+            content: '✓';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #e8c991, #c7b58a);
+            color: #0a1723;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .join-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #e8c991, #c7b58a);
+            color: #0a1723;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 8px 24px rgba(232, 201, 145, 0.4),
+                        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .join-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .join-btn:hover::before,
+        .join-btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .join-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(232, 201, 145, 0.5),
+                        0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+            filter: brightness(1.1);
+        }
+
+        .join-btn:active {
+            transform: translateY(0) scale(0.98);
+            box-shadow: 0 4px 16px rgba(232, 201, 145, 0.3);
+        }
+
+        .footer-text {
+            margin-top: 20px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        @media screen and (max-width: 480px) {
+            .invite-card {
+                padding: 30px 20px;
+                border-radius: 20px;
+            }
+
+            .title {
+                font-size: 28px;
+            }
+
+            .invite-code {
+                font-size: 32px;
+                letter-spacing: 3px;
+            }
+
+            .benefit-item {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="invite-card">
+        <div class="card-content">
+            <img src="img/logo.png" alt="Providence" class="logo" onerror="this.style.display='none'" />
+            <h1 class="title">PROVIDENCE</h1>
+            <p class="subtitle">邀请好友，共享财富</p>
+
+            <div class="invite-code-box">
+                <div class="invite-label">专属邀请码（个人账号）</div>
+                <div class="invite-code" id="inviteCode">加载中...</div>
+            </div>
+
+            <div class="benefits">
+                <div class="benefit-item">🎁 新人888元体验金</div>
+                <div class="benefit-item">⭐ VIP最高0.25%加息</div>
+                <div class="benefit-item">💰 推荐最高7%返佣</div>
+                <div class="benefit-item">🏆 团队奖最高18万积分</div>
+                <div class="benefit-item">🤖 7×24小时AI客服</div>
+            </div>
+
+            <button class="join-btn" id="joinBtn" onclick="goToRegister()">
+                立即加入
+            </button>
+
+            <p class="footer-text">
+                点击"立即加入"按钮，开始您的财富之旅
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 从子域名提取邀请码（个人账号）
+        // 规则：code = 个人账号
+        function getInviteCodeFromDomain() {
+            const hostname = window.location.hostname;
+            console.log('[邀请页] 当前hostname:', hostname);
+
+            const parts = hostname.split('.');
+            console.log('[邀请页] 域名部分:', parts);
+
+            // 检查是否是子域名（排除 www, api, admin 等）
+            if (parts.length >= 3) {
+                // 子域名就是个人账号（邀请码）
+                // 例如：g138688.4kp3l0iq.top -> 账号是 G138688
+                const subdomain = parts[0].toUpperCase(); // 转换为大写
+                console.log('[邀请页] 提取的子域名（个人账号）:', subdomain);
+
+                // 排除已知的非邀请码子域名
+                const excludeList = ['www', 'api', 'admin', 'xin', 'qiantai'];
+                if (!excludeList.includes(subdomain.toLowerCase())) {
+                    console.log('[邀请页] 确认邀请码（个人账号）:', subdomain);
+                    return subdomain; // 返回完整账号，例如：G138688
+                }
+            }
+            console.warn('[邀请页] 无法提取邀请码');
+            return null;
+        }
+
+        // 初始化邀请码
+        function initInviteCode() {
+            const inviteCode = getInviteCodeFromDomain();
+            const codeElement = document.getElementById('inviteCode');
+
+            if (inviteCode) {
+                // 显示邀请码（这是个人账号）
+                // 例如：G138688（完整账号，不是138688）
+                codeElement.textContent = inviteCode;
+                // 保存到 localStorage，供注册页面使用
+                localStorage.setItem('invite_code', inviteCode);
+                console.log('[邀请页] ✅ 邀请码（个人账号）:', inviteCode);
+                console.log('[邀请页] ✅ 规则：code = 个人账号');
+                console.log('[邀请页] ✅ 完整账号已显示，不是纯数字');
+            } else {
+                codeElement.textContent = '无效邀请';
+                codeElement.style.color = 'rgba(255, 107, 107, 0.8)';
+                document.getElementById('joinBtn').disabled = true;
+                document.getElementById('joinBtn').style.opacity = '0.5';
+                document.getElementById('joinBtn').style.cursor = 'not-allowed';
+            }
+        }
+
+        // 跳转到注册页面
+        function goToRegister() {
+            const inviteCode = getInviteCodeFromDomain();
+            if (!inviteCode) {
+                alert('邀请码无效，请使用正确的邀请链接');
+                return;
+            }
+
+            // 跳转到注册页面，带上邀请码参数（完整账号）
+            // 例如：invite_code=G138688（不是138688）
+            const registerUrl = `https://4kp3l0iq.top/register.html?invite_code=${encodeURIComponent(inviteCode)}`;
+            console.log('[邀请页] 跳转到注册页，邀请码（个人账号）:', inviteCode);
+            console.log('[邀请页] 完整URL:', registerUrl);
+            window.location.href = registerUrl;
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initInviteCode();
+        });
+
+        // 如果 DOM 已经加载完成
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initInviteCode);
+        } else {
+            initInviteCode();
+        }
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script src="smart-swipe-control.js?v=1763897782"></script>
+</body>
+</html>

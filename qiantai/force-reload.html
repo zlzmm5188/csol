@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>强制刷新 - Providence</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .container {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-
+
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+
+      }
+      h1 {
+        font-size: 32px;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .subtitle {
+        color: #666;
+        margin-bottom: 32px;
+        font-size: 14px;
+      }
+      .status {
+        background: #f0f9ff;
+        border: 2px solid #0ea5e9;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 20px 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #0369a1;
+      }
+      .btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 16px 32px;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+
+        margin-top: 20px;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        transition: transform 0.2s;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+      }
+      .step {
+        background: #fafafa;
+        padding: 16px;
+        margin: 12px 0;
+        border-radius: 8px;
+
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      .countdown {
+        font-size: 48px;
+        font-weight: 900;
+        color: #667eea;
+        margin: 20px 0;
+      }
+      .loading {
+        display: inline-block;
+
+        height: 20px;
+        border: 3px solid rgba(102, 126, 234, 0.3);
+        border-radius: 50%;
+        border-top-color: #667eea;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+          .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔄 强制刷新工具</h1>
+      <p class="subtitle">清除所有缓存并重新加载最新文件</p>
+
+      <div class="status" id="status">准备清除缓存...</div>
+
+      <button class="btn" onclick="startClearing()">🚀 开始清除缓存</button>
+
+      <div class="step" style="margin-top: 32px">
+        <strong>📌 温馨提示</strong><br />
+        点击按钮后，系统将：<br />
+        1️⃣ 清除所有浏览器缓存<br />
+        2️⃣ 清除所有本地存储<br />
+        3️⃣ 自动跳转到登录页面<br />
+        4️⃣ 重新加载最新文件
+      </div>
+    </div>
+
+    <script>
+      let countdown = 3;
+      let interval;
+
+      async function startClearing() {
+        const statusEl = document.getElementById("status");
+
+        try {
+          // 1. 清除 Service Worker
+          statusEl.innerHTML =
+            '<div class="loading"></div> 清除 Service Worker...';
+          if ("serviceWorker" in navigator) {
+            const registrations =
+              await navigator.serviceWorker.getRegistrations();
+            for (let registration of registrations) {
+              await registration.unregister();
+            }
+          }
+          await sleep(500);
+
+          // 2. 清除 Cache Storage
+          statusEl.innerHTML = '<div class="loading"></div> 清除缓存存储...';
+          if ("caches" in window) {
+            const cacheNames = await caches.keys();
+            for (let name of cacheNames) {
+              await caches.delete(name);
+            }
+          }
+          await sleep(500);
+
+          // 3. 清除 LocalStorage
+          statusEl.innerHTML = '<div class="loading"></div> 清除本地存储...';
+          localStorage.clear();
+          await sleep(500);
+
+          // 4. 清除 SessionStorage
+          statusEl.innerHTML = '<div class="loading"></div> 清除会话存储...';
+          sessionStorage.clear();
+          await sleep(500);
+
+          // 5. 清除 IndexedDB
+          statusEl.innerHTML = '<div class="loading"></div> 清除数据库...';
+          if ("indexedDB" in window) {
+            try {
+              const dbs = await indexedDB.databases();
+              for (let db of dbs) {
+                indexedDB.deleteDatabase(db.name);
+              }
+            } catch (e) {
+              console.log("IndexedDB清除失败（可能不支持）:", e);
+            }
+          }
+          await sleep(500);
+
+          // 完成
+          statusEl.style.background = "#f0fdf4";
+          statusEl.style.borderColor = "#10b981";
+          statusEl.style.color = "#065f46";
+          statusEl.innerHTML = "✅ 缓存清除成功！";
+
+          await sleep(1000);
+
+          // 倒计时跳转
+          statusEl.innerHTML =
+            '<div class="countdown">' +
+            countdown +
+            "</div>秒后跳转到登录页面...";
+
+          interval = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+              statusEl.innerHTML =
+                '<div class="countdown">' +
+                countdown +
+                "</div>秒后跳转到登录页面...";
+            } else {
+              clearInterval(interval);
+              statusEl.innerHTML = "🚀 正在跳转...";
+              // 添加随机参数强制刷新
+              const timestamp = Date.now();
+              window.location.href =
+                "login.html?_t=" + timestamp + "&_r=" + Math.random();
+            }
+          }, 1000);
+        } catch (error) {
+          statusEl.style.background = "#fef2f2";
+          statusEl.style.borderColor = "#ef4444";
+          statusEl.style.color = "#991b1b";
+          statusEl.innerHTML = "❌ 清除失败: " + error.message;
+          console.error("清除缓存失败:", error);
+        }
+      }
+
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      // 页面加载时自动检测
+      window.addEventListener("load", () => {
+        console.log("📊 当前页面信息:");
+        console.log("- URL:", window.location.href);
+        console.log("- 时间:", new Date().toLocaleString());
+        console.log("- UserAgent:", navigator.userAgent);
+      });
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script defer src="smart-swipe-control.js?v=1763897782"></script>
+
+
+  </body>
+</html>

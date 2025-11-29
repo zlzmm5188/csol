@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>积分兑换 - Frevix</title>
+    <link rel="stylesheet" href="css/ios-toast.css" />
+    <style>
+        /* ========== FREVIX DESIGN TOKENS ========== */
+        :root {
+            --bg-dark: #0A1020;
+            --bg-card-blue: #1C2F4D;
+            --bg-card-blue-end: #102135;
+            --gold-light: #F8E7C1;
+            --gold-normal: #E8C991;
+            --gold-deep: #D6B97A;
+            --text-main: #F2F5FF;
+            --text-sub: #9DA9BE;
+            --text-dark: #2F3847;
+            --text-muted: #7B8495;
+            --white-card: #FAF8F4;
+            --white-border: #EBE6DF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', 'SF Pro Text', 'PingFang SC', 'Inter', -apple-system, sans-serif;
+            background:
+                radial-gradient(circle at 30% 0%, rgba(33,55,88,.45), transparent 65%),
+                radial-gradient(circle at 100% 20%, rgba(28,42,70,.35), transparent 60%),
+                var(--bg-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(10, 16, 32, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .back-btn {
+
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .header-title {
+            flex: 1;
+
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .history-btn {
+
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-normal);
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .app-container {
+            padding-top: 56px;
+            padding-bottom: 20px;
+        }
+
+        /* 蓝色余额卡片 - 改为单行布局 */
+        .balance-blue-card {
+            margin: 14px;
+            padding: 20px;
+            background: linear-gradient(145deg, var(--bg-card-blue), var(--bg-card-blue-end));
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 15px 30px rgba(0,0,0,.55),
+                inset 0 1px 0 rgba(255,255,255,0.10);
+        }
+
+        .balance-blue-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+
+            height: 100%;
+            background: linear-gradient(135deg,
+                rgba(255,255,255,0.12) 0%,
+                rgba(255,255,255,0.06) 50%,
+                transparent 100%);
+            filter: blur(28px);
+            pointer-events: none;
+        }
+
+        .balance-blue-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg,
+                transparent,
+                var(--gold-normal),
+                transparent);
+        }
+
+        /* 单行三列布局 */
+        .balance-stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-item {
+
+            padding: 12px 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .stat-label {
+            color: var(--text-sub);
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            color: var(--gold-normal);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .stat-value.primary {
+            font-size: 22px;
+            background: linear-gradient(90deg, var(--gold-normal), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 白色操作区 */
+        .white-content-card {
+            margin: 14px;
+            background: var(--white-card);
+            border-radius: 18px;
+            border: 1px solid var(--white-border);
+            box-shadow: 0 8px 18px rgba(0,0,0,.15);
+            padding: 20px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .section-icon {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-label {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 8px;
+
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .amount-input {
+
+            height: 54px;
+            background: #fff;
+            border: 1px solid var(--gold-normal);
+            border-radius: 16px;
+            padding: 0 60px 0 16px;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,.05);
+        }
+
+        .amount-input:focus {
+            outline: none;
+            border-color: var(--gold-deep);
+            box-shadow:
+                inset 0 2px 4px rgba(0,0,0,.05),
+                0 0 0 3px rgba(232,201,145,0.15);
+        }
+
+        .amount-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gold-deep);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .exchange-info {
+            background: rgba(232,201,145,0.08);
+            border-radius: 12px;
+            padding: 14px;
+            margin: 16px 0;
+            border: 1px solid rgba(232,201,145,0.2);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .info-value {
+            color: var(--text-dark);
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .info-value.highlight {
+            background: linear-gradient(90deg, var(--gold-normal), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-dark-card {
+            margin: 14px;
+        }
+
+        .primary-btn {
+
+            height: 52px;
+            background: linear-gradient(135deg, #F3D49A, #E2B76A);
+            border: none;
+            border-radius: 999px;
+            color: #2B1B05;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,.20);
+            transition: all 0.2s ease;
+        }
+
+        .primary-btn:active {
+            transform: scale(0.96);
+        }
+
+        .primary-btn:disabled {
+            background: #C9C4BC;
+            color: #7B7771;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .tips-card {
+            margin: 14px;
+            background: rgba(28,47,77,0.6);
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid rgba(232,201,145,0.15);
+        }
+
+        .tips-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .tips-icon {
+            font-size: 18px;
+            margin-right: 6px;
+        }
+
+        .tips-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gold-normal);
+        }
+
+        .tips-list {
+            list-style: none;
+        }
+
+        .tips-item {
+            color: var(--text-sub);
+            font-size: 12px;
+            line-height: 1.7;
+            padding-left: 12px;
+            position: relative;
+            margin-bottom: 6px;
+        }
+
+        .tips-item:before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--gold-normal);
+        }
+
+        .bottom-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,.55);
+            z-index: 9999;
+        }
+
+        .bottom-popup.active {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .popup-content {
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+            padding: 24px 20px 28px;
+
+            max-height: 28vh;
+            animation: rise 0.3s ease;
+        }
+
+        @keyframes rise {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .popup-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-dark);
+
+            margin-bottom: 20px;
+        }
+
+        .password-input {
+
+            padding: 14px;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 4px;
+
+            border: 2px solid #E5E7EB;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            background: #FAFBFC;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: var(--gold-normal);
+            box-shadow: 0 0 0 3px rgba(232,201,145,0.15);
+        }
+
+        .password-input.error {
+            animation: shake 0.3s ease;
+            border-color: #C63D3D;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            50% { transform: translateX(4px); }
+            75% { transform: translateX(-4px); }
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .popup-btn {
+            flex: 1;
+            height: 46px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .popup-btn-cancel {
+            background: #F3F4F6;
+            color: var(--text-muted);
+        }
+
+        .popup-btn-confirm {
+            background: linear-gradient(135deg, #F3D49A, #E2B76A);
+            color: #2B1B05;
+        }
+
+        .popup-btn:active {
+            transform: scale(0.96);
+        }
+
+        .loading {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        @media (max-
+            }
+
+            .stat-item {
+                padding: 10px 6px;
+            }
+
+            .stat-value {
+                font-size: 16px;
+            }
+
+            .stat-value.primary {
+                font-size: 20px;
+            }
+
+            .popup-content {
+                max-height: 26vh;
+            }
+        }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+      .brand .back-btn { flex: 0 0 auto; margin-right: 8px; }
+      .brand .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+<body>
+    <div class="header-bar">
+        <div class="back-btn" onclick="goBack()">‹</div>
+        <div class="header-title">积分兑换</div>
+        <div class="history-btn" onclick="goHistory()">明细</div>
+    </div>
+
+    <div class="app-container">
+        <!-- 蓝色余额卡片 - 单行三列 -->
+        <div class="balance-blue-card">
+            <div class="balance-stats-row">
+                <div class="stat-item">
+                    <div class="stat-label">当前积分</div>
+                    <div class="stat-value primary" id="pointsBalance">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">今日获得</div>
+                    <div class="stat-value" id="todayPoints">+0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">累计兑换</div>
+                    <div class="stat-value" id="totalExchange">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 白色操作区 -->
+        <div class="white-content-card">
+            <div class="section-title">
+                <span class="section-icon">💰</span>
+                积分兑换人民币
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">兑换积分</label>
+                <div class="input-wrapper">
+                    <input
+                        type="number"
+                        class="amount-input"
+                        id="exchangeAmount"
+                        placeholder="请输入兑换积分"
+                        min="10"
+                        oninput="calculateAmount()"
+                     />
+                    <span class="input-suffix">CNY</span>
+                </div>
+            </div>
+
+            <div class="exchange-info">
+                <div class="info-row">
+                    <span class="info-label">兑换比例</span>
+                    <span class="info-value">1 积分 = ¥1</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">兑换金额</span>
+                    <span class="info-value highlight" id="exchangeMoney">¥0</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">最低兑换</span>
+                    <span class="info-value">10 积分</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-dark-card">
+            <button class="primary-btn" id="exchangeBtn" onclick="showPasswordModal()">
+                确认兑换
+            </button>
+        </div>
+
+        <div class="tips-card">
+            <div class="tips-header">
+                <span class="tips-icon">💡</span>
+                <span class="tips-title">兑换说明</span>
+            </div>
+            <ul class="tips-list">
+                <li class="tips-item">最低兑换积分 10 分</li>
+                <li class="tips-item">兑换比例：1 积分 = ¥1</li>
+                <li class="tips-item">兑换需要输入支付密码</li>
+                <li class="tips-item">积分兑换后实时到账</li>
+                <li class="tips-item">积分可用于消费抵扣等</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="bottom-popup" id="passwordModal">
+        <div class="popup-content" onclick="event.stopPropagation()">
+            <div class="popup-title">请输入支付密码</div>
+            <input
+                type="tel"
+                class="password-input"
+                id="tradePassword"
+                placeholder="请输入6位支付密码"
+                maxlength="6"
+                inputmode="numeric"
+             />
+            <div class="popup-buttons">
+                <button class="popup-btn popup-btn-cancel" onclick="closePasswordModal()">
+                    取消
+                </button>
+                <button class="popup-btn popup-btn-confirm" onclick="confirmExchange()">
+                    确认兑换
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/ios-toast.js"></script>
+    <script src="config.js"></script>
+    <script>
+        const API = new APIClient();
+        let currentBalance = 0;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!checkLogin()) {
+                return; // 如果未登录，不继续执行
+            }
+            loadPointsBalance();
+        });
+
+        function checkLogin() {
+            // 兼容两种token存储方式
+            const token = localStorage.getItem('providence_token') || localStorage.getItem('token');
+            if (!token) {
+                showToast('请先登录');
+                setTimeout(() => {
+                    window.location.href = '/login.html';
+                }, 1500);
+                return false;
+            }
+            return true;
+        }
+
+        async function loadPointsBalance() {
+            try {
+                const data = await API.get('/user/points-balance.php');
+
+                if (data.code === 1) {
+                    currentBalance = parseFloat(data.data.points) || 0;
+                    document.getElementById('pointsBalance').textContent = currentBalance.toFixed(2);
+                    document.getElementById('todayPoints').textContent = '+' + (parseFloat(data.data.today_points) || 0).toFixed(2);
+                    document.getElementById('totalExchange').textContent = (parseFloat(data.data.total_exchange) || 0).toFixed(2);
+                } else {
+                    showToast(data.msg || '加载失败');
+                }
+            } catch (error) {
+                console.error('加载积分余额失败:', error);
+                showToast('加载失败，请刷新重试');
+            }
+        }
+
+        function calculateAmount() {
+            const points = parseFloat(document.getElementById('exchangeAmount').value) || 0;
+            const money = points;
+            document.getElementById('exchangeMoney').textContent = '¥' + money.toFixed(2);
+
+            const btn = document.getElementById('exchangeBtn');
+            if (points < 10) {
+                btn.disabled = true;
+                btn.textContent = '最低兑换 10 积分';
+            } else if (points > currentBalance) {
+                btn.disabled = true;
+                btn.textContent = '积分不足';
+            } else {
+                btn.disabled = false;
+                btn.textContent = '确认兑换';
+            }
+        }
+
+        function showPasswordModal() {
+            const points = parseFloat(document.getElementById('exchangeAmount').value) || 0;
+
+            if (points < 10) {
+                showToast('最低兑换 10 积分');
+                return;
+            }
+
+            if (points > currentBalance) {
+                showToast('积分不足');
+                return;
+            }
+
+            document.getElementById('passwordModal').classList.add('active');
+            document.getElementById('tradePassword').value = '';
+            setTimeout(() => {
+                document.getElementById('tradePassword').focus();
+            }, 300);
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.remove('active');
+        }
+
+        async function confirmExchange() {
+            const points = parseFloat(document.getElementById('exchangeAmount').value) || 0;
+            const tradePassword = document.getElementById('tradePassword').value;
+
+            if (!tradePassword || tradePassword.length !== 6) {
+                document.getElementById('tradePassword').classList.add('error');
+                showToast('请输入6位支付密码');
+                setTimeout(() => {
+                    document.getElementById('tradePassword').classList.remove('error');
+                }, 300);
+                return;
+            }
+
+            const btn = document.querySelector('.popup-btn-confirm');
+            btn.classList.add('loading');
+            btn.textContent = '处理中...';
+
+            try {
+                const data = await API.post('/user/points-exchange.php', {
+                    amount: points,
+                    trade_password: tradePassword
+                });
+
+                if (data.code === 1) {
+                    showToast('兑换成功！');
+                    closePasswordModal();
+
+                    document.getElementById('exchangeAmount').value = '';
+                    calculateAmount();
+
+                    setTimeout(() => {
+                        loadPointsBalance();
+                    }, 1000);
+                } else {
+                    document.getElementById('tradePassword').classList.add('error');
+                    showToast(data.msg || '兑换失败');
+                    setTimeout(() => {
+                        document.getElementById('tradePassword').classList.remove('error');
+                    }, 300);
+                }
+            } catch (error) {
+                console.error('兑换失败:', error);
+                showToast('兑换失败，请重试');
+            } finally {
+                btn.classList.remove('loading');
+                btn.textContent = '确认兑换';
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function goHistory() {
+            window.location.href = '/points-exchange-history.html';
+        }
+
+        document.getElementById('passwordModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePasswordModal();
+            }
+        });
+
+        document.getElementById('tradePassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                confirmExchange();
+            }
+        });
+    </script>
+
+    <!-- 积分获得方式说明 -->
+    <div class="white-card" style="margin-top: clamp(12px, 3vw, 16px);">
+        <div class="card-title">
+            <span>💡</span>
+            <span>积分获得方式</span>
+        </div>
+        <div class="exchange-info" style="margin: 0;">
+            <div class="info-row">
+                <span class="info-label">📅 每日签到</span>
+                <span class="info-value">每日可获得积分</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">💰 完成投资</span>
+                <span class="info-value">投资项目赚取积分</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">👥 邀请好友</span>
+                <span class="info-value">邀请注册获得积分奖励</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">🎉 参与活动</span>
+                <span class="info-value">平台活动赢取积分</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

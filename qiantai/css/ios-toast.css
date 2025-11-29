@@ -1,0 +1,39 @@
+.ios-toast{
+    position:fixed !important;
+    top:50% !important;
+    left:50% !important;
+    transform:translate(-50%,-50%) scale(0.9) !important;
+    background:linear-gradient(to bottom, #ffffff, #f8f9fa) !important;
+    border-radius:16px !important;
+    padding:20px 24px !important;
+    box-shadow:0 8px 32px rgba(0,0,0,0.15) !important;
+    z-index:99999 !important;
+    max-width:80% !important;
+    min-width:200px !important;
+    text-align:center !important;
+    visibility:hidden !important;
+    opacity:0 !important;
+    transition:all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+    border:1px solid rgba(0,0,0,0.1) !important;
+}
+
+.ios-toast.show{
+    visibility:visible !important;
+    transform:translate(-50%,-50%) scale(1) !important;
+    opacity:1 !important;
+}
+
+.ios-toast-title{
+    font-size:17px !important;
+    font-weight:600 !important;
+    color:#1d1d1f !important;
+    margin-bottom:8px !important;
+    line-height:1.4 !important;
+}
+
+.ios-toast-message{
+    font-size:15px !important;
+    color:#6e6e73 !important;
+    line-height:1.5 !important;
+    word-wrap:break-word !important;
+}

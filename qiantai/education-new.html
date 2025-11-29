@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>投资学堂 - PROVIDENCE</title>
+    <link rel="icon" href="favicon.ico" />
+    <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", Segoe UI, Roboto, sans-serif;
+      background: linear-gradient(135deg, #0e2b44 0%, #1a3a5f 50%, #0e2b44 100%);
+        background-attachment: fixed;
+      background-size: 200% 200%;
+      animation: gradientShift 15s ease infinite;
+      color: #e9eef6;
+      min-height: 100vh;
+      padding-bottom: 20px;
+      overflow-x: hidden;
+  padding-top: 60px;}
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* 顶部导航栏 */
+    .topbar {
+      position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important;
+      top: 0;
+      z-index: 100;
+      background: rgba(14, 43, 68, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .topbar-inner {
+      max-width: 100%;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .back-btn:active {
+        transform: scale(0.95) !important;
+    }
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+
+    .back-btn:hover {
+      background: rgba(201, 169, 97, 0.25);
+      transform: translateX(-2px);
+    }
+
+    .topbar-title {
+      flex: 1;
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff 0%, #c9a961 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .topbar-stats {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      max-
+      margin: 24px auto;
+      padding: 0 20px;
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, rgba(201, 169, 97, 0.2), rgba(201, 169, 97, 0.05));
+      border: 2px solid rgba(201, 169, 97, 0.3);
+      border-radius: 20px;
+      padding: 32px 28px;
+
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+
+      height: 200%;
+      background: radial-gradient(circle, rgba(201, 169, 97, 0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .hero-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #fff 0%, #c9a961 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 分类选择器 */
+    .category-section {
+      max-width: 100%;
+      padding: 20px;
+    }
+
+    .category-tabs {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .category-tab {
+      padding: 12px 28px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category-tab::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(201, 169, 97, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .category-tab:hover::before {
+      left: 100%;
+    }
+
+    .category-tab.active {
+      background: rgba(201, 169, 97, 0.2);
+      border-color: rgba(201, 169, 97, 0.5);
+      color: #c9a961;
+      box-shadow: 0 4px 20px rgba(201, 169, 97, 0.3);
+    }
+
+    .category-tab:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* 课程网格 */
+    .courses-section {
+      max-width: 100%;
+      padding: 20px;
+    }
+
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .course-card {
+      background: rgba(14, 43, 68, 0.6);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .course-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #c9a961, #d4af37);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .course-card:hover::before {
+      opacity: 1;
+    }
+
+    .course-card:hover {
+      background: rgba(14, 43, 68, 0.85);
+      border-color: rgba(201, 169, 97, 0.4);
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .course-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+
+    }
+
+    .course-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .course-level {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      background: rgba(201, 169, 97, 0.15);
+      border: 1px solid rgba(201, 169, 97, 0.3);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #c9a961;
+    }
+
+    .course-featured {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      background: rgba(255, 215, 0, 0.15);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #ffd700;
+    }
+
+    .course-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .course-desc {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .course-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .course-meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .course-btn {
+
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #c9a961 0%, #d4af37 100%);
+      border: none;
+      border-radius: 10px;
+      color: #0e2b44;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .course-btn:hover {
+      background: linear-gradient(135deg, #d4af37 0%, #e6c56e 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(201, 169, 97, 0.4);
+    }
+
+    .course-btn:disabled {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.3);
+      cursor: not-allowed;
+    }
+
+    /* 加载状态 */
+    .loading-container {
+
+      padding: 60px 20px;
+    }
+
+    .loading-spinner {
+
+      height: 50px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #c9a961;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* 底部导航 */
+    .tabbar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(11, 59, 94, 0.98) 0%, rgba(18, 76, 106, 0.98) 100%);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      height: 65px;
+      z-index: 100;
+      padding: 2px 0;
+      box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .tab {
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      color: #8b9aa8;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      position: relative;
+      padding: 0;
+      gap: 0;
+    }
+
+    .tab.active {
+      color: #f5d771;
+    }
+
+    .tab .ico {
+
+      height: 110px;
+      background-size: 75% !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+      margin-bottom: 0;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      opacity: 0.7;
+    }
+
+    .tab:not(.active) .ico {
+      opacity: 0.7;
+    }
+
+    .tab.active .ico {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+
+    .tab .txt {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      margin-top: -30px;
+      line-height: 1;
+      padding-top: 0;
+      margin-bottom: 2px;
+    }
+
+    .ico-home { background-image: url('img/zy.png?v=1763897782') !important; }
+    .ico-finance { background-image: url('img/w1.png?v=1763897782') !important; }
+    .ico-market { background-image: url('img/xm.png?v=1763897782') !important; }
+    .ico-message { background-image: url('img/34.png?v=1763897782') !important; }
+    .ico-me { background-image: url('img/wd.png?v=1763897782') !important; }
+
+    /* 响应式 */
+    @media (max-
+      }
+
+      .hero-card {
+        padding: 24px 20px;
+      }
+
+      .hero-title {
+        font-size: 24px;
+      }
+
+      .topbar-stats {
+        display: none;
+      }
+    }
+
+.brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }      .brand .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .back-btn:active {
+        transform: scale(0.95) !important;
+    }
+.back-btn:active {
+    transform: scale(0.95) !important;
+}      .brand .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <div class="topbar">
+        <div class="topbar-inner">
+            <a href="index.html" class="back-btn">←</a>
+            <div class="topbar-title">📚 投资学堂</div>
+            <div class="topbar-stats" id="courseStats">69 门精选课程</div>
+        </div>
+    </div>
+
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+        <div class="hero-card">
+            <div class="hero-icon">🎓</div>
+            <div class="hero-title">专业投资知识体系</div>
+            <div class="hero-desc">从零基础到专业投资者，系统学习基金、IPO、债券投资策略<br />Providence 金融学院专业课程体系</div>
+        </div>
+    </div>
+
+    <!-- 分类选择器 -->
+    <div class="category-section">
+        <div class="category-tabs">
+            <div class="category-tab active" data-category="fund">📈 基金投资 (26)</div>
+            <div class="category-tab" data-category="ipo">🎯 IPO新股 (20)</div>
+            <div class="category-tab" data-category="bond">💰 债券投资 (23)</div>
+        </div>
+    </div>
+
+    <!-- 课程列表 -->
+    <div class="courses-section">
+        <div class="courses-grid" id="coursesGrid">
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">正在加载课程...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <!-- 底部导航已移除 -->
+
+    <script defer src="education.js?v=1763897782"></script>
+    <script>
+    // 简化版课程渲染（直接在页面加载）
+    (function() {
+      // 等待 education.js 加载完成
+      setTimeout(function() {
+        // 获取课程数据
+        const COURSES_DATA = window.COURSES_DATA || {
+          courses: [],
+          updateTime: new Date().toLocaleString()
+        };
+
+        let currentCategory = 'fund';
+        let allCourses = COURSES_DATA.courses || [];
+
+        console.log('📚 课程总数:', allCourses.length);
+
+        // 分类切换
+        document.querySelectorAll('.category-tab').forEach(tab => {
+          tab.addEventListener('click', function() {
+            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            currentCategory = this.getAttribute('data-category');
+            renderCourses();
+          });
+        });
+
+        // 渲染课程
+        function renderCourses() {
+          const grid = document.getElementById('coursesGrid');
+          const filtered = allCourses.filter(c => c.category === currentCategory);
+
+          if (filtered.length === 0) {
+            grid.innerHTML = '<div class="loading-text">暂无课程数据</div>';
+            return;
+          }
+
+          grid.innerHTML = filtered.map(course => `
+            <div class="course-card">
+              <div class="course-icon">${course.icon}</div>
+              <div class="course-header">
+                <span class="course-level">${course.level}</span>
+                ${course.featured ? '<span class="course-featured">⭐ 特色</span>' : ''}
+              </div>
+              <h3 class="course-title">${course.title}</h3>
+              <p class="course-desc">${course.desc}</p>
+              <div class="course-meta">
+                <span>⏱️ ${course.duration}</span>
+                <span>📚 ${course.lessons}课时</span>
+              </div>
+              <button class="course-btn">开始学习</button>
+            </div>
+          `).join('');
+        }
+
+        // 初始渲染
+        renderCourses();
+
+      , 100);
+    )();
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script defer src="smart-swipe-control.js?v=1763897782"></script>
+
+
+</body>
+</html>

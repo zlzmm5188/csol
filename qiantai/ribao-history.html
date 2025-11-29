@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>日利宝记录 - Providence</title>
+    <link rel="stylesheet" href="styles.css?v=1763897782" />
+    <style>
+        :root {
+            --gold: #c8ba94;
+            --green: #26A17B;
+            --red: #E74C3C;
+            --ink: #0f172a;
+            --lineD: rgba(255,255,255,0.08);
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        html, body {
+            color: rgba(255,255,255,0.85);
+            -webkit-font-smoothing: antialiased;
+
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+  padding-top: 60px;}
+
+        body {
+            background: linear-gradient(180deg, #0a1723 0%, #0f1c2a 100%) !important;
+        background-attachment: fixed;
+            padding-bottom: 65px !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* 标题栏 - 统一风格 */
+        .header-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(10, 23, 35, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: clamp(12px, 3vw, 14px) clamp(16px, 4vw, 20px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .back-btn:active {
+        transform: scale(0.95) !important;
+    }
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
+        }
+
+        .back-btn:active {
+            transform: scale(0.95);
+        }
+
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-size: clamp(16px, 4vw, 18px);
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
+            margin: 0 clamp(8px, 2vw, 12px);
+        }
+
+        .spacer {
+            width: clamp(36px, 9vw, 40px);
+        }
+
+        /* 筛选区域 - 去除日期筛选 */
+        .filter-section {
+            margin: clamp(56px, 14vw, 64px) 16px 8px;
+            background: rgba(16, 27, 45, 0.92);
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid rgba(200, 186, 148, 0.3);
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.03);
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .filter-tab {
+
+            padding: 8px;
+            background: transparent;
+            color: rgba(255,255,255,0.5);
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, #c8ba94 0%, #a39363 100%);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* 记录列表 - 间距8px */
+        .records-container {
+            margin: 0 16px 16px;
+        }
+
+        .record-card {
+            background: rgba(16, 27, 45, 0.92);
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid rgba(200, 186, 148, 0.2);
+            margin-bottom: 8px;
+        }
+
+        .record-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .record-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(200, 186, 148, 0.15);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .record-type.in {
+            background: rgba(38, 161, 123, 0.15);
+            color: var(--green);
+        }
+
+        .record-type.out {
+            background: rgba(231, 76, 60, 0.15);
+            color: var(--red);
+        }
+
+        .record-amount {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .record-amount.in {
+            color: var(--green);
+        }
+
+        .record-amount.out {
+            color: var(--red);
+        }
+
+        .record-currency {
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+            margin-left: 4px;
+        }
+
+        .record-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .record-balance {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .record-time {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* 空状态 */
+        .empty-state {
+
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .empty-text {
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+        }
+
+        /* 加载更多 */
+        .load-more {
+
+            padding: 12px;
+        }
+
+        .load-more-btn {
+            background: rgba(200, 186, 148, 0.15);
+            color: var(--gold);
+            border: 1px solid rgba(200, 186, 148, 0.3);
+            border-radius: 8px;
+            padding: 10px 32px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+  <!-- 前端统一中间件加载 -->
+  <script src="/API_MAP.js?v=1"></script>
+  <script src="/token-interceptor.js?v=1"></script>
+  <script src="/error-interceptor.js?v=1"></script>
+  <script src="/login-handler.js?v=1"></script>
+  <script src="/global-stabilizer.js?v=1"></script>
+</head>
+<body>
+    <!-- 标题栏 - 统一风格 -->
+    <div class="header-bar">
+        <div class="back-btn" onclick="goBack()">‹</div>
+        <div class="header-title">日利宝记录</div>
+        <div class="spacer"></div>
+    </div>
+
+    <!-- 筛选区域 - 去除日期筛选 -->
+    <div class="filter-section">
+        <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterByType('')">全部</button>
+            <button class="filter-tab" onclick="filterByType('in')">转入</button>
+            <button class="filter-tab" onclick="filterByType('out')">转出</button>
+        </div>
+    </div>
+
+    <div class="records-container" id="recordsContainer">
+        <!-- 记录将通过JS动态加载 -->
+    </div>
+
+    <div class="load-more" id="loadMoreSection" style="display: none;">
+        <button class="load-more-btn" onclick="loadMore()">加载更多</button>
+    </div>
+
+    <script src="api-new.js?v=1763897782"></script>
+    <script src="ios-toast.js?v=1763897782"></script>
+    <script>
+        let currentPage = 1;
+        let totalPages = 1;
+        let isLoading = false;
+        let currentFilter = { type: '', currency: '' };
+
+        // 右滑返回
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX - touchStartX > 100) {
+                history.back();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[日利宝记录] 页面加载完成');
+            // 检查登录状态（新版本token检查）
+            if (window.ApiService && window.ApiService.auth && window.ApiService.auth.requireLogin) {
+                if (!ApiService.auth.requireLogin()) {
+                    return;
+                }
+            } else {
+                // 兼容旧版本：直接检查token
+                const token = localStorage.getItem('providence_token') || localStorage.getItem('token') || '';
+                if (!token) {
+                    console.warn('[日利宝记录] 未登录，跳转到登录页');
+                    window.location.href = 'login.html';
+                    return;
+                }
+            }
+
+            console.log('[日利宝记录] 开始加载记录');
+            loadRecords();
+        });
+
+        // 返回函数
+        function goBack() {
+            window.history.back();
+        }
+
+        async function loadRecords(page = 1) {
+            if (isLoading) return;
+            isLoading = true;
+
+            try {
+                // 优先使用ApiService封装（来自config.js）
+                let result = null;
+                if (window.ApiService && window.ApiService.ribao && window.ApiService.ribao.getRecords) {
+                    try {
+                        const params = {
+                            page: page,
+                            pageSize: 20
+                        };
+                        if (currentFilter.type) {
+                            params.type = currentFilter.type;
+                        }
+                        const data = await window.ApiService.ribao.getRecords(params);
+                        if (data && (Array.isArray(data) || data.list)) {
+                            result = { code: 1, data: data };
+                        }
+                    } catch (apiError) {
+                        console.warn('ApiService调用失败，使用fallback:', apiError);
+                    }
+                }
+
+                // Fallback: 直接使用fetch
+                if (!result) {
+                    const API_BASE = window.API_CONFIG?.baseURL || 'https://api.4kp3l0iq.top';
+                    let url = `${API_BASE}/user/api/ribao/records?page=${page}&pageSize=20`;
+                    if (currentFilter.type) {
+                        url += `&type=${currentFilter.type}`;
+                    }
+
+                    const res = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'token': localStorage.getItem('providence_token') || localStorage.getItem('token') || ''
+                        }
+                    });
+
+                    result = await res.json();
+                }
+
+                console.log('[日利宝记录] API响应:', result);
+
+                if ((result.code === 1 || result.code === 1 || result.code === 200) && result.data) {
+                    // 处理不同的数据结构
+                    let records = [];
+                    let pagination = {};
+
+                    if (Array.isArray(result.data)) {
+                        // 后端直接返回数组
+                        records = result.data;
+                        // 如果数组长度等于pageSize，可能还有更多数据
+                        if (records.length >= 20) {
+                            totalPages = page + 1; // 假设还有下一页
+                        } else {
+                            totalPages = page; // 当前页是最后一页
+                        }
+                    } else if (result.data.list) {
+                        records = result.data.list;
+                        pagination = result.data.pagination || {};
+                        totalPages = pagination.pages || pagination.total_pages || 1;
+                    } else if (result.data.records) {
+                        records = result.data.records;
+                        pagination = result.data.pagination || {};
+                        totalPages = pagination.pages || pagination.total_pages || 1;
+                    } else {
+                        // 如果data不是数组也不是对象，尝试直接使用
+                        records = [];
+                    }
+
+                    currentPage = pagination.page || page;
+                    if (!totalPages) {
+                        totalPages = records.length > 0 ? page : 1;
+                    }
+
+                    console.log('[日利宝记录] 解析后的记录数:', records.length, '当前页:', currentPage, '总页数:', totalPages);
+
+                    if (page === 1) {
+                        displayRecords(records);
+                    } else {
+                        appendRecords(records);
+                    }
+
+                    const loadMoreSection = document.getElementById('loadMoreSection');
+                    if (records.length > 0 && records.length >= 20 && currentPage < totalPages) {
+                        loadMoreSection.style.display = 'block';
+                    } else {
+                        loadMoreSection.style.display = 'none';
+                    }
+                } else {
+                    console.warn('[日利宝记录] API返回错误:', result.message || result.msg || '未知错误');
+                    if (page === 1) {
+                        showEmptyState();
+                    }
+                }
+            } catch (e) {
+                console.error('[日利宝记录] 加载记录失败:', e);
+                showToast('', '加载失败，请稍后重试');
+                if (page === 1) {
+                    showEmptyState();
+                }
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        function displayRecords(records) {
+            const container = document.getElementById('recordsContainer');
+
+            if (records.length === 0) {
+                showEmptyState();
+                return;
+            }
+
+            container.innerHTML = records.map(record => {
+                console.log('[日利宝记录] 处理单条记录:', record);
+                const typeClass = record.type || record.transfer_type || 'in';
+                const typeText = typeClass === 'in' ? '转入' : '转出';
+                const typeIcon = typeClass === 'in' ? '📥' : '📤';
+                const amountSign = typeClass === 'in' ? '+' : '-';
+                // 后端返回amount字段，需要格式化
+                const amount = parseFloat(record.amount || record.transfer_amount || 0).toFixed(2);
+                const afterBalance = parseFloat(record.after_balance || record.balance_after || 0).toFixed(2);
+                // 格式化时间 - 后端返回created_at字段
+                let timeStr = '';
+                if (record.created_at) {
+                    try {
+                        const date = new Date(record.created_at);
+                        if (!isNaN(date.getTime())) {
+                            timeStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+                        } else {
+                            // 如果Date解析失败，尝试直接使用字符串
+                            timeStr = record.created_at;
+                        }
+                    } catch (e) {
+                        timeStr = record.created_at || '';
+                    }
+                } else if (record.date && record.time) {
+                    timeStr = `${record.date} ${record.time}`;
+                } else if (record.date) {
+                    timeStr = record.date;
+                } else {
+                    timeStr = '--';
+                }
+
+                return `
+                    <div class="record-card">
+                        <div class="record-header">
+                            <div class="record-type ${typeClass}">
+                                <span>${typeIcon}</span>
+                                <span>${typeText}</span>
+                            </div>
+                            <div class="record-amount ${typeClass}">
+                                ${amountSign}¥${amount}
+                            </div>
+                        </div>
+                        <div class="record-footer">
+                            <div class="record-balance">余额: ¥${afterBalance}</div>
+                            <div class="record-time">${timeStr}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function appendRecords(records) {
+            const container = document.getElementById('recordsContainer');
+            const newHTML = records.map(record => {
+                const typeClass = record.type || record.transfer_type || 'in';
+                const typeText = typeClass === 'in' ? '转入' : '转出';
+                const typeIcon = typeClass === 'in' ? '📥' : '📤';
+                const amountSign = typeClass === 'in' ? '+' : '-';
+                const amount = parseFloat(record.amount || record.transfer_amount || 0).toFixed(2);
+                const afterBalance = parseFloat(record.after_balance || record.balance_after || 0).toFixed(2);
+                let timeStr = '';
+                if (record.created_at) {
+                    try {
+                        const date = new Date(record.created_at);
+                        if (!isNaN(date.getTime())) {
+                            timeStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+                        } else {
+                            timeStr = record.created_at;
+                        }
+                    } catch (e) {
+                        timeStr = record.created_at || '';
+                    }
+                } else if (record.date && record.time) {
+                    timeStr = `${record.date} ${record.time}`;
+                } else if (record.date) {
+                    timeStr = record.date;
+                } else {
+                    timeStr = '--';
+                }
+
+                return `
+                    <div class="record-card">
+                        <div class="record-header">
+                            <div class="record-type ${typeClass}">
+                                <span>${typeIcon}</span>
+                                <span>${typeText}</span>
+                            </div>
+                            <div class="record-amount ${typeClass}">
+                                ${amountSign}¥${amount}
+                            </div>
+                        </div>
+                        <div class="record-footer">
+                            <div class="record-balance">余额: ¥${afterBalance}</div>
+                            <div class="record-time">${timeStr}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            container.insertAdjacentHTML('beforeend', newHTML);
+        }
+
+        function showEmptyState() {
+            const container = document.getElementById('recordsContainer');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">💰</div>
+                    <div class="empty-text">暂无日利宝记录</div>
+                </div>
+            `;
+        }
+
+        function filterByType(filter) {
+            currentFilter.type = filter;
+            currentFilter.currency = '';
+            currentPage = 1;
+
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            loadRecords(1);
+        }
+
+        function loadMore() {
+            loadRecords(currentPage + 1);
+        }
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script src="smart-swipe-control.js?v=1763897782"></script>
+
+
+</body>
+</html>

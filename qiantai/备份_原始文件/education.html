@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+  <title>PROVIDENCE · 投资学堂</title>
+  <link rel="icon" href="favicon.ico" />
+  <script src="ios-toast.js?v=1763813622"></script>
+  <style>
+    /* ========== 品牌配色（与首页统一） ========== */
+    :root {
+      --primary-dark: #0e2b44;
+      --primary-mid: #0d2851;
+      --primary-light: #091c2e;
+      --accent-gold: #c99b2b;
+      --accent-gold-light: #d4af37;
+      --accent-gold-dark: #c9a84a;
+      --white: #ffffff;
+      --white-bg: #e8eaed;
+      --gray-text: #6b7a8a;
+      --gray-light: #8a8a8a;
+      --success: #25d0a6;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", sans-serif;
+      background: var(--white-bg);
+        background-attachment: fixed;
+      color: #1a1a1a;
+      overflow-x: hidden;
+      padding-bottom: 20px;
+    }
+
+    /* ========== 顶部深蓝区 ========== */
+    .top-section {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-mid) 50%, var(--primary-dark) 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 15s ease infinite;
+      position: relative;
+      overflow: hidden;
+      padding-bottom: 20px;
+    }
+
+    @keyframes gradientShift {
+
+      0%,
+      100% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    /* 装饰光晕 */
+    .top-section::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -15%;
+
+      height: 400px;
+      background: radial-gradient(circle, rgba(201, 155, 43, 0.08), transparent 70%);
+      border-radius: 50%;
+      animation: glow 8s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+
+      0%,
+      100% {
+        opacity: 0.3;
+        transform: translate(0, 0);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: translate(-20px, 20px);
+      }
+    }
+
+    /* 导航栏 */
+    .navbar {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 10;
+      background: rgba(14, 43, 68, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(201, 155, 43, 0.15);
+    }
+
+    .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+
+    .back-btn:active {
+      transform: scale(0.95);
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+
+    
+
+    /* VIP会员卡 */
+    .vip-card {
+      margin: 16px 16px 24px;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+      border-radius: 16px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(201, 155, 43, 0.15) inset;
+      border: 1px solid rgba(201, 155, 43, 0.2);
+    }
+
+    .vip-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+    }
+
+    .vip-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: linear-gradient(135deg, rgba(201, 155, 43, 0.2), rgba(212, 175, 55, 0.15));
+      border: 1px solid rgba(201, 155, 43, 0.3);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-gold-light);
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .vip-title {
+      font-size: 22px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .vip-desc {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.5;
+    }
+
+    .vip-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 50px;
+      opacity: 0.2;
+    }
+
+    /* 学习统计 */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 0 16px 20px;
+    }
+
+    .stat-item {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 14px 10px;
+
+      border: 1px solid rgba(201, 155, 43, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(201, 155, 43, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .stat-unit {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-left: 2px;
+    }
+
+    /* ========== 白色内容区 ========== */
+    .content-section {
+      background: var(--white-bg);
+      border-radius: 24px 24px 0 0;
+      margin-top: -16px;
+      position: relative;
+      z-index: 1;
+      padding: 20px 0 40px;
+    }
+
+    /* 分类导航 */
+    .category-nav {
+      padding: 0 16px 16px;
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scrollbar-
+    }
+
+    .category-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-item {
+
+      padding: 10px 22px;
+      background: var(--white);
+      border: 1.5px solid #e5e5e5;
+      border-radius: 22px;
+      color: var(--gray-text);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .category-item.active {
+      background: linear-gradient(135deg, var(--accent-gold-dark), var(--accent-gold));
+      border-color: var(--accent-gold);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 2px 12px rgba(201, 155, 43, 0.25);
+    }
+
+    .category-item:active {
+      transform: scale(0.97);
+    }
+
+    /* 课程区域 */
+    .courses-area {
+      padding: 0 16px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-left: 4px;
+    }
+
+    .section-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #1a1a1a;
+      position: relative;
+      padding-left: 12px;
+    }
+
+    .section-title::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+
+      height: 16px;
+      background: var(--accent-gold);
+      border-radius: 2px;
+    }
+
+    .course-count {
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--gray-light);
+    }
+
+    /* 课程网格 */
+    .courses-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    /* 课程卡片 */
+    .course-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      position: relative;
+    }
+
+    .course-card:active {
+      transform: scale(0.98);
+    }
+
+    .course-card.locked {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .course-card.locked:active {
+      transform: none;
+    }
+
+    .course-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .course-icon-wrap {
+
+      height: 54px;
+      background: linear-gradient(135deg, #f8f9fa, #fff);
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(0, 0, 0, 0.03);
+    }
+
+    .course-info {
+      flex: 1;
+      min-
+    }
+
+    .course-tags {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .course-tag {
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .tag-level {
+      background: linear-gradient(135deg, rgba(201, 155, 43, 0.1), rgba(212, 175, 55, 0.08));
+      border: 1px solid rgba(201, 155, 43, 0.2);
+      color: var(--accent-gold-dark);
+    }
+
+    .tag-complete {
+      background: rgba(37, 208, 166, 0.1);
+      border: 1px solid rgba(37, 208, 166, 0.25);
+      color: var(--success);
+    }
+
+    .tag-lock {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 14px;
+      color: var(--gray-light);
+    }
+
+    .course-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1a1a;
+      line-height: 1.4;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .course-desc {
+      font-size: 12px;
+      color: var(--gray-text);
+      line-height: 1.5;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .course-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid #f5f5f5;
+    }
+
+    .course-meta {
+      display: flex;
+      gap: 14px;
+      font-size: 11px;
+      color: var(--gray-light);
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .course-btn {
+      padding: 6px 16px;
+      background: linear-gradient(135deg, var(--accent-gold-dark), var(--accent-gold));
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(201, 155, 43, 0.25);
+    }
+
+    .course-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* ========== 课程详情模态框 ========== */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal.show {
+      display: flex;
+      opacity: 1;
+      align-items: flex-end;
+    }
+
+    /* 防止背景滚动 */
+    body.modal-open {
+      overflow: hidden;
+      position: fixed;
+
+    }
+
+    .modal-dialog {
+
+      max-
+      max-height: 88vh;
+      background: var(--white);
+      border-radius: 20px 20px 0 0;
+      overflow: hidden;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    }
+
+    .modal.show .modal-dialog {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      padding: 20px;
+      background: linear-gradient(180deg, #fff, var(--white-bg));
+      border-bottom: 1px solid #f0f0f0;
+      position: relative;
+    }
+
+    .modal-handle {
+
+      height: 4px;
+      background: #d0d0d0;
+      border-radius: 2px;
+
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f5f5;
+      border-radius: 50%;
+      color: #666;
+      font-size: 20px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:active {
+      transform: scale(0.9);
+    }
+
+    .modal-icon {
+      font-size: 44px;
+
+      margin-bottom: 12px;
+    }
+
+    .modal-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: #1a1a1a;
+
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .modal-intro {
+      font-size: 13px;
+      color: var(--gray-text);
+
+      line-height: 1.6;
+    }
+
+    .modal-body {
+      padding: 16px;
+      max-height: calc(88vh - 200px);
+      overflow-y: auto;
+      background: #f5f6f8;
+    }
+
+    .modal-body::-webkit-scrollbar {
+
+    }
+
+    .modal-body::-webkit-scrollbar-thumb {
+      background: #d0d0d0;
+      border-radius: 2px;
+    }
+
+    .content-block {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .block-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .block-text {
+      font-size: 15px;
+      color: #333;
+      line-height: 1.8;
+      margin-bottom: 10px;
+    }
+
+    .block-tip {
+      background: rgba(201, 155, 43, 0.08);
+      border-left: 3px solid var(--accent-gold);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .list-objectives {
+      list-style: none;
+      padding: 0;
+    }
+
+    .list-objectives li {
+      padding: 8px 0;
+      padding-left: 22px;
+      position: relative;
+      font-size: 14px;
+      color: #333;
+      line-height: 1.7;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .list-objectives li:last-child {
+      border-bottom: none;
+    }
+
+    .list-objectives li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--accent-gold);
+      font-weight: 700;
+    }
+
+    .list-steps {
+      list-style: none;
+      padding: 0;
+    }
+
+    .list-steps li {
+      background: #fafbfc;
+      border: 1px solid #e8eaed;
+      border-radius: 10px;
+      padding: 12px 14px;
+      padding-left: 34px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #333;
+      line-height: 1.7;
+      position: relative;
+    }
+
+    .list-steps li::before {
+      content: '→';
+      position: absolute;
+      left: 14px;
+      color: var(--accent-gold);
+      font-weight: 700;
+    }
+
+    .modal-actions {
+      position: sticky;
+      bottom: 0;
+      background: var(--white);
+      padding: 14px 16px;
+      border-top: 1px solid #f0f0f0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn-action {
+      padding: 13px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-gold-dark), var(--accent-gold));
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(201, 155, 43, 0.25);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+
+    .btn-secondary {
+      background: var(--white-bg);
+      border: 1.5px solid #e5e5e5;
+      color: #1a1a1a;
+    }
+
+    .btn-secondary:active {
+      transform: scale(0.97);
+    }
+
+    /* ========== 底部导航 ========== */
+    .tabbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      border-top: 1px solid #f0f0f0;
+      padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+      z-index: 100;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .tabbar .tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4px 0;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .tabbar .ico {
+
+      height: 24px;
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin-bottom: 4px;
+      transition: transform 0.2s ease;
+    }
+
+    .tabbar .txt {
+      font-size: 10px;
+      color: #8a8a8a;
+      transition: color 0.2s ease;
+    }
+
+    .tabbar .tab.active .txt {
+      color: var(--gold-primary);
+      font-weight: 600;
+    }
+
+    .tabbar .tab.active .ico {
+      transform: scale(1.1);
+    }
+
+    /* 加载状态 */
+    .loading {
+
+      padding: 60px 20px;
+      color: var(--gray-light);
+      font-size: 14px;
+    }
+
+    .loading::before {
+      content: '⌛';
+
+      font-size: 36px;
+      margin-bottom: 12px;
+      animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* 响应式 */
+    @media (min-
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .modal {
+        align-items: center;
+      }
+
+      .modal-dialog {
+        max-
+        border-radius: 20px;
+        transform: scale(0.9);
+      }
+
+      .modal.show .modal-dialog {
+        transform: scale(1);
+      }
+    }
+
+.brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}      .brand .page-title, .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+  </style>
+</head>
+
+<body>
+  <!-- 顶部深蓝区 -->
+  <div class="top-section">
+    <div class="navbar">
+      <a href="index.html" class="back-btn">←</a>
+      <div class="page-title">PROVIDENCE</div>
+      <div class="nav-spacer"></div>
+    </div>
+
+    <div class="vip-card">
+      <div class="vip-badge">PROVIDENCE</div>
+      <div class="vip-title">专业投资知识体系</div>
+      <div class="vip-desc">系统学习 · 实战技巧 · 风险防控 · 持续进阶</div>
+      <div class="vip-icon">🎓</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-label">已学课程</div>
+        <div class="stat-value" id="statCompleted">0<span class="stat-unit">门</span></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">学习时长</div>
+        <div class="stat-value">0<span class="stat-unit">h</span></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">总课程数</div>
+        <div class="stat-value">69<span class="stat-unit">门</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 白色内容区 -->
+  <div class="content-section">
+    <div class="category-nav">
+      <div class="category-item active" data-category="fund">📈 基金投资</div>
+      <div class="category-item" data-category="ipo">🎯 IPO新股</div>
+      <div class="category-item" data-category="bond">💰 债券投资</div>
+    </div>
+
+    <div class="courses-area">
+      <div class="section-header">
+        <div class="section-title">精选课程</div>
+        <div class="course-count" id="courseCount">0门课程</div>
+      </div>
+      <div class="courses-grid" id="coursesGrid">
+        <div class="loading">加载课程中...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 模态框 -->
+  <div class="modal" id="modal">
+    <div class="modal-dialog" id="modalDialog"></div>
+  </div>
+
+  <!-- 底部导航 -->
+  <!-- 底部导航已移除 -->
+
+  <script defer src="education-data.js?v=1763813622"></script>
+  <script defer src="education-content.js?v=1763813622"></script>
+  <script>
+    const PROGRESS_KEY = 'education_progress_v4';
+    let currentCategory = 'fund';
+
+    function getProgress() {
+      const data = localStorage.getItem(PROGRESS_KEY);
+      return data ? JSON.parse(data) : [];
+    }
+
+    function saveProgress(completed) {
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify(completed));
+      updateStats();
+    }
+
+    function isCourseCompleted(id) {
+      return getProgress().includes(id);
+    }
+
+    function markComplete(id) {
+      const completed = getProgress();
+      if (!completed.includes(id)) {
+        completed.push(id);
+        saveProgress(completed);
+      }
+    }
+
+    function isUnlocked(id) {
+      const course = COURSES.find(c => c.id === id);
+      if (!course) return false;
+
+      const sameCat = COURSES
+        .filter(c => c.category === course.category)
+        .sort((a, b) => a.order - b.order);
+
+      if (sameCat[0].id === id) return true;
+
+      const idx = sameCat.findIndex(c => c.id === id);
+      if (idx <= 0) return false;
+
+      return isCourseCompleted(sameCat[idx - 1].id);
+    }
+
+    function updateStats() {
+      const completed = getProgress();
+      const el = document.getElementById('statCompleted');
+      if (el) {
+        el.innerHTML = `${completed.length}<span class="stat-unit">门</span>`;
+      }
+    }
+
+    function generateContent(course) {
+      const levelDesc = {
+        '入门': '本课程适合投资新手，从零开始系统学习',
+        '进阶': '本课程需要一定基础，帮助你进一步提升投资能力',
+        '高级': '本课程面向有经验的投资者，深入探讨高级投资策略'
+      };
+
+      const catNames = {
+        'fund': '基金投资',
+        'ipo': 'IPO新股',
+        'bond': '债券投资'
+      };
+
+      return {
+        intro: `欢迎学习《${course.title}》！${levelDesc[course.level]}。通过本课程的学习，你将掌握关键的投资知识和实战技巧。`,
+        objectives: [
+          `深入理解"${course.title}"的核心概念和原理`,
+          `掌握${catNames[course.category]}领域的实用技巧`,
+          `学会运用所学知识进行实际投资决策`,
+          `提升${course.level}阶段的专业投资能力`
+        ],
+        sections: [
+          {
+            title: "核心概念讲解",
+            text: `在本章节中，我们将系统学习《${course.title}》的基本定义、发展历程和重要意义。理解这些基础概念是掌握后续知识的关键。`,
+            tips: `建议先理解核心概念，再进入实战应用阶段。`
+          },
+          {
+            title: "关键要点分析",
+            text: `本节重点分析《${course.title}》中的关键要点和注意事项。我们将通过实际案例，帮助你深入理解这些要点在实战中的应用。`,
+            tips: `重点关注案例分析，思考如何将理论应用到实际投资中。`
+          },
+          {
+            title: "实战技巧分享",
+            text: `在掌握了理论知识后，本节将分享实用的投资技巧和策略。这些技巧都是经过市场验证的，可以直接应用到你的投资实践中。`,
+            tips: `建议边学边实践，通过模拟投资来验证所学技巧。`
+          },
+          {
+            title: "风险管理要点",
+            text: `任何投资都伴随风险，本节将详细讲解${catNames[course.category]}中的常见风险，以及相应的防范和应对策略。`,
+            tips: `风险管理永远是第一位的，不要为了追求高收益而忽视风险！`
+          }
+        ],
+        summary: `通过本课程的系统学习，你已经掌握了《${course.title}》的核心知识和实战技巧。记住，投资是一个持续学习的过程。`,
+        nextSteps: [
+          `复习本课程的关键知识点，确保完全理解`,
+          `继续学习下一课程，持续提升投资能力`,
+          `将所学知识应用到实际投资中，积累经验`,
+          `关注市场动态，保持学习热情`
+        ]
+      };
+    }
+
+    function renderCourses() {
+      const grid = document.getElementById('coursesGrid');
+      const filtered = COURSES.filter(c => c.category === currentCategory).sort((a, b) => a.order - b.order);
+
+      document.getElementById('courseCount').textContent = `${filtered.length}门课程`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div class="loading">暂无课程</div>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(course => {
+        const completed = isCourseCompleted(course.id);
+        const unlocked = isUnlocked(course.id);
+
+        return `
+          <div class="course-card ${!unlocked ? 'locked' : ''}" onclick="${unlocked ? `openCourse(${course.id})` : ''}">
+            <div class="course-top">
+              <div class="course-icon-wrap">${course.icon}</div>
+              <div class="course-info">
+                <div class="course-tags">
+                  <span class="course-tag tag-level">${course.level}</span>
+                  ${completed ? '<span class="course-tag tag-complete">✓ 已完成</span>' : ''}
+                </div>
+                <div class="course-title">${course.title}</div>
+              </div>
+              ${!unlocked ? '<span class="tag-lock">🔒</span>' : ''}
+            </div>
+            <div class="course-desc">${course.desc || '系统学习投资知识，掌握实战技巧'}</div>
+            <div class="course-bottom">
+              <div class="course-meta">
+                <span class="meta-item">⏱️ ${course.duration}</span>
+                <span class="meta-item">📚 ${course.lessons}课时</span>
+              </div>
+              ${unlocked && !completed ? '<button class="course-btn" onclick="event.stopPropagation(); openCourse(' + course.id + ')">开始学习</button>' : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openCourse(id) {
+      const course = COURSES.find(c => c.id === id);
+      if (!course) return;
+
+      let content = window.COURSE_CONTENTS && window.COURSE_CONTENTS[id];
+      if (!content) {
+        content = generateContent(course);
+      }
+
+      const completed = isCourseCompleted(id);
+
+      const html = `
+        <div class="modal-header">
+          <div class="modal-handle"></div>
+          <button class="modal-close" onclick="closeModal()">×</button>
+          <div class="modal-icon">${course.icon}</div>
+          <h2 class="modal-title">${course.title}</h2>
+          <p class="modal-intro">${content.intro}</p>
+        </div>
+        <div class="modal-body">
+          <div class="content-block">
+            <div class="block-title">🎯 学习目标</div>
+            <ul class="list-objectives">
+              ${content.objectives.map(obj => `<li>${obj}</li>`).join('')}
+            </ul>
+          </div>
+
+          ${content.sections.map((sec, idx) => `
+            <div class="content-block">
+              <div class="block-title">${idx + 1}️⃣ ${sec.title}</div>
+              <div class="block-text">${sec.text}</div>
+              ${sec.tips ? `<div class="block-tip">💡 ${sec.tips}</div>` : ''}
+            </div>
+          `).join('')}
+
+          <div class="content-block">
+            <div class="block-title">📝 课程总结</div>
+            <div class="block-text">${content.summary}</div>
+          </div>
+
+          <div class="content-block">
+            <div class="block-title">🚀 下一步行动</div>
+            <ul class="list-steps">
+              ${content.nextSteps.map(step => `<li>${step}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+        <div class="modal-actions">
+          ${!completed ?
+          `<button class="btn-action btn-primary" onclick="completeCourse(${id})">✓ 标记为已完成</button>` :
+          `<button class="btn-action btn-secondary" disabled style="opacity:0.5">✓ 已完成</button>`
+        }
+          <button class="btn-action btn-secondary" onclick="closeModal()">稍后学习</button>
+        </div>
+      `;
+
+      document.getElementById('modalDialog').innerHTML = html;
+      document.getElementById('modal').classList.add('show');
+      document.body.classList.add('modal-open');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('show');
+      document.body.classList.remove('modal-open');
+    }
+
+    function completeCourse(id) {
+      markComplete(id);
+      showToast('🎉 恭喜完成本课程！');
+      closeModal();
+      renderCourses();
+    }
+
+    function init() {
+      document.querySelectorAll('.category-item').forEach(item => {
+        item.addEventListener('click', function () {
+          document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+          this.classList.add('active');
+          currentCategory = this.getAttribute('data-category');
+          renderCourses();
+        });
+      });
+
+      document.getElementById('modal').addEventListener('click', function (e) {
+        if (e.target === this) {
+          closeModal();
+        }
+      });
+
+      updateStats();
+      renderCourses();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+     else {
+      init();
+    
+  </script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script defer src="smart-swipe-control.js?v=1763813622"></script>
+
+
+</body>
+
+</html>

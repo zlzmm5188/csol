@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>绑定Telegram - Providence</title>
+    <link rel="stylesheet" href="styles.css?v=1763712000">
+    <style>
+        .telegram-bind-page {
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .telegram-bind-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .telegram-bind-header h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .telegram-bind-code {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+        .bind-code-display {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+            letter-spacing: 8px;
+            margin: 10px 0;
+        }
+        .telegram-bind-instructions {
+            margin: 20px 0;
+        }
+        .telegram-bind-instructions ol {
+            padding-left: 20px;
+            line-height: 2;
+        }
+        .telegram-bind-status {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 10px;
+        }
+        .bind-loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .telegram-bind-cancel {
+            width: 100%;
+            padding: 12px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .telegram-bind-success {
+            text-align: center;
+            padding: 30px;
+        }
+        .telegram-bind-success h3 {
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="telegram-bind-page">
+        <div id="telegramBindContainer" class="telegram-bind-container">
+            <div style="text-align: center; padding: 40px;">
+                <p>加载中...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js?v=1763712000"></script>
+    <script src="token-manager.js?v=1763712000"></script>
+    <script src="telegram-api.js?v=1763712000"></script>
+    <script src="ios-toast.js?v=1763685589"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('telegramBindContainer');
+            const telegramBind = new TelegramBindUI('telegramBindContainer');
+        });
+    </script>
+</body>
+</html>

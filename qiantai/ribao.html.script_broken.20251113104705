@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <title>日利宝 - Providence</title>
+    <link rel="stylesheet" href="styles.css?v=1763019500">
+    <style>
+        :root {
+            --gold: #c8ba94;
+            --gold2: #f5d771;
+            --green: #26A17B;
+            --ink: #0f172a;
+            --lineD: rgba(255,255,255,0.08);
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        html, body {
+            color: rgba(255,255,255,0.85);
+            -webkit-font-smoothing: antialiased;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        body {
+            background: linear-gradient(180deg, #0a1723 0%, #0f1c2a 100%) !important;
+            padding-bottom: 65px !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* 顶部导航 - 间距优化 */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, rgba(10,23,35,.95), rgba(10,23,35,.75));
+            backdrop-filter: blur(6px);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--lineD);
+            margin-bottom: 4px;
+        }
+
+        .back-btn {
+            width: 8.5vw;
+            height: 8.5vw;
+            min-width: 32px;
+            min-height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: rgba(255,255,255,.08);
+            color: #fff;
+            font-size: 5vw;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 4.5vw;
+            letter-spacing: .3px;
+            color: #fff;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+        }
+
+        .history-link {
+            font-size: 3.5vw;
+            color: #fff;
+            text-decoration: none;
+            padding: 1.5vw 3vw;
+            border-radius: 8px;
+            background: rgba(255,255,255,.08);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* Hero区域 - 增加间距 */
+        .hero {
+            padding: 4px 16px 16px; /* 底部增加间距 */
+            background: linear-gradient(180deg, rgba(10,23,35,.8) 0%, rgba(15,28,42,.6) 100%);
+            margin-bottom: 16px; /* 与section分开 */
+            margin-top: 0;
+            height: auto;
+        }
+
+        .hero h2 {
+            margin: 0 0 4px;
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            transition: color 0.3s ease;
+        }
+
+        /* CNY模式 - 金色标题 */
+        .hero h2.cny-mode {
+            color: var(--gold2);
+        }
+
+        /* USDT模式 - 绿色标题 */
+        .hero h2.usdt-mode {
+            color: var(--green);
+        }
+
+        .hero p {
+            margin: 0 0 12px;
+            color: rgba(255,255,255,0.82);
+            font-size: 13px;
+            text-align: center;
+        }
+
+        /* 币种切换tabs */
+        .currency-tabs {
+            display: flex;
+            gap: 8px;
+            margin: 0 0 8px 0;
+            background: rgba(255,255,255,0.03);
+            padding: 4px;
+            border-radius: 10px;
+        }
+
+        .currency-tab {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            color: rgba(255,255,255,0.6);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .currency-tab.active.cny {
+            background: linear-gradient(135deg, rgba(220,178,79,.15), rgba(163,121,29,.08));
+            color: #fff;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(220,178,79,0.15);
+            /* 不需要动态改变，保持金色 */
+        }
+
+        .currency-tab.active.usdt {
+            background: linear-gradient(135deg, rgba(38,161,123,.15), rgba(30,138,104,.08));
+            color: #fff;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(38,161,123,0.15);
+        }
+
+        .currency-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .currency-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* 人民币图标稍大 */
+        .currency-tab.cny .currency-icon img {
+            width: 115%;
+            height: 115%;
+        }
+
+        /* KPI指标 - 间距4px */
+        .kpis {
+            display: flex;
+            gap: 6px;
+            margin: 0 0 4px 0;
+            height: auto;
+        }
+
+        .kpi {
+            flex: 1;
+            background: rgba(255,255,255,.06);
+            border: 1px solid var(--lineD);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            height: auto;
+        }
+
+        .kpi b {
+            display: block;
+            font-size: 15px;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .kpi small {
+            font-size: 11px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* 操作区域 - 间距8px */
+        .section {
+            margin: 0 16px 12px;
+            background: rgba(16, 27, 45, 0.92);
+            border-radius: 12px;
+            padding: 14px;
+            border: 1px solid rgba(200, 186, 148, 0.3);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+        }
+
+        .section .head h3 {
+            margin: 0 0 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+        }
+
+        /* 切换按钮组 */
+        .tab-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            background: rgba(255,255,255,0.05);
+            padding: 4px;
+            border-radius: 10px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            color: rgba(255,255,255,0.6);
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            color: #fff;
+        }
+
+        /* CNY模式下的按钮 - 淡金色渐变+反光 */
+        .tab-btn.active.cny-mode {
+            background: linear-gradient(135deg, rgba(200, 186, 148, 0.35) 0%, rgba(163, 147, 99, 0.25) 100%);
+            box-shadow: 0 4px 12px rgba(200, 186, 148, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tab-btn.active.cny-mode::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shine 3s infinite;
+        }
+        
+        /* USDT模式下的按钮 - 淡绿色渐变+反光 */
+        .tab-btn.active.usdt-mode {
+            background: linear-gradient(135deg, rgba(38, 161, 123, 0.35) 0%, rgba(30, 138, 104, 0.25) 100%);
+            box-shadow: 0 4px 12px rgba(38, 161, 123, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tab-btn.active.usdt-mode::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* 表单区域 */
+        .form-area {
+            display: none;
+        }
+
+        .form-area.active {
+            display: block;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 12px;
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--green);
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            margin-top: -8px;
+            margin-bottom: 12px;
+        }
+
+        .quick-amounts {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .quick-btn {
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        /* CNY模式 - 金色快捷按钮 */
+        .quick-btn.cny-mode {
+            border: 1px solid rgba(200, 186, 148, 0.3);
+        }
+
+        .quick-btn.cny-mode:active {
+            background: rgba(200, 186, 148, 0.2);
+            border-color: var(--gold);
+        }
+
+        /* USDT模式 - 绿色快捷按钮 */
+        .quick-btn.usdt-mode {
+            border: 1px solid rgba(38, 161, 123, 0.3);
+        }
+
+        .quick-btn.usdt-mode:active {
+            background: rgba(38, 161, 123, 0.2);
+            border-color: var(--green);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* CNY模式下的提交按钮 - 淡金色渐变+反光 */
+        .submit-btn.cny-mode {
+            background: linear-gradient(135deg, rgba(200, 186, 148, 0.45) 0%, rgba(163, 147, 99, 0.35) 100%);
+            box-shadow: 0 8px 20px rgba(200, 186, 148, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-btn.cny-mode::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shine 3s infinite;
+        }
+        
+        /* USDT模式下的提交按钮 - 淡绿色渐变+反光 */
+        .submit-btn.usdt-mode {
+            background: linear-gradient(135deg, rgba(38, 161, 123, 0.45) 0%, rgba(30, 138, 104, 0.35) 100%);
+            box-shadow: 0 8px 20px rgba(38, 161, 123, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-btn.usdt-mode::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shine 3s infinite;
+        }
+
+        /* 收益说明 - 间距8px */
+        .tips-box {
+            margin: 0 16px 12px;
+            background: rgba(18, 30, 49, 0.88);
+            border: 1px solid rgba(200, 186, 148, 0.28);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: inset 0 0 18px rgba(0,0,0,0.18);
+        }
+
+        .tips-box h4 {
+            margin: 0 0 8px;
+            color: rgba(255,255,255,0.92);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .tips-box ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .tips-box li {
+            font-size: 12px;
+            color: rgba(255,255,255,0.78);
+            line-height: 1.6;
+            margin-bottom: 4px;
+        }
+
+        .tips-box li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 弹窗 */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(6, 10, 20, 0.82);
+            z-index: 1000;
+            align-items: flex-end;
+        }
+
+        .popup-overlay.show {
+            display: flex;
+        }
+
+        .popup-content {
+            width: 100%;
+            background: linear-gradient(180deg, #1a2332 0%, #0f1820 100%);
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            max-height: 35vh;
+        }
+
+        .popup-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .password-input {
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 20px;
+            color: #fff;
+            text-align: center;
+            letter-spacing: 0.5em;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        /* CNY模式下的密码输入框 */
+        .password-input.cny-mode {
+            border: 1px solid rgba(200, 186, 148, 0.5);
+        }
+
+        .password-input.cny-mode:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(200, 186, 148, 0.2);
+        }
+
+        /* USDT模式下的密码输入框 */
+        .password-input.usdt-mode {
+            border: 1px solid rgba(38, 161, 123, 0.5);
+        }
+
+        .password-input.usdt-mode:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(38, 161, 123, 0.2);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .popup-content.shake {
+            animation: shake 0.3s ease;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="topbar">
+        <a href="javascript:history.back()" class="back-btn">‹</a>
+        <div class="brand"><h1>日利宝</h1></div>
+        <a href="ribao-history.html" class="history-link">明细</a>
+    </div>
+
+    <div class="hero">
+        <h2 id="heroTitle" class="cny-mode">💰 日利宝账户</h2>
+        <p>高收益理财，每日自动结算收益</p>
+
+        <!-- 币种切换 -->
+        <div class="currency-tabs">
+            <button class="currency-tab active cny" onclick="switchCurrency('CNY')" data-currency="CNY">
+                <div class="currency-icon">
+                    <img src="tp/yh.jpg" alt="人民币">
+                </div>
+                <span>人民币</span>
+            </button>
+            <button class="currency-tab usdt" onclick="switchCurrency('USDT')" data-currency="USDT">
+                <div class="currency-icon">
+                    <img src="tp/rencyLogo.jpg" alt="USDT">
+                </div>
+                <span>USDT</span>
+            </button>
+        </div>
+
+        <div class="kpis">
+            <div class="kpi">
+                <b id="ribaoBalance">0.00</b>
+                <small>账户余额</small>
+            </div>
+            <div class="kpi">
+                <b id="todayEarnings">0.00</b>
+                <small>今日收益</small>
+            </div>
+            <div class="kpi">
+                <b id="totalEarnings">0.00</b>
+                <small>累计收益</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="head">
+            <h3>💼 日利宝操作</h3>
+        </div>
+
+        <div class="tab-buttons">
+            <button class="tab-btn active cny-mode" onclick="switchTab('in')">转入</button>
+            <button class="tab-btn cny-mode" onclick="switchTab('out')">转出</button>
+        </div>
+
+        <!-- 转入表单 -->
+        <div class="form-area active" id="formIn">
+            <label class="form-label">转入金额</label>
+            <input type="tel" class="form-input" id="amountIn" placeholder="请输入转入金额">
+            <div class="form-hint" id="hintIn">从余额账户转入日利宝，当前收益率：<span id="rateIn">0.1%</span>/日</div>
+
+            <div class="quick-amounts">
+                <button class="quick-btn cny-mode" onclick="quickAmount('in', 100)">100</button>
+                <button class="quick-btn cny-mode" onclick="quickAmount('in', 500)">500</button>
+                <button class="quick-btn cny-mode" onclick="quickAmount('in', 1000)">1000</button>
+                <button class="quick-btn cny-mode" onclick="quickAmount('in', 5000)">5000</button>
+            </div>
+
+            <button class="submit-btn cny-mode" onclick="confirmTransfer('in')">确认转入</button>
+        </div>
+
+        <!-- 转出表单 -->
+        <div class="form-area" id="formOut">
+            <label class="form-label">转出金额</label>
+            <input type="tel" class="form-input" id="amountOut" placeholder="请输入转出金额">
+            <div class="form-hint">从日利宝转出至余额账户</div>
+
+            <div class="quick-amounts">
+                <button class="quick-btn cny-mode" onclick="quickAmount('out', 100)">100</button>
+                <button class="quick-btn cny-mode" onclick="quickAmount('out', 500)">500</button>
+                <button class="quick-btn cny-mode" onclick="quickAmount('out', 1000)">1000</button>
+                <button class="quick-btn cny-mode" onclick="quickAmount('out', 'all')">全部</button>
+            </div>
+
+            <button class="submit-btn cny-mode" onclick="confirmTransfer('out')">确认转出</button>
+        </div>
+    </div>
+
+    <div class="tips-box">
+        <h4>📖 收益说明</h4>
+        <ul id="tipsContent">
+            <li id="rateTip">人民币日收益率：0.1% - 0.3%</li>
+            <li>收益计算：每日凌晨自动结算</li>
+            <li>转入/转出：即时到账，无手续费</li>
+            <li>最低转入：100元起</li>
+        </ul>
+    </div>
+
+    <!-- 支付密码弹窗 -->
+    <div class="popup-overlay" id="passwordPopup" onclick="closePopup()">
+        <div class="popup-content" id="popupContent" onclick="event.stopPropagation()">
+            <div class="popup-title">请输入支付密码</div>
+            <input type="tel" class="password-input cny-mode" id="payPassword" placeholder="••••••" maxlength="6" inputmode="numeric">
+            <button class="submit-btn cny-mode" onclick="submitTransfer()">确认</button>
+        </div>
+    </div>
+
+// Providence 日利宝页面 - API对接修复
+// 移除所有硬编码数据，使用真实API
+
+// 全局数据
+let ribaoData = null;
+let userData = null;
+
+// 初始化
+async function init() {
+    console.log('💰 日利宝页面初始化');
+    
+    // 等待API加载
+    await waitForAPI();
+    
+    // 加载数据
+    await loadRibaoData();
+    await loadUserData();
+}
+
+// 等待API配置加载
+function waitForAPI() {
+    return new Promise((resolve) => {
+        if (window.API && window.API_CONFIG) {
+            resolve();
+        } else {
+            const check = setInterval(() => {
+                if (window.API && window.API_CONFIG) {
+                    clearInterval(check);
+                    resolve();
+                }
+            }, 50);
+            setTimeout(() => {
+                clearInterval(check);
+                resolve();
+            }, 3000);
+        }
+    });
+}
+
+// 加载日利宝数据
+// 修复：切换币种时更新所有按钮的class
+function updateButtonColors(currency) {
+    const allButtons = document.querySelectorAll('.action-btn, .quick-amount');
+    const section = document.querySelector('.section');
+    
+    if (currency === 'USDT') {
+        allButtons.forEach(btn => {
+            btn.classList.remove('cny-mode');
+            btn.classList.add('usdt-mode');
+        });
+        if (section) {
+            section.classList.add('usdt-mode');
+        }
+    } else {
+        allButtons.forEach(btn => {
+            btn.classList.remove('usdt-mode');
+            btn.classList.add('cny-mode');
+        });
+        if (section) {
+            section.classList.remove('usdt-mode');
+        }
+    }
+}
+
+// 在selectCurrency函数中调用
+const originalSelectCurrency = window.selectCurrency;
+window.selectCurrency = function(currency) {
+    if (originalSelectCurrency) {
+        originalSelectCurrency(currency);
+    }
+    updateButtonColors(currency);
+};
+
+// 页面加载时初始化
+document.addEventListener('DOMContentLoaded', function() {
+    updateButtonColors(selectedCurrency || 'CNY');
+});
+    <script src="ios-toast.js?v=1763019500"></script>
+    <script>
+        let currentTab = 'in';
+        let currentCurrency = 'CNY';
+        let transferAmount = 0;
+        let ribaoData = {
+            CNY: { balance: 0, todayEarnings: 0, totalEarnings: 0, rate: 0.001 },
+            USDT: { balance: 0, todayEarnings: 0, totalEarnings: 0, rate: 0.002 }
+        };
+
+        // 右滑返回
+        let touchStartX = 0, touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX - touchStartX > 100) {
+                history.back();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!ApiService.auth.ensureLogin()) return;
+
+            // 初始化为CNY金色模式
+            updateColorMode('CNY');
+
+            loadRibaoData();
+            loadRates();
+            loadUserBalance(); // 加载用户钱包余额
+        });
+
+        async function loadRibaoData() {
+            try {
+                const res = await fetch('https://api', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'token': localStorage.getItem('token') || ''
+                    }
+                });
+                const result = await res.json();
+                if (result.code === 1 && result.data) {
+                    ribaoData.CNY = result.data.CNY || ribaoData.CNY;
+                    ribaoData.USDT = result.data.USDT || ribaoData.USDT;
+                    updateDisplay();
+                }
+            } catch (e) {
+                console.error('加载日利宝数据失败:', e);
+            }
+        }
+
+        async function loadRates() {
+            try {
+                const res = await fetch('https://api', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'token': localStorage.getItem('token') || ''
+                    }
+                });
+                const result = await res.json();
+                if (result.code === 1 && result.data) {
+                    ribaoData.CNY.rate = result.data.CNY?.rate || 0.001;
+                    ribaoData.USDT.rate = result.data.USDT?.rate || 0.002;
+                    updateRateDisplay();
+                }
+            } catch (e) {
+                console.error('加载收益率失败:', e);
+            }
+        }
+
+        function switchCurrency(currency) {
+            currentCurrency = currency;
+
+            // 移除所有active类
+            document.querySelectorAll('.currency-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // 为当前选中的tab添加active类
+            document.querySelector(`.currency-tab[data-currency="${currency}"]`).classList.add('active');
+
+            // 动态切换所有按钮的颜色模式
+            updateColorMode(currency);
+
+            updateDisplay();
+            updateRateDisplay();
+        }
+
+        function updateColorMode(currency) {
+            const modeClass = currency === 'CNY' ? 'cny-mode' : 'usdt-mode';
+            const removeClass = currency === 'CNY' ? 'usdt-mode' : 'cny-mode';
+
+            // 更新标题颜色
+            const heroTitle = document.getElementById('heroTitle');
+            if (heroTitle) {
+                heroTitle.classList.remove(removeClass);
+                heroTitle.classList.add(modeClass);
+            }
+
+            // 更新转入/转出tab按钮
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove(removeClass);
+                btn.classList.add(modeClass);
+            });
+
+            // 更新确认按钮
+            document.querySelectorAll('.submit-btn').forEach(btn => {
+                btn.classList.remove(removeClass);
+                btn.classList.add(modeClass);
+            });
+
+            // 更新快捷金额按钮
+            document.querySelectorAll('.quick-btn').forEach(btn => {
+                btn.classList.remove(removeClass);
+                btn.classList.add(modeClass);
+            });
+
+            // 更新密码输入框
+            const passwordInput = document.getElementById('payPassword');
+            if (passwordInput) {
+                passwordInput.classList.remove(removeClass);
+                passwordInput.classList.add(modeClass);
+            }
+        }
+
+        function updateDisplay() {
+            const data = ribaoData[currentCurrency];
+            const symbol = currentCurrency === 'USDT' ? '$' : '¥';
+            document.getElementById('ribaoBalance').textContent = symbol + data.balance.toFixed(currentCurrency === 'USDT' ? 4 : 2);
+            document.getElementById('todayEarnings').textContent = symbol + data.todayEarnings.toFixed(currentCurrency === 'USDT' ? 4 : 2);
+            document.getElementById('totalEarnings').textContent = symbol + data.totalEarnings.toFixed(currentCurrency === 'USDT' ? 4 : 2);
+        }
+
+        function updateRateDisplay() {
+            const rate = (ribaoData[currentCurrency].rate * 100).toFixed(2);
+            document.getElementById('rateIn').textContent = rate + '%';
+            const currencyName = currentCurrency === 'CNY' ? '人民币' : 'USDT';
+            document.getElementById('rateTip').textContent = `${currencyName}日收益率：${rate}%`;
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.form-area').forEach(area => area.classList.remove('active'));
+
+            const modeClass = currentCurrency === 'CNY' ? 'cny-mode' : 'usdt-mode';
+
+            if (tab === 'in') {
+                const btn = document.querySelector('.tab-btn:first-child');
+                btn.classList.add('active');
+                btn.classList.add(modeClass);
+                document.getElementById('formIn').classList.add('active');
+            } else {
+                const btn = document.querySelector('.tab-btn:last-child');
+                btn.classList.add('active');
+                btn.classList.add(modeClass);
+                document.getElementById('formOut').classList.add('active');
+            }
+        }
+
+        function quickAmount(type, value) {
+            const input = type === 'in' ? document.getElementById('amountIn') : document.getElementById('amountOut');
+            if (value === 'all') {
+                const precision = currentCurrency === 'USDT' ? 4 : 2;
+                input.value = ribaoData[currentCurrency].balance.toFixed(precision);
+            } else {
+                input.value = value;
+            }
+        }
+
+        function confirmTransfer(type) {
+            const input = type === 'in' ? document.getElementById('amountIn') : document.getElementById('amountOut');
+            const amount = parseFloat(input.value);
+
+            if (!amount || amount <= 0) {
+                showToast('', '请输入有效金额');
+                return;
+            }
+
+            if (type === 'in') {
+                // 检查转入金额最低限制
+                if (amount < 100) {
+                    showToast('', '转入金额最低100起');
+                    return;
+                }
+
+                // 检查用户余额是否足够（需要从API获取用户余额）
+                // 暂时假设余额存储在 userBalance 对象中
+                const userBalance = getUserBalance(currentCurrency);
+                if (amount > userBalance) {
+                    showToast('', `${currentCurrency === 'CNY' ? '人民币' : 'USDT'}余额不足`);
+                    return;
+                }
+            }
+
+            if (type === 'out' && amount > ribaoData[currentCurrency].balance) {
+                showToast('', '日利宝余额不足');
+                return;
+            }
+
+            transferAmount = amount;
+            document.getElementById('passwordPopup').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('payPassword').focus();
+            }, 300);
+        }
+
+        // 获取用户钱包余额（需要从API加载）
+        let userBalances = {
+            CNY: 0,
+            USDT: 0
+        };
+
+        function getUserBalance(currency) {
+            return userBalances[currency] || 0;
+        }
+
+        // 在页面加载时获取用户余额
+        async function loadUserBalance() {
+            try {
+                const res = await ApiService.finance.getUserBalance();
+                if (res.code === 1 && res.data) {
+                    userBalances.CNY = parseFloat(res.data.balance || 0);
+                    userBalances.USDT = parseFloat(res.data.usdt_balance || 0);
+                }
+            } catch (e) {
+                console.error('加载用户余额失败:', e);
+            }
+        }
+
+        async function submitTransfer() {
+            const pwd = document.getElementById('payPassword').value.trim();
+
+            if (!pwd || pwd.length !== 6) {
+                const popup = document.getElementById('popupContent');
+                popup.classList.add('shake');
+                setTimeout(() => popup.classList.remove('shake'), 300);
+                showToast('', '请输入6位支付密码');
+                return;
+            }
+
+            try {
+                const res = await fetch('https://api', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'token': localStorage.getItem('token') || ''
+                    },
+                    body: JSON.stringify({
+                        type: currentTab,
+                        currency: currentCurrency,
+                        amount: transferAmount,
+                        pay_password: pwd
+                    })
+                });
+
+                const result = await res.json();
+
+                if (result.code === 1) {
+                    closePopup();
+                    showToast('', currentTab === 'in' ? '转入成功' : '转出成功');
+                    document.getElementById('amountIn').value = '';
+                    document.getElementById('amountOut').value = '';
+                    loadRibaoData();
+                } else {
+                    showToast('', result.message || '操作失败');
+                }
+            } catch (e) {
+                showToast('', '网络错误，请重试');
+            }
+        }
+
+        function closePopup() {
+            document.getElementById('passwordPopup').classList.remove('show');
+            document.getElementById('payPassword').value = '';
+        }
+    </script>
+</body>
+</html>

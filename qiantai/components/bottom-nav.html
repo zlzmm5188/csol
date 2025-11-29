@@ -1,0 +1,42 @@
+<!-- 底部导航组件 -->
+<div class="bottom-nav">
+    <a href="index.html" class="nav-item">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">首页</span>
+    </a>
+    <a href="data.html" class="nav-item">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">数据</span>
+    </a>
+    <a href="projects-list.html" class="nav-item">
+        <span class="nav-icon">💼</span>
+        <span class="nav-label">项目</span>
+    </a>
+    <a href="messages.html" class="nav-item">
+        <span class="nav-icon">💬</span>
+        <span class="nav-label">消息</span>
+    </a>
+    <a href="profile.html" class="nav-item" id="nav-profile">
+        <span class="nav-icon">👤</span>
+        <span class="nav-label">我的</span>
+    </a>
+</div>
+
+<script>
+// 自动激活当前页面的导航项
+(function() {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+    
+    navItems.forEach(item => {
+        const href = item.getAttribute('href');
+        if (href === currentPage || 
+            (currentPage.includes('profile') && href === 'profile.html') ||
+            (currentPage.includes('ribao') && href === 'profile.html') ||
+            (currentPage.includes('team') && href === 'profile.html') ||
+            (currentPage.includes('points') && href === 'profile.html')) {
+            item.classList.add('active');
+        }
+    });
+})();
+</script>

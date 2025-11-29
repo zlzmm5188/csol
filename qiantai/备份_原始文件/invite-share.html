@@ -1,0 +1,1166 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>邀请好友 - Providence</title>
+    <link rel="stylesheet" href="styles.css?v=1763813622" />
+    <style>
+
+* {
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+html,
+body {
+    touch-action: pan-y !important;
+    -ms-touch-action: pan-y !important;
+    overscroll-behavior: none !important;
+    -webkit-overscroll-behavior: none !important;
+    background: linear-gradient(180deg, #0e2b44 0%, #091c2e 100%) !important;
+        background-attachment: fixed;
+  padding-top: 60px;}
+
+body {
+    -webkit-overflow-scrolling: touch;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#app {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        touch-action: pan-x pan-y;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      html,
+      body {
+        height: 100%;
+        overflow-x: hidden;
+        touch-action: pan-x pan-y !important;
+        -ms-touch-action: pan-x pan-y !important;
+      }
+
+      body {
+        background: linear-gradient(180deg, #0e2b44 0%, #091c2e 100%);
+        min-height: 100vh;
+        padding-bottom: 20px;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        position: relative;
+        animation: pageFadeIn 0.6s ease-out;
+      }
+
+      @keyframes pageFadeIn {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* 背景光效 */
+      body::before {
+        content: "";
+        position: fixed;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(246, 210, 122, 0.08) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: glowPulse 4s ease-in-out infinite;
+        filter: blur(80px);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      @keyframes glowPulse {
+        0%,
+        100% {
+          opacity: 0.5;
+          transform: translateX(-50%) scale(1);
+        }
+
+        50% {
+          opacity: 0.8;
+          transform: translateX(-50%) scale(1.3);
+        }
+      }
+
+      /* 顶部导航 */
+      .hero-simple {
+        position: relative;
+        z-index: 10;
+        background: transparent;
+      }
+
+      .hero-top {
+        display: flex;
+        align-items: center;
+        gap: clamp(12px, 3vw, 16px);
+        padding: clamp(16px, 4vw, 20px) clamp(16px, 4vw, 20px);
+        position: relative;
+        z-index: 10;
+      }
+
+      .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+
+      .back-btn:active {
+        background: rgba(246, 210, 122, 0.2);
+        transform: scale(0.95);
+      }
+
+      .hero-top .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+
+      /* 主容器 */
+      .invite-container {
+        padding: clamp(16px, 4vw, 20px);
+        max-width: 100%;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* 卡片样式 */
+      .share-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(15px);
+        border-radius: 16px;
+        padding: clamp(20px, 5vw, 24px);
+        margin-bottom: clamp(16px, 4vw, 20px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(246, 210, 122, 0.2);
+        animation: cardSlideUp 0.8s ease-out both;
+      }
+
+      @keyframes cardSlideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .share-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+
+      .share-card:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      .share-card:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      .share-card:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+
+      .share-card:nth-child(5) {
+        animation-delay: 0.5s;
+      }
+
+      /* 顶部说明 */
+      .invite-intro {
+        text-align: center;
+        margin-bottom: clamp(16px, 4vw, 20px);
+      }
+
+      .intro-icon {
+        font-size: clamp(48px, 12vw, 56px);
+        margin-bottom: clamp(12px, 3vw, 16px);
+        filter: drop-shadow(0 0 20px rgba(246, 210, 122, 0.5));
+      }
+
+      .intro-title {
+        font-size: clamp(20px, 5vw, 22px);
+        font-weight: 700;
+        background: linear-gradient(
+          135deg,
+          #f6d27a 0%,
+          #f6c952 50%,
+          #d4a574 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: clamp(8px, 2vw, 10px);
+      }
+
+      .intro-desc {
+        font-size: clamp(13px, 3.25vw, 14px);
+        color: rgba(246, 210, 122, 0.7);
+        line-height: 1.6;
+      }
+
+      .share-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: clamp(12px, 3vw, 16px);
+      }
+
+      .share-icon {
+        font-size: clamp(20px, 5vw, 24px);
+        filter: drop-shadow(0 0 10px rgba(246, 210, 122, 0.5));
+      }
+
+      .share-title {
+        font-size: clamp(16px, 4vw, 18px);
+        font-weight: 700;
+        color: #f6d27a;
+      }
+
+      .share-link-box {
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(246, 210, 122, 0.2);
+        border-radius: 12px;
+        padding: clamp(14px, 3.5vw, 16px);
+        margin-bottom: clamp(12px, 3vw, 16px);
+        word-break: break-all;
+        font-size: clamp(13px, 3.25vw, 14px);
+        color: rgba(246, 210, 122, 0.9);
+        line-height: 1.6;
+        text-align: center;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-copy {
+
+        background: linear-gradient(
+          135deg,
+          #f6d27a 0%,
+          #f6c952 50%,
+          #d4a574 100%
+        );
+        color: #1a1a1a;
+        border: 1px solid rgba(246, 201, 82, 0.6);
+        padding: clamp(14px, 3.5vw, 16px);
+        border-radius: 12px;
+        font-size: clamp(15px, 3.75vw, 16px);
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow:
+          0 4px 16px rgba(246, 201, 82, 0.4),
+          0 2px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s;
+      }
+
+      .btn-copy:active {
+        transform: scale(0.98);
+      }
+
+      /* 统计网格 */
+      .stats-grid {
+        display: grid;
+
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .stat-item {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        padding: 16px;
+
+        border: 1px solid rgba(246, 210, 122, 0.2);
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: rgba(246, 210, 122, 0.6);
+        margin-bottom: 8px;
+      }
+
+      .stat-value {
+        font-size: 18px;
+        font-weight: 700;
+        color: #f6d27a;
+      }
+
+      /* 折叠式板块 */
+      .section-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(15px);
+        border-radius: 16px;
+        margin-bottom: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(246, 210, 122, 0.2);
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .section-card.active {
+        border-color: rgba(246, 210, 122, 0.5);
+        box-shadow: 0 12px 40px rgba(246, 210, 122, 0.2);
+      }
+
+      .section-header {
+        padding: 18px 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        transition: background 0.3s ease;
+      }
+
+      .section-header:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .section-header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+      }
+
+      .section-icon {
+        font-size: 24px;
+        filter: drop-shadow(0 0 8px rgba(246, 210, 122, 0.5));
+      }
+
+      .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #f6d27a;
+      }
+
+      .section-toggle {
+        font-size: 20px;
+        color: #f6d27a;
+        transition: transform 0.3s ease;
+
+      }
+
+      .section-card.active .section-toggle {
+        transform: rotate(180deg);
+      }
+
+      .section-content {
+        max-height: 0;
+        overflow: hidden;
+        transition:
+          max-height 0.4s ease,
+          padding 0.3s ease;
+        padding: 0 20px;
+      }
+
+      .section-card.active .section-content {
+        max-height: 3000px;
+        padding: 0 20px 20px 20px;
+      }
+
+      /* 表格样式 */
+      .data-table {
+
+        border-collapse: collapse;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        overflow: hidden;
+        font-size: 14px;
+        margin-top: 16px;
+      }
+
+      .data-table th {
+        background: rgba(246, 210, 122, 0.2);
+        color: #f6d27a;
+        padding: 14px 10px;
+        font-size: 14px;
+        font-weight: 700;
+
+        border-bottom: 2px solid rgba(246, 210, 122, 0.3);
+        white-space: nowrap;
+      }
+
+      .data-table td {
+        padding: 14px 10px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.95);
+
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        word-break: break-word;
+      }
+
+      .data-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .data-table .highlight {
+        color: #ffd700;
+        font-weight: 700;
+      }
+
+      .data-table tr:hover {
+        background: rgba(246, 210, 122, 0.08);
+      }
+
+      /* 说明文字 */
+      .table-note {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.8);
+        margin-top: 16px;
+        line-height: 1.8;
+        padding: 16px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        border-left: 4px solid #f6d27a;
+      }
+
+      .table-note-item {
+        margin: 8px 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .table-note-item::before {
+        content: "✓";
+        color: #f6d27a;
+        font-weight: bold;
+
+        margin-top: 2px;
+      }
+
+      /* 按钮样式 */
+      .btn-link {
+
+        margin-top: 16px;
+        background: rgba(246, 210, 122, 0.1);
+        color: #f6d27a;
+        border: 1px solid rgba(246, 210, 122, 0.3);
+        padding: 12px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+
+        text-decoration: none;
+
+      }
+
+      .btn-link:active {
+        background: rgba(246, 210, 122, 0.2);
+        transform: scale(0.98);
+      }
+
+      /* 加载状态 */
+      .loading {
+        color: rgba(246, 210, 122, 0.6);
+        font-size: clamp(13px, 3.25vw, 14px);
+
+        padding: 20px;
+      }
+
+      .loading::after {
+        content: "...";
+        animation: dots 1.5s infinite;
+      }
+
+      @keyframes dots {
+        0%,
+        20% {
+          content: ".";
+        }
+
+        40% {
+          content: "..";
+        }
+
+        60%,
+        100% {
+          content: "...";
+        }
+      }
+
+      /* 底部导航栏 - 统一样式 */
+      .tabbar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: transparent;          linear-gradient(
+            180deg,
+            rgba(11, 59, 94, 0.98) 0%,
+            rgba(18, 76, 106, 0.98) 100%
+          ),
+          url("img/photo_2025-10-20_05-38-52.jpg") center bottom/contain
+            repeat-x;
+        backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-end;
+        border-top: 1px solid rgba(212, 175, 55, 0.2);
+        height: 65px;
+        z-index: 100;
+        padding: 2px 0 2px;
+        box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      .tab {
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        color: #8b9aa8;
+        text-decoration: none;
+        transition: color 0.2s ease;
+        position: relative;
+        padding: 0;
+        gap: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .tab:active .ico {
+        transform: scale(0.92);
+      }
+
+      .tab.active {
+        color: #f5d771;
+      }
+
+      .tab .ico {
+
+        height: 110px;
+        background-image: url("assets/a75728afde83d.jpg");
+        background-size: 400% 400%;
+        background-repeat: no-repeat;
+        background-color: transparent;
+        margin-bottom: 0px;
+        transition:
+          transform 0.15s ease,
+          opacity 0.15s ease;
+        position: relative;
+        border-radius: 0;
+        overflow: visible;
+        will-change: transform, opacity;
+      }
+
+      .tab:not(.active) .ico {
+        opacity: 0.7;
+      }
+
+      .tab.active .ico {
+        opacity: 1;
+        transform: scale(1.15);
+      }
+
+      .tab .txt {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        margin-top: -30px;
+        line-height: 1;
+        padding-top: 0;
+        margin-bottom: 2px;
+      }
+
+      .ico-home {
+        background-image: url("img/zy.png?v=1763340588") !important;
+        background-size: 75% !important;
+        background-position: center !important;
+      }
+
+      .ico-finance {
+        background-image: url("img/w1.png?v=1763340588") !important;
+        background-size: 75% !important;
+        background-position: center !important;
+      }
+
+      .ico-market {
+        background-image: url("img/xm.png?v=1763340588") !important;
+        background-size: 75% !important;
+        background-position: center !important;
+      }
+
+      .ico-message {
+        background-image: url("img/34.png?v=1763340588") !important;
+        background-size: 75% !important;
+        background-position: center !important;
+      }
+
+      .ico-me {
+        background-image: url("img/wd.png?v=1763340588") !important;
+        background-size: 75% !important;
+        background-position: center !important;
+      }
+
+.brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}      .brand .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+    <script defer src="smart-swipe-control.js?v=1763813622"></script>
+    </head>
+
+  <body>
+    <!-- 顶部导航 -->
+    <header class="hero-simple">
+      <div class="hero-top">
+        <a href="profile.html" class="back-btn">←</a>
+        <div class="brand">
+          <span>邀请好友</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 主容器 -->
+    <div class="invite-container">
+      <!-- 顶部说明 -->
+      <div class="share-card invite-intro">
+        <div class="intro-icon">🎁</div>
+        <div class="intro-title">邀请好友 赚取奖励</div>
+        <div class="intro-desc">
+          分享您的专属链接给好友，好友注册并投资后，双方均可获得丰厚奖励
+        </div>
+      </div>
+
+      <!-- 分享链接 -->
+      <div class="share-card">
+        <div class="share-header">
+          <span class="share-icon">🔗</span>
+          <span class="share-title">专属推广链接</span>
+        </div>
+        <div class="share-link-box" id="shareLink">
+          <span class="loading">加载中</span>
+        </div>
+        <button class="btn-copy" onclick="copyShareLink()">
+          📋 复制推广链接
+        </button>
+      </div>
+
+      <!-- 佣金比例 -->
+      <div class="share-card">
+        <div class="share-header">
+          <span class="share-icon">💰</span>
+          <span class="share-title">佣金比例</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-label">一级佣金</div>
+            <div class="stat-value" id="commission1">1%</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">二级佣金</div>
+            <div class="stat-value" id="commission2">0.5%</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">VIP等级</div>
+            <div class="stat-value" id="vipLevel">VIP0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 我的团队 -->
+      <div class="share-card">
+        <div class="share-header">
+          <span class="share-icon">👥</span>
+          <span class="share-title">我的团队</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-label">团队人数</div>
+            <div class="stat-value" id="teamCount">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">团队投资</div>
+            <div class="stat-value" id="teamInvest">¥0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">我的佣金</div>
+            <div class="stat-value" id="myCommission">¥0</div>
+          </div>
+        </div>
+        <a href="invite.html" class="btn-link">查看团队详情 →</a>
+      </div>
+
+      <!-- 团队推广奖励规则 -->
+      <div class="section-card" onclick="toggleSection(this)">
+        <div class="section-header">
+          <div class="section-header-left">
+            <span class="section-icon">📋</span>
+            <span class="section-title">团队推广奖励规则</span>
+          </div>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-content">
+          <div class="table-note">
+            <div class="table-note-item">
+              根据等级邀请好友，可获得邀请奖励百分比
+            </div>
+            <div class="table-note-item">
+              一级返佣：直推会员投资时的返佣比例
+            </div>
+            <div class="table-note-item">
+              二级返佣：一级会员推广的会员投资时的返佣比例
+            </div>
+            <div class="table-note-item">
+              有效成员定义：完成实名认证 + 已充值 + 持有项目
+            </div>
+            <div class="table-note-item">
+              只有有效成员才会计算在团队人数和奖励中
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 团队管理奖金 -->
+      <div class="section-card" onclick="toggleSection(this)">
+        <div class="section-header">
+          <div class="section-header-left">
+            <span class="section-icon">🏆</span>
+            <span class="section-title">团队管理奖金</span>
+          </div>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-content">
+          <div id="loadingBonus" class="loading" style="display: none">
+            加载中...
+          </div>
+          <table class="data-table" id="bonusTable" style="display: none">
+            <thead>
+              <tr>
+                <th>下级成员</th>
+                <th>累计投资</th>
+                <th>奖励</th>
+              </tr>
+            </thead>
+            <tbody id="bonusTableBody"></tbody>
+          </table>
+          <div class="table-note" id="bonusNote" style="display: none">
+            <div class="table-note-item">
+              团队管理奖金根据下级有效成员数量和累计投资金额计算
+            </div>
+            <div class="table-note-item">奖励金额达到对应条件后自动发放</div>
+            <div class="table-note-item">
+              可在"我的"-"团队收益"中查看详细记录
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="api-new.js?v=1763813622"></script>
+    <script src="ios-toast.js?v=1763813622"></script>
+    <script>
+      // 折叠展开功能
+      function toggleSection(card) {
+        const isActive = card.classList.contains("active");
+
+        if (isActive) {
+          card.classList.remove("active");
+        } else {
+          // 关闭其他所有板块
+          document.querySelectorAll(".section-card").forEach((c) => {
+            c.classList.remove("active");
+          });
+          // 打开当前板块
+          card.classList.add("active");
+
+          // 如果是团队管理奖金，加载数据
+          const sectionId = card.querySelector(".section-icon").textContent;
+          if (sectionId === "🏆" && !card.dataset.loaded) {
+            card.dataset.loaded = "true";
+            renderBonusTable();
+          }
+        }
+      }
+
+      // 判断是否为有效成员（实名+充值+持仓）
+      function isValidMember(member) {
+        // 1. 实名检查
+        const isKycVerified =
+          member.kyc_status === 2 ||
+          member.kyc_status === "2" ||
+          member.isKycVerified === true ||
+          (member.realname && member.realname !== "");
+
+        // 2. 充值检查
+        const recharges = parseFloat(member.recharges) || 0;
+        const hasRecharged = recharges > 0;
+
+        // 3. 持仓检查
+        const withdraws = parseFloat(member.withdraws) || 0;
+        const currentHolding = recharges - withdraws;
+        const hasHolding = currentHolding > 0;
+
+        return isKycVerified && hasRecharged && hasHolding;
+      }
+
+      // 生成分享链接
+      async function generateShareLink() {
+        try {
+          const token = localStorage.getItem("providence_token");
+          if (!token) {
+            document.getElementById("shareLink").innerHTML =
+              '<span style="color:rgba(246,210,122,0.6);">请先登录</span>';
+            return;
+          }
+
+          console.log("[分享] 开始获取邀请链接...");
+
+          // 先尝试从用户信息接口获取邀请码
+          const userResponse = await fetch(
+            "https://api.4kp3l0iq.top/api/user/info",
+            {
+              method: "GET",
+              headers: { token: token },
+            }
+          );
+
+          const userData = await userResponse.json();
+          console.log("[分享] 用户数据:", userData);
+
+          let inviteCode = null;
+          let uid = null;
+
+          if (userData.code === 1 && userData.data) {
+            uid = userData.data.uid || null;
+            inviteCode =
+              userData.data.invite ||
+              userData.data.invite_code ||
+              userData.data.yaoqingma;
+
+            // 更新VIP等级
+            const vipLevel =
+              userData.data.vip ||
+              userData.data.vip_level ||
+              userData.data.vipLevel ||
+              0;
+            const vipLevelEl = document.getElementById("vipLevel");
+            if (vipLevelEl) {
+              vipLevelEl.textContent = "VIP" + vipLevel;
+            }
+          }
+
+          // 如果用户数据中没有,再尝试专门的邀请接口
+          if (!inviteCode) {
+            try {
+              const inviteResponse = await fetch(
+                "https://api.4kp3l0iq.top/api/user/invite",
+                {
+                  method: "GET",
+                  headers: { token: token },
+                }
+              );
+
+              const inviteData = await inviteResponse.json();
+              console.log("[分享] 邀请数据:", inviteData);
+
+              if (inviteData.code === 1 && inviteData.data) {
+                uid = inviteData.data.uid || null;
+                inviteCode =
+                  inviteData.data.invite_code ||
+                  inviteData.data.invite ||
+                  inviteData.data.code;
+
+                // 更新佣金比例
+                if (inviteData.data.l1) {
+                  document.getElementById("commission1").textContent =
+                    inviteData.data.l1 + "%";
+                }
+                if (inviteData.data.l2) {
+                  document.getElementById("commission2").textContent =
+                    inviteData.data.l2 + "%";
+                }
+
+                // 更新VIP等级（如果邀请接口返回了VIP信息）
+                if (inviteData.data.vip !== undefined) {
+                  const vipLevel = inviteData.data.vip || 0;
+                  const vipLevelEl = document.getElementById("vipLevel");
+                  if (vipLevelEl) {
+                    vipLevelEl.textContent = "VIP" + vipLevel;
+                  }
+                }
+              }
+            } catch (inviteError) {
+              console.warn("[分享] 邀请接口调用失败:", inviteError);
+            }
+          }
+
+          const finalInviteId = uid || inviteCode;
+          if (finalInviteId) {
+            const domain = window.location.hostname;
+            let mainDomain = domain;
+            if (domain.includes("4kp3l0iq.top")) {
+              mainDomain = "4kp3l0iq.top";
+            } else if (domain.includes(".")) {
+              const parts = domain.split(".");
+              mainDomain = parts.slice(-2).join(".");
+            }
+
+            const shareLink = `https://${finalInviteId.toLowerCase ? finalInviteId.toLowerCase() : finalInviteId}.${mainDomain}`;
+            document.getElementById("shareLink").textContent = shareLink;
+            window.currentShareLink = shareLink;
+            console.log("[分享] ✓ 链接生成成功:", shareLink);
+          } else {
+            document.getElementById("shareLink").innerHTML =
+              '<span style="color:rgba(246,210,122,0.6);">未找到邀请码</span>';
+          }
+
+          // 加载团队统计数据
+          await loadTeamStats();
+        } catch (error) {
+          console.error("[分享] ✗ 请求失败:", error);
+          document.getElementById("shareLink").innerHTML =
+            '<span style="color:rgba(246,210,122,0.6);">网络错误，请刷新重试</span>';
+        }
+      }
+
+      // 加载团队统计（只计算有效成员）
+      async function loadTeamStats() {
+        try {
+          const token = localStorage.getItem("providence_token");
+          if (!token) return;
+
+          const response = await fetch(
+            "https://api.4kp3l0iq.top/api/team/members",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                token: token,
+              },
+              body: JSON.stringify({
+                page: 1,
+                uid: 0,
+              }),
+            }
+          );
+
+          const result = await response.json();
+          console.log("[团队统计]", result);
+
+          if (result.code === 1 || result.code === 200 && result.data && result.data.users) {
+            const allMembers = result.data.users;
+
+            // 筛选有效成员（实名+充值+持仓）
+            const validMembers = allMembers.filter((m) => isValidMember(m));
+
+            let totalInvest = 0;
+            let totalCommission = 0;
+
+            validMembers.forEach((member) => {
+              const recharges = parseFloat(member.recharges) || 0;
+              totalInvest += recharges;
+              // 一级佣金1%
+              totalCommission += recharges * 0.01;
+            });
+
+            // 格式化金额
+            function formatMoney(amount) {
+              if (amount >= 100000000) {
+                return (amount / 100000000).toFixed(1) + "亿";
+              }
+              if (amount >= 10000) {
+                return (amount / 10000).toFixed(1) + "万";
+              }
+              return amount.toFixed(2);
+            }
+
+            document.getElementById("teamCount").textContent =
+              validMembers.length;
+            document.getElementById("teamInvest").textContent =
+              "¥" + formatMoney(totalInvest);
+            document.getElementById("myCommission").textContent =
+              "¥" + formatMoney(totalCommission);
+          }
+        } catch (error) {
+          console.error("[团队统计] 加载失败:", error);
+        }
+      }
+
+      // 渲染团队管理奖金表格
+      function renderBonusTable() {
+        const loading = document.getElementById("loadingBonus");
+        const table = document.getElementById("bonusTable");
+        const tableBody = document.getElementById("bonusTableBody");
+        const tableNote = document.getElementById("bonusNote");
+
+        // 团队管理奖金数据
+        const bonusData = [
+          { members: 3, invest: 80000, bonus: 1800 },
+          { members: 5, invest: 150000, bonus: 2500 },
+          { members: 10, invest: 500000, bonus: 8800 },
+          { members: 20, invest: 1500000, bonus: 18000 },
+          { members: 50, invest: 3800000, bonus: 25000 },
+          { members: 100, invest: 8800000, bonus: 38000 },
+          { members: 200, invest: 15000000, bonus: 66000 },
+          { members: 500, invest: 58000000, bonus: 100000 },
+          { members: 1000, invest: 98000000, bonus: 180000 },
+        ];
+
+        function formatAmount(amount) {
+          if (amount >= 100000000) {
+            return (amount / 100000000).toFixed(1) + "亿";
+          }
+          if (amount >= 10000) {
+            return (amount / 10000).toFixed(0) + "万";
+          }
+          return amount.toLocaleString();
+        }
+
+        const rows = bonusData
+          .map(
+            (item) => `
+            <tr>
+                <td>${item.members}人</td>
+                <td>¥${formatAmount(item.invest)}</td>
+                <td class="highlight">¥${formatAmount(item.bonus)}</td>
+            </tr>
+        `
+          )
+          .join("");
+
+        tableBody.innerHTML = rows;
+        loading.style.display = "none";
+        table.style.display = "table";
+        tableNote.style.display = "block";
+      }
+
+      // 复制分享链接
+      async function copyShareLink() {
+        const shareLink =
+          window.currentShareLink ||
+          document.getElementById("shareLink").textContent;
+
+        if (
+          !shareLink ||
+          shareLink.includes("加载中") ||
+          shareLink.includes("请先登录") ||
+          shareLink.includes("失败") ||
+          shareLink.includes("错误")
+        ) {
+          await showToast("提示", "链接尚未加载，请稍后重试");
+          return;
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard
+            .writeText(shareLink)
+            .then(async () => {
+              await showToast("成功", "复制成功");
+            })
+            .catch(async (err) => {
+              console.error("[分享] 复制失败:", err);
+              fallbackCopy(shareLink);
+            });
+        } else {
+          fallbackCopy(shareLink);
+        }
+      }
+
+      // 备用复制方案
+      async function fallbackCopy(text) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        textarea.style.top = "0";
+        textarea.style.left = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+
+        try {
+          const successful = document.execCommand("copy");
+          if (successful) {
+            await showToast("成功", "复制成功");
+          } else {
+            await showToast("错误", "复制失败，请手动复制");
+          }
+        } catch (err) {
+          console.error("[分享] 备用复制失败:", err);
+          await showToast("错误", "复制失败，请手动复制");
+        }
+
+        document.body.removeChild(textarea);
+      }
+
+      // 页面加载时生成链接
+      window.addEventListener("DOMContentLoaded", () => {
+        console.log("[分享] 页面加载完成");
+        generateShareLink();
+      });
+    </script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+
+  </body>
+</html>

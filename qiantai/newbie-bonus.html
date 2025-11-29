@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <!-- iOS适配 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a1020">
+
+  <title>新人体验金 - Providence</title>
+  <style>
+    :root {
+      --navy: #08141f;
+      --navy2: #0f1f2e;
+      --navy3: #0a1723;
+      --gold: #9f8b54;
+      --gold2: #c7b58a;
+      --lineD: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", Arial, sans-serif;
+      background: linear-gradient(135deg, var(--navy3) 0%, var(--navy2) 50%, var(--navy) 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 15s ease infinite;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* 顶部导航 */
+    .topbar {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      z-index: 1000 !important;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 23, 35, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--lineD);
+      padding: 14px 16px;
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .back-btn:active {
+        transform: scale(0.95) !important;
+    }
+
+    .page-title {
+      flex: 1;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--gold2);
+    }
+
+    .nav-spacer {
+      width: 32px;
+    }
+
+    /* 主容器 */
+    .container {
+      flex: 1;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 红包卡片 */
+    .hongbao-card {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+      background: linear-gradient(135deg,
+        rgba(214, 30, 30, 0.95) 0%,
+        rgba(180, 20, 20, 0.95) 100%);
+      border-radius: 24px;
+      padding: 40px 24px;
+      box-shadow:
+        0 20px 60px rgba(214, 30, 30, 0.4),
+        0 10px 30px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      margin-bottom: 24px;
+      border: 3px solid var(--gold);
+    }
+
+    .hongbao-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .hongbao-icon {
+      font-size: 64px;
+      text-align: center;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+      position: relative;
+      z-index: 1;
+    }
+
+    .hongbao-title {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hongbao-subtitle {
+      text-align: center;
+      font-size: 13px;
+      opacity: 0.9;
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .amount-box {
+      text-align: center;
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .amount-symbol {
+      font-size: 32px;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+
+    .amount-value {
+      font-size: 72px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -2px;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .requirement {
+      text-align: center;
+      font-size: 14px;
+      opacity: 0.95;
+      margin-bottom: 24px;
+      padding: 12px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 使用说明 */
+    .rules-card {
+      width: 100%;
+      max-width: 360px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 20px;
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--lineD);
+      margin-bottom: 24px;
+    }
+
+    .rules-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gold2);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rule-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      align-items: flex-start;
+    }
+
+    .rule-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .rule-number {
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--navy);
+      flex-shrink: 0;
+    }
+
+    .rule-text {
+      flex: 1;
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* 领取按钮 */
+    .claim-btn {
+      width: 100%;
+      max-width: 360px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      border: none;
+      border-radius: 28px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+      cursor: pointer;
+      box-shadow:
+        0 8px 24px rgba(214, 178, 90, 0.4),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .claim-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255,255,255,0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .claim-btn:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .claim-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .claim-btn.claimed {
+      background: linear-gradient(135deg, #666, #888);
+      box-shadow: none;
+    }
+
+    /* 分享区 */
+    .share-section {
+      width: 100%;
+      max-width: 360px;
+      margin-top: 24px;
+    }
+
+    .share-title {
+      text-align: center;
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 16px;
+    }
+
+    .share-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .share-btn {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--lineD);
+      color: rgba(255,255,255,0.85);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .share-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--gold);
+    }
+
+    /* 状态提示 */
+    .status-hint {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* 加载动画 */
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(10, 22, 40, 0.3);
+      border-top-color: var(--navy);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* 已领取状态 */
+    .claimed-state {
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .claimed-icon {
+      font-size: 72px;
+      margin-bottom: 20px;
+      color: var(--gold2);
+    }
+
+    .claimed-text {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .claimed-date {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 24px;
+    }
+  </style>
+    <!-- 统一API客户端 v2.0 -->
+    <script src="api-unified-v2.js"></script>
+    <!-- Token检查中间件 -->
+    <script src="token-check-middleware.js"></script>
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a href="profile.html" class="back-btn">‹</a>
+      <div class="page-title">新人体验金</div>
+      <div class="nav-spacer"></div>
+    </div>
+  </div>
+
+  <!-- 主容器 -->
+  <div class="container" id="content">
+    <!-- 动态加载内容 -->
+  </div>
+
+  <script src="config.js?v=1763897782"></script>
+  <script src="ios-toast.js?v=1763897782b227"></script>
+  <script>
+    async function waitForAPI() {
+      return new Promise((resolve) => {
+        if (window.API && window.API_CONFIG) { resolve(); return; }
+        let attempts = 0;
+        const check = setInterval(() => {
+          if (window.API && window.API_CONFIG || attempts++ > 20) {
+            clearInterval(check);
+            resolve();
+          }
+        }, 50);
+      });
+    }
+
+    async function checkStatus() {
+      await waitForAPI();
+
+      const token = localStorage.getItem('providence_token') || localStorage.getItem('token') || '';
+      const API_BASE = window.API_CONFIG?.baseURL || 'https://api.4kp3l0iq.top';
+
+      if (!token) {
+        showLogin();
+        return;
+      }
+
+      try {
+        // 使用统一的API路径
+        const apiPath = window.httpClient ? '/api/trial-fund/status' : `${API_BASE}/api/trial-fund/status`;
+        let data;
+        if (window.httpClient) {
+          const response = await window.httpClient.get('/api/trial-fund/status');
+          data = response.data || response;
+        } else {
+          const res = await fetch(apiPath, {
+            headers: {
+              'Authorization': 'Bearer ' + token,
+              'token': token,
+              'Content-Type': 'application/json'
+            }
+          });
+          data = await res.json();
+        }
+
+        if (data.code === 1 && data.data) {
+          const { can_claim, claimed_at, realname_status } = data.data;
+
+          if (claimed_at) {
+            showClaimed(claimed_at);
+          } else if (realname_status === 0) {
+            showKYC();
+          } else if (can_claim) {
+            showClaimable();
+          } else {
+            showUnavailable();
+          }
+        } else {
+          throw new Error(data.message || '加载失败');
+        }
+      } catch (err) {
+        console.error('[Status Error]', err);
+        showClaimable(); // 默认显示可领取界面
+      }
+    }
+
+    function showClaimable() {
+      document.getElementById('content').innerHTML = `
+        <!-- 红包卡片 -->
+        <div class="hongbao-card">
+          <div class="hongbao-icon">🧧</div>
+          <div class="hongbao-title">PROVIDENCE 新手礼包</div>
+          <div class="hongbao-subtitle">新用户专享 · 限领一次</div>
+
+          <div class="amount-box">
+            <span class="amount-symbol">¥</span>
+            <span class="amount-value">888</span>
+          </div>
+
+          <div class="requirement">完成实名认证即可领取</div>
+        </div>
+
+        <!-- 使用说明 -->
+        <div class="rules-card">
+          <div class="rules-title">📋 使用说明</div>
+          <div class="rule-item">
+            <div class="rule-number">1</div>
+            <div class="rule-text">限实名用户领取，确保账户安全</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-number">2</div>
+            <div class="rule-text">每人限领一次，不可重复</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-number">3</div>
+            <div class="rule-text">可投资项目获取收益，收益可提现</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-number">4</div>
+            <div class="rule-text">项目到期后，本金自动回收，收益归您所有</div>
+          </div>
+        </div>
+
+        <!-- 领取按钮 -->
+        <button class="claim-btn" id="claimBtn" onclick="claim()">立即领取</button>
+
+        <div class="status-hint" id="statusHint"></div>
+
+        <!-- 分享区 -->
+        <div class="share-section">
+          <div class="share-title">分享给好友</div>
+          <div class="share-btns">
+            <button class="share-btn" onclick="copyLink()">
+              <span>📋</span>
+              <span>复制链接</span>
+            </button>
+            <button class="share-btn" onclick="showQR()">
+              <span>📱</span>
+              <span>生成二维码</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function showClaimed(time) {
+      document.getElementById('content').innerHTML = `
+        <div class="claimed-state">
+          <div class="claimed-icon">✓</div>
+          <div class="claimed-text">领取成功</div>
+          <div class="claimed-date">领取时间：${time}</div>
+        </div>
+
+        <div class="rules-card">
+          <div class="rules-title">📊 后续操作</div>
+          <div class="rule-item">
+            <div class="rule-number">✓</div>
+            <div class="rule-text">体验金已发放到您的账户</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-number">✓</div>
+            <div class="rule-text">可在"我的项目"查看投资详情</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-number">✓</div>
+            <div class="rule-text">收益可随时提现到钱包</div>
+          </div>
+        </div>
+
+        <button class="claim-btn claimed" onclick="location.href='my-investments.html'">
+          查看我的投资
+        </button>
+
+        <div class="share-section">
+          <div class="share-title">邀请好友同享福利</div>
+          <div class="share-btns">
+            <button class="share-btn" onclick="copyLink()">
+              <span>📋</span>
+              <span>复制链接</span>
+            </button>
+            <button class="share-btn" onclick="showQR()">
+              <span>📱</span>
+              <span>生成二维码</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function showKYC() {
+      document.getElementById('content').innerHTML = `
+        <div class="hongbao-card">
+          <div class="hongbao-icon">🧧</div>
+          <div class="hongbao-title">PROVIDENCE 新手礼包</div>
+          <div class="hongbao-subtitle">新用户专享 · 限领一次</div>
+
+          <div class="amount-box">
+            <span class="amount-symbol">¥</span>
+            <span class="amount-value">888</span>
+          </div>
+
+          <div class="requirement">请先完成实名认证</div>
+        </div>
+
+        <div class="rules-card">
+          <div class="rules-title">🔐 实名认证</div>
+          <div class="rule-item">
+            <div class="rule-number">1</div>
+            <div class="rule-text">保护您的资金安全</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-number">2</div>
+            <div class="rule-text">符合金融监管要求</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-number">3</div>
+            <div class="rule-text">提升账户安全等级</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-number">4</div>
+            <div class="rule-text">享受更多平台服务</div>
+          </div>
+        </div>
+
+        <button class="claim-btn" onclick="location.href='kyc.html'">
+          前往实名认证
+        </button>
+      `;
+    }
+
+    function showLogin() {
+      document.getElementById('content').innerHTML = `
+        <div class="hongbao-card">
+          <div class="hongbao-icon">🧧</div>
+          <div class="hongbao-title">PROVIDENCE 新手礼包</div>
+          <div class="hongbao-subtitle">新用户专享 · 限领一次</div>
+
+          <div class="amount-box">
+            <span class="amount-symbol">¥</span>
+            <span class="amount-value">888</span>
+          </div>
+
+          <div class="requirement">请先登录</div>
+        </div>
+
+        <button class="claim-btn" onclick="location.href='login.html'">
+          前往登录
+        </button>
+      `;
+    }
+
+    function showUnavailable() {
+      showClaimable();
+    }
+
+    async function claim() {
+      const btn = document.getElementById('claimBtn');
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.innerHTML = '领取中<span class="loading"></span>';
+
+      const token = localStorage.getItem('providence_token') || localStorage.getItem('token') || '';
+      const API_BASE = window.API_CONFIG?.baseURL || 'https://api.4kp3l0iq.top';
+
+      try {
+        // 使用统一的API路径
+        const apiPath = window.httpClient ? '/api/trial-fund/claim' : `${API_BASE}/api/trial-fund/claim`;
+        const res = window.httpClient
+          ? await window.httpClient.post('/api/trial-fund/claim', {})
+          : await fetch(apiPath, {
+              method: 'POST',
+              headers: {
+                'Authorization': 'Bearer ' + token,
+                'token': token,
+                'Content-Type': 'application/json'
+              }
+            });
+        let data;
+        if (window.httpClient) {
+          const response = await window.httpClient.post('/api/trial-fund/claim', {});
+          data = response.data || response;
+        } else {
+          data = await res.json();
+        }
+
+        if (data.code === 1 || data.code === 200) {
+          showToast('🎉 领取成功！获得888元体验金', 'success');
+          setTimeout(() => checkStatus(), 1500);
+        } else {
+          throw new Error(data.msg || data.message || '领取失败');
+        }
+      } catch (err) {
+        showToast(err.message, 'error');
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    }
+
+    function copyLink() {
+      const userId = localStorage.getItem('user_id') || '';
+      const url = `${window.location.origin}/register.html?ref=${userId}`;
+
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('邀请链接已复制', 'success');
+      }).catch(() => {
+        showToast('复制失败', 'error');
+      });
+    }
+
+    function showQR() {
+      showToast('二维码功能开发中', 'info');
+    }
+
+    document.addEventListener('DOMContentLoaded', checkStatus);
+  </script>
+</body>
+</html>

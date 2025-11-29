@@ -1,0 +1,94 @@
+/**
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Providence 骨架屏样式
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ */
+
+/* 骨架屏动画 */
+@keyframes skeleton-loading {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* 骨架屏基础样式 */
+.skeleton-loading {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.05) 100%
+    ) !important;
+    background-size: 200% 100% !important;
+    animation: skeleton-loading 1.5s ease-in-out infinite !important;
+    color: transparent !important;
+    user-select: none !important;
+    pointer-events: none !important;
+    border-radius: 4px !important;
+}
+
+/* 骨架屏文字占位 */
+.skeleton-loading::before {
+    content: '\00a0' !important;
+}
+
+/* 骨架屏 - 禁用文字阴影 */
+.skeleton-loading {
+    text-shadow: none !important;
+}
+
+/* 骨架屏 - 金额卡片 */
+[data-skeleton="balance"] {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 骨架屏 - 用户信息 */
+[data-skeleton="username"] {
+    min-width: 80px;
+    min-height: 20px;
+    display: inline-block;
+}
+
+[data-skeleton="vip"] {
+    min-width: 50px;
+    min-height: 18px;
+    display: inline-block;
+}
+
+/* 骨架屏 - 数字 */
+[data-skeleton="number"] {
+    min-width: 60px;
+    min-height: 24px;
+    display: inline-block;
+}
+
+/* 骨架屏 - 大数字 */
+[data-skeleton="amount"] {
+    min-width: 100px;
+    min-height: 32px;
+    display: inline-block;
+}
+
+/* 骨架屏加载完成淡入动画 */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 移除骨架屏后的淡入效果 */
+.skeleton-loaded {
+    animation: fade-in 0.3s ease-out;
+}
+

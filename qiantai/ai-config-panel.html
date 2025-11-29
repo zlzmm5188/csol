@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>Providence AI 配置面板</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #0e2b44 0%, #1a1a2e 100%);
+        background-attachment: fixed;
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+  padding-top: 60px;}
+
+        .container {
+            max-
+
+        }
+
+        .header {
+            background: linear-gradient(135deg, #d4af37, #f4d03f);
+            color: #1a1a1a;
+            padding: 30px;
+            border-radius: 16px 16px 0 0;
+
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .content {
+            background: white;
+            border-radius: 0 0 16px 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .section {
+            padding: 30px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.success {
+            background: #e6f7e6;
+            color: #25d0a6;
+        }
+
+        .badge.warning {
+            background: #fff7e6;
+            color: #faad14;
+        }
+
+        .badge.error {
+            background: #ffe6e6;
+            color: #f5222d;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 6px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            flex: 1;
+            min-
+        }
+
+        .radio-option input[type="radio"] {
+            display: none;
+        }
+
+        .radio-label {
+
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+
+        }
+
+        .radio-option input:checked + .radio-label {
+            background: linear-gradient(135deg, #d4af37, #f4d03f);
+            border-color: #d4af37;
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        .radio-label .radio-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .radio-label .radio-desc {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4af37, #f4d03f);
+            color: #1a1a1a;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212,175,55,0.3);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .btn-test {
+            background: #1890ff;
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background: #e6f7e6;
+            color: #25d0a6;
+        }
+
+        .alert-error {
+            background: #ffe6e6;
+            color: #f5222d;
+        }
+
+        .alert-warning {
+            background: #fff7e6;
+            color: #faad14;
+        }
+
+        #testResult {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-indicator.online {
+            background: #25d0a6;
+            box-shadow: 0 0 8px rgba(37,208,166,0.5);
+        }
+
+        .status-indicator.offline {
+            background: #999;
+        }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+          .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Providence AI 配置面板</h1>
+            <p>v2.0 - 混合AI系统配置中心</p>
+        </div>
+
+        <div class="content">
+            <!-- 状态概览 -->
+            <div class="section">
+                <div class="section-title">
+                    📊 系统状态
+                    <span id="statusBadge" class="badge"></span>
+                </div>
+
+                <div id="statusAlert"></div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="statMode">-</div>
+                        <div class="stat-label">运行模式</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="statRequests">0</div>
+                        <div class="stat-label">总请求数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="statRulesPercent">0%</div>
+                        <div class="stat-label">规则引擎占比</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="statAvgTime">0ms</div>
+                        <div class="stat-label">平均响应时间</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OpenAI配置 -->
+            <div class="section">
+                <div class="section-title">🔑 OpenAI 配置</div>
+
+                <div class="form-group">
+                    <label class="form-label">API Key</label>
+                    <input
+                        type="password"
+                        id="apiKeyInput"
+                        class="form-input"
+                        placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                     />
+                    <div class="form-hint">
+                        🔐 您的API密钥将保存在浏览器本地存储中
+                        <br />📍 获取地址: <a href="https://platform.openai.com/api-keys" target="_blank">https://platform.openai.com/api-keys</a>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">模型选择</label>
+                    <select id="modelSelect" class="form-input">
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo (推荐，性价比高)</option>
+                        <option value="gpt-4">GPT-4 (最强智能)</option>
+                        <option value="gpt-4-turbo">GPT-4 Turbo (速度+智能)</option>
+                    </select>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="saveOpenAIConfig()">
+                        💾 保存OpenAI配置
+                    </button>
+                    <button class="btn btn-secondary" onclick="testOpenAIConnection()">
+                        🔍 测试连接
+                    </button>
+                </div>
+            </div>
+
+            <!-- 运行模式 -->
+            <div class="section">
+                <div class="section-title">⚙️ 运行模式</div>
+
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="mode" id="modeRules" value="rules_only" />
+                        <label for="modeRules" class="radio-label">
+                            <div class="radio-title">⚡ 规则引擎</div>
+                            <div class="radio-desc">快速·免费·简单</div>
+                        </label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="mode" id="modeHybrid" value="hybrid" checked />
+                        <label for="modeHybrid" class="radio-label">
+                            <div class="radio-title">🎯 混合模式</div>
+                            <div class="radio-desc">推荐·智能路由</div>
+                        </label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="mode" id="modeOpenAI" value="openai_only" />
+                        <label for="modeOpenAI" class="radio-label">
+                            <div class="radio-title">🤖 OpenAI</div>
+                            <div class="radio-desc">智能·强大·深度</div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="saveMode()">
+                        💾 保存模式设置
+                    </button>
+                </div>
+            </div>
+
+            <!-- 测试工具 -->
+            <div class="section">
+                <div class="section-title">🧪 测试工具</div>
+
+                <div class="form-group">
+                    <label class="form-label">测试消息</label>
+                    <input
+                        type="text"
+                        id="testMessageInput"
+                        class="form-input"
+                        placeholder="输入测试消息，例如：我的账户余额"
+                        value="我有5万元，推荐投资什么项目？"
+                     />
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-test" onclick="runTest()">
+                        🚀 运行测试
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearStats()">
+                        🗑️ 清除统计
+                    </button>
+                </div>
+
+                <div id="testResult" style="display:none"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入AI模块 -->
+    <script src="ai-config.js?v=1763897782"></script>
+    <script defer src="ai-rules-engine-enhanced.js?v=1763897782"></script>
+    <script defer src="ai-openai.js?v=1763897782"></script>
+    <script defer src="ai-knowledge-base.js?v=1763897782"></script>
+    <script defer src="ai-smart-conversation.js?v=1763897782"></script>
+    <script defer src="ai-service-local.js?v=1763897782"></script>
+    <script defer src="ai-hybrid-dispatcher.js?v=1763897782"></script>
+
+    <script>
+        // 页面加载时初始化
+        window.addEventListener('load', () => {
+            updateStatus();
+            loadSavedConfig();
+        });
+
+        // 更新状态显示
+        function updateStatus() {
+            const config = AI_CONFIG.getSummary();
+            const stats = AI_HYBRID_DISPATCHER.getStats();
+
+            // 更新状态徽章
+            const statusBadge = document.getElementById('statusBadge');
+            if (config.openaiConfigured) {
+                statusBadge.className = 'badge success';
+                statusBadge.innerHTML = '<span class="status-indicator online"></span>已配置';
+            } else {
+                statusBadge.className = 'badge warning';
+                statusBadge.innerHTML = '<span class="status-indicator offline"></span>未配置OpenAI';
+            }
+
+            // 更新提示
+            const statusAlert = document.getElementById('statusAlert');
+            if (!config.openaiConfigured && AI_CONFIG.mode !== 'rules_only') {
+                statusAlert.innerHTML = `
+                    <div class="alert alert-warning">
+                        ⚠️ <strong>OpenAI未配置</strong> - 当前模式需要OpenAI API Key才能正常工作
+                    </div>
+                `;
+            } else if (config.openaiConfigured) {
+                statusAlert.innerHTML = `
+                    <div class="alert alert-success">
+                        ✅ <strong>系统就绪</strong> - AI系统已配置完成，可以正常使用
+                    </div>
+                `;
+            } else {
+                statusAlert.innerHTML = '';
+            }
+
+            // 更新统计数据
+            document.getElementById('statMode').textContent = {
+                'rules_only': '规则引擎',
+                'openai_only': 'OpenAI',
+                'hybrid': '混合模式'
+            }[AI_CONFIG.mode] || '-';
+
+            document.getElementById('statRequests').textContent = stats.totalRequests || 0;
+            document.getElementById('statRulesPercent').textContent = stats.rulesPercentage || '0%';
+            document.getElementById('statAvgTime').textContent = stats.avgResponseTime || '0ms';
+        }
+
+        // 加载保存的配置
+        function loadSavedConfig() {
+            // API Key (脱敏显示)
+            if (AI_CONFIG.openai.apiKey) {
+                const key = AI_CONFIG.openai.apiKey;
+                const masked = key.substring(0, 7) + '***' + key.substring(key.length - 4);
+                document.getElementById('apiKeyInput').value = masked;
+                document.getElementById('apiKeyInput').placeholder = '已配置 (点击修改)';
+            }
+
+            // 模型
+            document.getElementById('modelSelect').value = AI_CONFIG.openai.model;
+
+            // 运行模式
+            const modeRadio = document.querySelector(`input[value="${AI_CONFIG.mode}"]`);
+            if (modeRadio) {
+                modeRadio.checked = true;
+            }
+        }
+
+        // 保存OpenAI配置
+        function saveOpenAIConfig() {
+            const apiKey = document.getElementById('apiKeyInput').value.trim();
+            const model = document.getElementById('modelSelect').value;
+
+            // 如果是脱敏显示的，不更新
+            if (!apiKey.includes('***')) {
+                if (!apiKey) {
+                    alert('⚠️ 请输入API Key');
+                    return;
+                }
+
+                if (!apiKey.startsWith('sk-')) {
+                    alert('⚠️ API Key格式不正确（应以sk-开头）');
+                    return;
+                }
+
+                AI_CONFIG.setOpenAIKey(apiKey);
+            }
+
+            AI_CONFIG.openai.model = model;
+            AI_CONFIG.saveToStorage();
+
+            alert('✅ OpenAI配置已保存！');
+            updateStatus();
+            loadSavedConfig();
+        }
+
+        // 测试OpenAI连接
+        async function testOpenAIConnection() {
+            const apiKey = AI_CONFIG.openai.apiKey;
+
+            if (!apiKey) {
+                alert('⚠️ 请先配置API Key');
+                return;
+            }
+
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '🔍 测试中...';
+
+            try {
+                AI_OPENAI.init(apiKey, {
+                    model: AI_CONFIG.openai.model
+                });
+
+                const response = await AI_OPENAI.callOpenAI('你好', null);
+
+                alert('✅ 连接成功！\n\nOpenAI响应: ' + response.substring(0, 100) + '...');
+            } catch (error) {
+                alert('❌ 连接失败！\n\n错误: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🔍 测试连接';
+            }
+        }
+
+        // 保存运行模式
+        function saveMode() {
+            const selectedMode = document.querySelector('input[name="mode"]:checked').value;
+            AI_CONFIG.setMode(selectedMode);
+            AI_CONFIG.saveToStorage();
+
+            alert('✅ 运行模式已保存: ' + {
+                'rules_only': '规则引擎',
+                'openai_only': 'OpenAI',
+                'hybrid': '混合模式'
+            }[selectedMode]);
+
+            updateStatus();
+        }
+
+        // 运行测试
+        async function runTest() {
+            const message = document.getElementById('testMessageInput').value.trim();
+
+            if (!message) {
+                alert('⚠️ 请输入测试消息');
+                return;
+            }
+
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '🔄 测试中...';
+
+            const resultDiv = document.getElementById('testResult');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = '处理中...\n';
+
+            try {
+                const startTime = Date.now();
+                const response = await AI_HYBRID_DISPATCHER.processMessage(message, null);
+                const duration = Date.now() - startTime;
+
+                resultDiv.textContent = `
+🎯 测试结果
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 测试消息: ${message}
+
+✅ 处理成功
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔍 处理来源: ${response.source === 'rules' ? '⚙️ 规则引擎' : response.source === 'openai' ? '🤖 OpenAI' : '📚 知识库'}
+
+⏱️ 响应时间: ${duration}ms
+
+💬 AI回复:
+${response.message.replace(/<[^>]*>/g, '')}
+
+📊 统计信息:
+${JSON.stringify(AI_HYBRID_DISPATCHER.getStats(), null, 2)}
+
+`;
+
+                updateStatus();
+            } catch (error) {
+                resultDiv.textContent = `
+❌ 测试失败
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+错误信息: ${error.message}
+
+堆栈跟踪:
+${error.stack}
+
+`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🚀 运行测试';
+            }
+        }
+
+        // 清除统计
+        function clearStats() {
+            if (confirm('确定要清除所有统计数据吗？')) {
+                AI_HYBRID_DISPATCHER.resetStats();
+                AI_OPENAI.clearCache();
+                updateStatus();
+                alert('✅ 统计数据已清除');
+            }
+        }
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script defer src="smart-swipe-control.js?v=1763897782"></script>
+
+
+</body>
+</html>

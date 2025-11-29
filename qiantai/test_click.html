@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <style>
+        body { padding: 20px; background: #0f1c2a; color: white; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+          .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+<body>
+    <h1>点击测试</h1>
+    <button onclick="alert('按钮1可以点击!')">测试按钮1</button>
+    <button onclick="testFunc()">测试按钮2</button>
+    
+    <script>
+        console.log('Script loaded');
+        function testFunc() {
+            alert('函数调用成功!');
+        }
+    </script>
+</body>
+</html>

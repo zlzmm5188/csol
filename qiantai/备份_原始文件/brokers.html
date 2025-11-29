@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+  <meta name="description" content="专业金融经纪人团队，提供财富管理、资产配置、投资咨询等服务。资深经纪人，管理资产超过86亿元，平均从业经验12年。" />
+  <meta name="keywords" content="金融经纪人,财富管理,资产配置,投资顾问,CFP,CFA,FRM" />
+  <title>金融经纪人 | PROVIDENCE</title>
+  <link rel="icon" href="favicon.ico" />
+  <link rel="stylesheet" href="design-tokens.css?v=1763813622" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", Arial, sans-serif;
+      background: var(--gradient-navy);
+        background-attachment: fixed;
+      background-size: 200% 200%;
+      animation: gradientShift 15s ease infinite;
+      color: var(--text-inverse);
+      padding-bottom: 20px;
+      min-height: 100vh;
+    }
+
+    @keyframes gradientShift {
+
+      0%,
+      100% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    .topbar {
+      position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important;
+      top: 0;
+      z-index: var(--z-sticky);
+      background: rgba(12, 21, 38, 0.85);
+      backdrop-filter: var(--blur-md);
+      border-bottom: 1px solid var(--border-white);
+      padding: 12px 16px;
+    }
+
+    .topbar-inner {
+
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+
+    .back-btn:active {
+      transform: scale(0.95) translateZ(0);
+    }
+
+    .page-title {
+
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gold-1);
+    }
+
+    .nav-spacer {
+      width: 32px;
+    }
+
+    .container {
+
+      padding: 16px;
+    }
+
+    /* Hero区域 - 紧凑版 */
+    .hero {
+
+      padding: 20px 16px;
+    }
+
+    .hero-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      font-size: 13px;
+      color: var(--muted-light);
+    }
+
+    /* 统计卡片组 - 紧凑版 */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: var(--blur-sm);
+      border: 1px solid var(--border-white);
+      border-radius: 12px;
+      padding: 12px;
+
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gold-1);
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: var(--muted-light);
+    }
+
+    /* 经纪人卡片 - 高端设计 */
+    .broker-card {
+      background: var(--white);
+      border: 2px solid var(--gold-light);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-gold);
+      transform: translateZ(0);
+    }
+
+    .broker-header {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    .broker-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 3px solid var(--gold-1);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .broker-basic {
+
+      min-width: 0;
+    }
+
+    .broker-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .broker-title {
+      font-size: 12px;
+      color: var(--gold-2);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .broker-certs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .cert-badge {
+      padding: 4px 10px;
+      background: var(--gradient-gold);
+      color: var(--navy);
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    /* 数据指标 - 紧凑版 */
+    .broker-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .stat-item {
+
+      padding: 10px;
+      background: var(--ink);
+      border-radius: 10px;
+    }
+
+    .stat-item-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .stat-item-label {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* 专长标签 - 紧凑版 */
+    .broker-skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .skill-tag {
+      padding: 6px 12px;
+      background: rgba(214, 178, 90, 0.1);
+      color: var(--gold-2);
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid var(--border-light);
+    }
+
+    /* 简介 - 紧凑版 */
+    .broker-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      padding-top: 12px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    /* 职业介绍卡片 */
+    .career-intro {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: var(--blur-sm);
+      border: 1px solid var(--border-white);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .career-intro-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gold-1);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .career-intro-title::before {
+      content: "📊";
+      font-size: 20px;
+    }
+
+    .career-intro-text {
+      font-size: 13px;
+      color: var(--muted-light);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    /* 职责和技能部分 */
+    .career-section {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: var(--blur-sm);
+      border: 1px solid var(--border-white);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::before {
+      content: "";
+      width: 4px;
+      height: 16px;
+      background: var(--gradient-gold);
+      border-radius: 2px;
+    }
+
+    .duty-list,
+    .skill-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .duty-item,
+    .skill-item {
+      font-size: 12px;
+      color: var(--muted-light);
+      line-height: 1.8;
+      padding: 8px 0 8px 20px;
+      position: relative;
+    }
+
+    .duty-item::before,
+    .skill-item::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--gold-1);
+      font-weight: 700;
+    }
+
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .skill-category {
+      background: rgba(214, 178, 90, 0.1);
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .skill-category-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold-1);
+      margin-bottom: 6px;
+    }
+
+    .skill-category-items {
+      font-size: 11px;
+      color: var(--muted-light);
+      line-height: 1.6;
+    }
+
+    /* 底部导航 */
+    .tabbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      border-top: 1px solid #e5e7eb;
+      padding: 8px 0 env(safe-area-inset-bottom, 8px);
+      z-index: var(--z-fixed);
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .tab {
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 0;
+      text-decoration: none;
+    }
+
+    .ico {
+      width: 24px;
+      height: 24px;
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .txt {
+      font-size: 10px;
+      color: #8a8a8a;
+    }
+
+    .tab.active .txt {
+      color: var(--gold-1);
+      font-weight: 600;
+    }
+
+.brand { display: flex; align-items: center; }      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}      .brand .page-title, .brand .page-title, .brand h1 { margin: 0; font-size: 16px; white-space: nowrap; flex: 0 1 auto; }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="back-btn">←</a>
+      <div class="page-title">金融经纪人</div>
+      <div class="nav-spacer"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="hero">
+      <h1 class="hero-title">专业财富管理团队</h1>
+      <p class="hero-subtitle">为您的资产配置保驾护航</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">18+</div>
+        <div class="stat-label">资深经纪人</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">¥86亿</div>
+        <div class="stat-label">管理资产</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">12年</div>
+        <div class="stat-label">平均从业</div>
+      </div>
+    </div>
+
+    <!-- 职业介绍 -->
+    <div class="career-intro">
+      <div class="career-intro-title">什么是金融经纪人</div>
+      <div class="career-intro-text">
+        金融经纪人是连接投资者与金融市场的专业中介，负责为客户提供投资建议、执行交易指令、管理投资组合，并帮助客户实现财富增值目标。他们需要具备深厚的金融知识、敏锐的市场洞察力和卓越的客户服务能力。
+      </div>
+    </div>
+
+    <!-- 核心职责 -->
+    <div class="career-section">
+      <div class="section-title">核心职责</div>
+      <ul class="duty-list">
+        <li class="duty-item">综合财务信息，分析市场趋势和投资机会</li>
+        <li class="duty-item">为客户提供专业的投资建议和资产配置方案</li>
+        <li class="duty-item">执行证券、期货、外汇等金融产品的交易指令</li>
+        <li class="duty-item">审查和管理客户投资组合，优化资产配置</li>
+        <li class="duty-item">与银行、基金公司等金融机构保持良好合作关系</li>
+        <li class="duty-item">持续跟踪市场动态，及时调整投资策略</li>
+        <li class="duty-item">为客户提供风险管理和税务筹划建议</li>
+        <li class="duty-item">维护客户关系，提供优质的财富管理服务</li>
+      </ul>
+    </div>
+
+    <!-- 技能要求 -->
+    <div class="career-section">
+      <div class="section-title">技能要求</div>
+      <div class="skill-grid">
+        <div class="skill-category">
+          <div class="skill-category-title">基本技能</div>
+          <div class="skill-category-items">
+            • 综合财务信息<br />
+            • 交易证券<br />
+            • 市场分析<br />
+            • 风险评估
+          </div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-category-title">专业知识</div>
+          <div class="skill-category-items">
+            • 精算学<br />
+            • 经济学<br />
+            • 金融学<br />
+            • 投资学
+          </div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-category-title">沟通能力</div>
+          <div class="skill-category-items">
+            • 客户沟通<br />
+            • 团队协作<br />
+            • 商务谈判<br />
+            • 关系维护
+          </div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-category-title">可选技能</div>
+          <div class="skill-category-items">
+            • 投资组合审查<br />
+            • 跨境资产配置<br />
+            • 衍生品交易<br />
+            • 量化分析
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 职业资质 -->
+    <div class="career-section">
+      <div class="section-title">职业资质</div>
+      <ul class="duty-list">
+        <li class="duty-item">证券从业资格证（必备）</li>
+        <li class="duty-item">基金从业资格证（必备）</li>
+        <li class="duty-item">注册金融规划师（CFP）</li>
+        <li class="duty-item">特许金融分析师（CFA）</li>
+        <li class="duty-item">金融风险管理师（FRM）</li>
+        <li class="duty-item">期货从业资格证</li>
+      </ul>
+    </div>
+
+    <!-- 职业发展 -->
+    <div class="career-section">
+      <div class="section-title">职业发展路径</div>
+      <ul class="duty-list">
+        <li class="duty-item">初级：客户经理 → 负责基础客户服务和交易执行</li>
+        <li class="duty-item">中级：投资顾问 → 提供投资建议和资产配置方案</li>
+        <li class="duty-item">高级：高级投资顾问 → 管理高净值客户和复杂投资组合</li>
+        <li class="duty-item">专家：首席财富管理顾问 → 制定战略规划和团队管理</li>
+      </ul>
+    </div>
+
+    <!-- 经纪人1 -->
+    <div class="broker-card">
+      <div class="broker-header">
+        <img src="https://i.pravatar.cc/150?img=12" alt="张明远" class="broker-avatar" />
+        <div class="broker-basic">
+          <div class="broker-name">张明远</div>
+          <div class="broker-title">首席财富管理顾问</div>
+          <div class="broker-certs">
+            <span class="cert-badge">CFP</span>
+            <span class="cert-badge">CFA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="broker-stats">
+        <div class="stat-item">
+          <div class="stat-item-value">¥28亿</div>
+          <div class="stat-item-label">管理资产</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item-value">15年</div>
+          <div class="stat-item-label">从业经验</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item-value">680+</div>
+          <div class="stat-item-label">服务客户</div>
+        </div>
+      </div>
+
+      <div class="broker-skills">
+        <span class="skill-tag">股权投资</span>
+        <span class="skill-tag">PE/VC基金</span>
+        <span class="skill-tag">资产配置</span>
+        <span class="skill-tag">税务筹划</span>
+      </div>
+
+      <div class="broker-desc">
+        专注于高净值客户资产配置，擅长股权投资、PE/VC基金、海外资产配置。曾任职于瑞银财富管理，为多家上市公司高管提供专业财富管理服务。持有注册金融规划师（CFP）和特许金融分析师（CFA）双资质，深谙全球资本市场运作规律。
+      </div>
+    </div>
+
+    <!-- 经纪人2 -->
+    <div class="broker-card">
+      <div class="broker-header">
+        <img src="https://i.pravatar.cc/150?img=5" alt="李雅琪" class="broker-avatar" />
+        <div class="broker-basic">
+          <div class="broker-name">李雅琪</div>
+          <div class="broker-title">高级投资顾问</div>
+          <div class="broker-certs">
+            <span class="cert-badge">CFP</span>
+            <span class="cert-badge">FRM</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="broker-stats">
+        <div class="stat-item">
+          <div class="stat-item-value">¥18亿</div>
+          <div class="stat-item-label">管理资产</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item-value">12年</div>
+          <div class="stat-item-label">从业经验</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item-value">420+</div>
+          <div class="stat-item-label">服务客户</div>
+        </div>
+      </div>
+
+      <div class="broker-skills">
+        <span class="skill-tag">固收产品</span>
+        <span class="skill-tag">家族信托</span>
+        <span class="skill-tag">风险对冲</span>
+        <span class="skill-tag">跨境配置</span>
+      </div>
+
+      <div class="broker-desc">
+        专注固定收益类产品和风险对冲策略，曾任职于摩根士丹利，为企业年金和家族信托提供资产配置方案。擅长跨境资产配置和外汇风险管理，持有金融风险管理师（FRM）资质，对全球债券市场和衍生品交易有深入研究。
+      </div>
+    </div>
+
+    <!-- 经纪人3 -->
+    <div class="broker-card">
+      <div class="broker-header">
+        <img src="https://i.pravatar.cc/150?img=33" alt="王建国" class="broker-avatar" />
+        <div class="broker-basic">
+          <div class="broker-name">王建国</div>
+          <div class="broker-title">量化投资专家</div>
+          <div class="broker-certs">
+            <span class="cert-badge">CFA</span>
+            <span class="cert-badge">FRM</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="broker-stats">
+        <div class="stat-item">
+          <div class="stat-item-value">¥22亿</div>
+          <div class="stat-item-label">管理资产</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item-value">10年</div>
+          <div class="stat-item-label">从业经验</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-item-value">280+</div>
+          <div class="stat-item-label">服务客户</div>
+        </div>
+      </div>
+
+      <div class="broker-skills">
+        <span class="skill-tag">量化策略</span>
+        <span class="skill-tag">算法交易</span>
+        <span class="skill-tag">衍生品</span>
+        <span class="skill-tag">风险管理</span>
+      </div>
+
+      <div class="broker-desc">
+        量化交易策略专家，曾任职于高盛量化投资部门，擅长利用数学模型和算法进行资产配置。为机构客户提供程序化交易和风险管理解决方案，在量化选股、统计套利、高频交易等领域有丰富实战经验。
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部导航已移除 -->
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script defer src="smart-swipe-control.js?v=1763813622"></script>
+
+
+</body>
+
+</html>

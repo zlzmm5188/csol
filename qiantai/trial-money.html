@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>新人体验金 | PROVIDENCE</title>
+    <link rel="icon" href="favicon.ico" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <script src="ios-toast.js?v=1763897782"></script>
+    <script src="api-config.js?v=1763897782"></script>
+    <style>
+      :root {
+        --navy: #08141f;
+        --navy2: #0f1f2e;
+        --navy3: #0a1723;
+        --gold: #9f8b54;
+        --gold2: #c7b58a;
+        --gold-light: #e8c991;
+        --gold-deep: #d6b97a;
+        --lineD: rgba(255, 255, 255, 0.08);
+        --text-main: #e9eef6;
+        --text-sub: #aeb8c6;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        touch-action: pan-x pan-y;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      html, body {
+        height: 100%;
+        overscroll-behavior: none;
+        -webkit-overscroll-behavior: none;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", sans-serif;
+        color: var(--text-main);
+        background: linear-gradient(180deg, var(--navy3), var(--navy2) 40%, var(--navy));
+        background-attachment: fixed;
+        padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        /* 页面进入动画 */
+        opacity: 0;
+        animation: pageFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        will-change: opacity;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+
+      @keyframes pageFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px) translateZ(0);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) translateZ(0);
+        }
+      }
+
+      /* 顶部导航栏 - 统一风格 */
+      .topbar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 1000 !important;
+        padding: 14px 16px;
+        padding-top: calc(14px + env(safe-area-inset-top, 0));
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+        background: rgba(10, 23, 35, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        /* 顶部栏进入动画 */
+        opacity: 0;
+        transform: translateY(-10px);
+        animation: topbarSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        will-change: opacity, transform;
+      }
+
+      @keyframes topbarSlideIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .brand {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+      }
+
+      .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        text-decoration: none;
+        transform: translateZ(0);
+      }
+
+      .back-btn:hover {
+        background: rgba(255, 255, 255, 0.12) !important;
+      }
+
+      .back-btn:active {
+        transform: scale(0.95) translateZ(0) !important;
+      }
+
+      .brand h1 {
+        display: inline-block;
+        margin: 0;
+        white-space: nowrap;
+        flex-shrink: 1;
+        font-size: 18px;
+        letter-spacing: 0.3px;
+        color: var(--gold2);
+        font-weight: 600;
+      }
+
+      /* 主容器 */
+      .container {
+        padding-top: calc(60px + env(safe-area-inset-top, 0) + 20px);
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+        padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* 红包卡片 - 优化版 */
+      .hongbao-card {
+        position: relative;
+        background: linear-gradient(135deg, #d6452b 0%, #b8331e 100%);
+        border-radius: 20px;
+        padding: 24px;
+        margin: 20px 0;
+        box-shadow: 0 16px 40px rgba(214, 69, 43, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        overflow: hidden;
+        /* 卡片进入动画 */
+        opacity: 0;
+        transform: translateY(20px) translateZ(0);
+        animation: cardFadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+        will-change: opacity, transform;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+
+      @keyframes cardFadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0) translateZ(0);
+        }
+      }
+
+      /* 红包装饰 */
+      .hongbao-card::before {
+        content: "";
+        position: absolute;
+        top: -30%;
+        right: -10%;
+        width: 140px;
+        height: 140px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .hongbao-card::after {
+        content: "";
+        position: absolute;
+        bottom: -20%;
+        left: -10%;
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 8s ease-in-out infinite reverse;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(10px, -10px) scale(1.1); }
+      }
+
+      .hongbao-header {
+        position: relative;
+        z-index: 1;
+        margin-bottom: 20px;
+      }
+
+      .hongbao-icon {
+        font-size: 42px;
+        margin-bottom: 10px;
+        display: block;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+
+      .hongbao-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.98);
+        margin-bottom: 6px;
+        letter-spacing: 0.5px;
+      }
+
+      .hongbao-subtitle {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .hongbao-amount {
+        position: relative;
+        z-index: 1;
+        margin: 20px 0;
+        text-align: center;
+      }
+
+      .amount-symbol {
+        font-size: 24px;
+        font-weight: 600;
+        color: #ffe8a3;
+        vertical-align: top;
+        margin-right: 4px;
+      }
+
+      .amount-number {
+        font-size: 56px;
+        font-weight: 700;
+        color: #ffe8a3;
+        line-height: 1;
+        font-family: -apple-system-ui-rounded, "SF Pro Rounded", sans-serif;
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 232, 163, 0.3);
+        letter-spacing: -1px;
+      }
+
+      .hongbao-note {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.75);
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        margin-top: 8px;
+      }
+
+      /* 规则卡片 - 优化版 */
+      .rules-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(200, 186, 148, 0.2);
+        border-radius: 20px;
+        padding: 24px;
+        margin: 20px 0;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        /* 卡片进入动画 */
+        opacity: 0;
+        transform: translateY(20px) translateZ(0);
+        animation: cardFadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+        will-change: opacity, transform;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+
+      .rules-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--gold2);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .rules-title span {
+        font-size: 20px;
+      }
+
+      .rules-list {
+        display: grid;
+        gap: 16px;
+      }
+
+      .rule-item {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+      }
+
+      .rule-num {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+        background: linear-gradient(135deg, var(--gold-light), var(--gold-deep));
+        color: #0f172a;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(232, 201, 145, 0.3);
+      }
+
+      .rule-text {
+        flex: 1;
+        font-size: 14px;
+        color: var(--text-main);
+        line-height: 1.7;
+        padding-top: 2px;
+      }
+
+      .rule-highlight {
+        color: var(--gold2);
+        font-weight: 600;
+      }
+
+      /* 领取按钮 - 优化版 */
+      .claim-btn {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, var(--gold-light), var(--gold-deep));
+        color: #0f172a;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        transform: translateZ(0);
+        box-shadow: 0 8px 24px rgba(232, 201, 145, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        letter-spacing: 1px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-top: 20px;
+        /* 按钮进入动画 */
+        opacity: 0;
+        transform: translateY(20px) translateZ(0);
+        animation: cardFadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+        will-change: opacity, transform;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+
+      .claim-btn:hover {
+        transform: translateY(-2px) translateZ(0);
+        box-shadow: 0 12px 32px rgba(232, 201, 145, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+        filter: brightness(1.1);
+      }
+
+      .claim-btn:active {
+        transform: scale(0.97) translateY(0) translateZ(0);
+        box-shadow: 0 4px 16px rgba(232, 201, 145, 0.3);
+      }
+
+      .claim-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: translateY(0) translateZ(0);
+      }
+
+      /* 移动端优化 */
+      @media screen and (max-width: 480px) {
+        .container {
+          padding: 16px;
+          padding-top: calc(60px + env(safe-area-inset-top, 0) + 16px);
+        }
+
+        .hongbao-card {
+          padding: 20px;
+          margin: 16px 0;
+          border-radius: 16px;
+        }
+
+        .rules-card {
+          padding: 20px;
+          margin: 16px 0;
+          border-radius: 16px;
+        }
+
+        .amount-number {
+          font-size: 48px;
+        }
+
+        .hongbao-title {
+          font-size: 16px;
+        }
+
+        .rules-title {
+          font-size: 16px;
+        }
+
+        .rule-text {
+          font-size: 13px;
+        }
+
+        .claim-btn {
+          padding: 14px;
+          font-size: 16px;
+        }
+      }
+
+      /* APP优化 */
+      @supports (padding: max(0px)) {
+        .container {
+          padding-left: max(16px, env(safe-area-inset-left));
+          padding-right: max(16px, env(safe-area-inset-right));
+        }
+      }
+    </style>
+    <!-- 统一API客户端 v2.0 -->
+    <script src="api-unified-v2.js"></script>
+    <!-- Token检查中间件 -->
+    <script src="token-check-middleware.js"></script>
+  </head>
+
+  <body>
+    <!-- 顶部导航 -->
+    <div class="topbar">
+      <div class="brand">
+        <a href="javascript:void(0);" onclick="history.back(); return false;" class="back-btn">‹</a>
+        <h1>新人体验金</h1>
+      </div>
+    </div>
+
+    <!-- 主内容 -->
+    <div class="container">
+      <!-- 红包卡片 -->
+      <div class="hongbao-card">
+        <div class="hongbao-header">
+          <span class="hongbao-icon">🧧</span>
+          <div class="hongbao-title">PROVIDENCE 新手礼包</div>
+          <div class="hongbao-subtitle">新用户专享 · 限领一次</div>
+        </div>
+
+        <div class="hongbao-amount">
+          <span class="amount-symbol">¥</span>
+          <span class="amount-number">888</span>
+        </div>
+
+        <div class="hongbao-note">完成实名认证即可领取</div>
+      </div>
+
+      <!-- 规则说明 -->
+      <div class="rules-card">
+        <div class="rules-title">
+          <span>📋</span>
+          <span>使用说明</span>
+        </div>
+
+        <div class="rules-list">
+          <div class="rule-item">
+            <div class="rule-num">1</div>
+            <div class="rule-text">
+              限<span class="rule-highlight">实名用户</span>领取，确保账户安全
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <div class="rule-num">2</div>
+            <div class="rule-text">
+              每人限领<span class="rule-highlight">一次</span>，不可重复
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <div class="rule-num">3</div>
+            <div class="rule-text">
+              可抵扣<span class="rule-highlight">888元本金</span>，收益可提现
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <div class="rule-num">4</div>
+            <div class="rule-text">
+              <span class="rule-highlight">7天</span>有效期，项目到期自动回收本金
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 领取按钮 -->
+      <button class="claim-btn" onclick="claimTrialFund()">立即领取</button>
+    </div>
+
+    <script src="token-manager-v2.js?v=1763897782"></script>
+    <script>
+      async function claimTrialFund() {
+        const btn = document.querySelector(".claim-btn");
+        if (btn.disabled) return;
+
+        // 检查登录状态
+        const token = TokenManager?.getToken() || localStorage.getItem("providence_token");
+        if (!token) {
+          showToast("请先登录");
+          setTimeout(() => (window.location.href = "login.html"), 1500);
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "领取中...";
+
+        try {
+          const API_BASE = window.API_CONFIG?.baseURL || "https://api.4kp3l0iq.top";
+
+          // 使用统一API客户端（如果存在）
+          let result = null;
+          if (window.httpClient) {
+            try {
+              result = await window.httpClient.post('/api/trial-fund/claim', {});
+            } catch (e) {
+              console.warn('[Trial] httpClient调用失败:', e);
+            }
+          }
+
+          // 降级方案：直接调用API
+          if (!result) {
+            const response = await fetch(`${API_BASE}/api/trial-fund/claim`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Token": token,
+                "Authorization": `Bearer ${token}`
+              }
+            });
+
+            if (!response.ok) {
+              throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const text = await response.text();
+
+            // 检查是否是HTML错误页面
+            if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
+              throw new Error('服务器返回了HTML而不是JSON');
+            }
+
+            try {
+              result = JSON.parse(text);
+            } catch (parseError) {
+              console.error('[Trial] JSON解析失败:', text.substring(0, 100));
+              throw new Error('服务器返回格式错误');
+            }
+          }
+
+          // 处理响应数据（后端返回 code=1 表示成功）
+          if (result && (result.code === 1 || result.code === 200)) {
+            showToast("🎉 领取成功！");
+            // 刷新状态
+            await checkClaimStatus();
+            setTimeout(() => (window.location.href = "profile.html"), 1500);
+          } else {
+            const errorMsg = result?.msg || result?.message || "领取失败";
+            showToast(errorMsg);
+            btn.disabled = false;
+            btn.textContent = "立即领取";
+          }
+        } catch (error) {
+          console.error("领取体验金失败:", error);
+          let errorMsg = "网络错误，请稍后重试";
+          if (error.message) {
+            if (error.message.includes('实名认证')) {
+              errorMsg = "请先完成实名认证";
+            } else if (error.message.includes('已领取')) {
+              errorMsg = "您已领取过体验金";
+            } else {
+              errorMsg = error.message;
+            }
+          }
+          showToast(errorMsg);
+          btn.disabled = false;
+          btn.textContent = "立即领取";
+        }
+      }
+
+      // 页面加载完成后检查是否已领取
+      async function checkClaimStatus() {
+        const token = TokenManager?.getToken() || localStorage.getItem("providence_token");
+        if (!token) {
+          return;
+        }
+
+        try {
+          const API_BASE = window.API_CONFIG?.baseURL || "https://api.4kp3l0iq.top";
+
+          // 使用统一API客户端（如果存在）
+          let result = null;
+          if (window.httpClient) {
+            try {
+              result = await window.httpClient.get('/api/trial-fund/status');
+            } catch (e) {
+              console.warn('[Trial] httpClient调用失败:', e);
+            }
+          }
+
+          // 降级方案：直接调用API
+          if (!result) {
+            const response = await fetch(`${API_BASE}/api/trial-fund/status`, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                "Token": token,
+                "Authorization": `Bearer ${token}`
+              }
+            });
+
+            if (!response.ok) {
+              return;
+            }
+
+            const text = await response.text();
+            if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
+              return;
+            }
+
+            try {
+              result = JSON.parse(text);
+            } catch (parseError) {
+              console.error('[Trial] JSON解析失败:', parseError);
+              return;
+            }
+          }
+
+          // 处理响应数据
+          if (result && (result.code === 1 || result.code === 200) && result.data) {
+            const hasClaimed = result.data.has_claimed || false;
+            const status = result.data.status || 0;
+
+            const btn = document.querySelector(".claim-btn");
+            if (btn) {
+              if (hasClaimed) {
+                btn.disabled = true;
+                if (status === 1) {
+                  btn.textContent = "已领取";
+                } else if (status === 2) {
+                  btn.textContent = "已使用";
+                } else if (status === 3) {
+                  btn.textContent = "已过期";
+                } else {
+                  btn.textContent = "已领取";
+                }
+                btn.style.opacity = '0.6';
+              } else {
+                btn.disabled = false;
+                btn.textContent = "立即领取";
+                btn.style.opacity = '1';
+              }
+            }
+          }
+        } catch (error) {
+          console.error("检查体验金状态失败:", error);
+        }
+      }
+
+      // 页面加载时检查状态
+      (function() {
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', checkClaimStatus);
+        } else {
+          checkClaimStatus();
+        }
+      })();
+    </script>
+  </body>
+</html>

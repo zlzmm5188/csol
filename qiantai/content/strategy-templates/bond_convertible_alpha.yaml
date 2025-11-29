@@ -1,0 +1,21 @@
+key: bond_convertible_alpha
+title: 可转债·攻守兼备策略
+language: zh-CN
+category: bond
+tags: 可转债,攻守兼备,下有保底,量化择券
+bodyMd: |
+  本策略专注于**可转债市场**的alpha挖掘，通过量化择券模型与动态调仓，在控制回撤的同时追求超额收益。
+
+  - 转债筛选：结合转股溢价率、正股基本面、流动性三重维度
+  - 回撤控制：通过仓位管理与对冲工具，目标最大回撤 **{{risk_drawdown}}%**
+  - 收益目标：在 **{{cycle_days}}** 天周期内，追求稳健增值
+
+variants:
+  - variantKey: A
+    weight: 2
+    bodyMd: |
+      采用**双轮驱动**：转债底仓提供安全垫，正股弹性贡献超额收益。通过量化模型动态平衡两者比例。
+  - variantKey: B
+    weight: 1
+    bodyMd: |
+      采用**精选池策略**：从全市场可转债中筛选出基本面优秀、转股溢价率合理的标的，集中持有，降低组合波动。

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Debug</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #0f0;
+        }
+        .section {
+            background: #000;
+            border: 1px solid #0f0;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .error { color: #f00; }
+        .success { color: #0f0; }
+        .info { color: #ff0; }
+        button {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #0c0;
+        }
+        pre {
+            background: #111;
+            padding: 10px;
+            overflow-x: auto;
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Profile.html Debug</h1>
+
+    <div class="section">
+        <h2>1. 检查Token</h2>
+        <button onclick="checkToken()">检查Token</button>
+        <pre id="tokenResult"></pre>
+    </div>
+
+    <div class="section">
+        <h2>2. 测试API</h2>
+        <button onclick="testAPI()">测试 /api/user/info</button>
+        <pre id="apiResult"></pre>
+    </div>
+
+    <div class="section">
+        <h2>3. 检查JS文件</h2>
+        <button onclick="checkJS()">检查JS加载</button>
+        <pre id="jsResult"></pre>
+    </div>
+
+    <div class="section">
+        <h2>4. 控制台日志</h2>
+        <pre id="consoleLog"></pre>
+    </div>
+
+    <script src="api-config.js"></script>
+    <script src="token-manager-v2.js"></script>
+
+    <script>
+        const log = [];
+        const originalConsoleLog = console.log;
+        const originalConsoleError = console.error;
+
+        console.log = function(...args) {
+            log.push(['LOG', ...args]);
+            originalConsoleLog.apply(console, args);
+            updateConsoleLog();
+        };
+
+        console.error = function(...args) {
+            log.push(['ERROR', ...args]);
+            originalConsoleError.apply(console, args);
+            updateConsoleLog();
+        };
+
+        function updateConsoleLog() {
+            document.getElementById('consoleLog').textContent = log.map(l =>
+                `[${l[0]}] ${l.slice(1).join(' ')}`
+            ).join('\n');
+        }
+
+        function checkToken() {
+            const result = document.getElementById('tokenResult');
+            try {
+                const token = TokenManager.getToken();
+                const sessionToken = sessionStorage.getItem('providence_token');
+                const localToken = localStorage.getItem('providence_token');
+
+                result.innerHTML = `
+<span class="${token ? 'success' : 'error'}">TokenManager.getToken(): ${token ? '✓ 存在' : '✗ 不存在'}</span>
+Token值: ${token ? token.substring(0, 50) + '...' : '无'}
+
+sessionStorage: ${sessionToken ? '✓ 存在' : '✗ 不存在'}
+localStorage: ${localToken ? '✓ 存在' : '✗ 不存在'}
+
+<span class="info">如果没有Token，请先登录：</span>
+<a href="login.html" style="color: #0ff;">前往登录页面</a>
+                `;
+            } catch (e) {
+                result.innerHTML = `<span class="error">错误: ${e.message}</span>`;
+            }
+        }
+
+        async function testAPI() {
+            const result = document.getElementById('apiResult');
+            result.textContent = '正在请求...';
+
+            try {
+                const token = TokenManager.getToken();
+                if (!token) {
+                    result.innerHTML = '<span class="error">错误: 未找到Token，请先登录</span>';
+                    return;
+                }
+
+                const API_BASE = window.API_CONFIG?.baseURL || 'https://api.4kp3l0iq.top';
+                const url = `${API_BASE}/api/user/info`;
+
+                console.log('请求URL:', url);
+                console.log('Token:', token.substring(0, 30) + '...');
+
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Token': token
+                    }
+                });
+
+                console.log('响应状态:', response.status);
+
+                const data = await response.json();
+                console.log('响应数据:', data);
+
+                if (data.code === 1 || data.code === 200) {
+                    result.innerHTML = `
+<span class="success">✓ API调用成功</span>
+
+响应数据:
+${JSON.stringify(data, null, 2)}
+                    `;
+                } else {
+                    result.innerHTML = `
+<span class="error">✗ API返回错误</span>
+
+${JSON.stringify(data, null, 2)}
+                    `;
+                }
+            } catch (e) {
+                result.innerHTML = `<span class="error">错误: ${e.message}\n${e.stack}</span>`;
+            }
+        }
+
+        function checkJS() {
+            const result = document.getElementById('jsResult');
+            const checks = [];
+
+            checks.push(`window.API_CONFIG: ${window.API_CONFIG ? '✓' : '✗'}`);
+            checks.push(`  baseURL: ${window.API_CONFIG?.baseURL || '未定义'}`);
+            checks.push(`TokenManager: ${typeof TokenManager !== 'undefined' ? '✓' : '✗'}`);
+            checks.push(`ApiClient: ${typeof ApiClient !== 'undefined' ? '✓' : '✗'}`);
+            checks.push(`window.API: ${window.API ? '✓' : '✗'}`);
+            checks.push(`httpClient: ${window.httpClient ? '✓' : '✗'}`);
+
+            result.innerHTML = checks.map(c =>
+                c.includes('✓') ? `<span class="success">${c}</span>` : `<span class="error">${c}</span>`
+            ).join('\n');
+        }
+
+        // 自动执行检查
+        setTimeout(() => {
+            checkToken();
+            checkJS();
+        }, 100);
+    </script>
+</body>
+</html>

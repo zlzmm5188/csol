@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>专属邀请卡 - Providence</title>
+    <link rel="stylesheet" href="styles.css?v=1763897782" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+            background: #0a0e1a;
+        background-attachment: fixed;
+            color: #fff;
+            min-height: 100vh;
+            position: relative;
+            padding: clamp(30px, 7.5vw, 50px) clamp(20px, 5vw, 30px);
+            padding-bottom: clamp(100px, 25vw, 120px);
+        }
+
+        /* 背景电路板图案 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(201, 169, 97, 0.03) 2px, rgba(201, 169, 97, 0.03) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(201, 169, 97, 0.03) 2px, rgba(201, 169, 97, 0.03) 4px);
+            background-size: 40px 40px;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        /* 主容器 */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(30px, 7.5vw, 50px);
+        }
+
+        /* 标题区域 */
+        .header-content {
+            text-align: center;
+            width: 100%;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-title {
+            font-size: clamp(32px, 8vw, 42px);
+            font-weight: 900;
+            color: #f6d27a;
+            margin-bottom: clamp(12px, 3vw, 16px);
+            letter-spacing: 2px;
+            line-height: 1.3;
+            text-shadow: 0 2px 20px rgba(246, 210, 122, 0.3);
+        }
+
+        .subtitle {
+            font-size: clamp(16px, 4vw, 20px);
+            color: #f6d27a;
+            margin-bottom: clamp(8px, 2vw, 10px);
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .description {
+            font-size: clamp(14px, 3.5vw, 18px);
+            color: #f6d27a;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        /* 信封容器 */
+        .envelope-wrapper {
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            padding-bottom: 120%;
+            background: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%);
+            border-radius: clamp(16px, 4vw, 20px);
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.8),
+                inset 0 2px 10px rgba(0, 0, 0, 0.5);
+            overflow: visible;
+        }
+
+        /* 信封开口效果 */
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15%;
+            background: linear-gradient(180deg, rgba(30, 35, 50, 0.8) 0%, transparent 100%);
+            border-radius: clamp(16px, 4vw, 20px) clamp(16px, 4vw, 20px) 0 0;
+            z-index: 3;
+        }
+
+        /* 888元奖励卡片（浅米色，在信封里） */
+        .reward-card {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            padding: clamp(24px, 6vw, 32px) clamp(20px, 5vw, 24px);
+            background: linear-gradient(135deg, #f5f0e1 0%, #e8ddd0 50%, #ddd4c5 100%);
+            border-radius: clamp(12px, 3vw, 16px);
+            box-shadow:
+                0 8px 30px rgba(0, 0, 0, 0.5),
+                inset 0 2px 6px rgba(255, 255, 255, 0.4);
+            text-align: center;
+            z-index: 2;
+            animation: cardFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-6px); }
+        }
+
+        .reward-label {
+            font-size: clamp(13px, 3.25vw, 15px);
+            color: #8b6f47;
+            font-weight: 600;
+            margin-bottom: clamp(10px, 2.5vw, 12px);
+            letter-spacing: 1px;
+        }
+
+        .reward-amount {
+            font-size: clamp(64px, 16vw, 96px);
+            font-weight: 900;
+            color: #c9a961;
+            line-height: 1;
+            margin-bottom: clamp(6px, 1.5vw, 8px);
+            letter-spacing: -3px;
+            text-shadow: 0 4px 15px rgba(201, 169, 97, 0.4);
+        }
+
+        .reward-unit {
+            font-size: clamp(20px, 5vw, 28px);
+            color: #8b6f47;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+
+        .reward-desc {
+            font-size: clamp(12px, 3vw, 14px);
+            color: #8b6f47;
+            font-weight: 500;
+            margin-top: clamp(8px, 2vw, 10px);
+        }
+
+        /* 黑色卡片（在信封底部） */
+        .black-card {
+            position: absolute;
+            bottom: clamp(20px, 5vw, 30px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: clamp(80px, 20vw, 100px);
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
+            border-radius: clamp(12px, 3vw, 16px);
+            border: 1px solid rgba(201, 169, 97, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 clamp(18px, 4.5vw, 24px);
+            box-shadow:
+                0 8px 35px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(201, 169, 97, 0.1);
+            z-index: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 电路板图案（在黑色卡片上） */
+        .black-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(201, 169, 97, 0.05) 3px, rgba(201, 169, 97, 0.05) 6px),
+                repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(201, 169, 97, 0.05) 3px, rgba(201, 169, 97, 0.05) 6px);
+            background-size: 20px 20px;
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        .card-left {
+            display: flex;
+            align-items: center;
+            gap: clamp(12px, 3vw, 16px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-chip {
+            width: clamp(24px, 6vw, 32px);
+            height: clamp(24px, 6vw, 32px);
+            background: linear-gradient(135deg, #c9a961 0%, #8b6f47 100%);
+            border-radius: 5px;
+            position: relative;
+            box-shadow: 0 3px 10px rgba(201, 169, 97, 0.5);
+            flex-shrink: 0;
+        }
+
+        .card-chip::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            right: 3px;
+            bottom: 3px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, transparent 100%);
+            border-radius: 2px;
+        }
+
+        /* 蓝色箭头logo */
+        .card-logo-icon {
+            width: clamp(28px, 7vw, 36px);
+            height: clamp(28px, 7vw, 36px);
+            background: linear-gradient(135deg, #4a9eff 0%, #2e7cd6 100%);
+            border-radius: 6px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(74, 158, 255, 0.4);
+        }
+
+        .card-logo-icon::before {
+            content: '→';
+            font-size: clamp(18px, 4.5vw, 24px);
+            color: #fff;
+            font-weight: 900;
+            transform: rotate(-45deg);
+        }
+
+        .card-logo {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .card-logo-text {
+            font-size: clamp(12px, 3vw, 14px);
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 1.5px;
+        }
+
+        .card-logo-sub {
+            font-size: clamp(9px, 2.25vw, 10px);
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.5px;
+        }
+
+        .card-right {
+            width: clamp(32px, 8vw, 40px);
+            height: clamp(32px, 8vw, 40px);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201, 169, 97, 0.5) 0%, transparent 70%);
+            border: 1px solid rgba(201, 169, 97, 0.5);
+            box-shadow: 0 0 25px rgba(201, 169, 97, 0.4);
+            position: relative;
+            z-index: 1;
+            flex-shrink: 0;
+        }
+
+        /* 立即加入按钮（深灰色/黑色，金色边框） */
+        .join-button {
+            display: block;
+            width: 100%;
+            max-width: 480px;
+            padding: clamp(20px, 5vw, 24px) clamp(40px, 10vw, 50px);
+            background: linear-gradient(135deg, #1a1f2e 0%, #0a0e1a 100%);
+            border: 2px solid #f6d27a;
+            border-radius: clamp(12px, 3vw, 16px);
+            color: #f6d27a;
+            font-size: clamp(18px, 4.5vw, 22px);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 0 auto;
+            letter-spacing: 2px;
+            box-shadow:
+                0 8px 35px rgba(0, 0, 0, 0.6),
+                0 0 0 0 rgba(246, 210, 122, 0.4);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            text-decoration: none;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .join-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(246, 210, 122, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .join-button:hover {
+            background: linear-gradient(135deg, #2a2f3e 0%, #1a1f2e 100%);
+            border-color: #f6c952;
+            color: #f6c952;
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.7),
+                0 0 0 3px rgba(246, 210, 122, 0.3);
+        }
+
+        .join-button:active::before {
+            width: 500px;
+            height: 500px;
+        }
+
+        .join-button:active {
+            transform: scale(0.98);
+            box-shadow:
+                0 6px 25px rgba(0, 0, 0, 0.5),
+                0 0 0 2px rgba(246, 210, 122, 0.5);
+        }
+
+        /* 响应式 */
+        @media (max-width: 480px) {
+            body {
+                padding: clamp(20px, 5vw, 30px);
+                padding-bottom: clamp(80px, 20vw, 100px);
+            }
+
+            .container {
+                gap: clamp(24px, 6vw, 30px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 标题区域 -->
+        <div class="header-content">
+            <h1 class="main-title">邀您同行·共赢未来</h1>
+            <p class="subtitle">您的加入,是我们最珍贵的信任</p>
+            <p class="description">开启专属通道·尊享高端特权</p>
+        </div>
+
+        <!-- 信封容器 -->
+        <div class="envelope-wrapper">
+            <div class="envelope">
+                <!-- 888元奖励卡片（浅米色） -->
+                <div class="reward-card">
+                    <div class="reward-label">新人专享奖励</div>
+                    <div class="reward-amount">
+                        888<span class="reward-unit">元</span>
+                    </div>
+                    <div class="reward-desc">注册即送，立即到账</div>
+                </div>
+
+                <!-- 黑色卡片（带电路板图案） -->
+                <div class="black-card">
+                    <div class="card-left">
+                        <div class="card-chip"></div>
+                        <div class="card-logo-icon"></div>
+                        <div class="card-logo">
+                            <div class="card-logo-text">PROVIDENCE</div>
+                            <div class="card-logo-sub">EQUITY PARTNERS</div>
+                        </div>
+                    </div>
+                    <div class="card-right"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 立即加入按钮 -->
+        <a href="register.html" class="join-button" id="joinBtn" onclick="goToRegister(event); return false;">立即加入</a>
+    </div>
+
+    <script>
+        // 从URL中提取邀请码（子域名部分）
+        function getInviteCodeFromUrl() {
+            // 优先从URL参数获取
+            const params = new URLSearchParams(window.location.search);
+            const codeFromUrl = params.get('invite') || params.get('code') || params.get('invite_code');
+            if (codeFromUrl) {
+                return codeFromUrl;
+            }
+
+            // 从子域名获取（如 g138688.copla.top）
+            const hostname = window.location.hostname;
+            const parts = hostname.split('.');
+
+            // 检查是否是子域名格式（排除 www 和主域名）
+            if (parts.length >= 3 && parts[0] !== 'www' && parts[0] !== 'qiantai') {
+                const subdomain = parts[0];
+                // 支持字母+数字格式（如 g138688）或纯数字UID
+                if (/^[a-zA-Z0-9]+$/.test(subdomain)) {
+                    return subdomain;
+                }
+            }
+
+            // 尝试从 localStorage 获取
+            const storedCode = localStorage.getItem('invite_code') || localStorage.getItem('invite_code_from_link');
+            if (storedCode) {
+                return storedCode;
+            }
+
+            return null;
+        }
+
+        // 跳转到注册页面
+        function goToRegister(event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            const inviteCode = getInviteCodeFromUrl();
+
+            if (inviteCode) {
+                // 保存邀请码到 localStorage
+                localStorage.setItem('invite_code', inviteCode);
+
+                // 跳转到注册页面，传递邀请码参数
+                window.location.href = `register.html?invite=${encodeURIComponent(inviteCode)}`;
+            } else {
+                // 如果没有邀请码，直接跳转到注册页面
+                window.location.href = 'register.html';
+            }
+        }
+
+        // 页面加载时自动检测并保存邀请码
+        document.addEventListener('DOMContentLoaded', () => {
+            const inviteCode = getInviteCodeFromUrl();
+            if (inviteCode) {
+                localStorage.setItem('invite_code', inviteCode);
+                console.log('✓ 邀请码已识别:', inviteCode);
+            }
+        });
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script defer src="smart-swipe-control.js?v=1763897782"></script>
+
+
+</body>
+</html>

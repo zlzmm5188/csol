@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>日利宝调试页面</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .debug-panel {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .debug-panel h2 {
+        margin-top: 0;
+        color: #333;
+      }
+      .status {
+        padding: 10px;
+        border-radius: 4px;
+        margin: 10px 0;
+      }
+      .status.success {
+        background: #d4edda;
+        color: #155724;
+      }
+      .status.error {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      .status.warning {
+        background: #fff3cd;
+        color: #856404;
+      }
+      .log {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 12px;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+      .log-entry {
+        padding: 5px 0;
+        border-bottom: 1px solid #dee2e6;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+          .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+  </head>
+  <body>
+    <div class="debug-panel">
+      <h2>🔍 日利宝调试面板</h2>
+      <div id="configStatus" class="status warning">
+        正在检查config.js加载状态...
+      </div>
+      <div id="tokenStatus" class="status warning">正在检查Token...</div>
+      <div id="apiStatus" class="status warning">等待API调用...</div>
+    </div>
+
+    <div class="debug-panel">
+      <h2>🎮 操作</h2>
+      <button onclick="testRibaoAPI()">测试日利宝API</button>
+      <button onclick="clearAllLogs()">清除日志</button>
+      <button onclick="checkToken()">重新检查Token</button>
+      <button onclick="window.location.href='ribao.html'">
+        前往日利宝页面
+      </button>
+    </div>
+
+    <div class="debug-panel">
+      <h2>📊 实时日志</h2>
+      <div id="logContainer" class="log"></div>
+    </div>
+
+    <script>
+      const logs = [];
+
+      function addLog(message, type = "info") {
+        const timestamp = new Date().toLocaleTimeString();
+        const log = `[${timestamp}] ${message}`;
+        logs.push(log);
+
+        const logEntry = document.createElement("div");
+        logEntry.className = "log-entry";
+        logEntry.textContent = log;
+        logEntry.style.color =
+          type === "error"
+            ? "#dc3545"
+            : type === "success"
+              ? "#28a745"
+              : "#333";
+
+        document.getElementById("logContainer").appendChild(logEntry);
+        document.getElementById("logContainer").scrollTop =
+          document.getElementById("logContainer").scrollHeight;
+      }
+
+      function clearAllLogs() {
+        document.getElementById("logContainer").innerHTML = "";
+        logs.length = 0;
+        addLog("日志已清除", "info");
+      }
+
+      function checkToken() {
+        const token = localStorage.getItem("token");
+        const tokenStatus = document.getElementById("tokenStatus");
+        if (token) {
+          tokenStatus.className = "status success";
+          tokenStatus.textContent = `✅ Token存在: ${token.substring(0, 20)}...`;
+          addLog(`Token存在: ${token.substring(0, 30)}...`, "success");
+        } else {
+          tokenStatus.className = "status error";
+          tokenStatus.textContent = "❌ Token不存在，请先登录";
+          addLog("未找到Token！", "error");
+        }
+      }
+
+      // 初始化检查
+      checkToken();
+
+      // 测试日利宝API
+      async function testRibaoAPI() {
+        const apiStatus = document.getElementById("apiStatus");
+        apiStatus.className = "status warning";
+        apiStatus.textContent = "⏳ 正在调用API...";
+        addLog("开始调用日利宝API...", "info");
+
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            throw new Error("Token不存在，请先登录");
+          }
+
+          addLog("发送请求到: /index.php/api", "info");
+
+          const response = await fetch(
+            "https://api.4kp3l0iq.top/api/ribao/info",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                token:
+                  token ||
+                  localStorage.getItem("providence_token") ||
+                  localStorage.getItem("token") ||
+                  "",
+              },
+            }
+          );
+
+          addLog(
+            `HTTP状态码: ${response.status}`,
+            response.ok ? "success" : "error"
+          );
+
+          const data = await response.json();
+          addLog(
+            `API响应: ${JSON.stringify(data).substring(0, 200)}`,
+            data.code === 1 ? "success" : "error"
+          );
+
+          if (data.code === 1) {
+            apiStatus.className = "status success";
+            apiStatus.textContent = "✅ API调用成功！";
+            addLog("API调用成功！", "success");
+          } else {
+            apiStatus.className = "status warning";
+            apiStatus.textContent = `⚠️ API返回错误: ${data.msg}`;
+            addLog(`API错误: ${data.msg}`, "error");
+
+            // 检查是否触发拦截器
+            setTimeout(() => {
+              if (localStorage.getItem("token")) {
+                addLog("✅ Token未被清除，拦截器白名单生效！", "success");
+                apiStatus.className = "status success";
+                apiStatus.textContent = "✅ 拦截器白名单生效！Token未被清除";
+              } else {
+                addLog("❌ Token被清除了，拦截器白名单未生效！", "error");
+                apiStatus.className = "status error";
+                apiStatus.textContent = "❌ Token被清除，白名单未生效！";
+              }
+            }, 100);
+          }
+        } catch (error) {
+          apiStatus.className = "status error";
+          apiStatus.textContent = `❌ API调用失败: ${error.message}`;
+          addLog(`调用失败: ${error.message}`, "error");
+        }
+      }
+
+      addLog("调试页面已初始化", "info");
+      addLog("版本: 17630668562427b227", "info");
+    </script>
+  </body>
+</html>

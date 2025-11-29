@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+  <title>公司动态 | PROVIDENCE EQUITY PARTNERS</title>
+  <link rel="icon" href="favicon.ico">
+  <style>
+    :root {
+      --navy-dark: #0a1929;
+      --navy-mid: #1e3a5f;
+      --navy-light: #2a4a6f;
+      --gold: #b8925a;
+      --gold-dark: #8b7044;
+      --gold-light: #d4b896;
+      --text-light: #e8edf3;
+      --text-dark: #1a2332;
+      --border-subtle: rgba(184, 146, 90, 0.2);
+      --border-normal: rgba(184, 146, 90, 0.35);
+      --bg-overlay: rgba(10, 25, 41, 0.75);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow-x: hidden
+    }
+
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text-light);
+      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-mid) 50%, var(--navy-dark) 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 20s ease infinite;
+      padding-bottom: 90px;
+      min-height: 100vh;
+    }
+
+    @keyframes gradientShift {
+
+      0%,
+      100% {
+        background-position: 0% 50%
+      }
+
+      50% {
+        background-position: 100% 50%
+      }
+    }
+
+    /* ========== 顶部导航栏 ========== */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      padding: 14px 16px;
+      background: linear-gradient(180deg, rgba(10, 23, 35, 0.95), rgba(10, 23, 35, 0.75));
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--lineD);
+    }
+
+    .topbar-content {
+      max-
+      
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .back-btn {
+      
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      
+    }
+
+    .back-btn:active {
+      transform: scale(0.95);
+    }
+
+    .topbar-title {
+      flex: 0 0 auto;
+    }
+
+    .topbar-title h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 1.5px;
+      margin: 0;
+    }
+
+
+    /* ========== 头版头条 Hero Banner ========== */
+    .hero-banner {
+      position: relative;
+      height: clamp(300px, 42vh, 450px);
+      margin: 0 0 32px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.7) saturate(0.8);
+      transition: transform 0.6s ease;
+    }
+
+    .hero-banner:hover .hero-bg {
+      transform: scale(1.05);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom,
+          transparent 0%,
+          rgba(10, 25, 41, 0.6) 40%,
+          rgba(10, 25, 41, 0.95) 100%);
+    }
+
+    .hero-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 40px 24px;
+      max-
+      
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(184, 146, 90, 0.9);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-size: clamp(26px, 5.5vw, 38px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.3;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 500;
+    }
+
+    .hero-meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ========== 快讯滚动条 ========== */
+    .news-ticker {
+      background: rgba(184, 146, 90, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 14px 0;
+      margin-bottom: 40px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .ticker-label {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--gold-dark);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      z-index: 2;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .ticker-content {
+      display: flex;
+      gap: 50px;
+      animation: scroll 35s linear infinite;
+      padding-left: 140px;
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translateX(0)
+      }
+
+      100% {
+        transform: translateX(-50%)
+      }
+    }
+
+    .ticker-item {
+      white-space: nowrap;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ticker-item::before {
+      content: '•';
+      color: var(--gold);
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    /* ========== 编辑精选（3栏）========== */
+    .featured-section {
+      max-
+      
+      padding: 0 20px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .section-line {
+      
+      height: 1px;
+      background: linear-gradient(90deg, var(--border-normal), transparent);
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .featured-card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .featured-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--border-normal);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .featured-img {
+      height: 180px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured-img::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, transparent 0%, rgba(10, 25, 41, 0.4) 100%);
+    }
+
+    .featured-category {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 5px 12px;
+      background: rgba(10, 25, 41, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.5px;
+      z-index: 2;
+      text-transform: uppercase;
+    }
+
+    .featured-body {
+      padding: 20px;
+    }
+
+    .featured-date {
+      font-size: 12px;
+      color: var(--gold-light);
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .featured-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .featured-summary {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.7;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ========== 时间线布局 ========== */
+    .timeline-section {
+      max-
+      
+      padding: 0 20px;
+    }
+
+    .timeline-container {
+      position: relative;
+      padding-left: 100px;
+    }
+
+    .timeline-line {
+      position: absolute;
+      left: 46px;
+      top: 0;
+      bottom: 0;
+      
+      background: linear-gradient(to bottom,
+          var(--gold) 0%,
+          var(--gold-dark) 50%,
+          transparent 100%);
+      opacity: 0.4;
+    }
+
+    .timeline-group {
+      margin-bottom: 56px;
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .timeline-group.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .timeline-date {
+      position: absolute;
+      left: -100px;
+      top: 4px;
+      
+      
+    }
+
+    .timeline-year {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--gold);
+      
+      letter-spacing: 0.5px;
+    }
+
+    .timeline-month {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 600;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -55px;
+      top: 10px;
+      
+      height: 14px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 3px solid var(--navy-dark);
+      box-shadow: 0 0 0 3px rgba(184, 146, 90, 0.2);
+      z-index: 2;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 3px rgba(184, 146, 90, 0.2);
+      }
+
+      50% {
+        box-shadow: 0 0 0 6px rgba(184, 146, 90, 0.4);
+      }
+    }
+
+    .timeline-items {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .timeline-card {
+      background: rgba(14, 43, 68, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(201, 169, 97, 0.15);
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      position: relative;
+
+      /* 去掉Spotlight滚动效果 */
+      transform: none;
+      opacity: 1;
+      will-change: transform, opacity;
+    }
+
+    /* 标签默认暗淡 */
+    .timeline-badge {
+      opacity: 0.4;
+      transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .timeline-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      
+      background: var(--gold);
+      opacity: 0;
+      /* 快速响应的透明度过渡 */
+      transition: opacity 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+
+    .timeline-card:hover {
+      border-color: var(--border-normal);
+    }
+
+    .timeline-card.active::before {
+      opacity: 1;
+    }
+
+    .timeline-card-header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 0;
+    }
+
+    .timeline-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      
+      opacity: 0.4;
+      /* 快速响应的透明度过渡 */
+      transition: opacity 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+      align-self: flex-start;
+    }
+
+    .timeline-card.active .timeline-badge {
+      opacity: 1;
+    }
+
+    .timeline-badge.investment {
+      background: rgba(251, 191, 36, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .timeline-badge.awards {
+      background: rgba(59, 130, 246, 0.15);
+      color: #3b82f6;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .timeline-badge.strategy {
+      background: rgba(139, 92, 246, 0.15);
+      color: #a78bfa;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .timeline-badge.expansion {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .timeline-card-content {
+      
+    }
+
+    .timeline-card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .timeline-card-desc {
+      display: none;
+    }
+
+    /* ========== 数据统计 ========== */
+    .stats-section {
+      max-
+      
+      padding: 0 20px;
+    }
+
+    .stats-card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 36px;
+      
+    }
+
+    .stats-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 28px;
+      letter-spacing: 0.5px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 32px;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .stat-number {
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--gold);
+      text-shadow: 0 2px 8px rgba(184, 146, 90, 0.3);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* ========== 底部导航 ========== */
+    .tabbar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(11, 59, 94, 0.98), rgba(18, 76, 106, 0.98)),
+        url('img/photo_2025-10-20_05-38-52.jpg') center bottom/contain repeat-x;
+      backdrop-filter: blur(16px);
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      border-top: 1px solid rgba(212, 175, 55, 0.25);
+      height: 68px;
+      z-index: 100;
+      padding: 4px 0 4px;
+      box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .tab {
+      
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      color: #8b9aa8;
+      text-decoration: none;
+      transition: color .3s ease;
+      position: relative;
+      padding: 0;
+      gap: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tab:active .ico {
+      transform: scale(0.90)
+    }
+
+    .tab.active {
+      color: #f5d771
+    }
+
+    .tab .ico {
+      
+      height: 110px;
+      background-image: url('assets/a75728afde83d.jpg');
+      background-size: 400% 400%;
+      background-repeat: no-repeat;
+      background-color: transparent;
+      margin-bottom: 0;
+      transition: transform .2s ease, opacity .2s ease;
+      position: relative;
+      will-change: transform, opacity;
+    }
+
+    .tab:not(.active) .ico {
+      opacity: 0.65
+    }
+
+    .tab.active .ico {
+      opacity: 1;
+      transform: scale(1.18)
+    }
+
+    .tab .txt {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-top: -30px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .ico-home {
+      background-image: url('img/zy.png?v=1763340588') !important;
+      background-size: 75% !important;
+      background-position: center !important
+    }
+
+    .ico-finance {
+      background-image: url('img/w1.png?v=1763340588') !important;
+      background-size: 75% !important;
+      background-position: center !important
+    }
+
+    .ico-market {
+      background-image: url('img/xm.png?v=1763340588') !important;
+      background-size: 75% !important;
+      background-position: center !important
+    }
+
+    .ico-message {
+      background-image: url('img/34.png?v=1763340588') !important;
+      background-size: 75% !important;
+      background-position: center !important
+    }
+
+    .ico-me {
+      background-image: url('img/wd.png?v=1763340588') !important;
+      background-size: 75% !important;
+      background-position: center !important
+    }
+
+    /* ========== 模态框（从下往上滑入）========== */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9999;
+    }
+
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    .modal-sheet {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      max-height: 90vh;
+      background: #fff;
+      border-radius: 20px 20px 0 0;
+      overflow: hidden;
+      animation: slideUpSheet 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+      box-shadow: 0 -4px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    @keyframes slideUpSheet {
+      from {
+        transform: translateY(100%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    .modal-handle {
+      
+      height: 4px;
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 2px;
+      margin: 12px auto;
+    }
+
+    .modal-header {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      padding: 0 24px 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      z-index: 10;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.05);
+      color: #666;
+      font-size: 20px;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-body {
+      padding: 0 24px 40px;
+      overflow-y: auto;
+      max-height: calc(90vh - 120px);
+      color: var(--text-dark);
+    }
+
+    .modal-body::-webkit-scrollbar {
+      
+      border-radius: 3px
+    }
+
+    .modal-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      background: var(--gold);
+      color: #fff;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    .modal-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .modal-meta {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      flex-wrap: wrap;
+    }
+
+    .modal-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .modal-section {
+      margin-bottom: 32px;
+    }
+
+    .modal-section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .modal-text {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #444;
+      margin-bottom: 20px;
+      
+    }
+
+    .modal-highlight {
+      background: rgba(184, 146, 90, 0.1);
+      border-left: 3px solid var(--gold);
+      padding: 16px;
+      margin: 20px 0;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .modal-highlight-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gold-dark);
+      margin-bottom: 8px;
+    }
+
+    .modal-highlight-text {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #555;
+    }
+
+    .modal-list {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+
+    .modal-list li {
+      padding: 12px 0 12px 24px;
+      position: relative;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #555;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .modal-list li:last-child {
+      border-bottom: none;
+    }
+
+    .modal-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-weight: bold;
+    }
+
+    /* ========== 响应式 ========== */
+    @media (max-
+      }
+
+      .timeline-container {
+        padding-left: 70px;
+      }
+
+      .timeline-date {
+        left: -70px;
+        
+      }
+
+      .timeline-year {
+        font-size: 16px;
+      }
+
+      .timeline-month {
+        font-size: 11px;
+      }
+
+      .timeline-dot {
+        left: -44px;
+        
+        height: 12px;
+      }
+
+      .timeline-line {
+        left: 37px;
+      }
+
+      .modal-title {
+        font-size: 22px;
+      }
+
+      .modal-body {
+        padding: 0 20px 32px;
+      }
+    }
+
+    @media (max-
+      }
+
+      .section-title {
+        font-size: 19px;
+      }
+
+      .stat-number {
+        font-size: 32px;
+      }
+
+      .ticker-content {
+        padding-left: 120px;
+      }
+    }
+.brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }      .brand .back-btn { flex: 0 0 auto; margin-right: 8px; }      .brand .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+  </style>
+</head>
+
+<body>
+
+  <!-- 顶部导航 -->
+  <div class="topbar">
+    <div class="brand"><a href="javascript:history.back()" class="back-btn">←</a><h1 class="page-title">公司动态</h1></div>
+  </div>
+
+  <!-- 头版头条 Hero Banner -->
+  <div class="hero-banner" onclick="openModal('hero')">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">HEADLINE</div>
+      <h2 class="hero-title">Providence 荣膺 GrowthCap 2025 顶级私募股权公司</h2>
+    </div>
+  </div>
+
+  <!-- 快讯滚动条 -->
+  <div class="news-ticker">
+    <div class="ticker-label">FLASH</div>
+    <div class="ticker-content" id="tickerContent"></div>
+  </div>
+
+  <!-- 编辑精选 -->
+  <div class="featured-section">
+    <div class="section-header">
+      <span class="section-title">编辑精选</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="featured-grid" id="featuredGrid"></div>
+  </div>
+
+  <!-- 时间线 -->
+  <div class="timeline-section">
+    <div class="section-header">
+      <span class="section-title">动态时间线</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="timeline-container" id="timelineContainer">
+      <div class="timeline-line"></div>
+    </div>
+  </div>
+
+  <!-- 年度统计板块已移除 -->
+
+  <!-- 底部导航 -->
+  <nav class="tabbar">
+    <a class="tab" href="index.html">
+      <div class="ico ico-home"></div>
+      <div class="txt">首页</div>
+    </a>
+    <a class="tab" href="market.html">
+      <div class="ico ico-finance"></div>
+      <div class="txt">数据</div>
+    </a>
+    <a class="tab" href="projects.html">
+      <div class="ico ico-market"></div>
+      <div class="txt">项目</div>
+    </a>
+    <a class="tab" href="messages.html">
+      <div class="ico ico-message"></div>
+      <div class="txt">消息</div>
+    </a>
+    <a class="tab" href="profile.html">
+      <div class="ico ico-me"></div>
+      <div class="txt">我的</div>
+    </a>
+  </nav>
+
+  <!-- 新闻详情模态框（从下往上滑入）-->
+  <div id="newsModal" class="modal">
+    <div class="modal-overlay" onclick="closeModal()"></div>
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    // 公司动态数据（扩展内容）
+    const newsData = [
+      {
+        id: 'hero',
+        badge: 'HEADLINE',
+        category: '奖项荣誉',
+        type: 'awards',
+        title: 'Providence 荣膺 GrowthCap 2025 顶级私募股权公司',
+        summary: 'Providence Equity Partners 被 GrowthCap 评选为2025年度顶级私募股权公司之一，这一殊荣彰显了 Providence 在全球私募股权投资领域的卓越表现和行业领导地位。',
+        content: `Providence Equity Partners 被权威机构 GrowthCap 评选为2025年度顶级私募股权公司之一。这一殊荣是对 Providence 在全球私募股权投资领域卓越表现的高度认可。
+
+作为专注于媒体、通信、教育和信息服务领域的领先私募股权投资公司，Providence 凭借其专业的投资策略、出色的资产管理能力和对行业的深刻洞察，在激烈的市场竞争中脱颖而出。
+
+公司自成立以来，始终秉持长期价值投资理念，专注于帮助被投企业实现可持续增长。通过深度参与企业战略规划、运营优化和资源整合，Providence 为投资组合公司创造了显著价值。
+
+此次获奖进一步巩固了 Providence 在行业内的领导地位，也是对公司团队专业精神和投资理念的最佳肯定。展望未来，Providence 将继续坚守专业投资道路，为投资者创造长期稳健回报。`,
+        details: {
+          impact: '此次获奖标志着 Providence 在全球私募股权投资领域的领先地位得到权威认可，进一步提升了公司的品牌价值和市场影响力。',
+          recognition: 'GrowthCap 是全球知名的投资行业评级机构，其评选标准包括投资业绩、管理规模、行业影响力、创新能力等多个维度。'
+        },
+        date: '2025-10-24',
+        year: '2025',
+        month: '10月',
+        featured: true,
+        image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800'
+      },
+      {
+        id: 'tvb-2011',
+        badge: 'INVESTMENT',
+        category: '投资案例',
+        type: 'investment',
+        title: 'Providence 完成香港TVB重大战略投资',
+        summary: '携手王雪红财团、陈国强，以每股55港元成功收购TVB 26%股权，总交易额达62.6亿港元。',
+        content: `Providence Equity Partners 携手王雪红财团、陈国强，以每股55港元成功收购香港电视广播有限公司（TVB）26%股权，总交易额达62.6亿港元。
+
+此次投资标志着Providence在亚洲传媒领域的战略性布局，为TVB带来国际化运营经验和资本支持，助力其数字化转型和内容升级。
+
+作为香港最大的免费电视台，TVB在华语娱乐内容制作领域拥有深厚积累和强大影响力。Providence 的加入将为 TVB 带来全球媒体行业的最佳实践和资源网络。
+
+这一里程碑式交易展现了Providence对优质传媒资产的精准洞察力和长期投资价值理念。`,
+        details: {
+          dealSize: '总交易金额达 62.6 亿港元，占 TVB 总股本的 26%。',
+          strategy: 'Providence 将协助 TVB 推进数字化转型，拓展新媒体业务，提升内容创新能力。',
+          partners: '联合投资方包括王雪红女士领导的财团和资深媒体企业家陈国强先生。'
+        },
+        date: '2011-12-15',
+        year: '2011',
+        month: '12月',
+        featured: true,
+        image: 'https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800'
+      },
+      {
+        id: 2,
+        badge: 'MILESTONE',
+        category: '业务拓展',
+        type: 'expansion',
+        title: '公司管理资产规模突破500亿美元里程碑',
+        summary: 'Providence 宣布公司管理资产规模（AUM）正式突破500亿美元大关，标志着公司在资产管理领域的重大里程碑。',
+        content: `Providence Equity Partners 宣布公司管理资产规模（AUM）正式突破500亿美元大关，标志着公司在资产管理领域达到新的重大里程碑。
+
+这一成就是客户信任与专业服务的双重见证，体现了Providence在全球私募股权投资领域的卓越地位。自成立以来，公司始终秉持专业、稳健的投资理念，为全球机构投资者和高净值客户创造了长期稳健回报。
+
+500亿美元的管理规模不仅代表着资本的积累，更体现了市场对Providence投资能力和价值创造能力的高度认可。
+
+公司将继续秉承稳健的投资策略，深耕媒体、通信、教育和信息服务等核心领域，为投资者创造长期价值。`,
+        details: {
+          growth: '从400亿美元增长至500亿美元，仅用时18个月，展现强劲增长动力。',
+          composition: '资产组合涵盖全球优质项目，分布于北美、欧洲和亚洲主要市场。',
+          outlook: '计划在未来3年内将管理规模提升至750亿美元，进一步巩固行业领导地位。'
+        },
+        date: '2025-10-15',
+        year: '2025',
+        month: '10月',
+        featured: true,
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800'
+      },
+      {
+        id: 3,
+        badge: 'LAUNCH',
+        category: '产品发布',
+        type: 'expansion',
+        title: '全新AI智能投顾系统正式上线',
+        summary: 'Providence 正式推出基于人工智能的智能投顾系统，为客户提供更精准的投资建议和风险评估。',
+        content: `Providence Equity Partners 正式推出全新的AI智能投顾系统，该系统基于先进的人工智能技术，能够为客户提供更精准的投资建议和全面的风险评估。
+
+这一创新系统整合了大数据分析、机器学习和自然语言处理等前沿技术，能够实时分析全球市场动态，识别投资机会，评估风险因素，为客户提供个性化的投资方案。
+
+系统将大幅提升投资决策效率，帮助客户在复杂的市场环境中把握投资机会，实现资产的保值增值。
+
+这标志着Providence在金融科技领域的又一重要突破，展现了公司持续创新的能力和对客户需求的深刻理解。`,
+        details: {
+          features: '系统具备实时市场分析、智能风险评估、个性化投资建议、投资组合优化等核心功能。',
+          technology: '采用深度学习算法，可处理海量金融数据，识别隐藏的投资机会和潜在风险。',
+          access: '首期向 VIP5 及以上级别客户开放，计划逐步向所有客户推广。'
+        },
+        date: '2025-10-12',
+        year: '2025',
+        month: '10月',
+        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800'
+      },
+      {
+        id: 4,
+        badge: 'PARTNERSHIP',
+        category: '战略合作',
+        type: 'strategy',
+        title: 'Providence 与全球顶级投行建立战略合作',
+        summary: 'Providence 宣布与高盛、摩根士丹利等全球顶级投行建立战略合作关系。',
+        content: `Providence Equity Partners 宣布与高盛、摩根士丹利等全球顶级投资银行建立深度战略合作关系。
+
+此次合作将整合双方在资本市场、投资研究和客户服务方面的优势资源，为高净值客户提供更优质、更全面的投资服务。合作范围包括联合投资项目、市场研究共享、客户资源互通等多个领域。
+
+通过与全球顶级投行的深度合作，Providence 将进一步提升全球资源整合能力，为客户创造更多价值。
+
+这一战略合作将进一步巩固Providence在全球金融市场的影响力，开启公司发展的新篇章。`,
+        details: {
+          partners: '合作方包括高盛、摩根士丹利、摩根大通等全球领先投资银行。',
+          scope: '合作内容涵盖并购顾问、资本市场服务、投资研究、风险管理等多个领域。',
+          benefits: '客户将享受到更丰富的投资产品选择、更专业的投资咨询和更完善的财富管理服务。'
+        },
+        date: '2025-09-28',
+        year: '2025',
+        month: '09月',
+        image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800'
+      },
+      {
+        id: 5,
+        badge: 'FUNDRAISING',
+        category: '业务拓展',
+        type: 'expansion',
+        title: 'Providence 完成新一期基金募集，规模达12亿美元',
+        summary: '成功完成第八期旗舰基金募集，将主要投资于科技、医疗健康和消费升级领域。',
+        content: `Providence Equity Partners 宣布成功完成其第八期旗舰基金的募集工作，总规模达到12亿美元。
+
+该基金将主要投资于科技创新、医疗健康和消费升级等高增长领域，为投资者捕捉未来经济增长的核心动力。基金将专注于中后期投资项目，通过深度参与企业成长，创造长期价值。
+
+此次募集获得了全球知名机构投资者的广泛支持，包括主权财富基金、养老金、大学捐赠基金等。超额认购的情况充分体现了投资者对Providence专业能力的高度认可。
+
+这是Providence连续第八期成功募集旗舰基金，展现了公司强大的品牌影响力和持续的业绩创造能力。`,
+        details: {
+          size: '基金规模 12 亿美元，较上一期增长 20%，反映投资者持续信心。',
+          focus: '重点关注人工智能、生物医药、高端制造、新能源等战略新兴产业。',
+          investors: '吸引了来自北美、欧洲和亚洲的顶级机构投资者参与。'
+        },
+        date: '2025-09-15',
+        year: '2025',
+        month: '09月',
+        image: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800'
+      },
+      {
+        id: 6,
+        badge: 'IPO',
+        category: '投资案例',
+        type: 'investment',
+        title: 'Providence 投资组合公司成功上市，回报率超300%',
+        summary: '投资的科技公司 TechVision 在纳斯达克成功上市，作为早期投资人获得超过3倍投资回报。',
+        content: `Providence Equity Partners 投资的科技公司 TechVision 在纳斯达克成功上市，Providence 作为早期投资人获得超过300%的投资回报。
+
+TechVision 是一家专注于企业级AI解决方案的创新公司，其产品已服务全球500强企业。公司在Providence的支持下，实现了技术创新、市场拓展和团队建设的全面突破。
+
+此次成功上市不仅为Providence带来了丰厚的财务回报，更验证了公司在科技领域的投资眼光和价值创造能力。
+
+这一成功案例再次证明了Providence在科技领域投资的前瞻性和专业能力，也为其他投资组合公司树立了标杆。`,
+        details: {
+          returns: 'Providence 作为 A 轮领投方，持股比例从初始的 15% 稀释至上市时的 8.5%，实现 IRR 超过 45%。',
+          growth: 'TechVision 在 Providence 投资期间，营收从 500 万美元增长至 2.5 亿美元，客户数量增长 10 倍。',
+          support: 'Providence 协助公司完成多轮融资，引入战略合作伙伴，优化治理结构，加速国际化进程。'
+        },
+        date: '2025-08-20',
+        year: '2025',
+        month: '08月',
+        image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800'
+      },
+      {
+        id: 7,
+        badge: 'AWARD',
+        category: '奖项荣誉',
+        type: 'awards',
+        title: 'Providence 荣获「年度最佳ESG投资机构」',
+        summary: '在2025年全球ESG投资峰会上，凭借卓越实践荣获「年度最佳ESG投资机构」称号。',
+        content: `在2025年全球ESG投资峰会上，Providence Equity Partners 凭借在环境（Environmental）、社会（Social）和治理（Governance）方面的卓越实践，荣获「年度最佳ESG投资机构」称号。
+
+Providence 始终将可持续发展理念融入投资决策全流程，在投资前尽职调查、投资后管理和退出环节都充分考虑ESG因素。公司积极推动被投企业提升ESG表现，助力实现商业成功与社会价值的统一。
+
+在环境方面，Providence 鼓励投资组合公司采用清洁能源、降低碳排放、提高资源利用效率。在社会方面，关注员工福利、社区发展和社会责任。在治理方面，推动建立规范的公司治理结构和透明的信息披露机制。
+
+这一荣誉是对Providence社会责任担当和可持续投资理念的重要肯定，也是公司长期践行ESG理念的成果体现。`,
+        details: {
+          initiatives: '制定了全面的 ESG 投资框架，覆盖投资全生命周期的 ESG 风险评估和管理。',
+          impact: '投资组合公司平均碳排放强度降低 25%，女性管理层比例提升至 35%。',
+          commitment: '承诺到 2030 年实现投资组合的碳中和目标，成为行业可持续发展的引领者。'
+        },
+        date: '2025-08-15',
+        year: '2025',
+        month: '08月',
+        image: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800'
+      },
+      {
+        id: 8,
+        badge: 'INVESTMENT',
+        category: '投资案例',
+        type: 'investment',
+        title: 'Providence 领投医疗AI公司B轮融资',
+        summary: '领投医疗AI公司MedAI的B轮融资，投资金额5000万美元。',
+        content: `Providence Equity Partners 领投医疗AI公司MedAI的B轮融资，投资金额达5000万美元。
+
+MedAI 是一家专注于医疗影像AI诊断的创新企业，其产品已在多家三甲医院投入使用，诊断准确率达到95%以上，显著提升了医疗服务效率和质量。
+
+本轮融资将用于加速产品研发、扩大市场覆盖和推进国际化布局。Providence 将协助公司完善产品矩阵、拓展医院客户、建立行业标准，推动医疗AI技术的广泛应用。
+
+医疗健康是Providence重点关注的投资领域之一，公司看好医疗AI技术在提升诊疗效率、降低医疗成本方面的巨大潜力。`,
+        details: {
+          technology: 'MedAI 的核心技术基于深度学习算法，可识别肺部、心脏、骨骼等多种医学影像。',
+          traction: '产品已部署在 120+ 家医院，累计辅助诊断超过 50 万例病例。',
+          vision: '计划3年内将产品覆盖至 1000+ 家医院，成为医疗 AI 领域的领军企业。'
+        },
+        date: '2025-07-20',
+        year: '2025',
+        month: '07月',
+        image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800'
+      },
+      {
+        id: 9,
+        badge: 'PARTNERSHIP',
+        category: '战略合作',
+        type: 'strategy',
+        title: 'Providence 与国内顶尖科研机构达成战略合作',
+        summary: '与中国科学院深圳先进技术研究院建立战略合作，共同推动科技成果转化。',
+        content: `Providence Equity Partners 宣布与中国科学院深圳先进技术研究院建立战略合作关系。
+
+双方将在科技成果转化、产业化应用和创新创业孵化等领域开展深度合作。合作内容包括联合设立产业化基金、共建技术转化平台、开展前沿技术研究等。
+
+中国科学院深圳先进技术研究院是国内领先的科研机构，在人工智能、生物医药、新材料等领域拥有雄厚的研发实力和丰富的科技成果储备。
+
+这一合作将加速前沿科技的商业化进程，为投资者创造新的价值增长点，也将为中国科技创新和产业升级贡献力量。`,
+        details: {
+          focus: '重点关注人工智能、生命科学、新能源、新材料等战略新兴领域。',
+          fund: '双方计划联合设立规模 5 亿元人民币的科技成果转化基金。',
+          platform: '共建技术转移和产业化平台，为科技项目提供资金、市场、管理等全方位支持。'
+        },
+        date: '2025-07-12',
+        year: '2025',
+        month: '07月',
+        image: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800'
+      },
+      {
+        id: 'iqiyi-2013',
+        badge: 'INVESTMENT',
+        category: '投资案例',
+        type: 'investment',
+        title: 'Providence 投资中国领先视频平台爱奇艺',
+        summary: '战略投资百度旗下爱奇艺，成为其重要股东之一。',
+        content: `Providence Equity Partners 战略投资百度旗下网络视频公司爱奇艺，成为其重要股东之一。
+
+爱奇艺作为中国最大的在线视频平台之一，月活跃用户数以亿计，拥有海量优质内容和强大的内容制作能力。Providence的加入为其带来丰富的媒体行业资源和国际化运营经验。
+
+这一投资体现了Providence在数字媒体领域的战略布局，也展现了公司对中国互联网市场发展潜力的看好。
+
+通过这一投资，Providence 进一步拓展了在亚太地区的投资版图，为全球投资组合增添了重要一笔。`,
+        details: {
+          investment: 'Providence 作为战略投资者参与爱奇艺 B 轮融资，投资金额未对外披露。',
+          support: '协助爱奇艺引入国际先进的内容制作和运营经验，提升平台竞争力。',
+          outcome: '爱奇艺后续成功在纳斯达克上市，成为中国视频行业的领军企业。'
+        },
+        date: '2013-05-20',
+        year: '2013',
+        month: '05月',
+        image: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=800'
+      }
+    ];
+
+    // 图片配置
+    const images = {
+      featured1: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800',
+      featured2: 'https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800',
+      featured3: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800'
+    };
+
+    // 渲染快讯滚动条
+    function renderTicker() {
+      const tickerContent = document.getElementById('tickerContent');
+      const tickerItems = newsData.slice(0, 6).map(news =>
+        `<div class="ticker-item">${news.title}</div>`
+      ).join('');
+      tickerContent.innerHTML = tickerItems + tickerItems;
+    }
+
+    // 渲染编辑精选
+    function renderFeatured() {
+      const featuredGrid = document.getElementById('featuredGrid');
+      const featured = newsData.filter(n => n.featured).slice(0, 3);
+
+      featuredGrid.innerHTML = featured.map((news, idx) => `
+    <div class="featured-card" onclick="openModal('${news.id}')">
+      <div class="featured-img" style="background-image:url('${news.image || images['featured' + (idx + 1)]}')">
+        <div class="featured-category">${news.category}</div>
+            </div>
+      <div class="featured-body">
+        <div class="featured-date">${news.date}</div>
+        <div class="featured-title">${news.title}</div>
+        <div class="featured-summary">${news.summary}</div>
+      </div>
+    </div>
+  `).join('');
+    }
+
+    // 渲染时间线
+    function renderTimeline() {
+      const container = document.getElementById('timelineContainer');
+
+      const grouped = {};
+      newsData.forEach(news => {
+        const key = `${news.year}-${news.month}`;
+        if (!grouped[key]) {
+          grouped[key] = {
+            year: news.year,
+            month: news.month,
+            items: []
+          };
+        }
+        grouped[key].items.push(news);
+      });
+
+      const sortedGroups = Object.values(grouped).sort((a, b) => {
+        const yearDiff = parseInt(b.year) - parseInt(a.year);
+        if (yearDiff !== 0) return yearDiff;
+        return parseInt(b.month) - parseInt(a.month);
+      });
+
+      container.innerHTML = '<div class="timeline-line"></div>' + sortedGroups.map(group => `
+    <div class="timeline-group">
+      <div class="timeline-date">
+        <span class="timeline-year">${group.year}</span>
+        <span class="timeline-month">${group.month}</span>
+                </div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-items">
+        ${group.items.map(news => `
+          <div class="timeline-card" onclick="openModal('${news.id}')">
+            <div class="timeline-card-header">
+              <span class="timeline-badge ${news.type}">${news.badge}</span>
+              <div class="timeline-card-content">
+                <div class="timeline-card-title">${news.title}</div>
+                <div class="timeline-card-desc">${news.summary}</div>
+                </div>
+                </div>
+            </div>
+        `).join('')}
+      </div>
+    </div>
+    `).join('');
+    }
+
+    // 打开模态框
+    function openModal(newsId) {
+      const news = newsData.find(n => n.id == newsId);
+      if (!news) return;
+
+      const modalBody = document.getElementById('modalBody');
+
+      let detailsHTML = '';
+      if (news.details) {
+        detailsHTML = Object.entries(news.details).map(([key, value]) => `
+      <div class="modal-highlight">
+        <div class="modal-highlight-title">${getDetailTitle(key)}</div>
+        <div class="modal-highlight-text">${value}</div>
+      </div>
+    `).join('');
+      }
+
+      modalBody.innerHTML = `
+    <div class="modal-badge">${news.badge}</div>
+    <h1 class="modal-title">${news.title}</h1>
+    <div class="modal-meta">
+      <div class="modal-meta-item">
+        <span>📅</span>
+        <span>${news.date}</span>
+      </div>
+      <div class="modal-meta-item">
+        <span>📂</span>
+        <span>${news.category}</span>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">新闻概要</div>
+      <div class="modal-text">${news.content.replace(/\n\n/g, '</div><div class="modal-text">')}</div>
+    </div>
+
+    ${detailsHTML ? `
+      <div class="modal-section">
+        <div class="modal-section-title">详细信息</div>
+        ${detailsHTML}
+      </div>
+    ` : ''}
+  `;
+
+      const modal = document.getElementById('newsModal');
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    // 关闭模态框
+    function closeModal() {
+      const modal = document.getElementById('newsModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    // 获取详情标题
+    function getDetailTitle(key) {
+      const titles = {
+        impact: '重要影响',
+        recognition: '权威认可',
+        dealSize: '交易规模',
+        strategy: '战略意义',
+        partners: '合作伙伴',
+        growth: '增长数据',
+        composition: '资产构成',
+        outlook: '未来展望',
+        features: '核心功能',
+        technology: '技术优势',
+        access: '使用权限',
+        scope: '合作范围',
+        benefits: '客户收益',
+        size: '基金规模',
+        focus: '投资重点',
+        investors: '投资者',
+        returns: '投资回报',
+        support: '增值服务',
+        initiatives: 'ESG举措',
+        commitment: '长期承诺',
+        traction: '业务进展',
+        vision: '发展愿景',
+        fund: '基金设立',
+        platform: '平台建设',
+        investment: '投资详情',
+        outcome: '投资成果'
+      };
+      return titles[key] || key;
+    }
+
+    // 页面加载时初始化
+    document.addEventListener('DOMContentLoaded', function () {
+      renderTicker();
+      renderFeatured();
+      renderTimeline();
+
+      // 滚动监听 - 时间线渐现动画
+      const observerOptions = {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, observerOptions);
+
+      // 监听所有时间线组
+      setTimeout(() => {
+        document.querySelectorAll('.timeline-group').forEach(group => {
+          observer.observe(group);
+        });
+      }, 100);
+
+      // 已去掉Spotlight滚动效果
+    });
+  </script>
+
+</body>
+
+</html>

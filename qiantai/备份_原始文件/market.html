@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>市场 | PROVIDENCE EQUITY PARTNERS</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="styles.css?v=1763813622" />
+    <script src="api-new.js?v=1763813622"></script>
+    <script defer src="market.js?v=1763813622"></script>
+    <style>
+        .detail-header,
+        .hero-simple,
+        .projects-header-theme {
+            background: linear-gradient(135deg, #0e2b44, #1a3a5f) !important
+        }
+
+        .detail-header-title,
+        .back-btn,
+        .back-btn-projects {
+            color: #fff !important
+        }
+
+.brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}      .brand .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+    <!-- <script src="api-config.js?v=1763813622"></script> (已包含在api-new.js) -->
+    <!-- <script src="token-manager.js?v=1763813622"></script> (已包含在api-new.js) -->
+</head>
+
+<body class="page-other">
+    <div id="app">
+        <!-- 顶部导航 -->
+        <header class="hero-simple">
+            <div class="hero-top">
+                <div class="logo-full">
+                    <img src="img/logo.png" alt="PROVIDENCE" class="logo-img-small"
+                        onerror="this.style.display='none'" />
+                </div>
+                <div class="brand">
+                    <div class="brand-name">市场数据</div>
+                    <span class="live-status" id="last-update-time">
+                        <span class="live-dot-small"></span>
+                        实时更新中...
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="content-other market-content-mobile">
+            <!-- 市场标签 -->
+            <div class="market-tabs-mobile">
+                <button class="market-tab-mobile active" data-section="fund">基金</button>
+                <button class="market-tab-mobile" data-section="ipo">IPO</button>
+                <button class="market-tab-mobile" data-section="bond">债券</button>
+            </div>
+
+            <!-- 基金板块 -->
+            <div class="market-section-mobile" id="fund-section">
+                <div class="market-list-mobile" id="fund-list">
+                    <!-- 基金数据将由JavaScript动态加载 -->
+                    <div class="loading-mobile">
+                        <div class="loading-spinner"></div>
+                        <p>加载中...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IPO板块 -->
+            <div class="market-section-mobile hidden" id="ipo-section">
+                <div class="market-list-mobile" id="ipo-list">
+                    <!-- IPO数据将由JavaScript动态加载 -->
+                    <div class="loading-mobile">
+                        <div class="loading-spinner"></div>
+                        <p>加载中...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 债券板块 -->
+            <div class="market-section-mobile hidden" id="bond-section">
+                <!-- 债券指数 -->
+                <div class="bond-indices" id="bond-indices">
+                    <!-- 债券指数将由JavaScript动态加载 -->
+                </div>
+
+                <div class="market-list-mobile" id="bond-list">
+                    <!-- 债券数据将由JavaScript动态加载 -->
+                    <div class="loading-mobile">
+                        <div class="loading-spinner"></div>
+                        <p>加载中...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 详情弹窗 -->
+        <div class="detail-modal" id="detail-modal">
+            <div class="detail-overlay" id="detail-overlay"></div>
+            <div class="detail-container">
+                <div class="detail-header">
+                    <button class="detail-back" id="detail-back">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                    </button>
+                    <h2 class="detail-title" id="detail-title">详情</h2>
+                    <div class="detail-actions"></div>
+                </div>
+                <div class="detail-content" id="detail-content">
+                    <!-- 动态内容 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航栏 -->
+        <!-- 底部导航已移除 -->
+    </div>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script src="smart-swipe-control.js?v=1763813622"></script>
+
+
+</body>
+
+</html>

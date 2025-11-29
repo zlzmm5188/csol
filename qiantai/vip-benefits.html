@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>VIP权益 - Providence</title>
+    <link rel="stylesheet" href="styles.css?v=1763897782" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(180deg, #1a2332 0%, #0e1621 100%);
+        background-attachment: fixed;
+            min-height: 100vh;
+            padding-bottom: 80px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  padding-top: 60px;}
+
+        /* 顶部导航 */
+        .vip-header {
+            background: linear-gradient(135deg, rgba(14, 43, 68, 0.95), rgba(26, 58, 95, 0.95));
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .back-btn:active {
+        transform: scale(0.95) !important;
+    }
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+
+        .vip-header-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* 容器 */
+        .vip-container {
+            padding: 20px 16px;
+            max-width: 100%;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* VIP Banner - 添加闪光效果 */
+        .vip-banner {
+            background: linear-gradient(135deg, #D9B45D, #E6C56E);
+            border-radius: 16px;
+            padding: 30px 20px;
+
+            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(217, 180, 93, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 闪光动画 */
+        .vip-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+            }
+
+            50% {
+                left: 100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        .vip-banner-icon {
+            font-size: 56px;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .vip-banner-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0e2b44;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .vip-banner-desc {
+            font-size: 14px;
+            color: rgba(14, 43, 68, 0.8);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 折叠式板块 */
+        .section-card {
+            background: linear-gradient(135deg, #1a2f42, #152535);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(217, 180, 93, 0.2);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section-card.active {
+            border-color: rgba(217, 180, 93, 0.5);
+            box-shadow: 0 8px 24px rgba(217, 180, 93, 0.2);
+        }
+
+        .section-header {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            transition: background 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .section-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .section-icon {
+            font-size: 28px;
+            filter: drop-shadow(0 0 8px rgba(217, 180, 93, 0.5));
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #D9B45D;
+        }
+
+        .section-toggle {
+            font-size: 24px;
+            color: #D9B45D;
+            transition: transform 0.3s ease;
+
+        }
+
+        .section-card.active .section-toggle {
+            transform: rotate(180deg);
+        }
+
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            padding: 0 20px;
+        }
+
+        .section-card.active .section-content {
+            max-height: 2000px;
+            padding: 0 20px 20px 20px;
+        }
+
+        /* 表格容器 - 支持横向滚动 */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-top: 16px;
+        }
+
+        /* 表格样式（放大） */
+        .data-table {
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            font-size: 15px;
+            width: 100%;
+            min-width: 600px; /* 确保表格最小宽度 */
+            table-layout: auto;
+        }
+
+        .data-table th {
+            background: rgba(217, 180, 93, 0.3);
+            color: #D9B45D;
+            padding: 14px 8px;
+            font-size: 13px;
+            font-weight: 700;
+            border-bottom: 2px solid rgba(217, 180, 93, 0.4);
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .data-table th:first-child {
+            text-align: left;
+            padding-left: 12px;
+        }
+
+        .data-table td {
+            padding: 14px 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .data-table td:first-child {
+            text-align: left;
+            padding-left: 12px;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table .highlight {
+            color: #FFD700;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .data-table .vip-level {
+            color: #D9B45D;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .data-table tr:hover {
+            background: rgba(217, 180, 93, 0.08);
+            transition: background 0.2s ease;
+        }
+
+        /* 说明文字（放大） */
+        .table-note {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 16px;
+            line-height: 2;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border-left: 4px solid #D9B45D;
+        }
+
+        .table-note-item {
+            margin: 10px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .table-note-item::before {
+            content: '✓';
+            color: #D9B45D;
+            font-weight: bold;
+            font-size: 16px;
+
+            margin-top: 2px;
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 480px) {
+            .section-header {
+                padding: 16px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+
+            .data-table {
+                font-size: 12px;
+                min-width: 550px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 10px 6px;
+                font-size: 12px;
+            }
+
+            .section-card.active .section-content {
+                padding: 0 16px 16px 16px;
+            }
+
+            .vip-container {
+                padding: 20px 8px;
+            }
+        }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+      .brand .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .back-btn:active {
+        transform: scale(0.95) !important;
+    }
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+      .brand .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+
+<body>
+    <!-- 顶部导航 -->
+    <div class="vip-header">
+        <div class="back-btn" onclick="history.back()">‹</div>
+        <div class="vip-header-title">VIP会员权益</div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="vip-container">
+        <!-- VIP Banner -->
+        <div class="vip-banner">
+            <div class="vip-banner-icon">👑</div>
+            <div class="vip-banner-title">VIP专属权益</div>
+            <div class="vip-banner-desc">升级VIP，享受更高返佣和额外加息</div>
+        </div>
+
+        <!-- 统一VIP权益表格 -->
+        <div class="section-card">
+            <div class="section-header" style="cursor: default;">
+                <div class="section-header-left">
+                    <span class="section-icon">📊</span>
+                    <span class="section-title">VIP权益总览</span>
+                </div>
+            </div>
+            <div class="section-content" style="max-height: none; padding: 20px;">
+                <div id="loading" class="loading" style="padding:20px;color:rgba(255,255,255,0.6);text-align:center;">
+                    加载中...</div>
+                <div class="table-wrapper">
+                    <table class="data-table" id="vipTable" style="display:none;">
+                        <thead>
+                            <tr>
+                                <th>会员等级</th>
+                                <th>累计投资</th>
+                                <th>额外加息</th>
+                                <th>一级返佣</th>
+                                <th>二级返佣</th>
+                                <th>每日签到</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vipTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-note" id="vipNote" style="display:none;margin-top:20px;">
+                    <div class="table-note-item">当您的累计投资达到对应金额时，自动升级VIP等级</div>
+                    <div class="table-note-item">VIP加息会叠加到所有项目的基础收益率上，最终收益率 = 项目基础年化 + VIP加息率</div>
+                    <div class="table-note-item">一级返佣：直推会员投资时的返佣比例；二级返佣：一级会员推广的会员投资时的返佣比例</div>
+                    <div class="table-note-item">每日签到可获得对应等级的奖励</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="api-new.js?v=1763897782"></script>
+    <script>
+        // VIP权益数据（合并后的统一数据）
+        const vipData = [
+            { level: 'VIP0', invest: 0, addRate: 0, level1: 1, level2: 0, points: 6 },
+            { level: 'VIP1', invest: 30000, addRate: 0.05, level1: 2, level2: 1, points: 10 },
+            { level: 'VIP2', invest: 100000, addRate: 0.1, level1: 3, level2: 2, points: 16 },
+            { level: 'VIP3', invest: 250000, addRate: 0.12, level1: 4, level2: 2, points: 20 },
+            { level: 'VIP4', invest: 800000, addRate: 0.15, level1: 5, level2: 3, points: 30 },
+            { level: 'VIP5', invest: 1500000, addRate: 0.16, level1: 5, level2: 4, points: 40 },
+            { level: 'VIP6', invest: 3800000, addRate: 0.18, level1: 6, level2: 4, points: 50 },
+            { level: 'VIP7', invest: 8000000, addRate: 0.23, level1: 6, level2: 5, points: 60 },
+            { level: 'VIP8', invest: 13000000, addRate: 0.25, level1: 7, level2: 5, points: 70 }
+        ];
+
+        // 格式化金额
+        function formatAmount(amount) {
+            if (amount === 0) return '-';
+            if (amount >= 100000000) {
+                return (amount / 100000000).toFixed(1) + '亿';
+            }
+            if (amount >= 10000) {
+                return (amount / 10000).toFixed(0) + '万';
+            }
+            return amount.toLocaleString();
+        }
+
+        // 渲染统一VIP权益表格
+        function renderVipTable() {
+            const loading = document.getElementById('loading');
+            const table = document.getElementById('vipTable');
+            const tableBody = document.getElementById('vipTableBody');
+            const tableNote = document.getElementById('vipNote');
+
+            const rows = vipData.map(item => `
+            <tr>
+                <td class="vip-level">${item.level}</td>
+                <td>${item.invest > 0 ? formatAmount(item.invest) : '-'}</td>
+                <td class="highlight">${item.addRate > 0 ? '+' + item.addRate : '-'}</td>
+                <td class="highlight">${item.level1}</td>
+                <td>${item.level2 > 0 ? item.level2 : '-'}</td>
+                <td class="highlight">${item.points}</td>
+            </tr>
+        `).join('');
+
+            tableBody.innerHTML = rows;
+            loading.style.display = 'none';
+            table.style.display = 'table';
+            tableNote.style.display = 'block';
+        }
+
+        // 页面加载时渲染表格
+        document.addEventListener('DOMContentLoaded', function() {
+            renderVipTable();
+        });
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script src="smart-swipe-control.js?v=1763897782"></script>
+
+
+</body>
+
+</html>

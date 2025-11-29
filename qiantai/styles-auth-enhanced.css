@@ -1,0 +1,684 @@
+/* ========================================
+   PROVIDENCE 移动端APP认证页面样式
+   登录 & 注册页面专用 - 仅针对移动端优化
+   创建时间: 2025-11-03
+   设计标准: iOS/Android APP
+   ======================================== */
+
+/* === 1. 移动端APP页面背景 === */
+body.page-login {
+    background: linear-gradient(135deg, #0e2b44 0%, #1a3a5f 50%, #091c2e 100%);
+    min-height: 100vh;
+    min-height: -webkit-fill-available; /* iOS Safari 修复 */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch; /* iOS 平滑滚动 */
+}
+
+/* 背景动画粒子效果 */
+body.page-login::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 动态星光效果 */
+body.page-login::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        radial-gradient(2px 2px at 20% 30%, white, transparent),
+        radial-gradient(2px 2px at 60% 70%, white, transparent),
+        radial-gradient(1px 1px at 50% 50%, white, transparent),
+        radial-gradient(1px 1px at 80% 10%, white, transparent),
+        radial-gradient(2px 2px at 90% 60%, white, transparent),
+        radial-gradient(1px 1px at 33% 50%, white, transparent);
+    background-size: 200% 200%;
+    animation: sparkle 8s ease-in-out infinite;
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+#app {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 100%; /* 移动端全屏 */
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+}
+
+/* === 2. 移动端APP Logo头部区域 === */
+.login-header {
+    text-align: center;
+    padding: 60px 20px 30px;
+    animation: fadeInDown 0.8s ease-out;
+    /* 适配刘海屏和状态栏 */
+    padding-top: max(60px, env(safe-area-inset-top) + 40px);
+}
+
+.login-logo {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 16px;
+    display: block;
+    filter: drop-shadow(0 4px 12px rgba(212, 175, 55, 0.3));
+    animation: logoFloat 3s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+
+.login-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #ffffff;
+    margin: 0 0 8px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #ffffff 0%, #e8edf3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.login-subtitle {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 2px;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* === 3. 移动端表单容器（类似APP卡片 - 增强金边装饰） === */
+.login-form-container {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.98));
+    border-radius: 28px 28px 0 0;
+    padding: 32px 24px;
+    padding-bottom: max(32px, env(safe-area-inset-bottom) + 32px);
+    box-shadow:
+        0 -8px 32px rgba(0, 0, 0, 0.25),
+        0 -2px 8px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(212, 175, 55, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        inset 0 0 20px rgba(212, 175, 55, 0.05);
+    backdrop-filter: blur(10px);
+    animation: slideUpFromBottom 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+    min-height: calc(100vh - 280px);
+    position: relative;
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-bottom: none;
+}
+
+/* 顶部金色装饰已删除 */
+
+/* 光晕装饰已删除 */
+.login-form-container::after {
+    display: none;
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 10%;
+    right: 10%;
+    height: 60px;
+    background: radial-gradient(ellipse at center,
+        rgba(212, 175, 55, 0.25) 0%,
+        rgba(255, 215, 0, 0.15) 30%,
+        transparent 70%);
+    filter: blur(15px);
+    pointer-events: none;
+    animation: glowPulse 4s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+@keyframes slideUpFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === 4. 标签切换优化 === */
+.form-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+    background: #f7f8fa;
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.form-tab {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    color: #6b7a8a;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.form-tab:hover {
+    color: #0b3b5e;
+    background: rgba(11, 59, 94, 0.05);
+}
+
+.form-tab.active {
+    background: #ffffff;
+    color: #0b3b5e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.form-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 3px;
+    background: linear-gradient(90deg, #d4af37, #c9a732);
+    border-radius: 2px;
+}
+
+/* === 5. 移动端表单输入框（大触摸区域） === */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: #2a3947;
+    margin-bottom: 10px;
+    letter-spacing: 0.3px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 16px 18px;
+    border: 1.5px solid rgba(212, 175, 55, 0.15);
+    border-radius: 14px;
+    font-size: 16px;
+    color: #222;
+    background: linear-gradient(to bottom, #ffffff, #fafbfc);
+    transition: all 0.3s ease;
+    outline: none;
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+    touch-action: manipulation;
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.05),
+        0 0 0 0.5px rgba(212, 175, 55, 0.1),
+        inset 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.form-group input::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+.form-group input:focus {
+    border-color: #d4af37;
+    background: #ffffff;
+    box-shadow:
+        0 0 0 4px rgba(212, 175, 55, 0.15),
+        0 2px 8px rgba(212, 175, 55, 0.2),
+        inset 0 1px 2px rgba(255, 255, 255, 0.9);
+    transform: translateY(-1px);
+}
+
+.form-group input:hover:not(:focus) {
+    border-color: #cbd5e1;
+}
+
+/* 输入提示文字 */
+.input-hint {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #6b7a8a;
+    line-height: 1.4;
+}
+
+.register-hint {
+    text-align: center;
+    font-size: 12px;
+    color: #6b7a8a;
+    margin-top: 12px;
+}
+
+/* === 6. 移动端APP风格按钮（带渐变反光效果） === */
+.btn-login {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #0b3b5e 0%, #0e4a78 50%, #0b3b5e 100%);
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 4px 12px rgba(11, 59, 94, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+/* 反光效果 */
+.btn-login::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent);
+    transition: left 0.6s;
+}
+
+/* 点击时触发反光 */
+.btn-login:active::before {
+    left: 100%;
+}
+
+/* 移动端点击反馈 */
+.btn-login:active {
+    transform: scale(0.98);
+    box-shadow:
+        0 2px 6px rgba(11, 59, 94, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.1s ease;
+}
+
+/* 加载状态 */
+.btn-login.btn-loading {
+    background: linear-gradient(135deg, #5a6c7d 0%, #495a68 50%, #5a6c7d 100%);
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.btn-login.btn-loading::after {
+    content: '';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* 微信登录按钮 */
+.btn-wechat {
+    background: linear-gradient(135deg, #07c160 0%, #05a050 100%);
+    box-shadow: 0 4px 12px rgba(7, 193, 96, 0.3);
+    margin-top: 12px;
+}
+
+.btn-wechat:hover {
+    box-shadow: 0 6px 20px rgba(7, 193, 96, 0.4);
+}
+
+/* === 7. 链接和操作按钮 === */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.link-text {
+    color: #0b3b5e;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.link-text::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #d4af37, #c9a732);
+    transition: width 0.3s ease;
+}
+
+.link-text:hover {
+    color: #d4af37;
+}
+
+.link-text:hover::after {
+    width: 100%;
+}
+
+/* === 8. 第三方登录区域 === */
+.oauth-section {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+.oauth-section > div {
+    color: #94a3b8 !important;
+    font-size: 12px !important;
+}
+
+/* === 9. 测试账号提示框 === */
+.test-account-hint {
+    margin-top: 24px;
+    padding: 16px;
+    background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+    border-left: 4px solid #fb923c;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #7c2d12;
+    line-height: 1.6;
+}
+
+.test-account-hint p {
+    margin: 4px 0;
+}
+
+.test-account-hint p:first-child {
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+/* === 10. Toast 消息提示优化 === */
+.toast-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    z-index: 10000;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    max-width: 80%;
+    text-align: center;
+}
+
+.toast-message.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* === 11. 移动端专属优化（不考虑PC） === */
+
+/* iPhone SE / 小屏手机 (375px及以下) */
+@media (max-width: 375px) {
+    .login-header {
+        padding: 50px 16px 20px;
+        padding-top: max(50px, env(safe-area-inset-top) + 30px);
+    }
+
+    .login-logo {
+        width: 64px;
+        height: 64px;
+    }
+
+    .login-title {
+        font-size: 28px;
+        letter-spacing: 2px;
+    }
+
+    .login-subtitle {
+        font-size: 13px;
+    }
+
+    .login-form-container {
+        padding: 28px 20px;
+        padding-bottom: max(28px, env(safe-area-inset-bottom) + 28px);
+    }
+}
+
+/* 超小屏手机 (360px及以下) */
+@media (max-width: 360px) {
+    .login-header {
+        padding: 40px 12px 16px;
+    }
+
+    .login-form-container {
+        padding: 24px 16px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+}
+
+/* iPhone 14 Pro Max / 大屏手机 (428px+) */
+@media (min-width: 428px) {
+    .login-logo {
+        width: 90px;
+        height: 90px;
+    }
+
+    .login-title {
+        font-size: 36px;
+    }
+
+    .login-form-container {
+        padding: 36px 28px;
+    }
+}
+
+/* === 12. 隐藏类 === */
+.hidden {
+    display: none !important;
+}
+
+/* === 13. 验证码输入框样式 === */
+.sms-input-group {
+    display: flex;
+    gap: 8px;
+}
+
+.sms-input-group input {
+    flex: 1;
+}
+
+.sms-input-group button {
+    flex-shrink: 0;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #0b3b5e 0%, #0e4a78 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.sms-input-group button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(11, 59, 94, 0.3);
+}
+
+.sms-input-group button:active {
+    transform: translateY(0);
+}
+
+.sms-input-group button:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* === 14. 页面过渡动画 === */
+.form-content {
+    animation: contentFadeIn 0.5s ease-out;
+}
+
+@keyframes contentFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === 15. 品牌色彩增强 === */
+:root {
+    --auth-primary: #0b3b5e;
+    --auth-primary-light: #0e4a78;
+    --auth-accent: #d4af37;
+    --auth-accent-dark: #c9a732;
+    --auth-success: #25d0a6;
+    --auth-danger: #ef4444;
+    --auth-warning: #fb923c;
+    --auth-text: #222;
+    --auth-text-light: #6b7a8a;
+    --auth-border: #e5e7eb;
+    --auth-bg: #f7f8fa;
+}
+
+/* === 16. 输入框错误状态 === */
+.form-group.error input {
+    border-color: var(--auth-danger);
+    background: #fef2f2;
+}
+
+.form-group.error .input-hint {
+    color: var(--auth-danger);
+}
+
+.form-group.error input:focus {
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+}
+
+/* === 17. 输入框成功状态 === */
+.form-group.success input {
+    border-color: var(--auth-success);
+    background: #f0fdf4;
+}
+
+.form-group.success .input-hint {
+    color: var(--auth-success);
+}
+
+/* === 18. 无障碍优化 === */
+.form-group input:focus-visible {
+    outline: 2px solid var(--auth-accent);
+    outline-offset: 2px;
+}
+
+.btn-login:focus-visible {
+    outline: 2px solid var(--auth-accent);
+    outline-offset: 2px;
+}
+
+/* === 19. 打印样式 === */
+@media print {
+    body.page-login::before,
+    body.page-login::after {
+        display: none;
+    }
+
+    .test-account-hint {
+        display: none;
+    }
+}

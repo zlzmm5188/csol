@@ -1,0 +1,19 @@
+<!-- 前端自动修复中间件加载脚本 -->
+<!-- 在index.html/profile.html/team.js等所有页面的<head>中添加以下内容 -->
+
+<!-- 1. API映射表 -->
+<script src="/API_MAP.js"></script>
+
+<!-- 2. Token拦截器 -->
+<script src="/token-interceptor.js"></script>
+
+<!-- 3. 错误拦截器 -->
+<script src="/error-interceptor.js"></script>
+
+<!-- 4. 登录处理器 -->
+<script src="/login-handler.js"></script>
+
+<!-- 5. 全局稳定化 -->
+<script src="/global-stabilizer.js"></script>
+
+<!-- 说明: 这5个脚本必须按照顺序加载，确保所有依赖都已就位 -->

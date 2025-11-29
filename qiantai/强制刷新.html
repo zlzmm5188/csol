@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>强制刷新</title>
+</head>
+<body>
+    <h1>正在清除缓存...</h1>
+    <script>
+        // 清除所有缓存
+        if ('caches' in window) {
+            caches.keys().then(names => {
+                names.forEach(name => caches.delete(name));
+            });
+        }
+        
+        // 添加时间戳跳转
+        setTimeout(() => {
+            const url = new URL(window.location.href);
+            url.searchParams.set('_', Date.now());
+            window.location.href = url.pathname === '/强制刷新.html' 
+                ? '/company-news.html?_=' + Date.now() 
+                : url.toString();
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+<title>项目详情 - Providence</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                primary: '#4a90e2',
+                dark: {
+                    100: '#0e2b44',
+                    200: '#091c2e',
+                    300: '#0a1929',
+                }
+            }
+        }
+    }
+}
+
+</script>
+<style>
+/* 防止截屏 */
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+    if (e.key === 'PrintScreen' || (e.metaKey && e.shiftKey && ['3','4','5'].includes(e.key)) || (e.ctrlKey && e.shiftKey && e.key === 'S')) {
+        e.preventDefault();
+    }
+});
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        document.body.style.opacity = '0';
+    } else {
+        document.body.style.opacity = '1';
+    }
+});
+      .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+          .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-dark-100 to-dark-200 min-h-screen pb-32">
+
+<!-- 顶部导航 -->
+<nav class="sticky top-0 z-50 bg-gradient-to-b from-dark-100 to-dark-200 backdrop-blur-xl border-b border-white/10">
+    <div class="flex items-center justify-between px-4 h-14">
+        <button onclick="window.history.back()" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/10 active:bg-white/20 transition">
+            <span class="text-white text-2xl">‹</span>
+        </button>
+        <h1 class="flex-1 text-center text-white text-lg font-bold ml-4">项目详情</h1>
+        <div class="w-10"></div>
+    </div>
+</nav>
+
+<!-- 主容器 -->
+<div id="mainContent" class="max-w-3xl mx-auto px-4 py-4 space-y-3" style="display:none;">
+
+    <!-- 项目头部 -->
+    <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-5 border border-white/15 shadow-xl">
+        <h2 id="projectName" class="text-white text-xl font-bold mb-3">加载中...</h2>
+        <div id="projectTags" class="flex gap-2 flex-wrap">
+            <!-- 标签将动态插入 -->
+        </div>
+    </div>
+
+    <!-- 年化收益 -->
+    <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-6 text-center shadow-xl">
+        <div class="text-white/90 text-sm mb-2">年化收益率</div>
+        <div id="projectRate" class="text-white text-4xl font-bold mb-2">--</div>
+        <div class="text-white/80 text-xs">预期年化收益</div>
+    </div>
+
+    <!-- 核心信息 - Tailwind版本 -->
+    <div class="bg-white/25 backdrop-blur-xl rounded-xl p-4 border border-white/30 shadow-2xl">
+        <div class="grid grid-cols-2 gap-4">
+            <div class="text-center">
+                <div class="text-dark-300 text-sm font-semibold mb-2">投资期限</div>
+                <div id="projectDays" class="text-dark-300 text-2xl font-bold">--</div>
+            </div>
+            <div class="text-center">
+                <div class="text-dark-300 text-sm font-semibold mb-2">起投金额</div>
+                <div id="projectMinAmount" class="text-dark-300 text-2xl font-bold">--</div>
+            </div>
+            <div class="text-center">
+                <div class="text-dark-300 text-sm font-semibold mb-2">最高投资</div>
+                <div id="projectMaxAmount" class="text-dark-300 text-2xl font-bold">--</div>
+            </div>
+            <div class="text-center">
+                <div class="text-dark-300 text-sm font-semibold mb-2">付息方式</div>
+                <div id="projectPayType" class="text-dark-300 text-2xl font-bold">--</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 投资进度 -->
+    <div class="bg-black/30 backdrop-blur-md rounded-xl p-4 border border-white/10">
+        <div class="flex justify-between text-sm mb-2">
+            <span class="text-white/70">项目进度</span>
+            <span id="progressPercent" class="text-white font-semibold">0%</span>
+        </div>
+        <div class="h-2 bg-black/30 rounded-full overflow-hidden">
+            <div id="progressBar" class="h-full bg-gradient-to-r from-green-400 to-green-500 rounded-full transition-all duration-500" style="
+let currentProject = null;
+let userInfo = null;
+
+// 项目经理数据
+const managers = [
+    { name:"胡善斌", code:"S1450114010007", avatarId: 1 },
+    { name:"江楠", code:"S1450123060029", avatarId: 2 },
+    { name:"高从珊", code:"F0490000000120", avatarId: 3 },
+    { name:"唐伟青", code:"F4220000000135", avatarId: 4 },
+    { name:"王珍珍", code:"S1450123080005", avatarId: 5 },
+    { name:"高璐", code:"S1450121020002", avatarId: 6 },
+    { name:"徐晓航", code:"S1450116120184", avatarId: 7 },
+    { name:"李志超", code:"S1450116060168", avatarId: 8 },
+    { name:"李想", code:"S1450112050037", avatarId: 9 },
+    { name:"丁云妹", code:"S1450116100021", avatarId: 10 },
+    { name:"孙春华", code:"A20190702034278", avatarId: 11 },
+    { name:"程昊", code:"S1450114060028", avatarId: 12 },
+    { name:"裴京辰", code:"S1450124090002", avatarId: 13 },
+    { name:"甘露", code:"S1450122120012", avatarId: 14 },
+    { name:"陶金铭", code:"S1450122100062", avatarId: 15 },
+    { name:"王云驰", code:"S1450123010001", avatarId: 16 },
+    { name:"张毓东", code:"S1450123050007", avatarId: 17 },
+    { name:"孟祥淼", code:"S1450123010017", avatarId: 18 },
+    { name:"潘秉化", code:"S1450121120028", avatarId: 19 },
+    { name:"孙悦", code:"S1450121080093", avatarId: 20 },
+    { name:"李春杨", code:"S1450121060077", avatarId: 21 },
+    { name:"马梓萌", code:"S1450120100001", avatarId: 22 },
+    { name:"赵建楠", code:"S1450120050014", avatarId: 23 },
+    { name:"吴紫岚", code:"S1450118100102", avatarId: 24 },
+    { name:"班昊", code:"S1450123070062", avatarId: 25 },
+    { name:"裴以坤", code:"S1450124040045", avatarId: 26 }
+
+];
+
+// 获取URL参数
+function getQueryParam(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+}
+
+// 获取固定的项目经理
+function getFixedManager(projectId) {
+    const id = parseInt(projectId) || 1;
+    const index = id % managers.length;
+    const manager = managers[index];
+    manager.avatarId = (id % 146) + 1;
+    return manager;
+}
+
+// 加载项目详情
+async function loadProjectDetail() {
+    try {
+        const projectId = getQueryParam('id');
+        if (!projectId) {
+            console.error('项目ID不存在');
+            document.getElementById('loading').innerHTML = '<div class="text-white/70">项目ID不存在</div>';
+            return;
+        }
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('未登录');
+            document.getElementById('loading').innerHTML = '<div class="text-white/70">请先登录</div>';
+            setTimeout(() => window.location.href = 'login.html', 1500);
+            return;
+        }
+
+        console.log('开始加载项目详情，ID:', projectId);
+
+        // 获取用户信息
+        console.log('获取用户信息...');
+        const userRes = await fetch(API_BASE + '/api/user/info', {
+            headers: { 'token': token }
+        });
+        const userData = await userRes.json();
+        console.log('用户信息:', userData);
+
+        if (userData.code === 1 && userData.data) {
+            userInfo = userData.data;
+            document.getElementById('userBalance').textContent = `¥${parseFloat(userData.data.money || 0).toFixed(2)}`;
+        }
+
+        // 获取项目列表
+        console.log('获取项目列表...');
+        const res = await fetch(API_BASE + '/fund/api/project/all', {
+            headers: { 'token': token }
+        });
+        const data = await res.json();
+        console.log('项目列表数据:', data);
+
+        if (data.code === 1 && data.data) {
+            let foundProject = null;
+            for (const category of data.data) {
+                if (category.list) {
+                    foundProject = category.list.find(p => p.id == projectId);
+                    if (foundProject) {
+                        console.log('找到项目:', foundProject);
+                        break;
+                    }
+                }
+            }
+
+            if (foundProject) {
+                currentProject = foundProject;
+                renderProjectDetail(foundProject);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+            } else {
+                console.error('项目不存在，ID:', projectId);
+                document.getElementById('loading').innerHTML = '<div class="text-white/70">项目不存在</div>';
+            }
+        } else {
+            console.error('API返回错误:', data);
+            document.getElementById('loading').innerHTML = `<div class="text-white/70">${data.msg || '加载失败'}</div>`;
+        }
+    } catch (error) {
+        console.error('加载项目详情失败:', error);
+        document.getElementById('loading').innerHTML = '<div class="text-white/70">加载失败，请检查网络</div>';
+    }
+}
+
+// 渲染项目详情
+function renderProjectDetail(data) {
+    const projectId = data.id || getQueryParam('id');
+
+    // 项目名称
+    document.getElementById('projectName').textContent = data.name || '未命名项目';
+
+    // 标签
+    const tagsHTML = `
+        <span class="px-4 py-1.5 bg-yellow-500/30 text-yellow-300 text-sm font-bold rounded-full border border-yellow-500/50 shadow-lg">代码：${data.code || '--'}</span>
+        <span class="px-4 py-1.5 bg-yellow-500/30 text-yellow-300 text-sm font-bold rounded-full border border-yellow-500/50 shadow-lg">分类：USDT专区</span>
+        <span class="px-4 py-1.5 bg-purple-600/35 text-purple-200 text-sm font-bold rounded-full border border-purple-500/60 shadow-lg">VIP专享</span>
+    `;
+    document.getElementById('projectTags').innerHTML = tagsHTML;
+
+    // 年化收益
+    document.getElementById('projectRate').textContent = `${data.rate || 0}%`;
+
+    // 核心信息
+    document.getElementById('projectDays').textContent = `${data.days || 0}天`;
+    document.getElementById('projectMinAmount').textContent = `¥${parseFloat(data.min_money || 0).toLocaleString()}`;
+    document.getElementById('projectMaxAmount').textContent = `¥${parseFloat(data.max_money || 0).toLocaleString()}`;
+    document.getElementById('projectPayType').textContent = data.days ? '到期还本付息' : '灵活付息';
+
+    // 投资进度
+    const total = parseFloat(data.total_money || 100000);
+    const sold = parseFloat(data.already_money || 0);
+    const remain = total - sold;
+    const percent = ((sold / total) * 100).toFixed(1);
+
+    document.getElementById('progressPercent').textContent = `${percent}%`;
+    document.getElementById('progressBar').style.width = `${percent}%`;
+    document.getElementById('soldAmount').textContent = `¥${sold.toLocaleString()}`;
+    document.getElementById('remainAmount').textContent = `¥${remain.toLocaleString()}`;
+
+    // 产品详情
+    document.getElementById('projectIntro').textContent = data.intro || '本产品专为追求稳健收益的投资者设计，采用专业的资产配置策略。';
+    document.getElementById('projectFeatures').textContent = data.features || '低风险、收益稳定、操作简便、资金安全有保障。';
+    document.getElementById('projectCalculation').textContent = `投资${data.min_money || 10000}元，${data.days || 30}天预期收益：¥${((data.min_money || 10000) * (data.rate || 10) / 100 / 365 * (data.days || 30)).toFixed(2)}`;
+    document.getElementById('projectGuide').textContent = '选择投资金额 → 确认购买 → 等待收益 → 到期赎回';
+
+    // 项目经理
+    const manager = getFixedManager(projectId);
+    document.getElementById('managerName').textContent = manager.name;
+    document.getElementById('managerCode').textContent = manager.code;
+    document.getElementById('managerAvatar').src = `img/good/img${String(manager.avatarId).padStart(3, '0')}.jpg`;
+    document.getElementById('managerAvatar').onerror = function() {
+        this.src = 'img/user-avatar-default.svg';
+    };
+}
+
+// 显示投资弹窗
+async function showInvestModal() {
+    if (!currentProject) {
+        await showToast('', '项目信息加载中');
+        return;
+    }
+
+    const amount = prompt(`请输入购买金额\n\n起投金额：¥${parseFloat(currentProject.min_money || 0).toLocaleString()}\n最高投资：¥${parseFloat(currentProject.max_money || 0).toLocaleString()}`);
+
+    if (!amount) return;
+
+    const investAmount = parseFloat(amount);
+    const minAmount = parseFloat(currentProject.min_money || 0);
+    const maxAmount = parseFloat(currentProject.max_money || 0);
+
+    if (isNaN(investAmount) || investAmount < minAmount) {
+        await showToast('', `最低投资金额为¥${minAmount.toLocaleString()}`);
+        return;
+    }
+
+    if (investAmount > maxAmount) {
+        await showToast('', `最高投资金额为¥${maxAmount.toLocaleString()}`);
+        return;
+    }
+
+    const userBalance = parseFloat(userInfo?.money || 0);
+    if (investAmount > userBalance) {
+        await showToast('', '余额不足，请先充值');
+        return;
+    }
+
+    const confirmed = await showConfirm('', `确认购买 ¥${investAmount.toLocaleString()} 吗？`);
+    if (!confirmed) return;
+
+    try {
+        const token = localStorage.getItem('token');
+        // 使用统一的新投资接口：/fund/api/project/add -> api/api/project/invest.php
+        const res = await fetch(API_BASE + '/fund/api/project/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'token': token
+            },
+            body: JSON.stringify({
+                project_id: currentProject.id,
+                money: investAmount
+            })
+        });
+
+        const data = await res.json();
+        if (data.code === 1) {
+            await showToast('', '购买成功！');
+            setTimeout(() => window.location.href = 'my-investments.html', 1500);
+        } else {
+            await showToast('', data.msg || '购买失败');
+        }
+    } catch (error) {
+        console.error('购买失败:', error);
+        await showToast('', '购买失败，请重试');
+    }
+}
+
+// 页面加载
+window.addEventListener('DOMContentLoaded', loadProjectDetail);
+</script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script src="smart-swipe-control.js?v=1763897782"></script>
+
+
+
+</body>
+</html>

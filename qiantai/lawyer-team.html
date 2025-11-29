@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>法律服务 - PROVIDENCE</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="styles.css?v=1763897782" />
+    <style>
+        /* 页面进入动画 - 流畅过渡 */
+        body {
+            opacity: 0;
+            animation: pageFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            will-change: opacity;
+        }
+
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 内容区域进入动画 */
+        #app {
+            opacity: 0;
+            animation: contentFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
+            will-change: opacity;
+        }
+
+        @keyframes contentFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+        }
+        }
+
+        /* 顶部栏 - 固定定位，参考 projects.html 风格 */
+        .topbar {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 1000 !important;
+            padding: 14px 16px;
+            padding-top: calc(14px + env(safe-area-inset-top, 0));
+            background: rgba(10, 23, 35, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            /* 顶部栏进入动画 */
+            opacity: 0;
+            transform: translateY(-10px);
+            animation: topbarSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            will-change: opacity, transform;
+        }
+
+        @keyframes topbarSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+        }
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+      .brand .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.12) !important;
+    }
+
+    .back-btn:active {
+        transform: scale(0.95) !important;
+    }
+
+        .brand h1 {
+            display: inline-block;
+            margin: 0;
+            white-space: nowrap;
+            flex-shrink: 1;
+            font-size: 18px;
+            letter-spacing: 0.3px;
+            color: var(--gold2, #c7b58a);
+            font-weight: 600;
+        }
+
+        .brand .brand-subtitle {
+            font-size: 11px;
+            color: rgba(199, 181, 138, 0.7);
+            margin-left: 6px;
+        }
+
+        /* 内容区域 - 添加顶部 padding 避免被固定顶部栏遮挡 */
+        .content-other {
+            padding-top: calc(60px + env(safe-area-inset-top, 0));
+            padding-left: max(16px, env(safe-area-inset-left));
+            padding-right: max(16px, env(safe-area-inset-right));
+            padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
+        }
+
+        /* 移动端优化 */
+        @media screen and (max-width: 480px) {
+            .content-other {
+                padding: 12px;
+                padding-top: calc(60px + env(safe-area-inset-top, 0) + 12px);
+            }
+        }
+
+        /* 卡片进入动画 */
+        .business-card-v2 {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cardFadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            will-change: opacity, transform;
+        }
+
+        @keyframes cardFadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 卡片延迟动画 - 交错效果 */
+        .business-card-v2:nth-child(1) { animation-delay: 0.1s; }
+        .business-card-v2:nth-child(2) { animation-delay: 0.2s; }
+        .business-card-v2:nth-child(3) { animation-delay: 0.3s; }
+        .business-card-v2:nth-child(4) { animation-delay: 0.4s; }
+        .business-card-v2:nth-child(n+5) { animation-delay: 0.5s; }
+
+        /* 性能优化 - 使用GPU加速 */
+        .business-card-v2 {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+    </style>
+</head>
+
+<body class="page-other">
+    <div id="app">
+        <!-- 固定顶部栏 - 参考 projects.html 风格 -->
+        <div class="topbar">
+                <div class="brand">
+                <a href="javascript:void(0);" onclick="history.back(); return false;" class="back-btn">‹</a>
+                <h1>⚖️ 法律服务</h1>
+                <span class="brand-subtitle">LEGAL TEAM</span>
+            </div>
+        </div>
+
+        <main class="content-other">
+            <!-- 事务所介绍 -->
+            <section class="lawyer-intro">
+                <div class="intro-card">
+                    <h3 class="intro-title">香港资本市场与私募融资律师事务所</h3>
+                    <p class="intro-subtitle">HK Capital Markets & Private Financing Law</p>
+
+                    <div class="key-features" style="margin: 16px 0;">
+                        <div class="feature-tag">债券私募发行</div>
+                        <div class="feature-tag">私募基站辅助</div>
+                        <div class="feature-tag">跨境资本市场法规</div>
+                    </div>
+
+                    <p class="intro-desc">本所专注于资本市场与私募融资领域，特别是为企业发行债券（包括私募债券／定向债）、结构化融资方案、私募基金基站（placement agent /
+                        支点服务）提供法律顾问服务。</p>
+
+                    <div class="firm-philosophy">
+                        <p>本所位于香港中环，汇聚拥有资本市场、债券发行、私募融资经验的律师团队，致力于为机构投资者、发行人、Placement Agent和相关服务方提供法律、结构、合规及文书支持。</p>
+                        <p class="philosophy-highlight"><strong>事务所理念：</strong>"专业、务实、连接资本与法律"</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 服务范围 -->
+            <section class="services-section">
+                <div class="auto-carousel-container">
+                    <div class="auto-carousel-track" id="servicesCarousel">
+                        <div class="carousel-card active">
+                            <h3 class="carousel-title">银行与融资</h3>
+                            <ul class="carousel-items">
+                                <li>银行业金融机构设立与许可</li>
+                                <li>银行间市场交易合规审查</li>
+                                <li>信贷资产证券化</li>
+                                <li>银团贷款法律服务</li>
+                                <li>跨境融资结构设计</li>
+                                <li>不良资产处置</li>
+                            </ul>
+                        </div>
+
+                        <div class="carousel-card">
+                            <h3 class="carousel-title">资本市场</h3>
+                            <ul class="carousel-items">
+                                <li>A股、港股、美股IPO全程法律服务</li>
+                                <li>上市公司并购重组</li>
+                                <li>私募股权与风险投资</li>
+                                <li>公司债券与资产支持证券发行</li>
+                                <li>可转债与可交换债</li>
+                                <li>新三板与北交所上市</li>
+                            </ul>
+                        </div>
+
+                        <div class="carousel-card">
+                            <h3 class="carousel-title">监管合规</h3>
+                            <ul class="carousel-items">
+                                <li>反洗钱与反恐怖融资合规体系建设</li>
+                                <li>金融科技业务合规审查</li>
+                                <li>数据安全与隐私保护</li>
+                                <li>跨境支付合规</li>
+                                <li>监管沟通与牌照申请</li>
+                                <li>合规培训与内控制度设计</li>
+                            </ul>
+                        </div>
+
+                        <div class="carousel-card">
+                            <h3 class="carousel-title">私募基金与资管</h3>
+                            <ul class="carousel-items">
+                                <li>私募基金管理人登记与合规</li>
+                                <li>私募基金架构设计与募集</li>
+                                <li>股权投资尽职调查</li>
+                                <li>控制权和杠杆收购(LBO)</li>
+                                <li>S基金交易法律服务</li>
+                                <li>基金争议解决与纠纷处理</li>
+                            </ul>
+                        </div>
+
+                        <div class="carousel-card">
+                            <h3 class="carousel-title">金融衍生品</h3>
+                            <ul class="carousel-items">
+                                <li>ISDA主协议谈判与修订</li>
+                                <li>场外衍生品交易法律服务</li>
+                                <li>商品期货与金融期货</li>
+                                <li>衍生品交易风险管理</li>
+                                <li>衍生品争议解决</li>
+                                <li>清算与结算法律服务</li>
+                            </ul>
+                        </div>
+
+                        <div class="carousel-card">
+                            <h3 class="carousel-title">金融科技</h3>
+                            <ul class="carousel-items">
+                                <li>第三方支付机构设立与合规</li>
+                                <li>区块链技术应用合规</li>
+                                <li>虚拟货币法律风险评估</li>
+                                <li>数字人民币业务合规</li>
+                                <li>金融科技创新监管沙盒</li>
+                                <li>互联网金融平台合规整改</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="carousel-dots" id="servicesDots"></div>
+                </div>
+            </section>
+
+    </div>
+    </section>
+
+    <!-- 成功案例 -->
+    <section class="lawyers-section">
+        <!-- 团队合照 -->
+        <div class="team-photo-container">
+            <img src="assets/a2c55d96602eb.jpg" alt="律师团队合照" class="team-photo-img" />
+            <div class="team-photo-desc">
+                <p><strong>香港资本市场与私募融资律师事务所</strong>核心团队致力于为客户提供最专业的法律服务。我们的团队汇聚了在资本市场、私募融资、合规监管等领域拥有丰富经验的专业律师，秉持"专业、务实、连接资本与法律"的理念，为机构投资者、发行人及相关服务方提供全方位的法律支持与咨询服务。
+                </p>
+            </div>
+        </div>
+
+        <div class="lawyers-list">
+            <!-- 律师1 -->
+            <div class="business-card-v2">
+                <div class="card-logo-watermark">
+                    <img src="img/logo-watermark.svg" alt="Logo" />
+                </div>
+                <div class="card-photo-v2">
+                    <img src="assets/a8f2d603ba253.jpg" alt="林志明律师" />
+                </div>
+                <div class="card-info-v2">
+                    <h3 class="lawyer-name-v2">林志明</h3>
+                    <p class="lawyer-name-en-v2">ZHIMING LIN</p>
+                    <p class="lawyer-position-v2">首席合伙人 | Senior Partner</p>
+                    <div class="expertise-line"></div>
+                    <div class="expertise-tags-v2">
+                        <span class="tag-v2">债券私募发行</span>
+                        <span class="tag-v2">私募基站架构</span>
+                        <span class="tag-v2">资本市场法规</span>
+                        <span class="tag-v2">跨境融资</span>
+                    </div>
+                    <p class="lawyer-intro-v2">专注于债券私募发行、Placement
+                        Agent服务、跨境资本市场法律合规，为机构投资者和发行人提供全方位法律支持。擅长为少数机构投资者设计债券发行方案，连接香港-大湾区-国际资本市场。</p>
+                </div>
+            </div>
+
+            <!-- 律师2 -->
+            <div class="business-card-v2">
+                <div class="card-logo-watermark">
+                    <img src="img/logo-watermark.svg" alt="Logo" />
+                </div>
+                <div class="card-photo-v2">
+                    <img src="assets/ac1dbacf83c03.jpg" alt="陈文轩律师" />
+                </div>
+                <div class="card-info-v2">
+                    <h3 class="lawyer-name-v2">陈文轩</h3>
+                    <p class="lawyer-name-en-v2">WENXUAN CHEN</p>
+                    <p class="lawyer-position-v2">合伙人 | Partner</p>
+                    <div class="expertise-line"></div>
+                    <div class="expertise-tags-v2">
+                        <span class="tag-v2">跨境并购</span>
+                        <span class="tag-v2">私募股权</span>
+                        <span class="tag-v2">风险投资</span>
+                        <span class="tag-v2">公司治理</span>
+                    </div>
+                    <p class="lawyer-intro-v2">在跨境并购和私募股权投资领域拥有超过15年经验，曾主导多起大型跨境交易。专注于为科技、金融科技企业提供全周期法律服务，从天使轮到IPO全程护航。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 律师3 -->
+            <div class="business-card-v2">
+                <div class="card-logo-watermark">
+                    <img src="img/logo-watermark.svg" alt="Logo" />
+                </div>
+                <div class="card-photo-v2">
+                    <img src="img/lawyer-yuting-wang.jpg" alt="王雨婷律师" />
+                </div>
+                <div class="card-info-v2">
+                    <h3 class="lawyer-name-v2">王雨婷</h3>
+                    <p class="lawyer-name-en-v2">YUTING WANG</p>
+                    <p class="lawyer-position-v2">高级顾问 | Senior Counsel</p>
+                    <div class="expertise-line"></div>
+                    <div class="expertise-tags-v2">
+                        <span class="tag-v2">合规咨询</span>
+                        <span class="tag-v2">反洗钱</span>
+                        <span class="tag-v2">监管政策</span>
+                        <span class="tag-v2">金融牌照</span>
+                    </div>
+                    <p class="lawyer-intro-v2">
+                        资深金融合规专家，深谙香港证监会、金管局等监管机构要求。为多家金融机构提供合规框架搭建、反洗钱体系建设、金融牌照申请等专业服务，确保业务合规稳健运营。</p>
+                </div>
+            </div>
+
+            <!-- 律师4 -->
+            <div class="business-card-v2">
+                <div class="card-logo-watermark">
+                    <img src="img/logo-watermark.svg" alt="Logo" />
+                </div>
+                <div class="card-photo-v2">
+                    <img src="img/lawyer-jiahao-zhang.jpg" alt="张嘉豪律师" />
+                </div>
+                <div class="card-info-v2">
+                    <h3 class="lawyer-name-v2">张嘉豪</h3>
+                    <p class="lawyer-name-en-v2">JIAHAO ZHANG</p>
+                    <p class="lawyer-position-v2">合伙人 | Partner</p>
+                    <div class="expertise-line"></div>
+                    <div class="expertise-tags-v2">
+                        <span class="tag-v2">资产证券化</span>
+                        <span class="tag-v2">结构化融资</span>
+                        <span class="tag-v2">REITS</span>
+                        <span class="tag-v2">债务重组</span>
+                    </div>
+                    <p class="lawyer-intro-v2">
+                        在资产证券化和结构化融资领域具有丰富经验，参与过多个大型ABS、CMBS项目。擅长为房地产、基建项目设计创新融资方案，为客户实现资金高效配置和风险有效管理。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 服务范围 -->
+    </div>
+    </section>
+
+    <!-- 成功案例 -->
+    <section class="cases-section">
+        <div class="section-header">
+            <h2 class="section-title">🏆 成功案例</h2>
+        </div>
+        <div class="auto-carousel-container">
+            <div class="auto-carousel-track" id="casesCarousel">
+                <div class="carousel-card active">
+                    <div class="case-tag">资本市场</div>
+                    <h3 class="carousel-title">某科技公司港股IPO</h3>
+                    <div class="case-content">
+                        <p><strong>案情：</strong>协助某互联网科技公司在香港联交所主板上市</p>
+                        <p><strong>交易规模：</strong>募资金额超30亿港元</p>
+                        <p><strong>法律服务：</strong>从尽职调查、重组、招股说明书撰写到上市全程法律服务</p>
+                        <p><strong>结果：</strong>成功上市，上市首日涨幅15%</p>
+                    </div>
+                </div>
+
+                <div class="carousel-card">
+                    <div class="case-tag">跨境并购</div>
+                    <h3 class="carousel-title">跨国能源并购交易</h3>
+                    <div class="case-content">
+                        <p><strong>案情：</strong>代表中国企业收购某欧洲能源公司</p>
+                        <p><strong>交易规模：</strong>涉及金额超50亿美元</p>
+                        <p><strong>法律服务：</strong>交易结构设计、反垄断审批、融资安排、税务筹划</p>
+                        <p><strong>结果：</strong>成功完成交割，获得监管机构批准</p>
+                    </div>
+                </div>
+
+                <div class="carousel-card">
+                    <div class="case-tag">合规咨询</div>
+                    <h3 class="carousel-title">金融科技公司合规整改</h3>
+                    <div class="case-content">
+                        <p><strong>案情：</strong>协助某互联网支付平台进行全面合规整改</p>
+                        <p><strong>服务内容：</strong>反洗钱体系建设、数据安全合规、支付牌照续期</p>
+                        <p><strong>结果：</strong>顺利通过监管检查，获得业务牌照续期</p>
+                    </div>
+                </div>
+
+                <div class="carousel-card">
+                    <div class="case-tag">基金设立</div>
+                    <h3 class="carousel-title">百亿级私募股权基金设立</h3>
+                    <div class="case-content">
+                        <p><strong>案情：</strong>协助设立人民币私募股权投资基金</p>
+                        <p><strong>基金规模：</strong>首期募集规模100亿元</p>
+                        <p><strong>法律服务：</strong>基金结构设计、募集文件撰写、基金协会备案</p>
+                        <p><strong>结果：</strong>成功设立并完成首轮投资项目</p>
+                    </div>
+                </div>
+
+                <div class="carousel-card">
+                    <div class="case-tag">私募股权</div>
+                    <h3 class="carousel-title">成长型企业杠杆收购(LBO)</h3>
+                    <div class="case-content">
+                        <p><strong>案情：</strong>代表私募股权基金完成控制权收购交易</p>
+                        <p><strong>交易规模：</strong>涉及金额超20亿人民币</p>
+                        <p><strong>法律服务：</strong>交易结构设计、融资安排、尽职调查、交易文件谈判</p>
+                        <p><strong>结果：</strong>成功完成收购，帮助目标公司实现战略升级</p>
+                    </div>
+                </div>
+
+                <div class="carousel-card">
+                    <div class="case-tag">跨境投资</div>
+                    <h3 class="carousel-title">QFLP跨境投资基金设立</h3>
+                    <div class="case-content">
+                        <p><strong>案情：</strong>协助境外投资者设立合格境外有限合伙人(QFLP)基金</p>
+                        <p><strong>基金规模：</strong>5亿美元</p>
+                        <p><strong>法律服务：</strong>QFLP资格申请、基金架构设计、跨境资金合规</p>
+                        <p><strong>结果：</strong>成功获得QFLP资格并完成首期募资</p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-dots" id="casesDots"></div>
+        </div>
+    </section>
+
+    </main>
+
+    <!-- 底部导航栏 -->
+    <!-- 底部导航已移除 -->
+    </div>
+    <script>
+        // 优化页面进入流畅度
+        document.addEventListener('DOMContentLoaded', function() {
+            // 预加载关键资源
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(() => {
+                    // 预加载图片资源
+                    const images = document.querySelectorAll('img');
+                    images.forEach(img => {
+                        if (img.src && !img.complete) {
+                            const link = document.createElement('link');
+                            link.rel = 'preload';
+                            link.as = 'image';
+                            link.href = img.src;
+                            document.head.appendChild(link);
+                        }
+                    });
+                });
+            }
+        });
+
+        // 自动轮播功能
+        function initCarousel(trackId, dotsId) {
+            const track = document.getElementById(trackId);
+            const cards = track.querySelectorAll('.carousel-card');
+            const dotsContainer = document.getElementById(dotsId);
+            let currentIndex = 0;
+            let autoPlayInterval;
+
+            // 创建指示点
+            cards.forEach((_, index) => {
+                const dot = document.createElement('span');
+                dot.className = 'dot' + (index === 0 ? ' active' : '');
+                dot.addEventListener('click', () => goToSlide(index));
+                dotsContainer.appendChild(dot);
+            });
+
+            const dots = dotsContainer.querySelectorAll('.dot');
+
+            function goToSlide(index) {
+                // 移除所有 active 类
+                cards.forEach(card => card.classList.remove('active'));
+                dots.forEach(dot => dot.classList.remove('active'));
+
+                // 添加 active 到当前卡片
+                cards[index].classList.add('active');
+                dots[index].classList.add('active');
+                currentIndex = index;
+            }
+
+            function nextSlide() {
+                const nextIndex = (currentIndex + 1) % cards.length;
+                goToSlide(nextIndex);
+            }
+
+            function startAutoPlay() {
+                autoPlayInterval = setInterval(nextSlide, 4000); // 4秒切换一次
+            }
+
+            function stopAutoPlay() {
+                clearInterval(autoPlayInterval);
+            }
+
+            // 鼠标悬停时暂停自动播放
+            track.addEventListener('mouseenter', stopAutoPlay);
+            track.addEventListener('mouseleave', startAutoPlay);
+
+            // 开始自动播放
+            startAutoPlay();
+        }
+
+        // 页面加载完成后初始化轮播
+        document.addEventListener('DOMContentLoaded', function () {
+            initCarousel('servicesCarousel', 'servicesDots');
+            initCarousel('casesCarousel', 'casesDots');
+        });
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script defer src="smart-swipe-control.js?v=1763897782"></script>
+
+
+</body>
+
+</html>

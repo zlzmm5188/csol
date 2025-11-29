@@ -1,0 +1,69 @@
+# Cursor 索引忽略文件
+# 排除不需要索引的文件和目录，提升索引速度
+
+# ========== 依赖和包 ==========
+node_modules/
+.pnpm-store/
+.yarn/
+.npm/
+
+# ========== 备份文件 ==========
+backups/
+*.backup
+*.backup_*
+*.bak
+*.bak_*
+*.old
+*_backup_*
+
+# ========== 图片资源（大文件） ==========
+img/*.jpg
+img/*.jpeg
+img/*.png
+img/*.gif
+img/*.webp
+img/*.svg
+img/backup/
+img/good/
+启动图/
+
+# ========== 字体文件 ==========
+*.woff
+*.woff2
+*.ttf
+*.eot
+*.otf
+
+# ========== 编译产物 ==========
+dist/
+build/
+.next/
+out/
+
+# ========== 临时文件 ==========
+*.tmp
+*.temp
+*.log
+.DS_Store
+Thumbs.db
+
+# ========== 数据库和缓存 ==========
+*.sql
+*.sqlite
+*.db
+.cache/
+
+# ========== 文档生成 ==========
+coverage/
+.nyc_output/
+
+# ========== IDE配置 ==========
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ========== 其他 ==========
+*.map
+*.min.js
+*.min.css

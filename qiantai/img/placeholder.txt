@@ -1,0 +1,22 @@
+律师照片占位符说明
+===================
+
+当前使用的是临时占位符图片。
+
+请上传真实的律师照片：
+- 文件名：lawyer-zhiming-lin.jpg
+- 位置：/www/wwwroot/f.abcmall.one/providence/img/
+- 建议尺寸：400x400px 或更大
+- 格式：JPG 或 PNG
+- 背景：最好是纯色背景或专业商务照
+
+上传方法：
+1. FTP/SFTP上传
+2. 宝塔面板上传
+3. 命令行：scp 照片.jpg root@服务器:/www/wwwroot/f.abcmall.one/providence/img/lawyer-zhiming-lin.jpg
+
+黑金风格参考：
+- 深色西装 + 白色或浅色衬衫
+- 专业的商务表情
+- 可以戴眼镜（增加专业感）
+- 建议使用您提供的第二张参考图片风格

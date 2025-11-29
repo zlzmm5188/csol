@@ -1,0 +1,182 @@
+{
+    "data": {
+        "2025-11-13": [
+            {
+                "time": "09:30",
+                "region": "cn",
+                "country": "中国",
+                "event": "工业增加值同比",
+                "importance": "high",
+                "actual": "--",
+                "forecast": "5.4%",
+                "previous": "5.3%",
+                "type": "data",
+                "unit": "%",
+                "id": "mock_73034963e5252e5a88fdec794e328c47",
+                "date": "2025-11-13",
+                "source": "系统数据"
+            },
+            {
+                "time": "14:00",
+                "region": "eu",
+                "country": "欧元区",
+                "event": "CPI年率初值",
+                "importance": "high",
+                "actual": "--",
+                "forecast": "2.1%",
+                "previous": "2.0%",
+                "type": "data",
+                "unit": "%",
+                "id": "mock_2aff2d9d045134c55e7968f1bcb17a03",
+                "date": "2025-11-13",
+                "source": "系统数据"
+            },
+            {
+                "time": "16:30",
+                "region": "us",
+                "country": "美国",
+                "event": "初请失业金人数",
+                "importance": "medium",
+                "actual": "--",
+                "forecast": "23.0万",
+                "previous": "23.2万",
+                "type": "data",
+                "unit": "万人",
+                "id": "mock_25ca0dbac8486f4c277407e41cda3415",
+                "date": "2025-11-13",
+                "source": "系统数据"
+            },
+            {
+                "time": "20:30",
+                "region": "us",
+                "country": "美国",
+                "event": "美联储主席鲍威尔讲话",
+                "importance": "high",
+                "actual": "--",
+                "forecast": "--",
+                "previous": "--",
+                "type": "event",
+                "unit": "",
+                "id": "mock_95f3eb34cfc0e4b15f7ff1a7a23c6103",
+                "date": "2025-11-13",
+                "source": "系统数据"
+            },
+            {
+                "time": "22:00",
+                "region": "us",
+                "country": "美国",
+                "event": "谘商会消费者信心指数",
+                "importance": "medium",
+                "actual": "--",
+                "forecast": "100.5",
+                "previous": "98.7",
+                "type": "data",
+                "unit": "",
+                "id": "mock_bd2c1ab9f89d9e379c8523f0415d5e8f",
+                "date": "2025-11-13",
+                "source": "系统数据"
+            }
+        ],
+        "2025-11-14": [
+            {
+                "time": "全天",
+                "region": "us",
+                "country": "美国",
+                "event": "纽约证券交易所休市",
+                "importance": "low",
+                "actual": "--",
+                "forecast": "--",
+                "previous": "--",
+                "type": "holiday",
+                "unit": "",
+                "id": "mock_89646ff1698b007ab844253c3fe6b7a5",
+                "date": "2025-11-14",
+                "source": "系统数据"
+            },
+            {
+                "time": "07:50",
+                "region": "jp",
+                "country": "日本",
+                "event": "贸易帐",
+                "importance": "medium",
+                "actual": "--",
+                "forecast": "4200亿",
+                "previous": "3950亿",
+                "type": "data",
+                "unit": "亿日元",
+                "id": "mock_22e8d8d764abf213fb6bbaa3c26150f5",
+                "date": "2025-11-14",
+                "source": "系统数据"
+            },
+            {
+                "time": "16:30",
+                "region": "us",
+                "country": "美国",
+                "event": "零售销售月率",
+                "importance": "high",
+                "actual": "--",
+                "forecast": "0.3%",
+                "previous": "0.2%",
+                "type": "data",
+                "unit": "%",
+                "id": "mock_0a0008f6cd93a15129c0d67b79c49c15",
+                "date": "2025-11-14",
+                "source": "系统数据"
+            }
+        ],
+        "2025-11-15": [
+            {
+                "time": "09:30",
+                "region": "cn",
+                "country": "中国",
+                "event": "新增人民币贷款",
+                "importance": "medium",
+                "actual": "--",
+                "forecast": "12500亿",
+                "previous": "11800亿",
+                "type": "data",
+                "unit": "亿元",
+                "id": "mock_fa0e67aa8dd1e1d74c3903bccb0addfb",
+                "date": "2025-11-15",
+                "source": "系统数据"
+            },
+            {
+                "time": "14:00",
+                "region": "eu",
+                "country": "欧元区",
+                "event": "欧洲央行行长拉加德讲话",
+                "importance": "high",
+                "actual": "--",
+                "forecast": "--",
+                "previous": "--",
+                "type": "event",
+                "unit": "",
+                "id": "mock_657d44a15c523684f3a03857496f680f",
+                "date": "2025-11-15",
+                "source": "系统数据"
+            },
+            {
+                "time": "20:30",
+                "region": "us",
+                "country": "美国",
+                "event": "核心PPI月率",
+                "importance": "high",
+                "actual": "--",
+                "forecast": "0.2%",
+                "previous": "0.1%",
+                "type": "data",
+                "unit": "%",
+                "id": "mock_14351f9d07ff54049308dd229c801d3c",
+                "date": "2025-11-15",
+                "source": "系统数据"
+            }
+        ]
+    },
+    "updateTime": "2025-11-13 19:12:57",
+    "timestamp": 1763032377,
+    "totalEvents": 11,
+    "dateRange": {
+        "start": "2025-11-13",
+        "end": "2025-11-15"
+    }
+}

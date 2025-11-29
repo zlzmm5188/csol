@@ -1,0 +1,21 @@
+{
+  "name": "providence-frontend",
+  "version": "1.0.0",
+  "description": "Providence Financial Platform Frontend",
+  "type": "module",
+  "scripts": {
+    "dev": "echo 'Development server - use local server'",
+    "build": "echo 'Build process - minify and optimize'",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "eslint": "^9.39.1"
+  },
+  "keywords": [
+    "financial",
+    "investment",
+    "mobile-web"
+  ],
+  "author": "Providence Team",
+  "license": "proprietary"
+}

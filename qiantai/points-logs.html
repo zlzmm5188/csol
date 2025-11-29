@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>积分记录 - Providence</title>
+    <link rel="stylesheet" href="styles.css?v=1763897782" />
+    <style>
+        :root {
+            --gold: #dcb24f;
+            --goldLight: #ffe6aa;
+            --goldDark: #a3791d;
+            --green: #26A17B;
+            --red: #E74C3C;
+            --ink: #0f172a;
+            --lineD: rgba(255,255,255,0.08);
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        html, body {
+            color: rgba(255,255,255,0.85);
+            -webkit-font-smoothing: antialiased;
+
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+  padding-top: 60px;}
+
+        body {
+            background: linear-gradient(180deg, #0a1723 0%, #0f1c2a 100%) !important;
+        background-attachment: fixed;
+            padding-bottom: 65px !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* 顶部导航 - 间距12px */
+        .topbar {
+            position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, rgba(10,23,35,.95), rgba(10,23,35,.75));
+            backdrop-filter: blur(6px);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--lineD);
+            margin-bottom: 12px;
+        }
+
+        .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .back-btn:active {
+        transform: scale(0.95) !important;
+    }
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+
+        .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+
+        
+
+        /* 筛选区域 - 间距12px */
+        .filter-section {
+            margin: 0 16px 12px;
+            background: rgba(16, 27, 45, 0.92);
+            border-radius: 12px;
+            padding: 14px;
+            border: 1px solid rgba(220, 178, 79, 0.3);
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            background: rgba(255,255,255,0.03);
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .filter-tab {
+            flex: 1;
+            padding: 8px;
+            background: transparent;
+            color: rgba(255,255,255,0.5);
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, #dcb24f 0%, #a3791d 100%);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-input {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 8px 10px;
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .filter-btn {
+            background: linear-gradient(135deg, #dcb24f 0%, #a3791d 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* 记录列表 - 间距12px */
+        .records-container {
+            margin: 0 16px 16px;
+        }
+
+        .record-card {
+            background: rgba(16, 27, 45, 0.92);
+            border-radius: 12px;
+            padding: 14px;
+            border: 1px solid rgba(220, 178, 79, 0.2);
+            margin-bottom: 12px;
+        }
+
+        .record-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .record-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(220, 178, 79, 0.15);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .record-amount {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .record-amount.income {
+            color: var(--green);
+        }
+
+        .record-amount.outcome {
+            color: var(--red);
+        }
+
+        .record-desc {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 6px;
+        }
+
+        .record-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .record-balance {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .record-time {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* 空状态 */
+        .empty-state {
+
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .empty-text {
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+        }
+
+        /* 加载更多 */
+        .load-more {
+
+            padding: 16px;
+        }
+
+        .load-more-btn {
+            background: rgba(220, 178, 79, 0.15);
+            color: var(--gold);
+            border: 1px solid rgba(220, 178, 79, 0.3);
+            border-radius: 8px;
+            padding: 10px 32px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+      .brand .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .back-btn:active {
+        transform: scale(0.95) !important;
+    }
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+      .brand .page-title, .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <a href="javascript:history.back()" class="back-btn">←</a>
+        <div class="brand"><a href="javascript:history.back()" class="back-btn">←</a><h1 class="page-title">积分记录</h1></div></div>
+        <div class="spacer"></div>
+    </div>
+
+    <div class="filter-section">
+        <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterByType('')">全部</button>
+            <button class="filter-tab" onclick="filterByType('SIGN')">签到</button>
+            <button class="filter-tab" onclick="filterByType('EXCHANGE')">兑换</button>
+            <button class="filter-tab" onclick="filterByType('REWARD')">奖励</button>
+        </div>
+        <div class="filter-row">
+            <input type="date" class="filter-input" id="startDate" placeholder="开始日期" />
+            <input type="date" class="filter-input" id="endDate" placeholder="结束日期" />
+            <button class="filter-btn" onclick="applyDateFilter()">筛选</button>
+        </div>
+    </div>
+
+    <div class="records-container" id="recordsContainer">
+        <!-- 记录将通过JS动态加载 -->
+    </div>
+
+    <div class="load-more" id="loadMoreSection" style="display: none;">
+        <button class="load-more-btn" onclick="loadMore()">加载更多</button>
+    </div>
+
+    <script src="api-new.js?v=1763897782"></script>
+    <script src="ios-toast.js?v=1763897782"></script>
+    <script>
+        let currentPage = 1;
+        let totalPages = 1;
+        let isLoading = false;
+        let currentBizType = '';
+
+        // 右滑返回
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX - touchStartX > 100) {
+                history.back();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查登录状态（新版本token检查）
+            if (!ApiService.auth.requireLogin()) return;
+            loadRecords();
+        });
+
+        async function loadRecords(page = 1) {
+            if (isLoading) return;
+            isLoading = true;
+
+            try {
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+
+                let url = `https://api.4kp3l0iq.top/user/points-logs.php?page=${page}&limit=20`;
+                if (currentBizType) url += `&biz_type=${currentBizType}`;
+                if (startDate) url += `&start_date=${startDate}`;
+                if (endDate) url += `&end_date=${endDate}`;
+
+                const res = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'token': localStorage.getItem('token') || ''
+                    }
+                });
+
+                const result = await res.json();
+
+                if (result.code === 1 && result.data) {
+                    const records = result.data.records || [];
+                    const pagination = result.data.pagination || {};
+
+                    currentPage = pagination.page || 1;
+                    totalPages = pagination.pages || 1;
+
+                    if (page === 1) {
+                        displayRecords(records);
+                    } else {
+                        appendRecords(records);
+                    }
+
+                    // 显示/隐藏加载更多按钮
+                    const loadMoreSection = document.getElementById('loadMoreSection');
+                    if (currentPage < totalPages) {
+                        loadMoreSection.style.display = 'block';
+                    } else {
+                        loadMoreSection.style.display = 'none';
+                    }
+                } else {
+                    if (page === 1) {
+                        showEmptyState();
+                    }
+                }
+            } catch (e) {
+                console.error('加载记录失败:', e);
+                showToast('', '加载失败，请稍后重试');
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        function displayRecords(records) {
+            const container = document.getElementById('recordsContainer');
+
+            if (records.length === 0) {
+                showEmptyState();
+                return;
+            }
+
+            container.innerHTML = records.map(record => {
+                const amountClass = record.is_income ? 'income' : 'outcome';
+                const amountSign = record.is_income ? '+' : '-';
+                const typeIcon = getTypeIcon(record.biz_type);
+
+                return `
+                    <div class="record-card">
+                        <div class="record-header">
+                            <div class="record-type">
+                                <span>${typeIcon}</span>
+                                <span>${record.biz_type_name}</span>
+                            </div>
+                            <div class="record-amount ${amountClass}">
+                                ${amountSign}${record.change_amount}
+                            </div>
+                        </div>
+                        <div class="record-desc">${record.description}</div>
+                        <div class="record-footer">
+                            <div class="record-balance">余额: ${record.balance_after}</div>
+                            <div class="record-time">${record.date} ${record.time}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function appendRecords(records) {
+            const container = document.getElementById('recordsContainer');
+            const newRecordsHTML = records.map(record => {
+                const amountClass = record.is_income ? 'income' : 'outcome';
+                const amountSign = record.is_income ? '+' : '-';
+                const typeIcon = getTypeIcon(record.biz_type);
+
+                return `
+                    <div class="record-card">
+                        <div class="record-header">
+                            <div class="record-type">
+                                <span>${typeIcon}</span>
+                                <span>${record.biz_type_name}</span>
+                            </div>
+                            <div class="record-amount ${amountClass}">
+                                ${amountSign}${record.change_amount}
+                            </div>
+                        </div>
+                        <div class="record-desc">${record.description}</div>
+                        <div class="record-footer">
+                            <div class="record-balance">余额: ${record.balance_after}</div>
+                            <div class="record-time">${record.date} ${record.time}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            container.insertAdjacentHTML('beforeend', newRecordsHTML);
+        }
+
+        function getTypeIcon(bizType) {
+            const icons = {
+                'SIGN': '📅',
+                'EXCHANGE': '💰',
+                'REWARD': '🎁',
+                'ADMIN': '⚙️',
+                'REFUND': '↩️'
+            };
+            return icons[bizType] || '📝';
+        }
+
+        function showEmptyState() {
+            const container = document.getElementById('recordsContainer');
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <div class="empty-text">暂无积分记录</div>
+                </div>
+            `;
+        }
+
+        function filterByType(bizType) {
+            currentBizType = bizType;
+            currentPage = 1;
+
+            // 更新tab状态
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            loadRecords(1);
+        }
+
+        function applyDateFilter() {
+            currentPage = 1;
+            loadRecords(1);
+        }
+
+        function loadMore() {
+            loadRecords(currentPage + 1);
+        }
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script src="smart-swipe-control.js?v=1763897782"></script>
+
+
+</body>
+</html>

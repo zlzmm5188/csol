@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>尊享邀请 - Providence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "SF Pro Display", sans-serif;
+            background: linear-gradient(135deg, #0a0e1a 0%, #0e1a2e 50%, #0a0e1a 100%);
+            background-size: 200% 200%;
+            background-attachment: fixed;
+            animation: gradientShift 20s ease infinite;
+            color: #fff;
+            min-height: 100vh;
+            padding: 0;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* 背景装饰 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(232, 201, 145, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(74, 158, 255, 0.06) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 420px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 60px 24px 40px;
+        }
+
+        /* Logo区域 */
+        .logo-section {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #4a9eff 0%, #2e7cd6 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow:
+                0 8px 24px rgba(74, 158, 255, 0.4),
+                0 0 0 1px rgba(74, 158, 255, 0.2);
+            position: relative;
+        }
+
+        .logo-icon::before {
+            content: '→';
+            font-size: 36px;
+            color: #fff;
+            font-weight: 900;
+            transform: rotate(-45deg);
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, rgba(74, 158, 255, 0.5), rgba(232, 201, 145, 0.3));
+            border-radius: 18px;
+            z-index: -1;
+            opacity: 0.6;
+            filter: blur(8px);
+        }
+
+        /* 标题区域 */
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: fadeInDown 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .title {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #e8c991 0%, #f4d03f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            letter-spacing: 3px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: rgba(232, 201, 145, 0.85);
+            font-weight: 400;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+        }
+
+        /* 主卡片 */
+        .card {
+            width: 100%;
+            padding: 36px 28px;
+            background: rgba(14, 28, 50, 0.4);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 24px;
+            border: 1px solid rgba(232, 201, 145, 0.15);
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            margin-bottom: 32px;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 品牌头部 */
+        .brand-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(232, 201, 145, 0.12);
+        }
+
+        .brand-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #4a9eff 0%, #2e7cd6 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
+        }
+
+        .brand-icon::before {
+            content: '→';
+            font-size: 22px;
+            color: #fff;
+            font-weight: 900;
+            transform: rotate(-45deg);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .brand-name {
+            font-size: 19px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .brand-sub {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.55);
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .vip-badge {
+            background: linear-gradient(135deg, #e8c991 0%, #d4af37 100%);
+            color: #0a1020;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 7px 16px;
+            border-radius: 22px;
+            letter-spacing: 1.5px;
+            box-shadow: 0 4px 12px rgba(232, 201, 145, 0.3);
+        }
+
+        /* 体验金区域 */
+        .reward-section {
+            text-align: center;
+            padding: 36px 24px;
+            background: linear-gradient(135deg, rgba(232, 201, 145, 0.12) 0%, rgba(212, 175, 55, 0.06) 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(232, 201, 145, 0.2);
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reward-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(232, 201, 145, 0.1) 0%, transparent 70%);
+            animation: rewardGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes rewardGlow {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+            50% { transform: translate(15%, 15%) scale(1.1); opacity: 0.7; }
+        }
+
+        .reward-label {
+            font-size: 14px;
+            color: rgba(232, 201, 145, 0.9);
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .reward-amount {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .currency {
+            font-size: 32px;
+            color: #e8c991;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .amount {
+            font-size: 80px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #e8c991 0%, #f4d03f 50%, #e8c991 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            letter-spacing: -4px;
+            animation: amountShine 4s ease-in-out infinite;
+        }
+
+        @keyframes amountShine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .reward-desc {
+            font-size: 13px;
+            color: rgba(232, 201, 145, 0.75);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 权益标签 */
+        .benefits {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .benefit {
+            background: rgba(232, 201, 145, 0.08);
+            border: 1px solid rgba(232, 201, 145, 0.2);
+            color: #e8c991;
+            font-size: 12px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .benefit:hover {
+            background: rgba(232, 201, 145, 0.15);
+            border-color: rgba(232, 201, 145, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* 立即加入按钮 */
+        .join-btn {
+            display: block;
+            width: 100%;
+            padding: 20px 40px;
+            background: linear-gradient(135deg, rgba(232, 201, 145, 0.15) 0%, rgba(212, 175, 55, 0.1) 100%);
+            border: 2px solid #e8c991;
+            border-radius: 18px;
+            color: #e8c991;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            letter-spacing: 3px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow:
+                0 8px 24px rgba(0, 0, 0, 0.3),
+                0 0 0 0 rgba(232, 201, 145, 0.4);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1.2s ease-out 0.6s both;
+        }
+
+        .join-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(232, 201, 145, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .join-btn:hover {
+            background: linear-gradient(135deg, rgba(232, 201, 145, 0.25) 0%, rgba(212, 175, 55, 0.2) 100%);
+            border-color: #f4d03f;
+            color: #f4d03f;
+            box-shadow:
+                0 12px 32px rgba(0, 0, 0, 0.4),
+                0 0 0 4px rgba(232, 201, 145, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .join-btn:active::before {
+            width: 500px;
+            height: 500px;
+        }
+
+        .join-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* 底部 */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            opacity: 0.4;
+            animation: fadeIn 2s ease-out 0.8s both;
+        }
+
+        .footer-text {
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: rgba(232, 201, 145, 0.4);
+            font-weight: 500;
+        }
+
+        /* 响应式 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 50px 20px 30px;
+            }
+
+            .logo-icon {
+                width: 64px;
+                height: 64px;
+            }
+
+            .logo-icon::before {
+                font-size: 32px;
+            }
+
+            .title {
+                font-size: 32px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .card {
+                padding: 32px 24px;
+            }
+
+            .amount {
+                font-size: 72px;
+            }
+
+            .join-btn {
+                padding: 18px 32px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 375px) {
+            .title {
+                font-size: 28px;
+            }
+
+            .amount {
+                font-size: 64px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo-section">
+            <div class="logo-icon"></div>
+        </div>
+
+        <!-- 标题 -->
+        <div class="header">
+            <h1 class="title">尊享邀请</h1>
+            <p class="subtitle">开启专属财富通道<br>与精英共享投资机遇</p>
+        </div>
+
+        <!-- 主卡片 -->
+        <div class="card">
+            <!-- 品牌头部 -->
+            <div class="brand-header">
+                <div class="brand-info">
+                    <div class="brand-icon"></div>
+                    <div class="brand-text">
+                        <div class="brand-name">PROVIDENCE</div>
+                        <div class="brand-sub">EQUITY PARTNERS</div>
+                    </div>
+                </div>
+                <div class="vip-badge">VIP</div>
+            </div>
+
+            <!-- 体验金 -->
+            <div class="reward-section">
+                <div class="reward-label">新人专属礼遇</div>
+                <div class="reward-amount">
+                    <span class="currency">¥</span>
+                    <span class="amount">888</span>
+                </div>
+                <div class="reward-desc">体验金 · 注册即送</div>
+            </div>
+
+            <!-- 权益 -->
+            <div class="benefits">
+                <span class="benefit">专属客服</span>
+                <span class="benefit">优先认购</span>
+                <span class="benefit">收益加成</span>
+            </div>
+        </div>
+
+        <!-- 立即加入按钮 -->
+        <a href="#" class="join-btn" id="joinBtn">立即加入</a>
+
+        <!-- 底部 -->
+        <div class="footer">
+            <div class="footer-text">TRUSTED BY PROFESSIONALS</div>
+        </div>
+    </div>
+
+    <script>
+        // 从URL参数获取邀请码
+        function getInviteCode() {
+            const params = new URLSearchParams(window.location.search);
+            return (params.get('code') || params.get('invite_code') || 'G138688').toUpperCase();
+        }
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            const code = getInviteCode();
+
+            // 设置跳转链接
+            const joinBtn = document.getElementById('joinBtn');
+            joinBtn.href = `register.html?invite_code=${encodeURIComponent(code)}`;
+
+            // 静默保存邀请码
+            localStorage.setItem('invite_code', code);
+            localStorage.setItem('invite_code_from_link', code);
+        });
+
+        // 跳转处理
+        document.getElementById('joinBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const code = getInviteCode();
+            if (code) {
+                localStorage.setItem('invite_code', code);
+                window.location.href = `register.html?invite_code=${encodeURIComponent(code)}`;
+            } else {
+                window.location.href = 'register.html';
+            }
+        });
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script defer src="smart-swipe-control.js?v=1763897782"></script>
+</body>
+</html>

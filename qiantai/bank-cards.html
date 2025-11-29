@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>银行卡管理 | PROVIDENCE</title>
+    <link rel="icon" href="../favicon.ico" />
+    <link rel="stylesheet" href="styles.css?v=1763813622" />
+    <style>
+
+/* ===== 导航栏样式 ===== */
+.nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: clamp(48px, 12vw, 56px);
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    background: rgba(10, 16, 32, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    padding-left: clamp(12px, 3vw, 16px);
+    padding-right: clamp(12px, 3vw, 16px);
+    box-sizing: content-box;
+    z-index: 1000;
+}
+
+.nav-back {
+    width: clamp(36px, 9vw, 40px);
+    height: clamp(36px, 9vw, 40px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(22px, 5.5vw, 26px);
+    color: #e8c991;
+    cursor: pointer;
+    background: rgba(232, 201, 145, 0.1);
+    border-radius: 10px;
+    transition: all 0.2s;
+    border: none;
+    padding: 0;
+}
+
+.nav-back:active {
+    transform: scale(0.92);
+    background: rgba(232, 201, 145, 0.15);
+}
+
+.nav-title {
+    flex: 1;
+    width: 100%;
+    text-align: center;
+    font-size: clamp(17px, 4.2vw, 19px);
+    font-weight: 600;
+    color: #e8c991;
+    margin-right: clamp(36px, 9vw, 40px);
+}
+
+* {
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+html,
+body {
+    touch-action: pan-y !important;
+    -ms-touch-action: pan-y !important;
+    overscroll-behavior: none !important;
+    -webkit-overscroll-behavior: none !important;
+    background: linear-gradient(180deg, #0e2b44 0%, #091c2e 100%) !important;
+        background-attachment: fixed;
+  padding-top: 60px;
+}
+
+body {
+    -webkit-overflow-scrolling: touch;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#app {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+        /* iOS原生风格弹窗 */
+        .ios-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background: #fff;
+            border-radius: 13px;
+
+            width: 90%;
+            z-index: 9999;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .ios-toast.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: auto;
+        }
+
+        .ios-toast-title {
+            font-size: 17px;
+            font-weight: 400;
+            color: #000;
+
+            padding: 20px 20px 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .ios-toast-message {
+            font-size: 13px;
+            color: #000;
+
+            line-height: 1.4;
+            padding: 0 20px 20px;
+            letter-spacing: -0.01em;
+            border-bottom: 0.5px solid #d1d1d6;
+            white-space: pre-line;
+        }
+
+        .ios-toast-buttons {
+            display: flex;
+            border-top: 0.5px solid #d1d1d6;
+        }
+
+        .ios-toast-button {
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 13px 0;
+            background: none;
+            border: none;
+            font-size: 17px;
+            font-weight: 400;
+            color: #007aff;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+        }
+
+        .ios-toast-button::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 0.5px;
+            background: #d1d1d6;
+        }
+
+        .ios-toast-button:first-child {
+            color: #000;
+        }
+
+        .ios-toast-button:last-child::after {
+            display: none;
+        }
+
+        .ios-toast-button.only-button::after {
+            display: none;
+        }
+
+        .ios-toast-button:active {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .toast-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .toast-backdrop.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(16px, 4vw, 20px);
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: clamp(12px, 3vw, 16px);
+            width: 90%;
+            max-width: 400px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 类型选择弹窗 - 统一大小 */
+        .type-select-modal {
+            width: 90%;
+            max-width: 400px;
+            min-height: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: clamp(16px, 4vw, 20px);
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: clamp(18px, 4.5vw, 20px);
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: clamp(28px, 7vw, 32px);
+            color: #999;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            width: clamp(32px, 8vw, 36px);
+            height: clamp(32px, 8vw, 36px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-body {
+            padding: clamp(16px, 4vw, 20px);
+        }
+
+        .form-group {
+            margin-bottom: clamp(16px, 4vw, 20px);
+        }
+
+        .form-label {
+            display: block;
+            font-size: clamp(14px, 3.5vw, 16px);
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: clamp(8px, 2vw, 10px);
+        }
+
+        .text-muted {
+            color: #999;
+            font-weight: 400;
+        }
+
+        .form-input {
+
+            padding: clamp(12px, 3vw, 14px);
+            border: 2px solid #e8e8e8;
+            border-radius: clamp(8px, 2vw, 10px);
+            font-size: clamp(14px, 3.5vw, 16px);
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #0e2b44;
+        }
+
+        .form-hint {
+            font-size: clamp(12px, 3vw, 14px);
+            color: #666;
+            margin-top: clamp(6px, 1.5vw, 8px);
+        }
+
+        .form-notice {
+            display: flex;
+            gap: clamp(10px, 2.5vw, 12px);
+            padding: clamp(12px, 3vw, 14px);
+            background: #fff5e6;
+            border: 1px solid #fbbf24;
+            border-radius: clamp(8px, 2vw, 10px);
+            font-size: clamp(12px, 3vw, 14px);
+        }
+
+        .notice-icon {
+            font-size: clamp(18px, 4.5vw, 20px);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: clamp(12px, 3vw, 16px);
+            margin-top: clamp(24px, 6vw, 28px);
+        }
+
+        .btn-cancel,
+        .btn-submit {
+
+            padding: clamp(12px, 3vw, 14px);
+            border-radius: clamp(8px, 2vw, 10px);
+            font-size: clamp(14px, 3.5vw, 16px);
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .btn-cancel:hover {
+            background: #e8e8e8;
+        }
+
+        .btn-submit {
+            background: #0e2b44;
+            color: #fff;
+        }
+
+        .btn-submit:hover {
+            background: #0a1f32;
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .bank-card-item {
+            position: relative;
+        }
+
+        .card-usdt {
+            margin-top: clamp(8px, 2vw, 10px);
+            font-size: clamp(12px, 3vw, 14px);
+            color: #666;
+        }
+
+        /* 选择类型模态框 */
+
+
+        .type-option {
+            padding: clamp(16px, 4vw, 20px);
+            margin-bottom: clamp(12px, 3vw, 16px);
+            border: 2px solid #e8e8e8;
+            border-radius: clamp(12px, 3vw, 16px);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .type-option:hover {
+            border-color: #0e2b44;
+            background: rgba(14, 43, 68, 0.05);
+        }
+
+        .type-option-icon {
+            font-size: clamp(32px, 8vw, 40px);
+            margin-bottom: clamp(8px, 2vw, 10px);
+        }
+
+        .type-option-title {
+            font-size: clamp(16px, 4vw, 18px);
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: clamp(4px, 1vw, 6px);
+        }
+
+        .type-option-desc {
+            font-size: clamp(12px, 3vw, 14px);
+            color: #666;
+        }
+      .brand { display: flex; align-items: center; }
+      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+      .brand .page-title, .brand .page-title, .brand h1 { margin: 0; font-size: 16px; white-space: nowrap; flex: 0 1 auto; }
+
+.brand { display: flex; align-items: center; }      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}      .brand .page-title, .brand .page-title, .brand h1 { margin: 0; font-size: 16px; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+    <script src="api-config.js?v=1763813622"></script>
+    <script defer src="token-manager.js?v=1763813622"></script>
+    <script defer src="smart-swipe-control.js?v=1763813622"></script>
+    <!-- 统一API客户端 v2.0 -->
+    <script src="api-unified-v2.js"></script>
+    <!-- Token检查中间件 -->
+    <script src="token-check-middleware.js"></script>
+    </head>
+
+<body class="page-other">
+    <div id="app">
+        <div class="nav-bar">
+            <div class="nav-back" onclick="goBack()">‹</div>
+            <div class="nav-title">银行卡管理</div>
+        </div>
+        <main class="content-white">
+            <div class="bank-cards-list" id="cardsList">
+                <!-- 动态加载银行卡列表 -->
+                <div class="loading-state" id="loadingState">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">加载中...</div>
+                </div>
+            </div>
+
+            <div class="add-card-section">
+                <button class="btn-add-card" id="addCardMainBtn">+ 添加银行卡/USDT地址</button>
+            </div>
+
+            <div class="card-tips">
+                <h3>💡 温馨提示</h3>
+                <ul>
+                    <li>仅支持本人实名银行卡绑定</li>
+                    <li>USDT地址支持TRC20、ERC20、BEP20等主流链</li>
+                    <li>绑定后如需换绑，请联系客服</li>
+                    <li>单笔提现最低100元，最高50万元</li>
+                    <li>提现到账时间：工作日2小时内，节假日顺延</li>
+                </ul>
+            </div>
+        </main>
+
+        <!-- 选择类型模态框 -->
+        <div class="modal-overlay" id="typeSelectModal" style="display:none;">
+            <div class="modal-content type-select-modal">
+                <div class="modal-header">
+                    <h3>选择绑定类型</h3>
+                    <button class="modal-close" id="closeTypeModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="type-option" data-type="bank">
+                        <div class="type-option-icon">🏦</div>
+                        <div class="type-option-title">绑定银行卡</div>
+                        <div class="type-option-desc">用于提现到银行卡</div>
+                    </div>
+                    <div class="type-option" data-type="usdt">
+                        <div class="type-option-icon">💳</div>
+                        <div class="type-option-title">绑定USDT地址</div>
+                        <div class="type-option-desc">用于USDT充值提现</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 添加银行卡/USDT地址模态框 -->
+        <div class="modal-overlay" id="addCardModal" style="display:none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">添加银行卡</h3>
+                    <button class="modal-close" id="closeModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <form id="addCardForm">
+                        <!-- 银行卡表单 -->
+                        <div id="bankForm" style="display:none;">
+                            <div class="form-group">
+                                <label class="form-label">持卡人姓名 <span style="color:#ef4444;">*</span></label>
+                                <input type="text" class="form-input" id="accountName" name="account_name" placeholder="请输入持卡人真实姓名" />
+                                <div class="form-hint" style="font-size: 12px; color: #f59e0b; margin-top: 4px;">
+                                    ⚠️ 必须与实名认证姓名一致
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">银行名称 <span style="color:#ef4444;">*</span></label>
+                                <input type="text" class="form-input" id="btype" name="btype"
+                                    placeholder="如：中国银行、工商银行等" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">开户行支行</label>
+                                <input type="text" class="form-input" id="branch" name="branch" placeholder="如：北京朝阳支行（选填）" />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">银行卡号 <span style="color:#ef4444;">*</span></label>
+                                <input type="text" class="form-input" id="card" name="card" placeholder="请输入银行卡号"
+                                    maxlength="19" />
+                            </div>
+                        </div>
+
+                        <!-- USDT地址表单 -->
+                        <div id="usdtForm" style="display:none;">
+                            <div class="form-group">
+                                <label class="form-label">USDT钱包地址</label>
+                                <input type="text" class="form-input" id="usdt_address" name="usdt_address"
+                                    placeholder="请输入USDT地址（支持TRC20/ERC20/BEP20等）" />
+                                <div class="form-hint">支持TRC20、ERC20、BEP20等主流链地址</div>
+                            </div>
+                        </div>
+
+                        <!-- 共同字段：支付密码（首次设置或验证） -->
+                        <div class="form-group" id="payPasswordGroup">
+                            <label class="form-label" id="payPasswordLabel">支付密码</label>
+                            <input type="password" class="form-input" id="pwd" name="pwd" placeholder="请输入支付密码（6位数字）"
+                                maxlength="6" />
+                            <div class="form-hint" id="payPasswordHint" style="font-size: 12px; color: #999; margin-top: 4px;">
+                                首次绑定需要设置支付密码
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-notice">
+                                <span class="notice-icon">⚠️</span>
+                                <div>
+                                    <div style="font-weight: 600; margin-bottom: 4px;">重要提示</div>
+                                    <div>绑定后如需换绑，请联系客服进行处理</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancel" id="cancelBtn">取消</button>
+                            <button type="submit" class="btn-submit" id="submitBtn">确认绑定</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航已移除 -->
+    </div>
+
+    <!-- 旧API已替换 -->
+    <script src="api-new.js?v=1763813622"></script>
+    <script src="ios-toast.js?v=1763813622"></script>
+    <script>
+        // ========== 导航函数 ==========
+        function goBack() {
+            window.history.back();
+        }
+
+        // 使用 config.js 中的 API 配置
+        const API_BASE = window.API_CONFIG?.baseURL || 'https://api.4kp3l0iq.top';
+        const TOKEN_KEY = window.API_CONFIG?.tokenKey || 'providence_token';
+        let currentBindType = ''; // 'bank' 或 'usdt'
+        let hasPayPassword = false; // 用户是否已设置支付密码
+
+        // 使用全局iOS弹窗组件（通过ios-toast.js）
+
+        // 检查用户是否已设置支付密码
+        async function checkPayPasswordStatus() {
+            try {
+                const token = localStorage.getItem(TOKEN_KEY);
+                if (!token) return;
+
+                const response = await fetch(`${API_BASE}/user/info`, {
+                    method: 'GET',
+                    headers: { 'token': token }
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.code === 1 || result.code === 200) {
+                        // 注意：后端不返回trade_password字段（安全考虑）
+                        // 我们通过尝试绑定时的错误来判断，或者假设用户已设置
+                        // 这里简化处理：如果用户信息正常返回，假设可能已设置
+                        // 实际状态由后端在绑定时判断
+                        const pwdInput = document.getElementById('pwd');
+                        const pwdLabel = document.getElementById('payPasswordLabel');
+                        const pwdHint = document.getElementById('payPasswordHint');
+
+                        if (pwdInput && pwdLabel && pwdHint) {
+                            // 默认显示"验证支付密码"（因为大多数用户已设置）
+                            // 如果未设置，后端会返回错误提示
+                            pwdInput.placeholder = '请输入支付密码（6位数字）';
+                            pwdLabel.textContent = '支付密码';
+                            pwdHint.textContent = '首次绑定将自动设置支付密码，已设置则验证密码';
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('检查支付密码状态失败:', error);
+            }
+        }
+
+        // 加载银行卡列表
+        async function loadBankCards() {
+            const loadingState = document.getElementById('loadingState');
+            const cardsList = document.getElementById('cardsList');
+
+            try {
+                const token = localStorage.getItem(TOKEN_KEY);
+                if (!token) {
+                    loadingState.innerHTML = '<div class="empty-state">请先登录</div>';
+                    return;
+                }
+
+                // 优先使用ApiClient
+                let data = null;
+                if (window.ApiClient && window.ApiClient.get) {
+                    try {
+                        const response = await window.ApiClient.get('/api/user/bank/list');
+                        if (response && (response.code === 1 || response.code === 200)) {
+                            data = response;
+                        }
+                    } catch (e) {
+                        console.warn('[BankCards] ApiClient调用失败，使用fallback:', e);
+                    }
+                }
+
+                // Fallback: 直接使用fetch
+                if (!data) {
+                    const response = await fetch(`${API_BASE}/api/user/bank/list`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Token': token,
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP错误: ${response.status}`);
+                    }
+
+                    const text = await response.text();
+
+                    // 检查是否是HTML错误页面
+                    if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html') || text.includes('系统发生错误') || text.includes('ThinkPHP')) {
+                        loadingState.innerHTML = '<div class="empty-state">暂无绑定记录</div>';
+                        return;
+                    }
+
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        loadingState.innerHTML = '<div class="empty-state">暂无绑定记录</div>';
+                        return;
+                    }
+                }
+
+                if ((data.code === 1 || data.code === 200) && data.data) {
+                    const cards = Array.isArray(data.data) ? data.data : (data.data.cards || []);
+                    if (cards.length > 0) {
+                        loadingState.style.display = 'none';
+                        renderBankCards(cards);
+                    } else {
+                        loadingState.innerHTML = '<div class="empty-state">暂无绑定记录</div>';
+                    }
+                } else {
+                    loadingState.innerHTML = '<div class="empty-state">暂无绑定记录</div>';
+                }
+            } catch (error) {
+                console.error('❌ 加载银行卡列表失败:', error);
+                console.warn('📌 接口暂未开放，显示空状态');
+                // 网络错误或接口不可用，优雅降级
+                loadingState.innerHTML = '<div class="empty-state">暂无绑定记录</div>';
+            }
+        }
+
+        // 渲染银行卡列表
+        function renderBankCards(cards) {
+            const cardsList = document.getElementById('cardsList');
+            cardsList.innerHTML = '';
+
+            cards.forEach(card => {
+                const cardItem = document.createElement('div');
+                cardItem.className = 'bank-card-item' + (card.type === 1 ? ' primary' : '');
+                cardItem.innerHTML = `
+            <div class="card-bank">${card.btype || '未设置'}</div>
+            ${card.card ? `<div class="card-number">${card.card}</div>` : ''}
+            ${card.usdt_address ? `<div class="card-usdt">USDT: ${card.usdt_address}</div>` : ''}
+            <div class="card-holder">${card.branch || ''}</div>
+            ${card.type === 1 ? '<div class="card-badge">默认</div>' : ''}
+            <div class="card-actions">
+                ${card.can_modify ? `
+                    <button class="card-action-btn unbind-btn" data-card-id="${card.id}">解绑</button>
+                ` : `
+                    <span class="card-action-hint">已锁定，联系客服换绑</span>
+                `}
+            </div>
+        `;
+                cardsList.appendChild(cardItem);
+            });
+
+            // 绑定解绑事件
+            document.querySelectorAll('.unbind-btn').forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    const cardId = this.dataset.cardId;
+                    unbindCard(cardId);
+                });
+            });
+        }
+
+        // 解绑银行卡
+        async function unbindCard(cardId) {
+            const confirmed = await showConfirm('确认解绑', '确认解绑该银行卡/USDT地址？');
+            if (!confirmed) return;
+
+            try {
+                const token = localStorage.getItem(TOKEN_KEY);
+                // 优先使用ApiClient
+                let data = null;
+                if (window.ApiClient && window.ApiClient.post) {
+                    try {
+                        const response = await window.ApiClient.post('/api/user/bank/del', { id: cardId });
+                        if (response && (response.code === 1 || response.code === 200)) {
+                            data = response;
+                        }
+                    } catch (e) {
+                        console.warn('[BankCards] ApiClient解绑失败，使用fallback:', e);
+                    }
+                }
+
+                // Fallback: 直接使用fetch
+                if (!data) {
+                    const response = await fetch(`${API_BASE}/api/user/bank/del`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Token': token,
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ id: cardId })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP错误: ${response.status}`);
+                    }
+
+                    const text = await response.text();
+
+                    // 检查是否是HTML错误页面
+                    if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html') || text.includes('系统发生错误') || text.includes('ThinkPHP')) {
+                        await showToast('错误', '服务器内部错误，请联系客服');
+                        return;
+                    }
+
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        await showToast('错误', '服务器返回格式错误，请重试或联系客服');
+                        return;
+                    }
+                }
+
+                if (data.code === 1 || (typeof data.message === 'string' && data.message.includes('成功'))) {
+                    await showToast('成功', '银行卡/USDT地址已解绑');
+                    loadBankCards();
+                } else {
+                    await showToast('错误', data.msg || '解绑失败，请重试');
+                }
+            } catch (error) {
+                console.error('❌ 解绑失败:', error);
+                await showToast('错误', '网络错误：' + error.message + '\n\n请检查网络连接后重试');
+            }
+        }
+
+        // 显示选择类型模态框
+        function showTypeSelectModal() {
+            document.getElementById('typeSelectModal').style.display = 'flex';
+        }
+
+        // 隐藏选择类型模态框
+        function hideTypeSelectModal() {
+            document.getElementById('typeSelectModal').style.display = 'none';
+        }
+
+        // 显示添加表单模态框
+        function showAddModal(type) {
+            currentBindType = type;
+            const modalTitle = document.getElementById('modalTitle');
+            const bankForm = document.getElementById('bankForm');
+            const usdtForm = document.getElementById('usdtForm');
+
+            if (type === 'bank') {
+                modalTitle.textContent = '添加银行卡';
+                bankForm.style.display = 'block';
+                usdtForm.style.display = 'none';
+                document.getElementById('card').required = true;
+                document.getElementById('usdt_address').required = false;
+            } else if (type === 'usdt') {
+                modalTitle.textContent = '添加USDT地址';
+                bankForm.style.display = 'none';
+                usdtForm.style.display = 'block';
+                document.getElementById('card').required = false;
+                document.getElementById('usdt_address').required = true;
+            }
+
+            document.getElementById('addCardModal').style.display = 'flex';
+        }
+
+        // 隐藏添加表单模态框
+        function hideAddModal() {
+            document.getElementById('addCardModal').style.display = 'none';
+            document.getElementById('addCardForm').reset();
+            currentBindType = '';
+        }
+
+        // USDT地址验证
+        function validateUsdtAddress(address) {
+            if (!address) return true; // 可选
+
+            const trimmed = address.trim();
+
+            // 长度检查
+            if (trimmed.length < 26 || trimmed.length > 65) {
+                return false;
+            }
+
+            // TRC20格式
+            if (/^T[A-Za-z1-9]{33}$/.test(trimmed)) {
+                return true;
+            }
+
+            // ERC20/BEP20格式
+            if (/^0x[a-fA-F0-9]{40}$/.test(trimmed)) {
+                return true;
+            }
+
+            // Base58格式
+            if (/^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{26,35}$/.test(trimmed)) {
+                return true;
+            }
+
+            // 宽松验证
+            return /^[A-Za-z0-9]{26,65}$/.test(trimmed);
+        }
+
+        // 提交表单
+        document.getElementById('addCardForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const accountName = document.getElementById('accountName')?.value?.trim() || '';
+            const branch = document.getElementById('branch').value.trim();
+            const btype = document.getElementById('btype').value.trim();
+            const card = document.getElementById('card').value.trim();
+            const usdtAddress = document.getElementById('usdt_address').value.trim();
+            const pwd = document.getElementById('pwd').value.trim();
+
+            // 验证：根据类型验证必填项
+            if (currentBindType === 'bank') {
+                if (!accountName) {
+                    await showToast('请输入持卡人姓名', '持卡人姓名不能为空');
+                    return;
+                }
+                if (!btype) {
+                    await showToast('请输入银行名称', '银行名称不能为空');
+                    return;
+                }
+                if (!card) {
+                    await showToast('请输入银行卡号', '银行卡号不能为空');
+                    return;
+                }
+            }
+
+            if (currentBindType === 'usdt' && !usdtAddress) {
+                await showToast('请输入USDT地址', 'USDT地址不能为空');
+                return;
+            }
+
+            // 验证USDT地址格式
+            if (currentBindType === 'usdt' && usdtAddress && !validateUsdtAddress(usdtAddress)) {
+                await showToast('USDT地址格式不正确', '请输入有效的虚拟货币钱包地址（支持TRC20、ERC20、BEP20等）');
+                return;
+            }
+
+            // 验证支付密码
+            if (!pwd || pwd.length !== 6 || !/^\d{6}$/.test(pwd)) {
+                await showToast('支付密码错误', '请输入6位数字支付密码');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '绑定中...';
+
+            try {
+                const token = localStorage.getItem(TOKEN_KEY);
+                let apiPath, bodyData;
+
+                if (currentBindType === 'bank') {
+                    apiPath = '/api/user/bank/add';
+                    bodyData = {
+                        account_name: accountName || '',  // 持卡人姓名（必须与实名一致）
+                        card_number: card || '',
+                        bank_name: btype || '',           // 银行名称（如：中国银行）
+                        account_branch: branch || '',     // 开户行支行
+                        pay_password: pwd
+                    };
+                } else {
+                    apiPath = '/api/user/bank/add';  // USDT地址也使用同一接口
+                    bodyData = {
+                        address: usdtAddress || '',
+                        chain_type: 'TRC20',
+                        pay_password: pwd,
+                        card_type: 'usdt'
+                    };
+                }
+
+                // 优先使用ApiClient
+                let data = null;
+                if (window.ApiClient && window.ApiClient.post) {
+                    try {
+                        const response = await window.ApiClient.post(apiPath, bodyData);
+                        if (response && (response.code === 1 || response.code === 200 || response.code === 0)) {
+                            data = response;
+                        }
+                    } catch (e) {
+                        console.warn('[BankCards] ApiClient绑定失败，使用fallback:', e);
+                    }
+                }
+
+                // Fallback: 直接使用fetch
+                if (!data) {
+                    const response = await fetch(`${API_BASE}${apiPath}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Token': token,
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(bodyData)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP错误: ${response.status}`);
+                    }
+
+                    const text = await response.text();
+
+                    // 检查是否是HTML错误页面
+                    if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html') || text.includes('系统发生错误') || text.includes('ThinkPHP')) {
+                        await showToast('错误', '服务器内部错误，请联系客服');
+                        return;
+                    }
+
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        await showToast('错误', '服务器返回格式错误，请重试或联系客服');
+                        return;
+                    }
+                }
+
+                if (data.code === 0 || data.code === 1 || (typeof data.msg === 'string' && data.msg.includes('成功'))) {
+                    await showToast('成功', '绑定成功\n如需换绑请联系客服');
+                    hideAddModal();
+                    loadBankCards();
+                } else {
+                    // 处理需要实名认证的情况
+                    if (data.data && data.data.need_kyc) {
+                        const goKyc = confirm(data.msg + '\n\n是否前往实名认证？');
+                        if (goKyc) {
+                            window.location.href = 'kyc-verification.html';
+                        }
+                    } else if (data.data && data.data.realname_hint) {
+                        // 姓名不一致时显示提示
+                        await showToast('姓名不一致', data.msg + '\n\n您的实名姓名：' + data.data.realname_hint);
+                    } else {
+                        await showToast('错误', data.msg || '绑定失败，请重试');
+                    }
+                }
+            } catch (error) {
+                console.error('❌ 绑定失败:', error);
+                await showToast('错误', '网络错误：' + error.message + '\n\n请检查网络连接后重试');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '确认绑定';
+            }
+        });
+
+        // 选择类型事件
+        document.querySelectorAll('.type-option').forEach(option => {
+            option.addEventListener('click', function () {
+                const type = this.dataset.type;
+                hideTypeSelectModal();
+                showAddModal(type);
+            });
+        });
+
+        // 绑定事件
+        document.getElementById('addCardMainBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+            showTypeSelectModal();
+        });
+
+        document.getElementById('closeTypeModal').addEventListener('click', hideTypeSelectModal);
+        document.getElementById('closeModal').addEventListener('click', hideAddModal);
+        document.getElementById('cancelBtn').addEventListener('click', hideAddModal);
+
+        // 点击模态框外部关闭
+        document.getElementById('typeSelectModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                hideTypeSelectModal();
+            }
+        });
+
+        document.getElementById('addCardModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                hideAddModal();
+            }
+        });
+
+        // 页面加载时获取银行卡列表和支付密码状态
+        loadBankCards();
+
+        // 打开绑定弹窗时，重新检查支付密码状态
+        document.getElementById('addCardBtn')?.addEventListener('click', function() {
+            checkPayPasswordStatus();
+        });
+    </script>
+    <!-- 支付密码验证弹窗 -->
+    <div class="popup-overlay" id="passwordModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 200; align-items: flex-end;">
+        <div class="popup-content" style=" max-height: 28vh; background: #fff; border-radius: 20px 20px 0 0; padding: 24px 20px; animation: rise 0.35s ease;">
+            <div class="popup-title" style="font-size: 18px; font-weight: 700; color: #2F3847;  margin-bottom: 20px;">输入支付密码</div>
+            <input type="tel" class="password-input" id="verifyPassword" placeholder="请输入6位支付密码" maxlength="6" inputmode="numeric" style=" height: 56px; padding: 0 20px; background: #F8F6F2; border: 2px solid #D4C9B8; border-radius: 16px; font-size: 20px; font-weight: 600; color: #2F3847;  letter-spacing: 6px; outline: none; margin-bottom: 16px;" />
+            <button class="submit-btn" onclick="verifyAndSubmit()" style=" height: 56px; background: linear-gradient(135deg, #F3D49A, #E2B76A); border: none; border-radius: 28px; font-size: 17px; font-weight: 700; color: #2B1B05; cursor: pointer;">确认绑定</button>
+        </div>
+    </div>
+    <script>
+    function showPasswordModal() {
+        const modal = document.getElementById("passwordModal");
+        if (modal) {
+            modal.style.display = "flex";
+            document.getElementById("verifyPassword").focus();
+        }
+    }
+    function verifyAndSubmit() {
+        const pwd = document.getElementById("verifyPassword").value;
+        if (!pwd || pwd.length !== 6) {
+            showToast("请输入6位支付密码");
+            return;
+        }
+        submitBankCard(pwd);
+    }
+    </script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+
+</body>
+
+</html>

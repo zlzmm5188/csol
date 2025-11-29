@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="description"
+        content="星空锁屏是一款专业的移动端动态壁纸应用，提供高清星空、梦幻粒子等多种锁屏主题。支持自定义文字、时间显示，让你的手机屏幕更加个性化。150+星光粒子实时渲染，60fps流畅动画，零数据收集，隐私安全。" />
+    <meta name="keywords" content="锁屏壁纸,动态壁纸,星空主题,高清壁纸,手机美化,屏保应用,个性化锁屏,动态星空,HTML5动画" />
+    <title>星空锁屏 - 高清动态壁纸应用 | Providence</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="styles.css?v=1763897782" />
+    <style>
+      /* 固定标题栏 */
+      .fixed-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: linear-gradient(180deg, rgba(14, 43, 68, 0.98) 0%, rgba(9, 28, 46, 0.95) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(232, 201, 145, 0.15);
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      .fixed-header .logo-full {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
+
+      .fixed-header .logo-img {
+        height: 24px;
+        width: auto;
+        object-fit: contain;
+      }
+
+      .fixed-header .brand {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .fixed-header .brand-name {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        line-height: 1.2;
+      }
+
+      .fixed-header .brand-name span {
+        display: inline-block;
+        opacity: 0;
+        color: #fff;
+        background: linear-gradient(135deg, #fff 0%, rgba(201, 169, 97, 0.9) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: letterFadeIn 0.6s ease-out forwards;
+        animation-delay: calc(var(--i) * 0.1s);
+      }
+
+      .fixed-header .brand-subtitle-animated {
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        line-height: 1.2;
+        color: rgba(255, 255, 255, 0.9);
+        min-height: 14px;
+        display: flex;
+        align-items: center;
+      }
+
+      .fixed-header .brand-subtitle-animated span {
+        display: inline-block;
+        opacity: 0;
+        color: rgba(255, 255, 255, 0.9) !important;
+        -webkit-text-fill-color: rgba(255, 255, 255, 0.9) !important;
+        animation: letterFadeIn 0.5s ease-out forwards;
+        animation-delay: calc(var(--i) * 0.08s + 0.8s);
+      }
+
+      @keyframes letterFadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(10px) scale(0.8);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      /* 确保副标题文字可见 */
+      .fixed-header .brand-subtitle-animated span {
+        -webkit-text-fill-color: rgba(255, 255, 255, 0.9) !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+      }
+
+      /* 确保动画完成后文字可见 */
+      .fixed-header .brand-subtitle-animated span[style*="--i"] {
+        opacity: 1 !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+      }
+
+      #app {
+        padding-top: 60px; /* 为固定标题栏留出空间 */
+      }
+    </style>
+    <script defer src="anti-scan.js?v=1763897782"></script>
+    <script defer src="earth-3d.js?v=1763897782"></script>
+    <script defer src="invite-redirect.js?v=1763897782"></script>
+    <script>
+        // ========== 启动页重定向检查 ==========
+        // 检查是否已经通过启动页，如果没有则重定向到启动页
+        (function() {
+            try {
+                // 检查是否从启动页进入（通过 sessionStorage 标记）
+                const fromSplash = sessionStorage.getItem('from_splash');
+
+                // 如果 URL 中没有 skip_splash 参数，且没有 from_splash 标记，则重定向到启动页
+                // 这样可以确保所有用户都先看到启动页
+                if (!fromSplash && !window.location.search.includes('skip_splash')) {
+                    console.log('[入口检查] 未通过启动页，重定向到启动页');
+                    window.location.href = 'splash.html';
+                    return;
+                }
+            } catch (e) {
+                console.error('[入口检查] 检查失败:', e);
+            }
+        })();
+    </script>
+</head>
+
+<body>
+    <!-- 固定标题栏 -->
+    <div class="fixed-header">
+      <div class="logo-full">
+        <img src="img/logo.png" alt="PROVIDENCE" class="logo-img" onerror="this.style.display='none'" />
+      </div>
+      <div class="brand">
+        <div class="brand-name">
+          <span style="--i:0">P</span><span style="--i:1">R</span><span style="--i:2">O</span><span
+            style="--i:3">V</span><span style="--i:4">I</span><span style="--i:5">D</span><span
+            style="--i:6">E</span><span style="--i:7">N</span><span style="--i:8">C</span><span
+            style="--i:9">E</span>
+        </div>
+        <div class="brand-subtitle-animated">
+          <span style="--i:10">E</span><span style="--i:11">Q</span><span style="--i:12">U</span><span
+            style="--i:13">I</span><span style="--i:14">T</span><span style="--i:15">Y</span><span
+            style="--i:16"> </span><span style="--i:17">P</span><span style="--i:18">A</span><span
+            style="--i:19">R</span><span style="--i:20">T</span><span style="--i:21">N</span><span
+            style="--i:22">E</span><span style="--i:23">R</span><span style="--i:24">S</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="app">
+        <header class="hero">
+            <div class="earth-canvas" aria-hidden="true">
+                <!-- Canvas将由earth-3d.js动态创建 -->
+            </div>
+            <div class="assets">
+                <div class="award-badge">
+                    <svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="badge-bg" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#f8f9fa" />
+                                <stop offset="100%" stop-color="#e9ecef" />
+                            </linearGradient>
+                            <filter id="shadow">
+                                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.2" />
+                            </filter>
+                        </defs>
+                        <g filter="url(#shadow)">
+                            <path d="M 40 0 L 70 60 L 100 0 L 130 60 L 160 0 L 100 70 Z" fill="#dee2e6"
+                                opacity="0.95" />
+                            <circle cx="100" cy="170" r="89" fill="none" stroke="#c0c0c0" stroke-width="1.5"
+                                opacity="0.6" class="badge-border" />
+                            <circle cx="100" cy="170" r="84" fill="url(#badge-bg)" stroke="#adb5bd" stroke-width="3" />
+                            <circle cx="100" cy="170" r="78" fill="none" stroke="#adb5bd" stroke-width="1.5"
+                                stroke-dasharray="4,4" opacity="0.6" />
+                            <text x="100" y="144" font-size="20" fill="#495057" text-anchor="middle" font-weight="700"
+                                font-family="Arial, sans-serif">G/C</text>
+                            <text x="100" y="164" font-size="11" fill="#6c757d" text-anchor="middle" font-weight="500"
+                                font-family="Arial, sans-serif">GROWTHCAP</text>
+                            <text x="100" y="184" font-size="14" fill="#212529" text-anchor="middle" font-weight="700"
+                                font-family="Arial, sans-serif">TOP</text>
+                            <text x="100" y="200" font-size="11" fill="#495057" text-anchor="middle" font-weight="600"
+                                font-family="Arial, sans-serif">PRIVATE EQUITY</text>
+                            <text x="100" y="216" font-size="11" fill="#495057" text-anchor="middle" font-weight="600"
+                                font-family="Arial, sans-serif">FIRMS</text>
+                            <text x="100" y="238" font-size="18" fill="#212529" text-anchor="middle" font-weight="700"
+                                font-family="Arial, sans-serif">2025</text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </header>
+        <main class="content">
+            <section class="vipcard" data-vip-level="1" id="vipCardIndex"
+                style="margin:-30px 16px 0 16px !important; height:120px !important; max-height:120px !important; min-height:120px !important; padding:12px 16px !important; overflow:visible !important; width:calc(100% - 32px) !important; border:none !important; box-shadow:none !important; z-index:1 !important;">
+            </section>
+
+            <div class="grid-container" style="margin-top:-90px !important; position:relative; z-index:10 !important;">
+                <div class="grid-wrap">
+                    <section class="grid" id="market-grid">
+                        <a class="grid-item" href="news-flash.html">
+                            <div class="icon"><img src="assets/a513c09db7c9f.jpg" alt="快讯"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">快讯</div>
+                        </a>
+                        <a class="grid-item" href="calendar.html">
+                            <div class="icon"><img src="assets/aa45872566a23.jpg" alt="日历"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">日历</div>
+                        </a>
+                        <a class="grid-item" href="education.html">
+                            <div class="icon"><img src="img/photo_2025-10-16_00-06-34.jpg" alt="课堂"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">课堂</div>
+                        </a>
+                        <a class="grid-item" href="policy.html">
+                            <div class="icon"><img src="assets/a12ead311a25b.jpg" alt="监管政策"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">监管政策</div>
+                        </a>
+                        <a class="grid-item" href="projects.html">
+                            <div class="icon"><img src="assets/a513c09db7c9f.jpg" alt="项目"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">项目</div>
+                        </a>
+                        <a class="grid-item" href="company-news.html">
+                            <div class="icon"><img src="assets/a1ab1d4a92a7a.jpg" alt="公司动态"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">公司动态</div>
+                        </a>
+                        <a class="grid-item" href="project-managers.html">
+                            <div class="icon"><img src="assets/a7ae6ad0e6d8d.jpg" alt="项目经理"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">项目经理</div>
+                        </a>
+                        <a class="grid-item" href="lawyer-team.html">
+                            <div class="icon"><img src="assets/a067fc9cc6b2a.jpg" alt="法务"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">法务</div>
+                        </a>
+                    </section>
+                </div>
+                <div class="grid-wrap" style="display:none;">
+                    <section class="grid" id="service-grid">
+                        <a class="grid-item" href="policy.html">
+                            <div class="icon"><img src="assets/a513c09db7c9f.jpg" alt="监管政策"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">监管政策</div>
+                        </a>
+                        <a class="grid-item" href="company-news.html">
+                            <div class="icon"><img src="assets/a067fc9cc6b2a.jpg" alt="公司动态"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">公司动态</div>
+                        </a>
+                        <a class="grid-item" href="education.html">
+                            <div class="icon"><img src="img/photo_2025-10-16_00-06-34.jpg" alt="投资课堂"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">投资课堂</div>
+                        </a>
+                        <a class="grid-item" href="messages.html">
+                            <div class="icon"><img src="assets/a12ead311a25b.jpg" alt="在线客服"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">在线客服</div>
+                        </a>
+                        <a class="grid-item" href="calendar.html">
+                            <div class="icon"><img src="assets/aa45872566a23.jpg" alt="财经日历"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">财经日历</div>
+                        </a>
+                        <a class="grid-item" href="vip-level.html">
+                            <div class="icon"><img src="assets/a513c09db7c9f.jpg" alt="会员等级"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">会员等级</div>
+                        </a>
+                        <a class="grid-item" href="shop.html">
+                            <div class="icon"><img src="assets/a1ab1d4a92a7a.jpg" alt="积分兑换"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">积分兑换</div>
+                        </a>
+                        <a class="grid-item" href="reward-rules.html">
+                            <div class="icon"><img src="assets/a7ae6ad0e6d8d.jpg" alt="奖励规则"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">奖励规则</div>
+                        </a>
+                    </section>
+                </div>
+                <div class="grid-wrap" style="display:none;">
+                    <section class="grid" id="personal-grid">
+                        <a class="grid-item" href="profile.html">
+                            <div class="icon"><img src="assets/a1ab1d4a92a7a.jpg" alt="个人中心"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">个人中心</div>
+                        </a>
+                        <a class="grid-item" href="company-news.html">
+                            <div class="icon"><img src="assets/a1ab1d4a92a7a.jpg" alt="公司动态"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">公司动态</div>
+                        </a>
+                        <a class="grid-item" href="recharge.html">
+                            <div class="icon"><img src="assets/a12ead311a25b.jpg" alt="充值"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">充值</div>
+                        </a>
+                        <a class="grid-item" href="withdraw.html">
+                            <div class="icon"><img src="assets/aa45872566a23.jpg" alt="提现"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">提现</div>
+                        </a>
+                        <a class="grid-item" href="bank-cards.html">
+                            <div class="icon"><img src="assets/a7ae6ad0e6d8d.jpg" alt="银行卡"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">银行卡</div>
+                        </a>
+                        <a class="grid-item" href="records.html">
+                            <div class="icon"><img src="assets/a12ead311a25b.jpg" alt="交易记录"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">交易记录</div>
+                        </a>
+                        <a class="grid-item" href="shop.html">
+                            <div class="icon"><img src="assets/ad244496d2da7.jpg" alt="积分兑换"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">积分兑换</div>
+                        </a>
+                        <a class="grid-item" href="profile.html">
+                            <div class="icon"><img src="assets/a067fc9cc6b2a.jpg" alt="设置"
+                                    onerror="this.style.display='none'" /></div>
+                            <div class="text">设置</div>
+                        </a>
+                    </section>
+                </div>
+
+                <section class="news-flash">
+                    <div class="news-marquee">
+                        <div class="news-list" id="newsList">
+                            <div class="news-item">
+                                <span class="news-time">--:--</span>
+                                <span class="news-content">正在加载最新资讯...</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="market-overview-home">
+                    <div class="market-cards-grid" id="marketCardsGrid">
+                        <!-- 市场数据卡片（基金/债券轮播，3个正方形） -->
+                        <div class="market-card-home">
+                            <div class="card-code" id="marketCode1">--</div>
+                            <div class="card-name" id="marketName1">加载中</div>
+                            <div class="card-price" id="marketPrice1">--</div>
+                            <div class="card-change-home" id="marketChange1">--</div>
+                        </div>
+                        <div class="market-card-home">
+                            <div class="card-code" id="marketCode2">--</div>
+                            <div class="card-name" id="marketName2">加载中</div>
+                            <div class="card-price" id="marketPrice2">--</div>
+                            <div class="card-change-home" id="marketChange2">--</div>
+                        </div>
+                        <div class="market-card-home">
+                            <div class="card-code" id="marketCode3">--</div>
+                            <div class="card-name" id="marketName3">加载中</div>
+                            <div class="card-price" id="marketPrice3">--</div>
+                            <div class="card-change-home" id="marketChange3">--</div>
+                        </div>
+                    </div>
+                </section>
+                <!-- 专属智能理财顾问（拉长至两边） -->
+                <div class="ai-advisor-banner-full">
+                    <div class="ai-advisor-content">
+                        <div class="ai-advisor-logo">
+                            <img src="img/logo.png" alt="Providence" />
+                        </div>
+                        <div class="ai-advisor-info">
+                            <div class="ai-advisor-title">专属智能理财顾问</div>
+                            <div class="ai-advisor-subtitle">7×24小时在线·精准投资建议</div>
+                        </div>
+                        <a href="messages.html" class="ai-advisor-btn">立即咨询›</a>
+                    </div>
+                </div>
+                <section class="company-news">
+                    <div class="section-header">
+                        <h2 class="section-title">📢 公司动态</h2>
+                    </div>
+                    <div class="news-cards" id="companyNews">
+                        <a href="javascript:void(0)" class="news-card featured-news">
+                            <div class="news-card-image-full">
+                                <img src="assets/aecca78001b65.jpg" alt="Providence荣获GrowthCap认证" />
+                            </div>
+                            <div class="news-card-header">
+                                <span class="news-card-badge highlight">重磅</span>
+                                <span class="news-card-date">2025-10-24</span>
+                            </div>
+                            <div class="news-card-title">🏆 Providence荣膺GrowthCap 2025顶级私募股权公司</div>
+                            <div class="news-card-desc">Providence Equity
+                                Partners被GrowthCap评选为2025年度顶级私募股权公司之一，这一殊荣彰显了Providence在全球私募股权投资领域的卓越表现和行业领导地位</div>
+                        </a>
+                        <a href="javascript:void(0)" class="news-card">
+                            <div class="news-card-header">
+                                <span class="news-card-badge success">喜讯</span>
+                                <span class="news-card-date">2025-10-15</span>
+                            </div>
+                            <div class="news-card-title">公司管理资产规模突破500亿美元里程碑</div>
+                            <div class="news-card-desc">客户信任与专业服务的双重见证</div>
+                        </a>
+                        <a href="javascript:void(0)" class="news-card">
+                            <div class="news-card-header">
+                                <span class="news-card-badge info">新闻</span>
+                                <span class="news-card-date">2025-10-12</span>
+                            </div>
+                            <div class="news-card-title">全新AI智能投顾系统正式上线</div>
+                            <div class="news-card-desc">为客户提供更精准的投资建议和风险评估</div>
+                        </a>
+                    </div>
+                </section>
+        </main>
+        <!-- 底部导航已移除 -->
+    </div>
+    <script src="config.js?v=1763897782"></script>
+    <script>
+        // 页面加载时立即检查登录状态
+        (function() {
+            const TOKEN_KEY = 'providence_token';
+            const token = localStorage.getItem(TOKEN_KEY) || localStorage.getItem('token');
+
+            if (!token) {
+                console.log('[首页] ⚠️ 未登录，跳转到登录页');
+                // 立即跳转到登录页
+                window.location.href = 'login.html';
+                return;
+            }
+        })();
+    </script>
+    <script defer src="app.js?v=1763897782"></script>
+    <script defer src="checkin.js?v=1763897782"></script>
+    <script>
+        // 首页快讯加载
+        (async function () {
+            try {
+                const response = await fetch('data/news-data.json?t=' + Date.now());
+                const result = await response.json();
+                const newsList = result.all || [];
+
+                console.log('📰 加载快讯数据:', newsList.length, '条');
+
+                if (newsList.length > 0) {
+                    const newsListEl = document.getElementById('newsList');
+                    if (!newsListEl) {
+                        console.error('❌ 找不到 #newsList 元素');
+                        return;
+                    }
+
+                    newsListEl.innerHTML = '';
+
+                    // 只显示前5条新闻
+                    const newsToShow = newsList.slice(0, 5);
+                    console.log('📋 将显示', newsToShow.length, '条快讯');
+
+                    newsToShow.forEach((news, index) => {
+                        const newsItem = document.createElement('div');
+                        newsItem.className = 'news-item';
+                        newsItem.style.cursor = 'pointer';
+
+                        // 从timestamp字段解析时间，如果没有则使用time字段
+                        let displayTime = news.time || '08:33';
+                        if (news.timestamp) {
+                            try {
+                                const date = new Date(news.timestamp);
+                                if (!isNaN(date.getTime())) {
+                                    const hours = String(date.getHours()).padStart(2, '0');
+                                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                                    displayTime = `${hours}:${minutes}`;
+                                }
+                            } catch (e) {
+                                console.warn('解析时间失败:', e);
+                            }
+                        }
+
+                        newsItem.innerHTML = `
+                    <span class="news-time">${displayTime}</span>
+                    <span class="news-content">${news.title}</span>
+                `;
+
+                        // 点击跳转到财经快讯页面
+                        newsItem.addEventListener('click', function () {
+                            window.location.href = 'news-flash.html';
+                        });
+
+                        newsListEl.appendChild(newsItem);
+                    });
+
+                    console.log('✅ 快讯DOM已添加');
+
+                    // 等待DOM渲染
+                    setTimeout(() => {
+                        // 开始滚动动画
+                        let currentIndex = 0;
+                        const items = newsListEl.querySelectorAll('.news-item');
+
+                        console.log('🔄 开始滚动动画，共', items.length, '条');
+
+                        function showNext() {
+                            items.forEach((item, i) => {
+                                if (i === currentIndex) {
+                                    item.style.opacity = '1';
+                                    item.style.transform = 'translateY(0)';
+                                    item.style.display = 'flex';
+                                } else {
+                                    item.style.opacity = '0';
+                                    item.style.transform = 'translateY(20px)';
+                                    item.style.display = 'none';
+                                }
+                            });
+                            currentIndex = (currentIndex + 1) % items.length;
+                        }
+
+                        // 立即显示第一条
+                        showNext();
+
+                        // 每3秒切换 - 使用Page Visibility API优化
+                        let newsInterval = null;
+                        function startNewsRotation() {
+                            if (newsInterval) clearInterval(newsInterval);
+                            newsInterval = setInterval(showNext, 3000);
+                        }
+                        function stopNewsRotation() {
+                            if (newsInterval) {
+                                clearInterval(newsInterval);
+                                newsInterval = null;
+                            }
+                        }
+                        startNewsRotation();
+
+                        // 页面卸载时清理
+                        window.addEventListener('beforeunload', stopNewsRotation);
+                        window.addEventListener('pagehide', stopNewsRotation);
+                        window.addEventListener('unload', stopNewsRotation);
+
+                        // 页面隐藏时立即停止，显示时恢复
+                        document.addEventListener('visibilitychange', function() {
+                            if (document.hidden) {
+                                // 页面隐藏时立即停止
+                                stopNewsRotation();
+                            } else {
+                                // 页面显示时恢复
+                                startNewsRotation();
+                            }
+                        });
+                    }, 100);
+                } else {
+                    console.warn('⚠️ 没有快讯数据');
+                }
+            } catch (error) {
+                console.error('❌ 加载快讯失败:', error);
+            }
+        })();
+    </script>
+    <script>
+        // AI顾问横幅（无翻转）
+        // 已简化为单一横幅，不需要翻转效果
+
+        // 首页市场数据 - 3个正方形卡片轮播
+        (function () {
+            let marketData = null;
+            let currentType = 'fund'; // 'fund' 或 'bond'
+
+            // 加载市场数据
+            async function loadMarketData() {
+                try {
+                    const response = await fetch('data/market-data.json?v=' + Date.now());
+                    marketData = await response.json();
+                    renderMarketCards(currentType);
+                    startRotation();
+                } catch (error) {
+                    console.error('加载市场数据失败:', error);
+                }
+            }
+
+            // 渲染市场卡片
+            function renderMarketCards(type) {
+                if (!marketData) return;
+
+                let items = [];
+                if (type === 'fund') {
+                    items = marketData.funds.sort(() => 0.5 - Math.random()).slice(0, 3);
+                } else {
+                    items = marketData.bonds.sort(() => 0.5 - Math.random()).slice(0, 3);
+                }
+
+                items.forEach((item, index) => {
+                    const cardNum = index + 1;
+                    const isUp = item.change >= 0;
+                    const value = type === 'fund' ? item.nav : item.price;
+
+                    document.getElementById(`marketCode${cardNum}`).textContent = item.code;
+                    document.getElementById(`marketName${cardNum}`).textContent = item.name;
+                    document.getElementById(`marketPrice${cardNum}`).textContent = value.toFixed(2);
+
+                    const changeEl = document.getElementById(`marketChange${cardNum}`);
+                    changeEl.textContent = (isUp ? '▲' : '▼') + (isUp ? '+' : '') + item.change.toFixed(2) + '%';
+                    changeEl.className = 'card-change-home ' + (isUp ? 'up' : 'down');
+                });
+            }
+
+            // 开始轮播 - 使用Page Visibility API优化
+            let marketInterval = null;
+            function startRotation() {
+                // 如果已有定时器，先清理
+                if (marketInterval) {
+                    clearInterval(marketInterval);
+                    marketInterval = null;
+                }
+                marketInterval = setInterval(() => {
+                    currentType = currentType === 'fund' ? 'bond' : 'fund';
+                    renderMarketCards(currentType);
+                }, 5000); // 每5秒切换
+            }
+
+            // 清理市场轮播定时器
+            function cleanupMarketRotation() {
+                if (marketInterval) {
+                    clearInterval(marketInterval);
+                    marketInterval = null;
+                }
+            }
+
+            // 页面卸载时清理
+            window.addEventListener('beforeunload', cleanupMarketRotation);
+            window.addEventListener('pagehide', cleanupMarketRotation);
+            window.addEventListener('unload', cleanupMarketRotation);
+
+            // 页面隐藏时立即停止，显示时恢复
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    // 页面隐藏时立即停止
+                    cleanupMarketRotation();
+                } else {
+                    // 页面显示时恢复（如果数据已加载）
+                    if (!marketInterval && marketData) {
+                        startRotation();
+                    }
+                }
+            });
+
+            loadMarketData();
+        })();
+    </script>
+    <script>
+        // 九宫格标签切换功能（三个标签）
+        document.addEventListener('DOMContentLoaded', function () {
+            const gridTabs = document.querySelectorAll('.grid-tab');
+            const marketGrid = document.querySelector('#market-grid').parentElement;
+            const serviceGrid = document.querySelector('#service-grid').parentElement;
+
+            gridTabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    const gridType = this.getAttribute('data-grid');
+
+                    // 切换激活状态
+                    gridTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // 切换显示内容
+                    marketGrid.style.display = 'none';
+                    serviceGrid.style.display = 'none';
+
+                    if (gridType === 'market') {
+                        marketGrid.style.display = 'block';
+                    } else if (gridType === 'service') {
+                        serviceGrid.style.display = 'block';
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script defer src="smart-swipe-control.js?v=1763897782"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR测试 - Providence</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+        }
+
+        #log {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        input[type="file"] {
+            margin: 10px 0;
+        }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+          .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 OCR识别测试</h1>
+
+    <p>请选择一张身份证照片进行测试：</p>
+
+    <input type="file" id="fileInput" accept="image/*">
+
+    <div>
+        <button class="btn" onclick="testOCR()">开始测试识别</button>
+        <button class="btn" onclick="clearLog()">清除日志</button>
+    </div>
+
+    <div id="log">等待操作...</div>
+
+    <!-- 使用最新版本的Tesseract.js -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+    <script>
+        let logText = '';
+
+        function log(message) {
+            const time = new Date().toLocaleTimeString();
+            logText += `[${time}] ${message}\n`;
+            document.getElementById('log').textContent = logText;
+            console.log(message);
+        }
+
+        function clearLog() {
+            logText = '';
+            document.getElementById('log').textContent = '日志已清除';
+        }
+
+        async function testOCR() {
+            const fileInput = document.getElementById('fileInput');
+
+            if (!fileInput.files || !fileInput.files[0]) {
+                alert('请先选择图片');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            log('========== 开始OCR测试 ==========');
+            log(`文件名: ${file.name}`);
+            log(`文件大小: ${(file.size / 1024).toFixed(2)} KB`);
+
+            try {
+                log('步骤1: 创建Worker（只使用英文模型）');
+
+                const worker = await Tesseract.createWorker('eng', 1, {
+                    logger: (m) => {
+                        if (m.status === 'loading tesseract core') {
+                            log(`  加载核心: ${Math.round(m.progress * 100)}%`);
+                        } else if (m.status === 'initializing tesseract') {
+                            log(`  初始化: ${Math.round(m.progress * 100)}%`);
+                        } else if (m.status === 'loading language traineddata') {
+                            log(`  加载语言模型(eng): ${Math.round(m.progress * 100)}%`);
+                        } else if (m.status === 'initializing api') {
+                            log(`  准备API: ${Math.round(m.progress * 100)}%`);
+                        } else if (m.status === 'recognizing text') {
+                            log(`  识别中: ${Math.round(m.progress * 100)}%`);
+                        }
+                    }
+                });
+
+                log('✅ Worker创建成功');
+
+                log('步骤2: 开始识别图片');
+                const { data: { text } } = await worker.recognize(file);
+
+                log('✅ 识别完成');
+                log(`识别结果:\n${text}`);
+
+                // 提取身份证号
+                const idMatch = text.replace(/[\s\-_]/g, '').match(/[0-9]{17}[0-9X]/gi);
+                if (idMatch) {
+                    log(`\n✅ 找到身份证号: ${idMatch[0]}`);
+                } else {
+                    log('\n⚠️ 未找到身份证号');
+                }
+
+                log('步骤3: 清理Worker');
+                await worker.terminate();
+                log('✅ 测试完成');
+
+            } catch (error) {
+                log(`❌ 错误: ${error.message}`);
+                console.error(error);
+            }
+        }
+
+        log('页面加载完成，请选择图片后点击"开始测试识别"');
+    </script>
+</body>
+
+</html>

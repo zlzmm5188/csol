@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人脸识别验证 - Providence</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .face-verify-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .camera-preview {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        #video, #canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #canvas { display: none; }
+        .capture-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        .capture-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .tips {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        .tips p {
+            margin: 5px 0;
+        }
+        .verify-status {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+        .verify-status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .verify-status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="face-verify-container">
+        <h2 style="text-align: center; margin-bottom: 20px;">人脸识别验证</h2>
+        
+        <div class="camera-preview">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="canvas"></canvas>
+        </div>
+        
+        <button class="capture-btn" id="captureBtn">拍照验证</button>
+        
+        <div class="tips">
+            <p>📸 请确保光线充足</p>
+            <p>👤 将脸部对准摄像头</p>
+            <p>😊 保持正脸拍摄</p>
+        </div>
+        
+        <div class="verify-status" id="verifyStatus"></div>
+    </div>
+
+    <script src="config.js?v=1763712000"></script>
+    <script src="token-manager.js?v=1763712000"></script>
+    <script src="face-recognition-api.js?v=1763712000"></script>
+    <script src="ios-toast.js?v=1763685589"></script>
+    
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureBtn = document.getElementById('captureBtn');
+        const verifyStatus = document.getElementById('verifyStatus');
+        
+        let stream = null;
+        const scene = new URLSearchParams(window.location.search).get('scene') || 'login';
+
+        // 启动摄像头
+        async function startCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } }
+                });
+                video.srcObject = stream;
+            } catch (error) {
+                if (typeof showToast === 'function') {
+                    showToast('', '无法访问摄像头，请检查权限设置');
+                }
+            }
+        }
+
+        // 拍照
+        captureBtn.onclick = async function() {
+            captureBtn.disabled = true;
+            captureBtn.textContent = '验证中...';
+
+            try {
+                // 拍照
+                const ctx = canvas.getContext('2d');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0);
+                const imageData = canvas.toDataURL('image/jpeg', 0.8);
+
+                // 上传并验证
+                const uploadResult = await FaceRecognitionAPI.uploadFaceImage(imageData);
+                const verifyResult = await FaceRecognitionAPI.verifyFace(scene, uploadResult.image_url);
+
+                // 显示结果
+                verifyStatus.style.display = 'block';
+                if (verifyResult.verified) {
+                    verifyStatus.className = 'verify-status success';
+                    verifyStatus.textContent = `✅ 验证成功！置信度: ${verifyResult.confidence}%`;
+                    
+                    setTimeout(() => {
+                        // 返回上一页或跳转
+                        if (window.history.length > 1) {
+                            window.history.back();
+                        } else {
+                            window.location.href = 'profile.html';
+                        }
+                    }, 2000);
+                } else {
+                    verifyStatus.className = 'verify-status error';
+                    verifyStatus.textContent = '❌ 验证失败，请重试';
+                    captureBtn.disabled = false;
+                    captureBtn.textContent = '拍照验证';
+                }
+            } catch (error) {
+                verifyStatus.style.display = 'block';
+                verifyStatus.className = 'verify-status error';
+                verifyStatus.textContent = '❌ ' + error.message;
+                captureBtn.disabled = false;
+                captureBtn.textContent = '拍照验证';
+            }
+        };
+
+        // 页面加载时启动摄像头
+        startCamera();
+
+        // 页面卸载时停止摄像头
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+</html>

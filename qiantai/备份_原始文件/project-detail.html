@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+  <title>PROVIDENCE · 认购详情</title>
+  <link rel="icon" href="favicon.ico" />
+  <script src="ios-toast.js?v=1763813622"></script>
+  <style>
+    :root {
+      --navy-1: #08141f;
+      --navy-2: #0d1d2b;
+      --navy-3: #0a1723;
+      --ink: #0f172a;
+      --muted: #6b7280;
+      --muted2: #8a95a6;
+      --paper: #f6f8fb;
+      --card: #ffffff;
+      --lineD: rgba(255, 255, 255, .10);
+      --lineL: #e5e9f0;
+      --lineS: #eef2f7;
+      --gold: #9e8a57;
+      --gold2: #c8ba94;
+      --radius: 16px;
+      --radius-sm: 12px;
+      --sh: 0 8px 28px rgba(6, 12, 18, .22);
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%
+  padding-top: 60px;}
+
+    body {
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: transparent;        radial-gradient(1200px 520px at 120% -10%, rgba(158, 138, 87, .16), transparent 55%),
+        linear-gradient(180deg, var(--navy-3) 0%, var(--navy-2) 42%, var(--navy-1) 100%);
+        background-attachment: fixed;
+      color: #e9eef6;
+      padding-bottom: 180px; /* 增加底部padding，避免申请认购按钮遮住项目经理 */
+    }
+
+    /* 顶栏 */
+    .topbar {
+      position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important;
+      top: 0;
+      z-index: 40;
+      padding: 12px 16px;
+      background: linear-gradient(180deg, rgba(10, 23, 35, .96), rgba(10, 23, 35, .78));
+      border-bottom: 1px solid var(--lineD);
+      backdrop-filter: blur(6px);
+    }
+
+    .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+
+    .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+
+    .back-btn:active {
+      transform: scale(0.95)
+    }
+
+    .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+
+    .badge {
+      margin-left: auto;
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: #0b1220;
+      background: linear-gradient(180deg, #efe9d6, #e2d7b7);
+      border: 1px solid rgba(158, 138, 87, .45)
+    }
+
+    /* 容器 */
+    .wrap {
+      max-width: 100%;
+      padding: 16px
+    }
+
+    /* Hero 指标 - 高端设计 */
+    .hero {
+      margin: 16px 0;
+      padding: 24px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .04));
+      border: 1px solid var(--lineD);
+      box-shadow: 0 8px 32px rgba(6, 12, 18, .12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold2));
+      opacity: 0.6;
+    }
+
+    .titleRow {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px
+    }
+
+    .titleBox h2 {
+      margin: 0;
+      font-size: 24px;
+      color: var(--gold2);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      line-height: 1.3;
+    }
+
+    .titleBox small {
+      margin-top: 8px;
+      color: #cbd6e3;
+      font-size: 14px;
+      display: block;
+      line-height: 1.5;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px
+    }
+
+    .kv {
+      background: linear-gradient(135deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .04));
+      border: 1px solid var(--lineD);
+      border-radius: 14px;
+      padding: 14px;
+      color: #fff;
+      font-size: 20px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kv::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(200, 186, 148, 0.4), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .kv:hover {
+      background: linear-gradient(135deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .06));
+      border-color: rgba(200, 186, 148, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .kv:hover::before {
+      opacity: 1;
+    }
+
+    .kv b {
+      display: block;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
+    }
+
+    .kv small {
+      color: #aeb8c6;
+      font-size: 12px;
+      display: block;
+      line-height: 1.4;
+    }
+
+    .progress {
+      margin-top: 12px
+    }
+
+    .bar {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .12);
+      overflow: hidden
+    }
+
+    .bar i {
+
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold2), var(--gold));
+
+      justify-content: space-between;
+      font-size: 12px;
+      color: #c8d2df;
+      margin-top: 6px
+    }
+
+    /* 白卡模块 - 高端设计 */
+    .section {
+      background: linear-gradient(180deg, #ffffff, #f8f9fb);
+      color: var(--ink);
+      border: 1px solid rgba(158, 138, 87, 0.15);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 32px rgba(6, 12, 18, .12), 0 2px 8px rgba(0, 0, 0, .04);
+      margin: 18px 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold2));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .section:hover {
+      box-shadow: 0 12px 40px rgba(6, 12, 18, .16), 0 4px 12px rgba(158, 138, 87, .1);
+      border-color: rgba(158, 138, 87, 0.25);
+    }
+
+    .section:hover::before {
+      opacity: 0.6;
+    }
+
+    .sec-hd {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--lineS);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(180deg, #fafbfc, #f8f9fb);
+    }
+
+    .sec-hd h3 {
+      margin: 0;
+      color: #0f172a;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .sec-bd {
+      padding: 18px 20px;
+      line-height: 1.8;
+    }
+
+    .sec-bd p {
+      margin: 0 0 12px;
+      color: #495468;
+      font-size: 14px;
+      text-align: justify;
+    }
+
+    .sec-bd p:last-child {
+      margin-bottom: 0;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    /* 余额条 */
+    .wallet {
+      background: #fff;
+      border: 1px solid var(--lineS);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .wallet b {
+      color: #0f172a;
+      font-size: 16px
+    }
+
+    .wallet small {
+      color: #6b7280
+    }
+
+    .btn-sm {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(158, 138, 87, .45);
+      background: linear-gradient(180deg, #efe7d2, #e2d6b5);
+      color: #0b1220;
+      cursor: pointer;
+      font-size: 13px;
+      border: none
+    }
+
+    .btn-sm:active {
+      transform: scale(0.98)
+    }
+
+    /* VIP条 */
+    .vip {
+      background: #fff;
+      border: 1px solid var(--lineS);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px
+    }
+
+    .vip b {
+      color: #0f172a
+    }
+
+    .vip small {
+      color: #6b7280
+    }
+
+    /* 输入与计算 */
+    .formRow {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px
+    }
+
+    @media (min-width: 480px) {
+      .input {
+        border: 1px solid var(--lineS);
+        border-radius: 12px;
+        padding: 12px
+      }
+    }
+
+    .input label {
+
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 6px
+    }
+
+    .input input {
+
+      border: none;
+      outline: none;
+      font-size: 18px;
+      color: #0f172a
+    }
+
+    .calc {
+      background: #fff;
+      border: 1px solid var(--lineS);
+      border-radius: 12px;
+      padding: 12px
+    }
+
+    .calc .kvline {
+      display: flex;
+      justify-content: space-between;
+      margin: 6px 0;
+      color: #3e4754;
+      flex-wrap: wrap;
+      gap: 4px
+    }
+
+    .calc .kvline span {
+      font-size: 12px;
+      flex: 1;
+      min-width: 0;
+      font-weight: 600;
+      font-size: 14px
+    }
+
+    .warn {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #b54747
+    }
+
+    /* PM 一行短介绍 */
+    .pmline {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border: 1px solid var(--lineS);
+      border-radius: 12px;
+      padding: 10px
+    }
+
+    .pmline img {
+
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(158, 138, 87, .35);
+      background: linear-gradient(180deg, #f8f6ee, #efe7d2)
+    }
+
+    .pmline small {
+      color: #616b79
+    }
+
+    /* 加载状态 */
+    .loading-state {
+
+      padding: 60px 20px;
+      color: #c8d2dd
+    }
+
+    .spinner {
+
+      height: 32px;
+      border: 3px solid rgba(200, 186, 148, .2);
+      border-top-color: var(--gold2);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    /* 底部 CTA */
+    .cta {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 50;
+      padding: 12px 16px;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, .94));
+      border-top: 1px solid var(--lineD);
+      display: flex;
+      gap: 10px
+    }
+
+    .btn {
+      flex: 1;
+
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 16px;
+      cursor: pointer;
+
+      border: none
+    }
+
+    .btn.ghost {
+      border: 1px solid var(--lineD);
+      background: rgba(255, 255, 255, .06);
+      color: #e9eef6
+    }
+
+    .btn.primary {
+      color: #0b1220;
+      border: 1px solid rgba(158, 138, 87, .55);
+      background: linear-gradient(180deg, #efe7d2, #e2d6b5)
+    }
+
+    .btn:active {
+      transform: scale(0.98)
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 90px;
+      background: rgba(0, 0, 0, .72);
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      display: none;
+      z-index: 100
+    }
+        .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+      .brand .page-title, .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+    <!-- <script src="api-config.js?v=1763813622"></script> (已包含在api-new.js) -->
+    <!-- <script src="token-manager.js?v=1763813622"></script> (已包含在api-new.js) -->
+</head>
+
+<body>
+
+  <!-- 顶栏 -->
+  <div class="topbar">
+    <div class="brand">
+      <a href="javascript:history.back()" class="back-btn">←</a>
+      <h1 class="page-title">认购详情</h1>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- 项目核心指标 -->
+    <section class="hero">
+      <div class="titleRow">
+        <div class="titleBox">
+          <h2 id="projName">加载中...</h2>
+          <small id="projSub">正在加载项目信息</small>
+        </div>
+      </div>
+      <div class="kpis">
+        <div class="kv"><b id="cycle">—</b><small>投资周期</small></div>
+        <div class="kv"><b id="rateVip">—</b><small>VIP额外加息</small></div>
+        <div class="kv"><b id="maxAmt">—</b><small>封顶金额</small></div>
+        <div class="kv"><b id="minAmt">—</b><small>起投金额</small></div>
+      </div>
+      <div class="progress">
+        <div class="bar"><i id="prog" style="width: 0%; display: flex; align-items: center; justify-content: center; color: #c8d2df; font-size: 12px;">0%</i></div>
+        <div style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 12px; color: #aeb8c6;">
+          <span id="soldInfo">已募集: ¥0</span>
+          <span id="totalInfo">总额度: ¥0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 项目详情 -->
+    <section class="section">
+      <div class="sec-hd">
+        <h3>项目详情</h3>
+      </div>
+      <div class="sec-bd">
+        <div id="projectDesc">
+          <p>正在加载项目详情...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 收益说明 -->
+    <section class="section">
+      <div class="sec-hd">
+        <h3>收益说明</h3>
+      </div>
+      <div class="sec-bd">
+        <div id="profitDesc" style="display: grid; gap: 14px;">
+          <div style="padding: 14px; background: linear-gradient(135deg, #fafbfc, #ffffff); border: 1px solid var(--lineS); border-radius: 12px; border-left: 3px solid var(--gold);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <strong style="color: var(--gold); font-size: 14px; font-weight: 600;">基础收益率</strong>
+              <span id="baseRate" style="color: #0f172a; font-size: 18px; font-weight: 700;">—</span>
+            </div>
+            <small style="color: #647086; font-size: 12px;">项目基础年化收益率</small>
+          </div>
+          <div style="padding: 14px; background: linear-gradient(135deg, #fafbfc, #ffffff); border: 1px solid var(--lineS); border-radius: 12px; border-left: 3px solid var(--gold2);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <strong style="color: var(--gold2); font-size: 14px; font-weight: 600;">VIP额外加息</strong>
+              <span id="vipRateText" style="color: #0f172a; font-size: 18px; font-weight: 700;">—</span>
+            </div>
+            <small style="color: #647086; font-size: 12px;">VIP等级用户额外收益加成</small>
+          </div>
+          <div style="padding: 14px; background: linear-gradient(135deg, #fafbfc, #ffffff); border: 1px solid var(--lineS); border-radius: 12px; border-left: 3px solid var(--gold);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <strong style="color: var(--gold); font-size: 14px; font-weight: 600;">增值收益</strong>
+              <span id="addedRateText" style="color: #0f172a; font-size: 18px; font-weight: 700;">—</span>
+            </div>
+            <small style="color: #647086; font-size: 12px;">项目增值部分收益</small>
+          </div>
+          <div style="padding: 14px; background: linear-gradient(135deg, #fafbfc, #ffffff); border: 1px solid var(--lineS); border-radius: 12px; border-left: 3px solid var(--gold2);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <strong style="color: var(--gold2); font-size: 14px; font-weight: 600;">红包收益</strong>
+              <span id="giftRateText" style="color: #0f172a; font-size: 18px; font-weight: 700;">—</span>
+            </div>
+            <small style="color: #647086; font-size: 12px;">项目红包奖励收益</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 投资金额输入和收益试算 -->
+    <section class="section">
+      <div class="sec-hd">
+        <h3>投资试算</h3>
+      </div>
+      <div class="sec-bd">
+        <div class="formRow">
+          <div class="input">
+            <label>投资金额（元）</label>
+            <input type="number" id="investAmount" placeholder="请输入投资金额" min="0" step="0.01" />
+          </div>
+        </div>
+        <div class="calc" id="calcResult" style="display:none;">
+          <div class="kvline">
+            <span>预计收益：</span>
+            <span id="calcProfit" style="color:#9e8a57;font-weight:700;">¥0.00</span>
+          </div>
+          <div class="kvline">
+            <span>到期总额：</span>
+            <span id="calcTotal" style="color:#9e8a57;font-weight:700;">¥0.00</span>
+          </div>
+          <div class="kvline">
+            <span>日均收益：</span>
+            <span id="calcDailyProfit" style="color:#9e8a57;font-weight:700;">¥0.00</span>
+          </div>
+        </div>
+        <div class="warn" id="calcWarn" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- 项目经理 -->
+    <section class="section">
+      <div class="sec-hd">
+        <h3>项目经理</h3>
+      </div>
+      <div class="sec-bd">
+        <div class="pmline" id="pmInfo" style="cursor:pointer;" onclick="showManagerDetail()">
+          <img src="img/user-avatar-default.svg" alt="" />
+          <div>
+            <b>加载中...</b>
+            <div><small>正在加载</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- 底部 CTA -->
+  <div class="cta">
+    <div style="flex:1;display:flex;align-items:center;gap:8px;font-size:14px;color:#c8ba94">
+      <span>余额：</span>
+      <b style="color:#fff;font-size:16px;font-weight:600" id="balance">加载中…</b>
+    </div>
+    <button class="btn primary" id="applyBtn">申请认购</button>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="api-new.js?v=1763813622"></script>
+  <script src="project-detail-managers-data.js?v=1763813622"></script>
+  <script src="project-detail.js?v=1763813622"></script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script src="smart-swipe-control.js?v=1763813622"></script>
+
+
+</body>
+
+</html>

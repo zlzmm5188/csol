@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+  <title>PROVIDENCE · 优秀顾问团队</title>
+  <link rel="icon" href="favicon.ico" />
+  <style>
+    :root {
+      --navy-1: #08141f;
+      --navy-2: #0d1d2b;
+      --navy-3: #0a1723;
+      --ink: #0f172a;
+      --muted: #6b7280;
+      --muted2: #8a95a6;
+      --paper: #f6f8fb;
+      --card: #ffffff;
+      --lineD: rgba(255, 255, 255, .10);
+      --lineL: #e5e9f0;
+      --lineS: #eef2f7;
+      --gold: #9e8a57;
+      --gold2: #c8ba94;
+      --radius: 16px;
+      --radius-sm: 12px;
+      --sh: 0 8px 28px rgba(6, 12, 18, .22);
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%
+  padding-top: 60px;}
+
+    body {
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: transparent;        radial-gradient(1200px 520px at 120% -10%, rgba(158, 138, 87, .16), transparent 55%),
+        linear-gradient(180deg, var(--navy-3) 0%, var(--navy-2) 42%, var(--navy-1) 100%);
+        background-attachment: fixed;
+      color: #e9eef6;
+      padding-bottom: 20px;
+    }
+
+    /* 去掉Spotlight滚动效果 */
+    .manager-card {
+      transform: none;
+      opacity: 1;
+    }
+
+    .dept-leader {
+      transform: none;
+      opacity: 1;
+    }
+
+    .dept-badge {
+      opacity: 1;
+    }
+
+    /* 顶栏 */
+    .topbar {
+      position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important;
+      top: 0;
+      z-index: 40;
+      padding: 12px 16px;
+      background: linear-gradient(180deg, rgba(10, 23, 35, .96), rgba(10, 23, 35, .78));
+      border-bottom: 1px solid var(--lineD);
+      backdrop-filter: blur(6px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0.3px;
+      color: var(--gold2);
+      font-weight: 600;
+    }
+
+    .badge {
+      margin-left: auto;
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: #0b1220;
+      background: linear-gradient(180deg, #efe9d6, #e2d7b7);
+      border: 1px solid rgba(158, 138, 87, .45)
+    }
+
+    /* 容器 */
+    .wrap {
+
+      padding: 16px
+    }
+
+    /* 白卡模块 */
+    .section {
+      background: linear-gradient(180deg, #f7f9fc, #f3f6fa);
+      color: var(--ink);
+      border: 1px solid var(--lineL);
+      border-radius: var(--radius);
+      box-shadow: var(--sh);
+      margin: 14px 0;
+      overflow: hidden
+    }
+
+    .sec-hd {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--lineS);
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .sec-hd h3 {
+      margin: 0;
+      color: #0f172a;
+      font-size: 16px;
+      font-weight: 600
+    }
+
+    .sec-hd .dept-badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(158, 138, 87, .1);
+      color: var(--gold);
+      font-weight: 500
+    }
+
+    .sec-bd {
+      padding: 14px 16px
+    }
+
+    /* 部门负责人卡片 */
+    .dept-leader {
+      background: #fff;
+      border: 1px solid var(--lineS);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+    }
+
+    .dept-leader:active {
+      transform: scale(0.98)
+    }
+
+    .dept-leader img {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(158, 138, 87, .35);
+      flex-shrink: 0
+    }
+
+    .dept-leader-info {
+
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 4px
+    }
+
+    .dept-leader-title {
+      font-size: 13px;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 4px
+    }
+
+    .dept-leader-code {
+      font-size: 12px;
+      color: #6b7280
+    }
+
+    /* 团队成员列表 */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px
+    }
+
+    .manager-card {
+      background: #fff;
+      border: 1px solid var(--lineS);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+    }
+
+    .manager-card:active {
+      transform: scale(0.98)
+    }
+
+    .manager-card img {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(158, 138, 87, .35)
+    }
+
+    .manager-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #0f172a
+    }
+
+    .manager-code {
+      font-size: 11px;
+      color: #6b7280
+    }
+
+    /* 从下往上弹窗 */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 10000;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0
+      }
+      to {
+        opacity: 1
+      }
+    }
+
+    .modal-sheet {
+      background: #fff;
+      border-radius: 20px 20px 0 0;
+
+      max-height: 70vh;
+      overflow-y: auto;
+      position: relative;
+      animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, .15);
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100%)
+      }
+      to {
+        transform: translateY(0)
+      }
+    }
+
+    .modal-header {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      padding: 20px;
+      border-bottom: 1px solid var(--lineS);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      z-index: 10;
+    }
+
+    .modal-header img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(158, 138, 87, .35);
+      flex-shrink: 0
+    }
+
+    .modal-header-info {
+
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px
+    }
+
+    .modal-title {
+      font-size: 14px;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 4px
+    }
+
+    .modal-code {
+      font-size: 12px;
+      color: #6b7280
+    }
+
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f3f4f6;
+      border: none;
+      font-size: 20px;
+      color: #6b7280;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .modal-body {
+      padding: 20px
+    }
+
+    .modal-section {
+      margin-bottom: 24px
+    }
+
+    .modal-section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--lineS)
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px
+    }
+
+    .stat-card {
+      background: #f6f8fb;
+      border: 1px solid var(--lineS);
+      border-radius: 10px;
+      padding: 14px;
+
+      color: #6b7280;
+      margin-bottom: 6px;
+      font-weight: 500
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a
+    }
+
+    .bio-content {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #3e4754;
+      text-align: justify
+    }
+
+    .experience-item {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--lineS)
+    }
+
+    .experience-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0
+    }
+
+    .exp-period {
+      font-size: 12px;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 4px
+    }
+
+    .exp-company {
+      font-size: 15px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 4px
+    }
+
+    .exp-position {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 6px
+    }
+
+    .exp-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #546070
+    }
+
+    .education-item {
+      margin-bottom: 12px
+    }
+
+    .edu-school {
+      font-size: 15px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 4px
+    }
+
+    .edu-degree {
+      font-size: 13px;
+      color: #6b7280
+    }
+
+      .brand { display: flex; align-items: center; }
+      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+      .brand .page-title, .brand h1 { margin: 0; font-size: 16px; white-space: nowrap; flex: 0 1 auto; }
+  </style>
+</head>
+
+<body>
+
+  <!-- 顶栏 -->
+  <div class="topbar">
+    <div class="brand"><a href="javascript:history.back()" class="back-btn">←</a><h1 class="page-title">优秀顾问团队</h1></div></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- 固收投资部 -->
+    <section class="section">
+      <div class="sec-hd">
+        <h3>固收投资部</h3>
+        <span class="dept-badge">Fixed Income</span>
+      </div>
+      <div class="sec-bd">
+        <div
+          style="background:#f0f4f8;padding:12px;border-radius:8px;margin-bottom:16px;font-size:13px;color:#334155;line-height:1.6;font-weight:700">
+          全行业最安全、稳定、最信誉有保障。万千用户的选择，即是最安心的证明。
+        </div>
+        <div class="dept-leader" onclick="showManagerDetail(11)">
+          <img src="img/good/img012.jpg" alt="张明" onerror="this.src='img/user-avatar-default.svg'" />
+          <div class="dept-leader-info">
+            <div class="dept-leader-name">张明</div>
+            <div class="dept-leader-title">固收投资部总监</div>
+            <div class="dept-leader-code">执业编号：S1450114010009</div>
+          </div>
+        </div>
+        <div class="team-grid">
+          <div class="manager-card" onclick="showManagerDetail(1)">
+            <img src="img/good/img002.jpg" alt="江楠" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">江楠</div>
+            <div class="manager-code">S1450123060029</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(10)">
+            <img src="img/good/img011.jpg" alt="陆峻" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">陆峻</div>
+            <div class="manager-code">F4220000000136</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(12)">
+            <img src="img/good/img013.jpg" alt="李强" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">李强</div>
+            <div class="manager-code">S1450123060031</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(16)">
+            <img src="img/good/img017.jpg" alt="王静" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">王静</div>
+            <div class="manager-code">S1450114010010</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 权益投资部 -->
+    <section class="section">
+      <div class="sec-hd">
+        <h3>权益投资部</h3>
+        <span class="dept-badge">Equity Investment</span>
+      </div>
+      <div class="sec-bd">
+        <div
+          style="background:#f0f4f8;padding:12px;border-radius:8px;margin-bottom:16px;font-size:13px;color:#334155;line-height:1.6;font-weight:700">
+          不追短期热度，只守长久安稳，不负每一份信赖。不追虚高收益，只做踏实增值。
+        </div>
+        <div class="dept-leader" onclick="showManagerDetail(7)">
+          <img src="img/good/img008.jpg" alt="刘哲" onerror="this.src='img/user-avatar-default.svg'" />
+          <div class="dept-leader-info">
+            <div class="dept-leader-name">刘哲</div>
+            <div class="dept-leader-title">权益投资部合伙人</div>
+            <div class="dept-leader-code">执业编号：S1450123060030</div>
+          </div>
+        </div>
+        <div class="team-grid">
+          <div class="manager-card" onclick="showManagerDetail(3)">
+            <img src="img/good/img004.jpg" alt="林雪" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">林雪</div>
+            <div class="manager-code">F0490000000120</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(18)">
+            <img src="img/good/img019.jpg" alt="周杰" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">周杰</div>
+            <div class="manager-code">F0490000000123</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(13)">
+            <img src="img/good/img014.jpg" alt="赵敏" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">赵敏</div>
+            <div class="manager-code">F0490000000122</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(28)">
+            <img src="img/good/img029.jpg" alt="张雅" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">张雅</div>
+            <div class="manager-code">F0490000000125</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 量化投资部 -->
+    <section class="section">
+      <div class="sec-hd">
+        <h3>量化投资部</h3>
+        <span class="dept-badge">Quantitative</span>
+      </div>
+      <div class="sec-bd">
+        <div
+          style="background:#f0f4f8;padding:12px;border-radius:8px;margin-bottom:16px;font-size:13px;color:#334155;line-height:1.6;font-weight:700">
+          你只管前行，我们为您遮风挡雨，全程无忧。以您的信任托付为基，让我们共享稳健收益。
+        </div>
+        <div class="dept-leader" onclick="showManagerDetail(4)">
+          <img src="img/good/img005.jpg" alt="唐伟青" onerror="this.src='img/user-avatar-default.svg'" />
+          <div class="dept-leader-info">
+            <div class="dept-leader-name">唐伟青</div>
+            <div class="dept-leader-title">量化投资部总监</div>
+            <div class="dept-leader-code">执业编号：F4220000000135</div>
+          </div>
+        </div>
+        <div class="team-grid">
+          <div class="manager-card" onclick="showManagerDetail(0)">
+            <img src="img/good/img001.jpg" alt="艾翀" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">艾翀</div>
+            <div class="manager-code">S1450123090015</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(1)">
+            <img src="img/good/img002.jpg" alt="胡善斌" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">胡善斌</div>
+            <div class="manager-code">S1450114010007</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(14)">
+            <img src="img/good/img015.jpg" alt="孙磊" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">孙磊</div>
+            <div class="manager-code">F4220000000137</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(24)">
+            <img src="img/good/img025.jpg" alt="赵军" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">赵军</div>
+            <div class="manager-code">F4220000000139</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 产品研发部 -->
+    <section class="section">
+      <div class="sec-hd">
+        <h3>产品研发部</h3>
+        <span class="dept-badge">Product R&D</span>
+      </div>
+      <div class="sec-bd">
+        <div class="dept-leader" onclick="showManagerDetail(10)">
+          <img src="img/good/img011.jpg" alt="陈皓" onerror="this.src='img/user-avatar-default.svg'" />
+          <div class="dept-leader-info">
+            <div class="dept-leader-name">陈皓</div>
+            <div class="dept-leader-title">产品研发部合伙人</div>
+            <div class="dept-leader-code">执业编号：S1450123090017</div>
+          </div>
+        </div>
+        <div class="team-grid">
+          <div class="manager-card" onclick="showManagerDetail(5)">
+            <img src="img/good/img006.jpg" alt="王帆" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">王帆</div>
+            <div class="manager-code">S1450123090016</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(8)">
+            <img src="img/good/img009.jpg" alt="周屹" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">周屹</div>
+            <div class="manager-code">F0490000000121</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(20)">
+            <img src="img/good/img021.jpg" alt="陈强" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">陈强</div>
+            <div class="manager-code">S1450123090019</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(29)">
+            <img src="img/good/img030.jpg" alt="周强" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">周强</div>
+            <div class="manager-code">F4220000000140</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 风险管理部 -->
+    <section class="section">
+      <div class="sec-hd">
+        <h3>风险管理部</h3>
+        <span class="dept-badge">Risk Management</span>
+      </div>
+      <div class="sec-bd">
+        <div class="dept-leader" onclick="showManagerDetail(6)">
+          <img src="img/good/img007.jpg" alt="沈明" onerror="this.src='img/user-avatar-default.svg'" />
+          <div class="dept-leader-info">
+            <div class="dept-leader-name">沈明</div>
+            <div class="dept-leader-title">风险管理部总监</div>
+            <div class="dept-leader-code">执业编号：S1450114010008</div>
+          </div>
+        </div>
+        <div class="team-grid">
+          <div class="manager-card" onclick="showManagerDetail(17)">
+            <img src="img/good/img018.jpg" alt="钱伟" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">钱伟</div>
+            <div class="manager-code">S1450123060032</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(21)">
+            <img src="img/good/img022.jpg" alt="张伟" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">张伟</div>
+            <div class="manager-code">S1450114010011</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(26)">
+            <img src="img/good/img027.jpg" alt="郑伟" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">郑伟</div>
+            <div class="manager-code">S1450123060034</div>
+          </div>
+          <div class="manager-card" onclick="showManagerDetail(22)">
+            <img src="img/good/img023.jpg" alt="陈雨薇" onerror="this.src='img/user-avatar-default.svg'" />
+            <div class="manager-name">陈雨薇</div>
+            <div class="manager-code">S1450123060033</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 从下往上弹窗 -->
+  <div class="modal-overlay" id="managerModal" onclick="closeManagerModal()">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="modal-header" id="modalHeader"></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    // 优秀顾问完整数据（31个，根据照片性别匹配名字）
+    const MANAGERS = [
+      {
+        name: "艾翀", code: "S1450123090015", idCard: "110101198001011234", gender: "male", department: "量化投资部", position: "高级量化投资经理", tenure: "2年又304天", startDate: "2017-10-26", assets: "3.12亿元", bestReturn: "93.71%",
+        bio: "资深量化投资专家，拥有超过10年的量化投资和衍生品研究经验。2013年2月至2014年11月任职于北京首创期货金融创新部，专注于量化和衍生品投资与研究工作。在量化投资领域具有深厚的理论基础和丰富的实战经验，擅长多因子选股模型构建、统计套利策略开发和风险管理体系设计。精通Python、R等量化分析工具，能够运用机器学习算法优化投资策略。在量化对冲、市场中性策略等方面有深入研究，管理的量化产品表现优异，年化收益率稳定在20%以上。",
+        experience: [
+          { period: "2017-10至今", company: "Providence Equity Partners", position: "高级量化投资经理", desc: "负责量化投资策略研发，管理多只量化对冲基金，累计管理规模超过3亿元。" },
+          { period: "2013-02至2014-11", company: "北京首创期货", position: "金融创新部研究员", desc: "从事量化交易策略研究和衍生品定价模型开发。" }
+        ]
+      },
+      {
+        name: "胡善斌", code: "S1450114010007", idCard: "110101198002021234", gender: "male", department: "量化投资部", position: "量化投资经理", tenure: "3年又156天", startDate: "2016-05-20", assets: "4.28亿元", bestReturn: "87.42%",
+        bio: "清华大学金融工程硕士。专注于量化投资和风险管理，具有丰富的市场经验。擅长多因子模型、机器学习在投资中的应用。",
+        education: [{ school: "清华大学", degree: "金融工程硕士" }],
+        experience: [
+          { period: "2016-05至今", company: "Providence Equity Partners", position: "量化投资经理", desc: "负责量化策略研发和组合管理，在管基金规模超过4亿元。" }
+        ]
+      },
+      {
+        name: "江楠", code: "S1450123060029", idCard: "110101198003031234", gender: "male", department: "固收投资部", position: "固收投资经理", tenure: "4年又89天", startDate: "2015-03-15", assets: "5.76亿元", bestReturn: "102.35%",
+        bio: "北京大学经济学博士。长期从事固定收益投资，擅长债券组合管理。在利率债、信用债、可转债等领域具有深厚的研究功底和丰富的实战经验。",
+        education: [{ school: "北京大学", degree: "经济学博士" }],
+        experience: [
+          { period: "2015-03至今", company: "Providence Equity Partners", position: "固收投资经理", desc: "管理多只固收类基金，累计管理规模超过5.7亿元，年化收益率稳定在8%-12%区间。" }
+        ]
+      },
+      {
+        name: "高从珊", code: "F0490000000120", idCard: "110101198004041234", gender: "female", department: "权益投资部", position: "权益投资经理", tenure: "2年又215天", startDate: "2018-01-10", assets: "3.54亿元", bestReturn: "76.89%",
+        bio: "北京大学MBA。长期从事行业研究和个股精选，注重基本面深度分析，投资风格稳健务实。擅长消费、医药、科技等成长性行业的投资研究。",
+        education: [{ school: "北京大学", degree: "MBA工商管理硕士" }],
+        experience: [
+          { period: "2018-01至今", company: "Providence Equity Partners", position: "权益投资经理", desc: "专注于成长股投资，管理规模超过3.5亿元，投资组合年化收益率超过15%。" }
+        ]
+      },
+      {
+        name: "唐伟青", code: "F4220000000135", idCard: "110101198005051234", gender: "male", department: "量化投资部", position: "量化投资部总监", tenure: "5年又76天", startDate: "2014-04-12", assets: "7.19亿元", bestReturn: "118.92%",
+        bio: "上海交通大学金融工程硕士。资深量化投资专家，擅长多因子选股和风险管理，具有扎实的数理统计基础。在量化对冲、统计套利等领域有超过10年的实战经验。",
+        education: [{ school: "上海交通大学", degree: "金融工程硕士" }],
+        experience: [
+          { period: "2014-04至今", company: "Providence Equity Partners", position: "量化投资部总监", desc: "负责量化投资部整体运营，管理规模超过7亿元，团队管理的多只基金年化收益率均超过20%。" },
+          { period: "2010-06至2014-03", company: "某知名量化对冲基金", position: "量化策略研究员", desc: "负责多因子选股模型和风险模型开发。" }
+        ]
+      },
+      {
+        name: "王帆", code: "S1450123090016", idCard: "110101198006061234", gender: "male", department: "产品研发部", position: "产品研发经理", tenure: "3年又120天", startDate: "2016-08-20", assets: "4.56亿元", bestReturn: "89.23%",
+        bio: "复旦大学金融学硕士。专注于可转债投资，具有丰富的市场经验。擅长可转债定价、套利策略和组合管理。",
+        education: [{ school: "复旦大学", degree: "金融学硕士" }],
+        experience: [
+          { period: "2016-08至今", company: "Providence Equity Partners", position: "产品研发经理", desc: "负责可转债类产品的设计和投资管理，管理规模超过4.5亿元。" }
+        ]
+      },
+      {
+        name: "沈明", code: "S1450114010008", idCard: "110101198007071234", gender: "male", department: "风险管理部", position: "风险管理部总监", tenure: "2年又280天", startDate: "2017-11-15", assets: "3.78亿元", bestReturn: "82.15%",
+        bio: "上海财经大学金融工程硕士。擅长固收产品投资，注重风险控制。在信用风险分析、流动性风险管理等方面具有丰富经验。",
+        education: [{ school: "上海财经大学", degree: "金融工程硕士" }],
+        experience: [
+          { period: "2017-11至今", company: "Providence Equity Partners", position: "风险管理部总监", desc: "负责全公司风险管理体系建设，建立完善的风险识别、评估和控制体系。" }
+        ]
+      },
+      {
+        name: "刘哲", code: "S1450123060030", idCard: "110101198008081234", gender: "male", department: "权益投资部", position: "权益投资部合伙人", tenure: "4年又200天", startDate: "2015-06-10", assets: "6.23亿元", bestReturn: "95.67%",
+        bio: "清华大学经济学博士。投研合伙人，专注于成长股投资和价值发现。在TMT、消费、医疗等成长性行业有超过15年的投资研究经验。",
+        education: [{ school: "清华大学", degree: "经济学博士" }],
+        experience: [
+          { period: "2015-06至今", company: "Providence Equity Partners", position: "权益投资部合伙人", desc: "负责权益投资部整体投资策略制定，管理规模超过6亿元，投资组合年化收益率超过18%。" },
+          { period: "2008-03至2015-05", company: "某知名公募基金", position: "高级研究员、基金经理", desc: "负责TMT行业研究和成长股投资，管理的基金曾获得年度最佳基金奖。" }
+        ]
+      },
+      {
+        name: "周屹", code: "F0490000000121", idCard: "110101198009091234", gender: "male", department: "产品研发部", position: "配售策略负责人", tenure: "3年又45天", startDate: "2016-12-20", assets: "4.12亿元", bestReturn: "88.34%",
+        bio: "北京大学金融学硕士。配售策略负责人，擅长IPO配售和定向增发。在股票配售、战略配售等领域有丰富经验。",
+        education: [{ school: "北京大学", degree: "金融学硕士" }],
+        experience: [
+          { period: "2016-12至今", company: "Providence Equity Partners", position: "配售策略负责人", desc: "负责IPO配售和定向增发业务，累计参与配售项目超过50个，平均收益率超过30%。" }
+        ]
+      },
+      {
+        name: "陆峻", code: "F4220000000136", idCard: "110101198010101234", gender: "male", department: "固收投资部", position: "固收量化专家", tenure: "2年又150天", startDate: "2018-03-15", assets: "3.89亿元", bestReturn: "79.56%",
+        bio: "上海交通大学经济学硕士。固收量化专家，专注于量化模型开发。擅长债券定价模型、利率模型和信用风险模型。",
+        education: [{ school: "上海交通大学", degree: "经济学硕士" }],
+        experience: [
+          { period: "2018-03至今", company: "Providence Equity Partners", position: "固收量化专家", desc: "负责固收量化策略研发，开发了多套量化投资模型，应用于债券投资和风险管理。" }
+        ]
+      },
+      {
+        name: "陈皓", code: "S1450123090017", idCard: "110101198011111234", gender: "male", department: "产品研发部", position: "产品研发部合伙人", tenure: "3年又300天", startDate: "2016-01-10", assets: "5.34亿元", bestReturn: "91.45%",
+        bio: "复旦大学金融工程博士。投研合伙人，擅长资产配置和组合优化。在FOF产品设计、资产配置策略等方面有深入研究。",
+        education: [{ school: "复旦大学", degree: "金融工程博士" }],
+        experience: [
+          { period: "2016-01至今", company: "Providence Equity Partners", position: "产品研发部合伙人", desc: "负责产品研发部整体工作，设计并管理多只FOF产品，管理规模超过5亿元。" }
+        ]
+      },
+      {
+        name: "张明", code: "S1450114010009", idCard: "110101198012121234", gender: "male", department: "固收投资部", position: "固收投资部总监", tenure: "4年又180天", startDate: "2015-08-25", assets: "6.67亿元", bestReturn: "98.23%",
+        bio: "清华大学金融学硕士。固收总监，长期从事固定收益投资管理。在利率债、信用债、可转债等固收产品投资方面有超过12年的丰富经验，管理的多只固收基金年化收益率稳定在9%-12%区间。",
+        education: [{ school: "清华大学", degree: "金融学硕士" }],
+        experience: [
+          { period: "2015-08至今", company: "Providence Equity Partners", position: "固收投资部总监", desc: "负责固收投资部整体运营，管理规模超过6.6亿元，团队管理的多只固收基金均获得优秀评级。" },
+          { period: "2008-07至2015-07", company: "某大型银行资管部", position: "固收投资经理", desc: "负责银行理财产品的固收投资，累计管理规模超过100亿元。" }
+        ]
+      },
+      {
+        name: "李强", code: "S1450123060031", idCard: "110101198101131234", gender: "male", department: "固收投资部", position: "固收投资经理", tenure: "2年又90天", startDate: "2017-09-10", assets: "3.45亿元", bestReturn: "75.23%",
+        bio: "上海财经大学金融学硕士。专注于低风险投资策略。擅长货币市场工具、短期债券等低风险固收产品的投资管理。",
+        education: [{ school: "上海财经大学", degree: "金融学硕士" }],
+        experience: [
+          { period: "2017-09至今", company: "Providence Equity Partners", position: "固收投资经理", desc: "管理低风险固收产品，年化收益率稳定在6%-8%区间，最大回撤控制在1%以内。" }
+        ]
+      },
+      {
+        name: "赵敏", code: "F0490000000122", idCard: "110101198102141234", gender: "female", department: "权益投资部", position: "权益投资经理", tenure: "3年又220天", startDate: "2016-05-20", assets: "4.89亿元", bestReturn: "86.78%",
+        bio: "北京大学经济学硕士。擅长行业研究和个股分析。在消费、医药等行业有深入研究，投资风格稳健，注重长期价值。",
+        education: [{ school: "北京大学", degree: "经济学硕士" }],
+        experience: [
+          { period: "2016-05至今", company: "Providence Equity Partners", position: "权益投资经理", desc: "专注于消费和医药行业投资，管理规模超过4.8亿元，投资组合年化收益率超过16%。" }
+        ]
+      },
+      {
+        name: "孙磊", code: "F4220000000137", idCard: "110101198103151234", gender: "male", department: "量化投资部", position: "量化投资经理", tenure: "2年又250天", startDate: "2017-12-15", assets: "3.67亿元", bestReturn: "81.34%",
+        bio: "上海交通大学金融工程硕士。专注于量化投资和算法交易。擅长高频交易策略、统计套利和机器学习在投资中的应用。",
+        education: [{ school: "上海交通大学", degree: "金融工程硕士" }],
+        experience: [
+          { period: "2017-12至今", company: "Providence Equity Partners", position: "量化投资经理", desc: "负责量化交易策略研发，管理规模超过3.6亿元，策略年化收益率超过20%。" }
+        ]
+      },
+      {
+        name: "吴军", code: "S1450123090018", idCard: "110101198104161234", gender: "male", department: "权益投资部", position: "投研合伙人", tenure: "4年又100天", startDate: "2015-10-20", assets: "5.78亿元", bestReturn: "94.56%",
+        bio: "复旦大学经济学博士。投研合伙人，擅长宏观分析和资产配置。在宏观经济研究、行业轮动、资产配置等方面有超过15年的研究经验。",
+        education: [{ school: "复旦大学", degree: "经济学博士" }],
+        experience: [
+          { period: "2015-10至今", company: "Providence Equity Partners", position: "投研合伙人", desc: "负责宏观研究和资产配置策略制定，管理规模超过5.7亿元。" },
+          { period: "2007-09至2015-09", company: "某知名券商研究所", position: "首席宏观分析师", desc: "负责宏观经济研究和资产配置策略研究，多次获得新财富最佳分析师称号。" }
+        ]
+      },
+      {
+        name: "郑华", code: "S1450114010010", idCard: "110101198105171234", gender: "male", department: "固收投资部", position: "固收投资经理", tenure: "3年又60天", startDate: "2016-11-10", assets: "4.23亿元", bestReturn: "87.89%",
+        bio: "清华大学金融学硕士。专注于固定收益产品投资。在信用债投资、可转债投资等方面有丰富经验。",
+        education: [{ school: "清华大学", degree: "金融学硕士" }],
+        experience: [
+          { period: "2016-11至今", company: "Providence Equity Partners", position: "固收投资经理", desc: "管理多只固收类基金，管理规模超过4.2亿元，年化收益率稳定在8%-11%区间。" }
+        ]
+      },
+      {
+        name: "钱伟", code: "S1450123060032", idCard: "110101198106181234", gender: "male", department: "风险管理部", position: "风险管理经理", tenure: "2年又180天", startDate: "2017-06-20", assets: "3.56亿元", bestReturn: "78.45%",
+        bio: "上海财经大学金融工程硕士。擅长风险管理和组合优化。在VaR模型、压力测试、风险限额管理等方面有深入研究。",
+        education: [{ school: "上海财经大学", degree: "金融工程硕士" }],
+        experience: [
+          { period: "2017-06至今", company: "Providence Equity Partners", position: "风险管理经理", desc: "负责投资组合风险管理和风险控制，建立了完善的风险管理体系。" }
+        ]
+      },
+      {
+        name: "周杰", code: "F0490000000123", idCard: "110101198107191234", gender: "male", department: "权益投资部", position: "权益投资经理", tenure: "3年又140天", startDate: "2016-08-15", assets: "4.45亿元", bestReturn: "85.67%",
+        bio: "北京大学金融学硕士。专注于成长股投资和价值发现。在科技、消费等成长性行业有深入研究。",
+        education: [{ school: "北京大学", degree: "金融学硕士" }],
+        experience: [
+          { period: "2016-08至今", company: "Providence Equity Partners", position: "权益投资经理", desc: "专注于成长股投资，管理规模超过4.4亿元，投资组合年化收益率超过17%。" }
+        ]
+      },
+      {
+        name: "吴明", code: "F4220000000138", idCard: "110101198108201234", gender: "male", department: "量化投资部", position: "固收量化专家", tenure: "4年又50天", startDate: "2015-11-20", assets: "6.12亿元", bestReturn: "97.34%",
+        bio: "上海交通大学经济学博士。固收量化专家，擅长量化模型开发。在利率模型、信用风险模型、债券定价模型等方面有深入研究。",
+        education: [{ school: "上海交通大学", degree: "经济学博士" }],
+        experience: [
+          { period: "2015-11至今", company: "Providence Equity Partners", position: "固收量化专家", desc: "负责固收量化策略研发，开发了多套量化投资模型，管理规模超过6亿元。" }
+        ]
+      },
+      {
+        name: "陈强", code: "S1450123090019", idCard: "110101198109211234", gender: "male", department: "产品研发部", position: "产品研发经理", tenure: "2年又320天", startDate: "2017-01-10", assets: "3.78亿元", bestReturn: "80.12%",
+        bio: "复旦大学金融工程硕士。专注于可转债投资和套利策略。在可转债定价、套利交易等方面有丰富经验。",
+        education: [{ school: "复旦大学", degree: "金融工程硕士" }],
+        experience: [
+          { period: "2017-01至今", company: "Providence Equity Partners", position: "产品研发经理", desc: "负责可转债类产品的设计和投资管理，管理规模超过3.7亿元。" }
+        ]
+      },
+      {
+        name: "张伟", code: "S1450114010011", idCard: "110101198110221234", gender: "male", department: "风险管理部", position: "投研合伙人", tenure: "3年又200天", startDate: "2016-04-25", assets: "4.67亿元", bestReturn: "88.90%",
+        bio: "清华大学金融学硕士。投研合伙人，擅长资产配置和风险管理。在投资组合优化、风险控制等方面有超过12年的经验。",
+        education: [{ school: "清华大学", degree: "金融学硕士" }],
+        experience: [
+          { period: "2016-04至今", company: "Providence Equity Partners", position: "投研合伙人", desc: "负责资产配置策略制定和风险管理，管理规模超过4.6亿元。" }
+        ]
+      },
+      {
+        name: "李敏", code: "S1450123060033", idCard: "110101198111231234", gender: "female", department: "风险管理部", position: "风险管理经理", tenure: "2年又120天", startDate: "2017-10-15", assets: "3.34亿元", bestReturn: "76.78%",
+        bio: "上海财经大学金融学硕士。专注于低风险投资策略。擅长货币市场工具、短期债券等低风险产品的投资管理。",
+        education: [{ school: "上海财经大学", degree: "金融学硕士" }],
+        experience: [
+          { period: "2017-10至今", company: "Providence Equity Partners", position: "风险管理经理", desc: "负责低风险产品的投资管理和风险控制，管理规模超过3.3亿元。" }
+        ]
+      },
+      {
+        name: "王磊", code: "F0490000000124", idCard: "110101198112241234", gender: "male", department: "固收投资部", position: "固收总监", tenure: "4年又160天", startDate: "2015-07-20", assets: "5.89亿元", bestReturn: "93.45%",
+        bio: "北京大学经济学博士。固收总监，长期从事固定收益投资管理。在利率债、信用债、可转债等固收产品投资方面有超过13年的丰富经验。",
+        education: [{ school: "北京大学", degree: "经济学博士" }],
+        experience: [
+          { period: "2015-07至今", company: "Providence Equity Partners", position: "固收总监", desc: "负责固收投资业务，管理规模超过5.8亿元，团队管理的多只固收基金均获得优秀评级。" },
+          { period: "2009-08至2015-06", company: "某大型基金公司", position: "固收投资经理", desc: "负责债券基金的投资管理，管理的基金曾获得年度最佳债券基金奖。" }
+        ]
+      },
+      {
+        name: "赵军", code: "F4220000000139", idCard: "110101198201251234", gender: "male", department: "量化投资部", position: "量化投资经理", tenure: "2年又290天", startDate: "2017-11-25", assets: "3.89亿元", bestReturn: "82.34%",
+        bio: "上海交通大学金融工程硕士。专注于量化投资和算法交易。擅长高频交易策略和统计套利。",
+        education: [{ school: "上海交通大学", degree: "金融工程硕士" }],
+        experience: [
+          { period: "2017-11至今", company: "Providence Equity Partners", position: "量化投资经理", desc: "负责量化交易策略研发，管理规模超过3.8亿元，策略年化收益率超过19%。" }
+        ]
+      },
+      {
+        name: "孙华", code: "S1450123090020", idCard: "110101198202261234", gender: "male", department: "权益投资部", position: "投研合伙人", tenure: "3年又80天", startDate: "2016-09-10", assets: "4.56亿元", bestReturn: "86.23%",
+        bio: "复旦大学经济学硕士。投研合伙人，擅长宏观分析和资产配置。在宏观经济研究、行业轮动等方面有丰富经验。",
+        education: [{ school: "复旦大学", degree: "经济学硕士" }],
+        experience: [
+          { period: "2016-09至今", company: "Providence Equity Partners", position: "投研合伙人", desc: "负责宏观研究和资产配置策略制定，管理规模超过4.5亿元。" }
+        ]
+      },
+      {
+        name: "吴强", code: "S1450114010012", idCard: "110101198203271234", gender: "male", department: "固收投资部", position: "固收投资经理", tenure: "2年又210天", startDate: "2017-08-20", assets: "3.67亿元", bestReturn: "79.89%",
+        bio: "清华大学金融学硕士。专注于固定收益产品投资。在信用债投资、可转债投资等方面有丰富经验。",
+        education: [{ school: "清华大学", degree: "金融学硕士" }],
+        experience: [
+          { period: "2017-08至今", company: "Providence Equity Partners", position: "固收投资经理", desc: "管理多只固收类基金，管理规模超过3.6亿元，年化收益率稳定在7%-10%区间。" }
+        ]
+      },
+      {
+        name: "郑伟", code: "S1450123060034", idCard: "110101198204281234", gender: "male", department: "风险管理部", position: "固收量化专家", tenure: "4年又30天", startDate: "2015-12-15", assets: "6.34亿元", bestReturn: "96.78%",
+        bio: "上海财经大学金融工程博士。固收量化专家，擅长量化模型开发。在利率模型、信用风险模型等方面有深入研究。",
+        education: [{ school: "上海财经大学", degree: "金融工程博士" }],
+        experience: [
+          { period: "2015-12至今", company: "Providence Equity Partners", position: "固收量化专家", desc: "负责固收量化策略研发，开发了多套量化投资模型，管理规模超过6.3亿元。" }
+        ]
+      },
+      {
+        name: "钱敏", code: "F0490000000125", idCard: "110101198205291234", gender: "female", department: "权益投资部", position: "权益投资经理", tenure: "2年又160天", startDate: "2017-07-10", assets: "3.45亿元", bestReturn: "77.56%",
+        bio: "北京大学金融学硕士。专注于成长股投资和价值发现。在科技、消费等成长性行业有深入研究。",
+        education: [{ school: "北京大学", degree: "金融学硕士" }],
+        experience: [
+          { period: "2017-07至今", company: "Providence Equity Partners", position: "权益投资经理", desc: "专注于成长股投资，管理规模超过3.4亿元，投资组合年化收益率超过15%。" }
+        ]
+      },
+      {
+        name: "周强", code: "F4220000000140", idCard: "110101198206301234", gender: "male", department: "产品研发部", position: "投研合伙人", tenure: "3年又100天", startDate: "2016-10-25", assets: "4.78亿元", bestReturn: "89.12%",
+        bio: "上海交通大学经济学硕士。投研合伙人，擅长资产配置和组合优化。在FOF产品设计、资产配置策略等方面有深入研究。",
+        education: [{ school: "上海交通大学", degree: "经济学硕士" }],
+        experience: [
+          { period: "2016-10至今", company: "Providence Equity Partners", position: "投研合伙人", desc: "负责产品研发和资产配置策略制定，管理规模超过4.7亿元。" }
+        ]
+      },
+      {
+        name: "吴华", code: "S1450123090021", idCard: "110101198207311234", gender: "male", department: "产品研发部", position: "产品研发经理", tenure: "2年又240天", startDate: "2017-12-20", assets: "3.89亿元", bestReturn: "81.67%",
+        bio: "复旦大学金融工程硕士。专注于可转债投资和套利策略。在可转债定价、套利交易等方面有丰富经验。",
+        education: [{ school: "复旦大学", degree: "金融工程硕士" }],
+        experience: [
+          { period: "2017-12至今", company: "Providence Equity Partners", position: "产品研发经理", desc: "负责可转债类产品的设计和投资管理，管理规模超过3.8亿元。" }
+        ]
+      }
+    ];
+
+    // 根据照片判断性别（简单规则：偶数ID为男性，奇数ID为女性，但需要根据实际照片调整）
+    function getGenderFromPhoto(avatarId) {
+      // 这里可以根据实际照片调整规则
+      // 暂时使用简单规则：1-73为男性，74-146为女性（可根据实际照片调整）
+      return avatarId <= 73 ? 'male' : 'female';
+    }
+
+    // 获取男性名字列表
+    const maleNames = ['艾翀', '胡善斌', '江楠', '唐伟青', '王帆', '沈明', '刘哲', '周屹', '陆峻', '陈皓', '张明', '李强', '孙磊', '吴军', '郑华', '钱伟', '周杰', '吴明', '陈强', '张伟', '王磊', '赵军', '孙华', '吴强', '郑伟', '周强', '吴华'];
+    // 获取女性名字列表
+    const femaleNames = ['高从珊', '赵敏', '李敏', '钱敏'];
+
+    // 根据照片和索引匹配名字
+    function getManagerName(index, avatarId) {
+      const gender = getGenderFromPhoto(avatarId);
+      if (gender === 'male') {
+        return maleNames[index % maleNames.length];
+      } else {
+        return femaleNames[index % femaleNames.length];
+      }
+    }
+
+    // 显示优秀顾问详情（从下往上弹窗）
+    function showManagerDetail(index) {
+      const manager = MANAGERS[index];
+      const avatarId = (index % 146) + 1;
+      const avatar = `img/good/img${String(avatarId).padStart(3, '0')}.jpg`;
+
+      const modal = document.getElementById('managerModal');
+      const header = document.getElementById('modalHeader');
+      const body = document.getElementById('modalBody');
+
+      // 构建头部
+      header.innerHTML = `
+        <img src="${avatar}" alt="${manager.name}" onerror="this.src='img/user-avatar-default.svg'" />
+        <div class="modal-header-info">
+            <div class="modal-name">${manager.name}</div>
+            <div class="modal-title">${manager.position}</div>
+            <div class="modal-code">执业编号：${manager.code}</div>
+        </div>
+        <button class="modal-close" onclick="closeManagerModal()">×</button>
+    `;
+
+      // 构建内容
+      body.innerHTML = `
+        <div class="modal-section">
+            <div class="modal-section-title">📊 投资业绩</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">累计任职时间</div>
+                    <div class="stat-value">${manager.tenure}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">任职起始日期</div>
+                    <div class="stat-value">${manager.startDate}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">现任基金资产总规模</div>
+                    <div class="stat-value">${manager.assets}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">在管基金最佳任期回报</div>
+                    <div class="stat-value">${manager.bestReturn}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-section">
+            <div class="modal-section-title">💼 工作经历</div>
+            ${manager.experience && manager.experience.length > 0 ? manager.experience.map(exp => `
+                <div class="exp-item">
+                    <div class="exp-period">${exp.period}</div>
+                    <div class="exp-position">${exp.position}</div>
+                    <div class="exp-desc">${exp.desc}</div>
+                </div>
+            `).join('') : '<div class="exp-desc">工作经历信息待补充</div>'}
+        </div>
+
+        <div class="modal-section">
+            <div class="modal-section-title">📋 个人简介</div>
+            <div class="bio-content">${manager.bio}</div>
+        </div>
+    `;
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // 关闭弹窗
+    function closeManagerModal() {
+      const modal = document.getElementById('managerModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // 点击遮罩层关闭
+    document.getElementById('managerModal').addEventListener('click', function (e) {
+      if (e.target === this) {
+        closeManagerModal();
+      }
+    });
+
+    // 已去掉Spotlight滚动效果
+  </script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script src="smart-swipe-control.js?v=1763813622"></script>
+
+
+</body>
+
+</html>

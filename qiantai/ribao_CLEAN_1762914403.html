@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
+    <!-- iOS适配 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a1020">
+
+    <title>日利宝 - Providence</title>
+    <style>
+        :root {
+            --gold: #c8ba94;
+            --gold2: #f5d771;
+            --ink: #0f172a;
+            --lineD: rgba(255,255,255,0.08);
+            --lineL: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #e9eef6;
+            background: linear-gradient(180deg, #0a1723 0%, #0f1c2a 100%);
+            padding-bottom: 80px;
+            min-height: 100vh;
+        }
+
+        /* 顶部导航栏 */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, rgba(10,23,35,.95), rgba(10,23,35,.75));
+            backdrop-filter: blur(6px);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--lineD);
+        }
+
+        .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .back-btn:active {
+        transform: scale(0.95) !important;
+    }
+
+        .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+
+        .history-link {
+            font-size: 13px;
+            color: var(--gold2);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: rgba(245,215,113,.1);
+        }
+
+        /* Hero区域 */
+        .hero {
+            padding: 24px 16px;
+            background: linear-gradient(180deg, rgba(10,23,35,.8) 0%, rgba(15,28,42,.6) 100%);
+        }
+
+        .hero h2 {
+            margin: 0 0 6px;
+            font-size: 22px;
+            color: var(--gold2);
+            font-weight: 600;
+
+        }
+
+        .hero p {
+            margin: 0 0 20px;
+            color: #c9d2dd;
+            font-size: 13px;
+            line-height: 1.55;
+
+        }
+
+        /* KPI指标卡片 */
+        .kpis {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .kpi {
+            flex: 1;
+            background: rgba(255,255,255,.06);
+            border: 1px solid var(--lineD);
+            border-radius: 12px;
+            padding: 12px;
+
+        }
+
+        .kpi b {
+
+            font-size: 18px;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .kpi small {
+            font-size: 11px;
+            color: #aeb8c6;
+        }
+
+        /* Section区域 */
+        .section {
+            margin: 16px;
+            background: rgba(243,245,247,.96);
+            color: var(--ink);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .section .head {
+            display: flex;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .section .head h3 {
+            margin: 0;
+            font-size: 17px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .section .head small {
+            margin-left: auto;
+            font-size: 12px;
+            color: #617087;
+        }
+
+        /* 操作按钮 */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .action-btn {
+            background: linear-gradient(180deg, var(--gold2), var(--gold));
+            color: #0b1220;
+            border: 1px solid rgba(159,139,84,.6);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+
+        .action-btn.secondary {
+            background: #fff;
+            color: var(--gold);
+            border: 1px solid var(--lineL);
+        }
+
+        /* 信息卡片 */
+        .info-card {
+            background: #fff;
+            border: 1px solid var(--lineL);
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 12px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        /* 提示框 */
+        .tips-box {
+            margin: 16px;
+            background: rgba(255,255,255,.06);
+            border: 1px solid var(--lineD);
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .tips-box h4 {
+            margin: 0 0 10px;
+            color: #e8edf6;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .tips-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .tips-box li {
+            font-size: 13px;
+            color: #b9c4d2;
+            line-height: 1.7;
+            margin-bottom: 6px;
+        }
+
+        /* Modal弹窗 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .modal-content {
+            background: #fff;
+
+            border-radius: 20px 20px 0 0;
+            padding: 24px 20px 30px;
+            animation: slideUp 0.3s;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 20px;
+
+        }
+
+        .modal-balance {
+            background: linear-gradient(180deg, var(--gold2), var(--gold));
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+
+        }
+
+        .modal-balance-label {
+            font-size: 13px;
+            color: #0b1220;
+            margin-bottom: 4px;
+        }
+
+        .modal-balance-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0b1220;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+
+            font-size: 14px;
+            color: #495468;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+
+            padding: 14px 50px 14px 40px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            color: #0f172a;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--gold);
+            outline: none;
+        }
+
+        .input-prefix {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #999;
+        }
+
+        .quick-amounts {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .quick-btn {
+            flex: 1;
+            padding: 10px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .quick-btn.active {
+            background: linear-gradient(180deg, var(--gold2), var(--gold));
+            color: #0b1220;
+            border-color: rgba(159,139,84,.6);
+        }
+
+        .preview-box {
+            background: #f0f4ff;
+            padding: 14px;
+            border-radius: 10px;
+            margin: 16px 0;
+        }
+
+        .preview-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .preview-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .preview-label {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .preview-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-btn-cancel {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .modal-btn-confirm {
+            background: linear-gradient(180deg, var(--gold2), var(--gold));
+            color: #0b1220;
+        }
+
+        /* 底部导航 */
+        .tabbar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(11,59,94,0.98) 0%, rgba(18,76,106,0.98) 100%);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            border-top: 1px solid rgba(212,175,55,0.2);
+            height: 65px;
+            z-index: 100;
+            padding: 2px 0 2px;
+            box-shadow: 0 -2px 16px rgba(0,0,0,.15);
+        }
+
+        .tab {
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #8b9aa8;
+            text-decoration: none;
+            transition: color .2s ease;
+            padding: 8px 0;
+        }
+
+        .tab.active {
+            color: #f5d771;
+        }
+
+        .tab .ico {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+
+        .tab .txt {
+            font-size: 11px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+      .brand .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .back-btn:active {
+        transform: scale(0.95) !important;
+    }
+      .brand .page-title, .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <div class="topbar">
+        <a href="javascript:history.back()" class="back-btn">←</a>
+        <div class="brand"><a href="javascript:history.back()" class="back-btn">←</a><h1 class="page-title">日利宝</h1></div>
+        </div>
+        <a href="ribao-history.html" class="history-link">明细</a>
+    </div>
+
+    <!-- Hero区域 -->
+    <div class="hero">
+        <h2 id="ribaoBalance">¥0.00</h2>
+        <p>日利宝总额（元）</p>
+        <div class="kpis">
+            <div class="kpi">
+                <b id="yesterdayEarning">0.00</b>
+                <small>昨日收益</small>
+            </div>
+            <div class="kpi">
+                <b id="totalEarning">0.00</b>
+                <small>累计收益</small>
+            </div>
+            <div class="kpi">
+                <b id="currentRate">0.15%</b>
+                <small>日利率</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- 操作区域 -->
+    <div class="section">
+        <div class="head">
+            <h3>快速操作</h3>
+        </div>
+        <div class="action-grid">
+            <button class="action-btn" onclick="showTransferIn()">
+                📥 转入
+            </button>
+            <button class="action-btn secondary" onclick="showTransferOut()">
+                📤 转出
+            </button>
+        </div>
+
+        </div>
+    </div>
+
+    <!-- 使用说明 -->
+    <div class="tips-box">
+        <h4>💡 使用说明</h4>
+        <ul>
+            <li>资金转入后按日结算，收益自动复利到日利宝余额</li>
+            <li>随时可转出，实时到账至可用余额，可继续投资或提现</li>
+            <li>最低转入/转出金额 ¥100，单笔上限按风控策略限制</li>
+            <li>实际收益以后端结算为准，前端不做数学计算</li>
+        </ul>
+    </div>
+
+    <!-- 转入弹窗 -->
+    <div class="modal" id="transferInModal">
+        <div class="modal-content">
+            <div class="modal-header">转入日利宝</div>
+            <div class="modal-balance">
+                <div class="modal-balance-label">可用余额</div>
+                <div class="modal-balance-value">¥<span id="availableBalance">0.00</span></div>
+            </div>
+            <div class="input-group">
+                <label>转入金额</label>
+                <div class="input-wrapper">
+                    <span class="input-prefix">¥</span>
+                    <input type="number" id="transferInAmount" placeholder="请输入转入金额" />
+                </div>
+                <div class="quick-amounts">
+                    <button class="quick-btn" onclick="setAmount('in', 100)">100</button>
+                    <button class="quick-btn" onclick="setAmount('in', 1000)">1000</button>
+                    <button class="quick-btn" onclick="setAmount('in', 5000)">5000</button>
+                    <button class="quick-btn" onclick="setAmount('in', 'all')">全部</button>
+                </div>
+            </div>
+            <div class="preview-box">
+                <div class="preview-row">
+                    <span class="preview-label">预计每日收益</span>
+                    <span class="preview-value" id="previewDailyIn">¥0.00</span>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" onclick="closeModal('transferInModal')">取消</button>
+                <button class="modal-btn modal-btn-confirm" onclick="confirmTransferIn()">确认转入</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 转出弹窗 -->
+    <div class="modal" id="transferOutModal">
+        <div class="modal-content">
+            <div class="modal-header">转出日利宝</div>
+            <div class="modal-balance">
+                <div class="modal-balance-label">日利宝余额</div>
+                <div class="modal-balance-value">¥<span id="ribaoBalanceForOut">0.00</span></div>
+            </div>
+            <div class="input-group">
+                <label>转出金额</label>
+                <div class="input-wrapper">
+                    <span class="input-prefix">¥</span>
+                    <input type="number" id="transferOutAmount" placeholder="请输入转出金额" />
+                </div>
+                <div class="quick-amounts">
+                    <button class="quick-btn" onclick="setAmount('out', 100)">100</button>
+                    <button class="quick-btn" onclick="setAmount('out', 1000)">1000</button>
+                    <button class="quick-btn" onclick="setAmount('out', 5000)">5000</button>
+                    <button class="quick-btn" onclick="setAmount('out', 'all')">全部</button>
+                </div>
+            </div>
+            <div class="preview-box">
+                <div class="preview-row">
+                    <span class="preview-label">转出后到账</span>
+                    <span class="preview-value">余额可提现或投资</span>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" onclick="closeModal('transferOutModal')">取消</button>
+                <button class="modal-btn modal-btn-confirm" onclick="confirmTransferOut()">确认转出</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <nav class="tabbar">
+        <a class="tab" href="index.html">
+            <div class="ico">🏠</div>
+            <div class="txt">首页</div>
+        </a>
+        <a class="tab" href="data-board.html">
+            <div class="ico">📊</div>
+            <div class="txt">数据</div>
+        </a>
+        <a class="tab" href="projects-list.html">
+            <div class="ico">💼</div>
+            <div class="txt">项目</div>
+        </a>
+        <a class="tab" href="messages.html">
+            <div class="ico">💬</div>
+            <div class="txt">消息</div>
+        </a>
+        <a class="tab" href="profile.html">
+            <div class="ico">👤</div>
+            <div class="txt">我的</div>
+        </a>
+    </nav>
+
+    <script src="js/config.js"></script>
+    <script src="js/ios-toast.js"></script>
+    <script>
+        let currentData = {};
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadRibaoInfo();
+        });
+
+        async function loadRibaoInfo() {
+            try {
+                const result = await ApiService.ribao.getInfo();
+                if (result.code === 1) {
+                    currentData = result.data;
+                    document.getElementById('ribaoBalance').textContent = '¥' + parseFloat(currentData.ribao_balance || 0).toFixed(2);
+                    document.getElementById('yesterdayEarning').textContent = parseFloat(currentData.yesterday_earning || 0).toFixed(2);
+                    document.getElementById('totalEarning').textContent = parseFloat(currentData.total_earning || 0).toFixed(2);
+                    document.getElementById('currentRate').textContent = (currentData.rate || 0.15) + '%';
+                    document.getElementById('availableBalance').textContent = parseFloat(currentData.available_balance || 0).toFixed(2);
+                    document.getElementById('ribaoBalanceForOut').textContent = parseFloat(currentData.ribao_balance || 0).toFixed(2);
+                }
+            } catch (error) {
+                console.error('加载失败:', error);
+            }
+        }
+
+        function showTransferIn() {
+            document.getElementById('transferInModal').classList.add('active');
+        }
+
+        function showTransferOut() {
+            document.getElementById('transferOutModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function setAmount(type, value) {
+            const input = document.getElementById(type === 'in' ? 'transferInAmount' : 'transferOutAmount');
+            if (value === 'all') {
+                const balance = type === 'in' ? parseFloat(currentData.available_balance || 0) : parseFloat(currentData.ribao_balance || 0);
+                input.value = balance.toFixed(2);
+            } else {
+                input.value = value;
+            }
+            updatePreview(type);
+        }
+
+        function updatePreview(type) {
+            const amount = parseFloat(document.getElementById(type === 'in' ? 'transferInAmount' : 'transferOutAmount').value) || 0;
+            if (type === 'in') {
+                const daily = (amount * (currentData.rate || 0.15) / 100).toFixed(2);
+                document.getElementById('previewDailyIn').textContent = '¥' + daily;
+            }
+        }
+
+        async function confirmTransferIn() {
+            const amount = parseFloat(document.getElementById('transferInAmount').value);
+            if (!amount || amount < 100) {
+                showToast('转入金额不能低于100元', 'error');
+                return;
+            }
+            if (amount > parseFloat(currentData.available_balance || 0)) {
+                showToast('余额不足', 'error');
+                return;
+            }
+
+            try {
+                const result = await ApiService.ribao.transferIn({ amount });
+                if (result.code === 1) {
+                    showToast('转入成功', 'success');
+                    closeModal('transferInModal');
+                    loadRibaoInfo();
+                } else {
+                    showToast(result.message || '转入失败', 'error');
+                }
+            } catch (error) {
+                showToast('操作失败，请重试', 'error');
+            }
+        }
+
+        async function confirmTransferOut() {
+            const amount = parseFloat(document.getElementById('transferOutAmount').value);
+            if (!amount || amount < 100) {
+                showToast('转出金额不能低于100元', 'error');
+                return;
+            }
+            if (amount > parseFloat(currentData.ribao_balance || 0)) {
+                showToast('日利宝余额不足', 'error');
+                return;
+            }
+
+            try {
+                const result = await ApiService.ribao.transferOut({ amount });
+                if (result.code === 1) {
+                    showToast('转出成功', 'success');
+                    closeModal('transferOutModal');
+                    loadRibaoInfo();
+                } else {
+                    showToast(result.message || '转出失败', 'error');
+                }
+            } catch (error) {
+                showToast('操作失败，请重试', 'error');
+            }
+        }
+
+        document.addEventListener('input', function(e) {
+            if (e.target.id === 'transferInAmount') {
+                updatePreview('in');
+            }
+        });
+
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal(this.id);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

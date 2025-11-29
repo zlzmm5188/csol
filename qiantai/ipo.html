@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>投资项目 - Providence</title>
+    <link rel="stylesheet" href="styles.css?v=1763897782" />
+      .brand { display: flex; align-items: center; }
+      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+      .brand .page-title, .brand .page-title, .brand h1 { margin: 0; font-size: 16px; white-space: nowrap; flex: 0 1 auto; }
+
+.brand { display: flex; align-items: center; }      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}      .brand .page-title, .brand .page-title, .brand h1 { margin: 0; font-size: 16px; white-space: nowrap; flex: 0 1 auto; }
+
+<style>.detail-header,.hero-simple,.projects-header-theme{background:linear-gradient(135deg,#0e2b44,#1a3a5f)!important}.detail-header-title,.back-btn,.back-btn-projects{color:#fff!important}</style>
+</head>
+<body class="page-projects-ipo">
+<div id="app">
+    <!-- 顶部导航 - 深蓝主题 -->
+    <header class="projects-header-theme">
+        <a href="index.html" class="back-btn-projects">←</a>
+        <h1 class="projects-title">投资项目</h1>
+        <div class="header-spacer"></div>
+    </header>
+
+    <!-- 项目列表 -->
+    <section class="product-list" id="projectsList">
+        <!-- 动态加载 -->
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">加载中...</div>
+        </div>
+    </section>
+</div>
+
+<!-- 底部导航 -->
+<!-- 底部导航已移除 -->
+
+<script>
+console.log('✅ 投资项目页面已加载');
+window.addEventListener('error', function(e) {
+    console.error('❌ JS错误:', e.message, e.filename, e.lineno);
+});
+</script>
+<script defer src="projects.js?v=1763897782"></script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script defer src="smart-swipe-control.js?v=1763897782"></script>
+
+
+</body>
+</html>

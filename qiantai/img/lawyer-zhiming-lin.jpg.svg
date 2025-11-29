@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d2d2d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="faceGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#d4af37;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#c9a732;stop-opacity:0.2" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <circle cx="200" cy="200" r="200" fill="url(#bgGrad)"/>
+  
+  <!-- Decorative gold circles -->
+  <circle cx="200" cy="200" r="180" fill="none" stroke="#d4af37" stroke-width="2" opacity="0.3"/>
+  <circle cx="200" cy="200" r="160" fill="none" stroke="#d4af37" stroke-width="1" opacity="0.2"/>
+  
+  <!-- Professional silhouette -->
+  <circle cx="200" cy="160" r="50" fill="url(#faceGrad)"/>
+  <path d="M 120 280 Q 200 240 280 280 L 280 320 Q 200 300 120 320 Z" fill="url(#faceGrad)"/>
+  
+  <!-- Glasses -->
+  <circle cx="185" cy="155" r="15" fill="none" stroke="#d4af37" stroke-width="2" opacity="0.8"/>
+  <circle cx="215" cy="155" r="15" fill="none" stroke="#d4af37" stroke-width="2" opacity="0.8"/>
+  <line x1="200" y1="155" x2="200" y2="155" stroke="#d4af37" stroke-width="2" opacity="0.8"/>
+  
+  <!-- Golden accents -->
+  <text x="200" y="360" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#d4af37" text-anchor="middle" opacity="0.5">LIN</text>
+</svg>

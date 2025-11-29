@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <!-- APP适配 -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>财经日历 - PROVIDENCE</title>
+    <link rel="icon" href="../favicon.ico" />
+    <link rel="stylesheet" href="styles.css?v=1763897782" />
+    <style>
+        /* 全局重置 - 移动端和APP适配 */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: pan-y;
+        }
+
+        /* 页面进入动画 - 流畅过渡 */
+        body {
+            opacity: 0;
+            animation: pageFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            will-change: opacity;
+        }
+
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 内容区域进入动画 */
+        #app {
+            opacity: 0;
+            animation: contentFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
+            will-change: opacity;
+        }
+
+        @keyframes contentFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+        }
+        }
+
+        /* 顶部栏 - 固定定位，参考 lawyer-team.html 和 projects.html 风格 */
+        .topbar {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 1000 !important;
+            padding: 14px 16px;
+            padding-top: calc(14px + env(safe-area-inset-top, 0));
+            padding-left: max(16px, env(safe-area-inset-left));
+            padding-right: max(16px, env(safe-area-inset-right));
+            background: rgba(10, 23, 35, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            /* 顶部栏进入动画 */
+            opacity: 0;
+            transform: translateY(-10px);
+            animation: topbarSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            will-change: opacity, transform;
+        }
+
+        @keyframes topbarSlideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .brand .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.12) !important;
+    }
+
+    .back-btn:active {
+        transform: scale(0.95) !important;
+    }
+
+        .brand h1 {
+            display: inline-block;
+            margin: 0;
+            white-space: nowrap;
+            flex-shrink: 1;
+            font-size: 18px;
+            letter-spacing: 0.3px;
+            color: var(--gold2, #c7b58a);
+            font-weight: 600;
+        }
+
+        /* 内容区域 - 添加顶部 padding 避免被固定顶部栏遮挡 */
+        .content-other {
+            padding-top: calc(60px + env(safe-area-inset-top, 0) + 20px);
+            padding-left: max(16px, env(safe-area-inset-left));
+            padding-right: max(16px, env(safe-area-inset-right));
+            padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
+        }
+
+        /* 信息卡片进入动画 */
+        .info-card {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cardFadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            will-change: opacity, transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        @keyframes cardFadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0) translateZ(0);
+            }
+        }
+
+        /* 信息卡片延迟动画 - 交错效果 */
+        .info-card:nth-child(1) { animation-delay: 0.1s; }
+        .info-card:nth-child(2) { animation-delay: 0.2s; }
+        .info-card:nth-child(3) { animation-delay: 0.3s; }
+
+        /* 筛选器和日期导航进入动画 */
+        .calendar-filters,
+        .date-nav {
+            opacity: 0;
+            transform: translateY(20px) translateZ(0);
+            animation: cardFadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+            will-change: opacity, transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        /* 确保所有section对齐整齐 */
+        .calendar-info,
+        .calendar-filters,
+        .date-nav,
+        .calendar-events {
+            width: 100%;
+            box-sizing: border-box;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 事件卡片进入动画 */
+        .event-card {
+            opacity: 0;
+            transform: translateY(20px) translateZ(0);
+            animation: cardFadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            will-change: opacity, transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        /* 事件卡片延迟动画 - 交错效果 */
+        .event-card:nth-child(1) { animation-delay: 0.05s; }
+        .event-card:nth-child(2) { animation-delay: 0.1s; }
+        .event-card:nth-child(3) { animation-delay: 0.15s; }
+        .event-card:nth-child(4) { animation-delay: 0.2s; }
+        .event-card:nth-child(5) { animation-delay: 0.25s; }
+        .event-card:nth-child(6) { animation-delay: 0.3s; }
+        .event-card:nth-child(n+7) { animation-delay: 0.35s; }
+
+        /* 移动端和APP优化 */
+        @media screen and (max-width: 480px) {
+            .content-other {
+                padding: 12px;
+                padding-top: calc(12px + 60px + env(safe-area-inset-top, 0));
+            }
+
+            .calendar-info {
+                padding: 12px;
+            }
+
+            .info-card {
+                padding: 14px;
+                margin-bottom: 10px;
+            }
+
+            .calendar-filters {
+                padding: 10px 12px;
+                margin-bottom: 10px;
+            }
+
+            .date-nav {
+                padding: 12px;
+                margin-bottom: 10px;
+            }
+
+            .filter-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* APP端优化 - 安全区域适配 */
+        @supports (padding: max(0px)) {
+            .content-other {
+                padding-left: max(16px, env(safe-area-inset-left));
+                padding-right: max(16px, env(safe-area-inset-right));
+            }
+        }
+    </style>
+</head>
+
+<body class="page-other">
+    <div id="app">
+        <!-- 固定顶部栏 - 参考 lawyer-team.html 和 projects.html 风格 -->
+        <div class="topbar">
+            <div class="brand">
+                <a href="javascript:void(0);" onclick="history.back(); return false;" class="back-btn">‹</a>
+                <h1>财经日历</h1>
+            </div>
+        </div>
+
+        <main class="content-other">
+            <!-- 说明 -->
+            <section class="calendar-info">
+                <div class="info-card">
+                    <div class="info-title">📅 什么是财经日历？</div>
+                    <p>财经日历记录全球重要的经济数据发布和重大事件，帮助投资者了解市场动态，做出明智的投资决策。</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">🔔 重要性说明</div>
+                    <div class="importance-legend">
+                        <div class="legend-item">
+                            <span class="importance-dot high"></span>
+                            <span>高 - 市场影响重大，可能引起市场剧烈波动</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="importance-dot medium"></span>
+                            <span>中 - 值得关注，对特定市场有一定影响</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="importance-dot low"></span>
+                            <span>低 - 一般影响，仅供参考</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">💡 为什么要关注财经日历？</div>
+                    <p>经济数据和重大事件是影响金融市场走势的关键因素。提前了解这些信息，可以帮助您：</p>
+                    <ul style="margin:10px 0 0 0;padding-left:20px;line-height:1.8">
+                        <li>把握市场节奏，避免在重要数据发布前后盲目操作</li>
+                        <li>识别投资机会，利用市场波动获取收益</li>
+                        <li>控制风险敞口，在高波动期做好防御准备</li>
+                        <li>理解市场逻辑，提升投资决策的专业性</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 筛选器 -->
+            <section class="calendar-filters">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-type="data">数据</button>
+                    <button class="filter-tab" data-type="event">事件</button>
+                    <button class="filter-tab" data-type="holiday">假期</button>
+                </div>
+
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label class="filter-label">地区</label>
+                        <select class="filter-select" id="regionFilter">
+                            <option value="all">全部</option>
+                            <option value="cn">中国</option>
+                            <option value="us">美国</option>
+                            <option value="eu">欧洲</option>
+                            <option value="jp">日本</option>
+                            <option value="uk">英国</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label">重要性</label>
+                        <select class="filter-select" id="importanceFilter">
+                            <option value="all">全部</option>
+                            <option value="high">高</option>
+                            <option value="medium">中</option>
+                            <option value="low">低</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 日期导航 -->
+            <section class="date-nav">
+                <button class="date-nav-btn" id="prevDay">‹</button>
+                <div class="date-display" id="currentDate">2025-10-17</div>
+                <button class="date-nav-btn" id="nextDay">›</button>
+                <button class="date-today-btn" id="todayBtn">今天</button>
+            </section>
+
+            <!-- 日历事件列表 -->
+            <section class="calendar-events" id="calendarEvents">
+                <!-- 事件加载中 -->
+                <div class="loading-indicator">
+                    <div class="loading-spinner"></div>
+                    <div>加载中...</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 底部导航已移除 -->
+    </div>
+
+    <script defer src="calendar.js?v=1763897782"></script>
+    <script>
+        // 优化页面进入流畅度
+        document.addEventListener('DOMContentLoaded', function() {
+            // 预加载关键资源
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(() => {
+                    // 预加载字体和关键资源
+                    const link = document.createElement('link');
+                    link.rel = 'preload';
+                    link.as = 'style';
+                    link.href = 'styles.css';
+                    document.head.appendChild(link);
+                });
+            }
+
+            // 优化滚动性能
+            if ('scrollBehavior' in document.documentElement.style) {
+                document.documentElement.style.scrollBehavior = 'smooth';
+            }
+
+            // 为事件卡片添加进入动画
+            const observer = new MutationObserver(function () {
+                const cards = document.querySelectorAll('.event-card');
+                if (cards && cards.length > 0) {
+                    cards.forEach((card, index) => {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        card.style.animation = `cardFadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${0.1 + index * 0.05}s forwards`;
+                    });
+                    observer.disconnect();
+                }
+            });
+
+            observer.observe(document.getElementById('calendarEvents'), {
+                childList: true,
+                subtree: true
+            });
+        });
+
+        // 卡片进入动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes cardFadeInUp {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            .event-card {
+                will-change: opacity, transform;
+                transform: translateZ(0);
+                backface-visibility: hidden;
+                -webkit-backface-visibility: hidden;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script defer src="smart-swipe-control.js?v=1763897782"></script>
+
+
+</body>
+
+</html>

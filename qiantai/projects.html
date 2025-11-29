@@ -1,0 +1,1650 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>PROVIDENCE · 投资项目</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="styles.css?v=1732624000" />
+    <script src="anti-scan.js?v=1763897782"></script>
+    <script src="ios-toast.js?v=1763897782"></script>
+    <style>
+      :root {
+        --navy: #08141f;
+        --navy2: #0f1f2e;
+        --navy3: #0a1723;
+        --paper: #f3f5f7;
+        --ink: #0f172a;
+        --muted: #6b7280;
+        --gold: #9f8b54;
+        --gold2: #c7b58a;
+        --lineL: #e2e6ed;
+        --lineD: rgba(255, 255, 255, 0.08);
+        --radius: 14px;
+      }
+
+      * {
+        box-sizing: border-box;
+        /* 移动端优化 */
+        touch-action: pan-x pan-y;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      html,
+      body {
+        height: 100%;
+        /* 禁止橡皮筋露白 */
+        overscroll-behavior: none;
+        -webkit-overscroll-behavior: none;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          "SF Pro Text",
+          "PingFang SC",
+          Segoe UI,
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif;
+        color: #e9eef6;
+        background: linear-gradient(
+          180deg,
+          var(--navy3),
+          var(--navy2) 40%,
+          var(--navy)
+        );
+        background-attachment: fixed;
+        padding-bottom: env(safe-area-inset-bottom, 80px);
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        /* 页面进入动画 */
+        opacity: 0;
+        animation: pageFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        will-change: opacity;
+      }
+
+      @keyframes pageFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px) translateZ(0);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) translateZ(0);
+        }
+      }
+
+      /* 底部导航栏 - 使用全局样式，移除内联覆盖 */
+
+      .ico-home {
+        background-image: url("img/zy.png?v=1763897782") !important;
+        background-size: contain !important;
+        background-position: center !important;
+      }
+
+      .ico-finance {
+        background-image: url("img/w1.png?v=1763897782") !important;
+        background-size: contain !important;
+        background-position: center !important;
+      }
+
+      .ico-market {
+        background-image: url("img/xm.png?v=1763897782") !important;
+        background-size: contain !important;
+        background-position: center !important;
+      }
+
+      .ico-message {
+        background-image: url("img/34.png?v=1763897782") !important;
+        background-size: contain !important;
+        background-position: center !important;
+      }
+
+      .ico-me {
+        background-image: url("img/wd.png?v=1763897782") !important;
+        background-size: contain !important;
+        background-position: center !important;
+      }
+
+      /* 顶部栏 - 固定定位 + 安全区域适配 */
+      .topbar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 1000 !important;
+        padding: 14px 16px;
+        padding-top: calc(14px + env(safe-area-inset-top, 0));
+        background: rgba(10, 23, 35, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        /* 顶部栏进入动画 */
+        opacity: 0;
+        transform: translateY(-10px);
+        animation: topbarSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        will-change: opacity, transform;
+      }
+
+      @keyframes topbarSlideIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .brand {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+      }
+
+      .back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+        background: rgba(232, 201, 145, 0.15) !important;
+        border: 1px solid rgba(232, 201, 145, 0.3) !important;
+        color: #e8c991 !important;
+        font-size: 20px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        text-decoration: none;
+}
+
+      .back-btn:hover {
+        background: rgba(255, 255, 255, 0.12) !important;
+      }
+
+      .back-btn:active {
+        transform: scale(0.95) !important;
+      }
+
+      .brand h1 {
+        display: inline-block;
+        margin: 0;
+        white-space: nowrap;
+        flex-shrink: 1;
+        font-size: 18px;
+        letter-spacing: 0.3px;
+        color: var(--gold2);
+        font-weight: 600;
+      }
+
+      .badge {
+        margin-left: auto;
+        font-size: 11px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(159, 139, 84, 0.4);
+        background: rgba(159, 139, 84, 0.15);
+        color: var(--gold2);
+      }
+
+      /* Hero */
+      .hero {
+        padding: 20px 16px;
+        padding-top: calc(60px + env(safe-area-inset-top, 0) + 20px);
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+        border-bottom: 1px solid var(--lineD);
+      }
+
+      .hero h2 {
+        margin: 0 0 6px;
+        font-size: 22px;
+        color: var(--gold2);
+        font-weight: 600;
+      }
+
+      .hero p {
+        margin: 0;
+        color: #c9d2dd;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .kpis {
+        display: flex;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .kpi {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid var(--lineD);
+        border-radius: 12px;
+        padding: 10px;
+        text-align: center;
+      }
+
+      .kpi b {
+        display: block;
+        font-size: 16px;
+        color: #ffffff;
+        font-weight: 600;
+      }
+
+      .kpi small {
+        font-size: 11px;
+        color: #aeb8c6;
+      }
+
+      /* 区块容器（白卡） */
+      .section {
+        margin: 16px;
+        margin-left: max(16px, env(safe-area-inset-left));
+        margin-right: max(16px, env(safe-area-inset-right));
+        background: rgba(243, 245, 247, 0.96);
+        color: var(--ink);
+        border: 1px solid var(--lineL);
+        border-radius: var(--radius);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        /* 卡片进入动画 */
+        opacity: 0;
+        transform: translateY(20px) translateZ(0);
+        animation: sectionFadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        will-change: opacity, transform;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+
+      @keyframes sectionFadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0) translateZ(0);
+        }
+      }
+
+      /* 移动端优化 */
+      @media screen and (max-width: 480px) {
+        .hero {
+          padding: 16px 12px;
+          padding-top: calc(60px + env(safe-area-inset-top, 0) + 16px);
+        }
+
+        .section {
+          margin: 12px;
+          margin-left: max(12px, env(safe-area-inset-left));
+          margin-right: max(12px, env(safe-area-inset-right));
+        }
+      }
+
+      /* 卡片延迟动画 - 交错效果 */
+      .section:nth-child(1) { animation-delay: 0.1s; }
+      .section:nth-child(2) { animation-delay: 0.2s; }
+      .section:nth-child(3) { animation-delay: 0.3s; }
+      .section:nth-child(4) { animation-delay: 0.4s; }
+      .section:nth-child(n+5) { animation-delay: 0.5s; }
+
+      .section .head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 14px 4px;
+      }
+
+      .section .head h3 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 600;
+        color: #0f172a;
+      }
+
+      .section .head small {
+        margin-left: auto;
+        font-size: 12px;
+        color: #617087;
+      }
+
+      /* 新手专区 */
+      .benefits {
+        padding: 8px 14px 14px;
+      }
+
+      .blist {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .b {
+        background: #fff;
+        border: 1px solid var(--lineL);
+        border-radius: 12px;
+        padding: 10px;
+        cursor: pointer;
+        transition:
+          transform 0.1s ease,
+          opacity 0.1s ease;
+        will-change: transform;
+      }
+
+      .b:hover {
+        transform: translateY(-2px);
+      }
+
+      .b:active {
+        transform: translateY(0) scale(0.98);
+      }
+
+      .b b {
+        display: block;
+        color: #0f172a;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .b small {
+        font-size: 12px;
+        color: #6b7280;
+        display: block;
+      }
+
+      .b .rate {
+        font-size: 14px;
+        color: var(--gold);
+        font-weight: 600;
+        margin-top: 6px;
+      }
+
+      .tips {
+        margin-top: 10px;
+        font-size: 12px;
+        color: #6c798c;
+        line-height: 1.6;
+      }
+
+      /* VIP专区 */
+      .vip {
+        padding: 8px 14px 14px;
+      }
+
+      .viptop {
+        background: linear-gradient(180deg, var(--gold2), var(--gold));
+        color: #0b1220;
+        border-radius: 12px;
+        padding: 12px;
+        border: 1px solid rgba(159, 139, 84, 0.6);
+        margin-bottom: 12px;
+      }
+
+      .viptop b {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .viptop small {
+        font-size: 12px;
+        opacity: 0.9;
+      }
+
+      .vgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .vcard {
+        background: rgba(243, 245, 247, 0.96);
+        color: #0f172a;
+        border: 1px solid rgba(200, 186, 148, 0.2);
+        border-radius: 16px;
+        padding: 16px;
+        cursor: pointer;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(6,12,18,0.25), 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .vcard:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(6,12,18,0.3), 0 4px 12px rgba(200, 186, 148, 0.2);
+        border-color: rgba(200, 186, 148, 0.35);
+        background: linear-gradient(135deg, rgba(200, 186, 148, 0.18), rgba(200, 186, 148, 0.08));
+      }
+
+      .vcard:active {
+        transform: translateY(-2px) scale(0.98);
+      }
+
+      .vcard b {
+        color: #0f172a;
+        font-weight: 600;
+        font-size: 18px;
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .vcard .meta {
+        font-size: 13px;
+        color: #6b7280;
+        margin-top: 4px;
+        margin-bottom: 8px;
+      }
+
+      .vcard .tag {
+        display: inline-block;
+        background: rgba(200, 186, 148, 0.15);
+        border: 1px solid rgba(200, 186, 148, 0.3);
+        color: #0f172a;
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 600;
+        margin-top: 8px;
+      }
+
+      .tag {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 11px;
+        color: #0b1220;
+        background: linear-gradient(180deg, var(--gold2), var(--gold));
+        border: 1px solid rgba(159, 139, 84, 0.55);
+      }
+
+      /* 热门专区 */
+      .hot {
+        padding: 8px 14px 14px;
+      }
+
+      .pcard {
+        background: linear-gradient(135deg, rgba(200, 186, 148, 0.15), rgba(200, 186, 148, 0.05));
+        color: #e9eef6;
+        border: 1px solid rgba(200, 186, 148, 0.2);
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 16px;
+        cursor: pointer;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(6,12,18,0.25), 0 2px 8px rgba(0,0,0,0.1);
+      }
+
+      .pcard:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(6,12,18,0.3), 0 4px 12px rgba(200, 186, 148, 0.2);
+        border-color: rgba(200, 186, 148, 0.35);
+        background: linear-gradient(135deg, rgba(200, 186, 148, 0.18), rgba(200, 186, 148, 0.08));
+      }
+
+      .pcard:active {
+        transform: translateY(-2px) scale(0.98);
+      }
+
+      .phead {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .phead b {
+        color: #0f172a;
+        font-weight: 600;
+      }
+
+      .phead span {
+        font-size: 12px;
+        color: #6b7280;
+      }
+
+      .pm {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .pm img {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid rgba(159, 139, 84, 0.35);
+      }
+
+      .pm span {
+        font-size: 12px;
+        color: #3e4754;
+      }
+
+      .pbrief {
+        margin-top: 8px;
+        font-size: 13px;
+        color: #0f172a;
+        line-height: 1.55;
+      }
+
+      /* 主题入口（固收） */
+      .theme {
+        margin: 16px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid var(--lineD);
+        border-radius: 14px;
+        padding: 14px;
+      }
+
+      .theme h4 {
+        margin: 0 0 6px;
+        color: #e8edf6;
+        font-weight: 600;
+      }
+
+      .theme p {
+        margin: 0;
+        color: #b9c4d2;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .btn-mini {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 8px 14px;
+        border-radius: 10px;
+        font-size: 13px;
+        color: #0b1220;
+        cursor: pointer;
+        background: linear-gradient(180deg, var(--gold2), var(--gold));
+        border: 1px solid rgba(159, 139, 84, 0.6);
+        text-decoration: none;
+        transition:
+          transform 0.1s ease,
+          opacity 0.1s ease;
+        will-change: transform;
+      }
+
+      .btn-mini:active {
+        transform: scale(0.98);
+      }
+
+      /* 加载状态 */
+      .loading-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #c8d2dd;
+      }
+      .spinner {
+        width: 24px;
+        height: 24px;
+        border: 3px solid rgba(200, 186, 148, 0.2);
+        border-top-color: var(--gold2);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: 0 auto 12px;
+        will-change: transform;
+        transform: translateZ(0);
+      }
+      @keyframes spin {
+        to {
+          transform: translateZ(0) rotate(360deg);
+        }
+      }
+
+      .footerpad {
+        height: 16px;
+      }
+
+      /* 闪烁提示动画 */
+      @keyframes flash {
+        0%, 100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        50% {
+          opacity: 0.3;
+          transform: translateY(-4px);
+        }
+      }
+
+      .flash-indicator {
+        display: inline-block;
+        animation: flash 1s ease-in-out infinite;
+      }
+    </style>
+      <script src="api-config.js?v=1763897782"></script>
+    <!-- token-manager.js 已包含在 api-new.js 中 -->
+    <script src="smart-swipe-control.js?v=1763897782"></script>
+
+</head>
+  <body>
+    <div class="topbar">
+      <div class="brand">
+        <a href="javascript:void(0);" onclick="history.back(); return false;" class="back-btn" style="display: flex; align-items: center; justify-content: center;">‹</a>
+        <h1>稳健增值资产池</h1>
+      </div>
+    </div>
+
+    <!-- Hero - 稳健增值资产池卡片 -->
+    <section class="hero">
+      <div class="hero-card" style="background: linear-gradient(135deg, rgba(200, 186, 148, 0.15), rgba(200, 186, 148, 0.05)); border-radius: 16px; padding: 16px; margin-bottom: 16px; border: 1px solid rgba(200, 186, 148, 0.2);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <h2 style="margin: 0; color: var(--gold2); font-size: 18px; font-weight: 600;">稳健增值资产池</h2>
+          <a class="btn-mini" href="projects-list.html" style="white-space: nowrap; padding: 6px 14px; font-size: 12px;">查看固收系列</a>
+        </div>
+        <div style="line-height: 1.6; color: rgba(255, 255, 255, 0.85); font-size: 13px; margin-bottom: 12px;">
+          <p style="margin: 0;">以固收为核心，辅以可转债、基金与精选 IPO 配售，追求长期稳健复利。</p>
+        </div>
+        <!-- 募集资金和参与人数 -->
+        <div style="background: rgba(8, 20, 31, 0.4); border-radius: 10px; padding: 10px; border: 1px solid rgba(200, 186, 148, 0.2);">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <div style="font-size: 11px; color: rgba(200, 186, 148, 0.8); margin-bottom: 4px;">目前募集资金</div>
+              <div id="totalAmount" style="font-size: 16px; color: #d4af37; font-weight: 700; font-family: 'Courier New', monospace; text-shadow: 0 0 8px rgba(212, 175, 55, 0.6), 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(212, 175, 55, 0.4); position: relative;">
+                <span id="amountValue">¥97,538,437</span>
+                <span id="amountFlash" class="flash-indicator" style="display: none; margin-left: 6px; color: #ffd700; font-size: 14px;">↑</span>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 11px; color: rgba(200, 186, 148, 0.8); margin-bottom: 4px;">当前参与人数</div>
+              <div id="participantCount" style="font-size: 16px; color: #fff; font-weight: 600; position: relative;">
+                <span id="participantValue">1,234</span>
+                <span id="participantFlash" class="flash-indicator" style="display: none; margin-left: 6px; color: #ffd700; font-size: 14px; animation: flash 1s ease-in-out infinite;">↑</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 新手专区 -->
+    <section class="section">
+      <div class="head">
+        <h3>新手专区</h3>
+        <small>第一次配置，从这里开始</small>
+      </div>
+      <div class="benefits" id="newbieSection">
+        <div class="blist">
+          <div class="b" onclick="location.href='trial-money.html'">
+            <b>新人体验金</b>
+            <small>首次投资专享体验，低门槛高收益</small>
+            <div class="rate">立即体验</div>
+          </div>
+          <div class="b" onclick="location.href='guide.html'">
+            <b>新手指南</b>
+            <small>快速了解平台操作流程</small>
+            <div class="rate">✨ 查看指南</div>
+          </div>
+        </div>
+        <div class="tips">提示：新手项目以固收及低波动策略为主，强调回撤控制与资金效率。</div>
+      </div>
+    </section>
+
+    <!-- VIP专区 -->
+    <section class="section">
+      <div class="head">
+        <h3>VIP专区</h3>
+        <small>VIP 权益 · 加息与专属项目</small>
+      </div>
+      <div class="vip" id="vipSection">
+        <div
+          class="viptop"
+          style="cursor: pointer"
+          onclick="location.href='vip-benefits.html'"
+        >
+          <b>VIP 加息权益</b>
+          <small>VIP3+ 享额外 +0.3%~0.8% 年化（随等级浮动）</small>
+        </div>
+        <div class="vgrid" id="vipProjects">
+          <div class="vcard" onclick="location.href='projects-list.html'">
+            <b>固收优选二期</b>
+            <div class="meta">可转债增强</div>
+            <div class="tag">VIP3+</div>
+          </div>
+          <div class="vcard" onclick="location.href='projects-list.html'">
+            <b>稳健增值专享</b>
+            <div class="meta">低波动策略</div>
+            <div class="tag">VIP5+</div>
+          </div>
+        </div>
+      </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- USDT增值计划 -->
+    <section class="section">
+      <div class="head">
+        <h3>USDT增值计划</h3>
+        <small>💎 充值即享2%额外收益，稳健增值首选</small>
+      </div>
+      <div class="hot" id="hotSection">
+        <div class="pcard">
+          <div class="phead" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <b style="color: #0f172a; font-size: 18px; font-weight: 600;">USDT增值计划</b>
+            <span style="color: #0f172a; font-weight: 600; font-size: 13px; padding: 4px 10px; background: rgba(200, 186, 148, 0.3); border: 1px solid rgba(200, 186, 148, 0.3); border-radius: 8px;">额外奖励</span>
+          </div>
+          <div class="pbrief" style="margin-top: 12px; line-height: 1.8;">
+            <p style="margin: 0 0 8px; color: #0f172a; font-size: 13px;">
+              <strong style="color: #0f172a; font-weight: 700;">充值即送2%额外收益</strong>，单笔充值即可享受增值奖励
+            </p>
+            <p style="margin: 0 0 8px; color: #0f172a; font-size: 13px;">
+              <strong style="color: #0f172a; font-weight: 700;">USDT稳定币种</strong>，全球流通，安全可靠，价值稳定
+            </p>
+            <p style="margin: 0 0 8px; color: #0f172a; font-size: 13px;">
+              <strong style="color: #0f172a; font-weight: 700;">专业资产管理</strong>，多重风控保障，稳健收益有保障
+            </p>
+            <p style="margin: 0; color: #0f172a; font-size: 13px;">
+              <strong style="color: #0f172a; font-weight: 700;">快速到账</strong>，充值即时到账，收益实时计算
+            </p>
+          </div>
+          <div style="margin-top: 16px; display: flex; gap: 10px;">
+            <a href="recharge.html" class="btn-mini" style="flex: 1; text-align: center; text-decoration: none; padding: 12px 20px; font-size: 14px; font-weight: 600; background: linear-gradient(180deg, var(--gold2), var(--gold)); border: 1px solid rgba(200, 186, 148, 0.6); color: #0b1220; border-radius: 10px;">
+              立即充值USDT
+            </a>
+            <a href="projects-list.html" class="btn-mini" style="flex: 1; text-align: center; text-decoration: none; padding: 12px 20px; font-size: 14px; font-weight: 600; background: rgba(8, 20, 31, 0.4); border: 1px solid rgba(200, 186, 148, 0.4); color: var(--gold2); border-radius: 10px;">
+              查看专属项目
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 专属项目的额外奖励 -->
+    <section class="section" style="background: linear-gradient(135deg, rgba(8, 20, 31, 0.95), rgba(15, 31, 46, 0.95)); border: 1px solid rgba(200, 186, 148, 0.2);">
+      <div class="head" style="border-bottom: 1px solid rgba(200, 186, 148, 0.15);">
+        <h3 style="color: var(--gold2);">专属项目的额外奖励</h3>
+        <small style="color: rgba(200, 186, 148, 0.8);">VIP专属项目额外收益加成</small>
+      </div>
+      <div style="padding: 16px;">
+        <div style="display: grid; gap: 12px;">
+          <div style="background: linear-gradient(135deg, rgba(200, 186, 148, 0.15), rgba(200, 186, 148, 0.08)); border: 1px solid rgba(200, 186, 148, 0.25); border-radius: 12px; padding: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <strong style="color: var(--gold2); font-size: 15px;">VIP3+ 额外加息</strong>
+              <span style="color: #fff; font-size: 18px; font-weight: 700;">+0.3%~0.8%</span>
+            </div>
+            <small style="color: rgba(200, 186, 148, 0.9); font-size: 12px;">根据VIP等级自动加成，随等级浮动</small>
+          </div>
+          <div style="background: linear-gradient(135deg, rgba(200, 186, 148, 0.15), rgba(200, 186, 148, 0.08)); border: 1px solid rgba(200, 186, 148, 0.25); border-radius: 12px; padding: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <strong style="color: var(--gold2); font-size: 15px;">专属项目增值收益</strong>
+              <span style="color: #fff; font-size: 18px; font-weight: 700;">+0.5%~1.2%</span>
+            </div>
+            <small style="color: rgba(200, 186, 148, 0.9); font-size: 12px;">VIP专属项目额外增值收益，收益更稳定</small>
+          </div>
+          <div style="background: linear-gradient(135deg, rgba(200, 186, 148, 0.15), rgba(200, 186, 148, 0.08)); border: 1px solid rgba(200, 186, 148, 0.25); border-radius: 12px; padding: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <strong style="color: var(--gold2); font-size: 15px;">红包奖励收益</strong>
+              <span style="color: #fff; font-size: 18px; font-weight: 700;">+0.2%~0.5%</span>
+            </div>
+            <small style="color: rgba(200, 186, 148, 0.9); font-size: 12px;">专属项目红包奖励，额外收益加成</small>
+          </div>
+        </div>
+        <div style="margin-top: 16px; text-align: center;">
+          <a href="vip-benefits.html" class="btn-mini" style="display: inline-block; text-decoration: none; padding: 10px 24px; font-size: 14px; background: linear-gradient(180deg, var(--gold2), var(--gold)); border: 1px solid rgba(200, 186, 148, 0.6); color: #0b1220;">
+            查看VIP权益详情
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 旧API已替换 -->
+    <script src="api-new.js?v=1763897782"></script>
+    <script>
+      // ========== 等待API对象加载 ==========
+      function waitForAPI() {
+        // config.js已通过script标签同步加载，这里只做快速检查
+        return new Promise((resolve) => {
+          if (window.API && window.API_CONFIG) {
+            resolve();
+            return;
+          }
+          // 快速轮询，最多等待200ms
+          let attempts = 0;
+          const check = setInterval(() => {
+            if (window.API && window.API_CONFIG || attempts++ > 2) {
+              clearInterval(check);
+              resolve();
+            }
+          }, 50);
+        });
+
+      // ========== 状态管理 ==========
+      let user = {
+        token:
+          localStorage.getItem("providence_token") ||
+          localStorage.getItem("token") ||
+          "",
+        level: 1,
+        money: 0,
+      };
+
+      let projectData = {
+        projects: [],
+        categories: [],
+      };
+
+      // ========== 初始化 ==========
+      // 优化页面进入流畅度
+      function optimizePageLoad() {
+        // 预加载关键资源
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(() => {
+            // 预加载API配置
+            const scripts = ['api-config.js', 'api-new.js'];
+            scripts.forEach(src => {
+              const link = document.createElement('link');
+              link.rel = 'preload';
+              link.as = 'script';
+              link.href = src;
+              document.head.appendChild(link);
+            });
+          });
+        }
+
+        // 优化滚动性能
+        if ('scrollBehavior' in document.documentElement.style) {
+          document.documentElement.style.scrollBehavior = 'smooth';
+        }
+      }
+
+      // 使用 requestIdleCallback 优化初始化时机
+      if (window.requestIdleCallback) {
+        requestIdleCallback(() => {
+          optimizePageLoad();
+          document.addEventListener("DOMContentLoaded", init, { once: true });
+        });
+      } else {
+        optimizePageLoad();
+        document.addEventListener("DOMContentLoaded", init, { once: true });
+      }
+
+      async function init() {
+        // 并行加载，减少等待时间
+        await Promise.all([
+          loadUserInfo().catch(() => {}),
+          loadProjects().catch(() => {}),
+        ]);
+        updateKPI();
+        // renderSections会在loadProjects中调用，这里不需要重复调用
+      }
+
+      // ========== 加载用户信息 ==========
+      async function loadUserInfo() {
+        if (!user.token) {
+          user.level = 0;
+          user.money = 0;
+          return;
+        }
+
+        try {
+          await waitForAPI();
+          // 修复：使用正确的 API 域名和路径
+          const API_BASE =
+            window.API_CONFIG?.baseURL || "https://api.4kp3l0iq.top";
+
+          // 添加超时控制（8秒）
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+          try {
+            const response = await fetch(
+              API_BASE + "/api/user/info",
+              {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  token: user.token
+                },
+                mode: 'cors',
+                credentials: 'omit',
+                signal: controller.signal
+              }
+            );
+            clearTimeout(timeoutId);
+
+            if (response.ok) {
+              const text = await response.text();
+              try {
+                const data = JSON.parse(text);
+                if ((data.code === 1 || data.code === 1 || data.code === 200) && data.data) {
+                  user.level = parseInt(data.data.level) || 1;
+                  user.money = parseFloat(data.data.money) || 0;
+                  console.log("[User] ✓ 用户信息加载成功");
+                }
+              } catch (parseError) {
+                console.warn("[User] JSON解析失败:", parseError.message);
+              }
+            } else {
+              console.warn("[User] API返回错误状态:", response.status);
+            }
+          } catch (fetchError) {
+            clearTimeout(timeoutId);
+            if (fetchError.name === 'AbortError') {
+              console.warn("[User] ⚠️ 请求超时（8秒），使用默认值");
+            } else {
+              console.warn("[User] API请求失败:", fetchError.message);
+            }
+            // 静默失败，不影响页面显示
+          }
+        } catch (e) {
+          console.warn("[User] 加载用户信息失败:", e.message);
+        }
+      }
+
+      // ========== 加载项目数据 ==========
+      async function loadProjects() {
+        try {
+          await waitForAPI();
+          let data = null;
+
+          // 优先使用统一API封装（带超时）
+          if (window.API && window.API.fund && window.API.fund.getList) {
+            try {
+              // 为统一API封装添加超时控制
+              const apiPromise = window.API.fund.getList();
+              const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('API调用超时')), 8000)
+              );
+              const result = await Promise.race([apiPromise, timeoutPromise]);
+
+              if (result && result.success && result.data) {
+                data = { code: 200, data: result.data, msg: "ok" };
+                console.log("[Projects] ✓ 使用统一API封装");
+              }
+            } catch (apiError) {
+              console.warn("[Projects] 统一API封装调用失败:", apiError.message);
+            }
+          }
+
+          // 降级方案：直接调用API（带超时）
+          if (!data) {
+            // 修复：使用正确的 API 域名和路径
+            const API_BASE =
+              window.API_CONFIG?.baseURL || "https://api.4kp3l0iq.top";
+            const token = localStorage.getItem('providence_token') || localStorage.getItem('token') || '';
+
+            // 添加超时控制（8秒）
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+            try {
+              const response = await fetch(
+                API_BASE + "/fund/api/project/all",
+                {
+                  method: 'GET',
+                  headers: {
+                    Accept: "application/json",
+                    'Content-Type': 'application/json',
+                    token: token
+                  },
+                  mode: 'cors',
+                  credentials: 'omit',
+                  signal: controller.signal
+                }
+              );
+              clearTimeout(timeoutId);
+
+              if (response.ok) {
+                const text = await response.text();
+                try {
+                  data = JSON.parse(text);
+                  console.log("[Projects] ✓ 使用直接API调用，返回数据:", data);
+                } catch (parseError) {
+                  console.warn("[Projects] JSON解析失败:", text.substring(0, 100));
+                  data = { code: -1, data: [], msg: "服务器返回格式错误" };
+                }
+              } else {
+                const errorText = await response.text();
+                console.warn("[Projects] API请求失败:", response.status, errorText.substring(0, 100));
+                data = { code: -1, data: [], msg: "API请求失败: " + response.status };
+              }
+            } catch (e) {
+              clearTimeout(timeoutId);
+              if (e.name === 'AbortError') {
+                console.warn("[Projects] ⚠️ 请求超时（8秒），显示空状态");
+                data = { code: -1, data: [], msg: "请求超时，请稍后重试" };
+              } else {
+                console.warn("[Projects] API调用失败:", e.message);
+                data = { code: -1, data: [], msg: "无法连接到服务器" };
+              }
+            }
+          }
+
+          // 处理数据
+          let projectList = null;
+          if (data && data.code === 1 && data.data) {
+            // 标准格式：{code: 1, data: [...]}
+            if (Array.isArray(data.data)) {
+              projectList = data.data;
+            } else if (data.data.list && Array.isArray(data.data.list)) {
+              projectList = data.data.list;
+            } else if (data.data.data && Array.isArray(data.data.data)) {
+              projectList = data.data.data;
+            }
+          } else if (data && data.data && Array.isArray(data.data)) {
+            projectList = data.data;
+          } else if (data && Array.isArray(data)) {
+            projectList = data;
+          }
+
+          if (projectList && projectList.length > 0) {
+            projectData.projects = [];
+            projectData.categories = projectList;
+
+            projectList.forEach((item) => {
+              // 如果是分类对象，包含list数组
+              if (item.list && Array.isArray(item.list)) {
+                item.list.forEach((p) => {
+                  p.categoryName = item.name || item.title || '';
+                  projectData.projects.push(p);
+                });
+              }
+              // 如果是项目对象，直接添加
+              else if (item.id || item.title) {
+                projectData.projects.push(item);
+              }
+            });
+
+            console.log(
+              "[Projects] ✓ 加载成功，共",
+              projectData.projects.length,
+              "个项目"
+            );
+            // 加载完成后渲染
+            renderSections();
+          } else {
+            console.warn("[Projects] ⚠️ API返回数据格式错误或为空:", data);
+            // 即使没有数据，也渲染空状态
+            projectData.projects = [];
+            projectData.categories = [];
+            renderSections();
+
+            // 显示错误提示（如果接口失败）
+            if (data && data.msg && data.msg.includes('超时')) {
+              if (typeof showToast === 'function') {
+                showToast('加载超时，请稍后重试', 3000);
+              }
+            }
+          }
+        } catch (error) {
+          console.error("[Load Projects] ❌ 加载失败:", error);
+          // 确保即使出错也渲染空状态
+          projectData.projects = [];
+          projectData.categories = [];
+          renderSections();
+
+          // 显示错误提示
+          if (typeof showToast === 'function') {
+            showToast('加载失败，请稍后重试', 3000);
+          }
+        }
+      }
+
+      // ========== 带超时的fetch ==========
+      // ========== 工具函数（已废弃，使用统一API） ==========
+      function fetchWithTimeout(url, timeout = 5000) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeout);
+        return fetch(url, {
+          signal: controller.signal,
+          headers: { Accept: "application/json" },
+        }).finally(() => {
+          clearTimeout(timer);
+        });
+      }
+
+      // ========== 更新KPI ==========
+      // 使用固定值避免刷新时数据变动
+      function updateKPI() {
+        const activeProjects = projectData.projects.filter(
+          (p) => p.status == 1
+        );
+
+        // 如果项目数据已加载，使用固定值或稳定的计算
+        // 为了避免刷新时数据变动，使用固定范围显示
+        const kpiEl = document.getElementById("kpis");
+        if (kpiEl) {
+          // 使用固定值，避免每次刷新都变动
+          kpiEl.innerHTML = `
+            <div class="kpi"><b>9%~13%</b><small>目标年化范围</small></div>
+            <div class="kpi"><b>12~24月</b><small>常见投资周期</small></div>
+            <div class="kpi"><b>¥10,000+</b><small>常见起投金额</small></div>
+        `;
+        }
+      }
+
+      // ========== 渲染各个专区 ==========
+      function renderSections() {
+        const activeProjects = projectData.projects.filter(
+          (p) => p.status == 1
+        );
+
+        // 渲染新手专区
+        renderNewbieSection(activeProjects);
+
+        // 渲染VIP专区（对应后台is_vip=1的项目）
+        renderVIPSection(activeProjects);
+
+        // 渲染USDT增值计划专区（固定内容，不依赖API）
+        renderHotSection(activeProjects);
+      }
+
+      // ========== 渲染新手专区 ==========
+      function renderNewbieSection(projects) {
+        console.log("[renderNewbieSection] 收到项目数:", projects.length);
+        // 新手项目：起投金额低、周期适中、风险较低
+        // 排除USDT增值计划Pro项目
+        console.log("[renderNewbieSection] 开始筛选新手项目...");
+        const allProjects = projects;
+        console.log("[DEBUG] 总项目数:", allProjects);
+        const newbieProjects = allProjects.filter((p) => {
+            const name = (p.name || p.title || "").toLowerCase();
+            // 排除USDT增值计划Pro相关项目
+            if (name.includes("usdt增值计划pro") || name.includes("usdt增值计划 pro")) {
+              return false;
+            }
+            const min = parseFloat(p.min_invest || p.min || 0) || 0;
+            const day = parseInt(p.total_days || p.cycle_days || p.day || 0);
+            const rate = parseFloat(p.base_rate || p.rate || p.daily_rate || 0) || 0;
+            return (
+              min <= 20000 && day >= 15 && day <= 90 && rate >= 7 && rate <= 12
+            );
+          })
+          .sort((a, b) => {
+            const aMin = parseFloat(a.min_invest || a.min || 0) || 0;
+            const bMin = parseFloat(b.min_invest || b.min || 0) || 0;
+            return aMin - bMin;
+          })
+          .slice(0, 2);
+        console.log("[DEBUG] 筛选后的新手项目:", newbieProjects);
+
+        const container = document.getElementById("newbieSection");
+        if (!container) return;
+
+        if (newbieProjects.length === 0) {
+          container.innerHTML = `
+            <div class="blist">
+                <div class="b" onclick="location.href='trial-money.html'">
+                    <b>新人体验金</b><small>首次投资专享体验，低门槛高收益</small>
+                    <div class="rate">立即体验</div>
+                </div>
+                <div class="b" onclick="location.href='guide.html'">
+                    <b>引导访问</b><small>新手引导，快速上手指南</small>
+                </div>
+            </div>
+            <div class="tips">提示：新手项目以固收及低波动策略为主，强调回撤控制与资金效率。</div>
+        `;
+          return;
+        }
+
+        // 使用 DocumentFragment 优化DOM操作
+        const fragment = document.createDocumentFragment();
+        const containerDiv = document.createElement("div");
+        containerDiv.className = "blist";
+
+        // 创建新人体验金板块卡片
+        const experienceDiv = document.createElement("div");
+        experienceDiv.className = "b";
+        experienceDiv.onclick = () => {
+          // 跳转到新人体验金页面
+          location.href = "trial-money.html";
+        };
+        experienceDiv.innerHTML = `
+        <b>新人体验金</b>
+        <small>首次投资专享体验，低门槛高收益</small>
+        <div class="rate">立即体验</div>
+    `;
+        containerDiv.appendChild(experienceDiv);
+
+        // 创建引导卡片
+        const guideDiv = document.createElement("div");
+        guideDiv.className = "b";
+        guideDiv.onclick = () => (location.href = "guide.html");
+        guideDiv.innerHTML = `
+        <img src="img/guide.png" alt="引导" style="width:24px;height:24px;margin-bottom:4px;" onerror="this.style.display='none'" />
+        <b>引导访问</b>
+        <small>新手引导，快速上手指南</small>
+        <div class="rate">✨ 查看指南</div>
+    `;
+        containerDiv.appendChild(guideDiv);
+
+        // 创建项目卡片
+        newbieProjects.forEach((p) => {
+          const rate = parseFloat(p.base_rate || p.rate || p.daily_rate || 0) || 0;
+          const vip = parseFloat(p.vip_rate || 0) || 0;
+          const add = parseFloat(p.added_rate || p.added || 0) || 0;
+          const gift = parseFloat(p.gift_rate || p.gift || 0) || 0;
+          const totalRate = rate + vip + add + gift;
+          const min = parseFloat(p.min_invest || p.min || 0) || 0;
+
+          const projectDiv = document.createElement("div");
+          projectDiv.className = "b";
+          projectDiv.onclick = () => goToDetail(p.id);
+          projectDiv.innerHTML = `
+            <b>${p.name || p.title || "投资产品"}</b>
+            <small>起投 ¥${formatMoney(min)}</small>
+        `;
+          containerDiv.appendChild(projectDiv);
+        });
+
+        fragment.appendChild(containerDiv);
+
+        const tipsDiv = document.createElement("div");
+        tipsDiv.className = "tips";
+        tipsDiv.textContent =
+          "提示：新手项目以固收及低波动策略为主，强调回撤控制与资金效率。";
+        fragment.appendChild(tipsDiv);
+
+        container.innerHTML = "";
+        container.appendChild(fragment);
+      }
+
+      // ========== 渲染推荐专区 ==========
+      function renderRecommendSection(projects) {
+        // 推荐项目：对应后台is_recommend=1的项目
+        const recommendProjects = projects
+          .filter((p) => {
+            // 检查is_recommend字段（可能是1、'1'、true等）
+            return p.is_recommend == 1 || p.is_recommend === '1' || p.is_recommend === true || p.recommend == 1 || p.recommend === '1' || p.recommend === true;
+          })
+          .slice(0, 4); // 最多显示4个
+
+        const container = document.getElementById("recommendSection");
+        if (!container) return;
+
+        if (recommendProjects.length === 0) {
+          container.innerHTML = `
+            <div class="blist">
+                <div class="b" style="opacity: 0.6;">
+                    <b>暂无推荐项目</b><small>敬请期待</small>
+                </div>
+            </div>
+        `;
+          return;
+        }
+
+        // 使用 DocumentFragment 优化DOM操作
+        const fragment = document.createDocumentFragment();
+        const containerDiv = document.createElement("div");
+        containerDiv.className = "blist";
+
+        // 创建项目卡片
+        recommendProjects.forEach((p) => {
+          const rate = parseFloat(p.base_rate || p.rate || p.daily_rate || 0) || 0;
+          const vip = parseFloat(p.vip_rate || 0) || 0;
+          const add = parseFloat(p.added_rate || p.added || 0) || 0;
+          const gift = parseFloat(p.gift_rate || p.gift || 0) || 0;
+          const totalRate = rate + vip + add + gift;
+          const min = parseFloat(p.min_invest || p.min || 0) || 0;
+
+          const projectDiv = document.createElement("div");
+          projectDiv.className = "b";
+          projectDiv.onclick = () => goToDetail(p.id);
+          projectDiv.innerHTML = `
+            <b>${p.name || p.title || "投资产品"}</b>
+            <small>起投 ¥${formatMoney(min)}</small>
+        `;
+          containerDiv.appendChild(projectDiv);
+        });
+
+        fragment.appendChild(containerDiv);
+        container.innerHTML = "";
+        container.appendChild(fragment);
+      }
+
+      // ========== 渲染VIP专区 ==========
+      function renderVIPSection(projects) {
+        // VIP项目：对应后台is_vip=1的项目
+        const vipProjects = projects
+          .filter((p) => {
+            // 检查is_vip字段（可能是1、'1'、true等）
+            return p.is_vip == 1 || p.is_vip === '1' || p.is_vip === true || p.vip == 1 || p.vip === '1' || p.vip === true;
+          })
+          .sort((a, b) => {
+            const aRate =
+              (parseFloat(a.rate) || 0) + (parseFloat(a.vip_rate) || 0);
+            const bRate =
+              (parseFloat(b.rate) || 0) + (parseFloat(b.vip_rate) || 0);
+            return bRate - aRate;
+          })
+          .slice(0, 2);
+
+        const container = document.getElementById("vipProjects");
+        if (!container) return;
+
+        if (vipProjects.length === 0) {
+          container.innerHTML = `
+            <div class="vcard" style="background: linear-gradient(135deg, rgba(200, 186, 148, 0.15), rgba(200, 186, 148, 0.05)); border-radius: 16px; padding: 16px; border: 1px solid rgba(200, 186, 148, 0.2); box-shadow: 0 8px 32px rgba(6,12,18,0.25), 0 2px 8px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <b style="color: var(--gold2); font-size: 18px; font-weight: 600; margin: 0;">固收优选二期</b>
+                    <span class="tag" style="background: rgba(200, 186, 148, 0.15); border: 1px solid rgba(200, 186, 148, 0.3); color: var(--gold2); padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600;">VIP3+</span>
+                </div>
+                <div class="meta" style="font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 12px;">可转债增强</div>
+                <div style="line-height: 1.6; color: rgba(255, 255, 255, 0.85); font-size: 13px; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                        <span>年化收益</span>
+                        <span style="color: var(--gold2); font-weight: 600;">8.50%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                        <span>投资周期</span>
+                        <span>90天</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>起投金额</span>
+                        <span>¥50,000</span>
+                    </div>
+                </div>
+            </div>
+            <div class="vcard" style="background: linear-gradient(135deg, rgba(200, 186, 148, 0.15), rgba(200, 186, 148, 0.05)); border-radius: 16px; padding: 16px; border: 1px solid rgba(200, 186, 148, 0.2); box-shadow: 0 8px 32px rgba(6,12,18,0.25), 0 2px 8px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <b style="color: var(--gold2); font-size: 18px; font-weight: 600; margin: 0;">中概进取 G2</b>
+                    <span class="tag" style="background: rgba(200, 186, 148, 0.15); border: 1px solid rgba(200, 186, 148, 0.3); color: var(--gold2); padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600;">VIP Only</span>
+                </div>
+                <div class="meta" style="font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 12px;">港美高增速</div>
+                <div style="line-height: 1.6; color: rgba(255, 255, 255, 0.85); font-size: 13px; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                        <span>年化收益</span>
+                        <span style="color: var(--gold2); font-weight: 600;">12.00%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                        <span>投资周期</span>
+                        <span>180天</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>起投金额</span>
+                        <span>¥100,000</span>
+                    </div>
+                </div>
+            </div>
+        `;
+          return;
+        }
+
+        const html = vipProjects
+          .map((p) => {
+            const rate = parseFloat(p.base_rate || p.rate || p.daily_rate || 0) || 0;
+            const vip = parseFloat(p.vip_rate || 0) || 0;
+            const add = parseFloat(p.added_rate || p.added || 0) || 0;
+            const gift = parseFloat(p.gift_rate || p.gift || 0) || 0;
+            const totalRate = rate + vip + add + gift;
+            const vReq = parseInt(p.vip || 0) || 0;
+            const tagText =
+              vReq > 0
+                ? `VIP${vReq}`
+                : vip > 0 || add > 0 || gift > 0
+                  ? "VIP3+"
+                  : "VIP";
+
+            const minInvest = parseFloat(p.min_invest || p.min_money || 0) || 0;
+            const maxInvest = parseFloat(p.max_invest || p.max_money || 0) || 0;
+            const cycle = parseInt(p.cycle || p.days || 0) || 0;
+            const collected = parseFloat(p.collected || p.sold || 0) || 0;
+            const total = parseFloat(p.total || p.total_amount || 0) || 0;
+            const progress = total > 0 ? Math.min((collected / total) * 100, 100) : 0;
+
+            return `
+            <div class="vcard" onclick="goToDetail(${p.id}); return false;" style="background: linear-gradient(135deg, rgba(200, 186, 148, 0.15), rgba(200, 186, 148, 0.05)); border-radius: 16px; padding: 16px; border: 1px solid rgba(200, 186, 148, 0.2); box-shadow: 0 8px 32px rgba(6,12,18,0.25), 0 2px 8px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <b style="color: var(--gold2); font-size: 18px; font-weight: 600; margin: 0;">${p.name || p.title || "投资产品"}</b>
+                    <span class="tag" style="background: rgba(200, 186, 148, 0.15); border: 1px solid rgba(200, 186, 148, 0.3); color: var(--gold2); padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600;">${tagText}</span>
+                </div>
+                <div class="meta" style="font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 12px;">${p.category || p.categoryName || "固收优选"}</div>
+                <div style="line-height: 1.6; color: rgba(255, 255, 255, 0.85); font-size: 13px; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                        <span>年化收益</span>
+                        <span style="color: var(--gold2); font-weight: 600;">${totalRate.toFixed(2)}%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                        <span>投资周期</span>
+                        <span>${cycle}天</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>起投金额</span>
+                        <span>¥${minInvest.toLocaleString('zh-CN')}</span>
+                    </div>
+                </div>
+                ${total > 0 ? `
+                <div style="background: rgba(8, 20, 31, 0.4); border-radius: 10px; padding: 10px; border: 1px solid rgba(200, 186, 148, 0.2); margin-top: 12px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                        <span style="font-size: 11px; color: rgba(200, 186, 148, 0.8);">募集进度</span>
+                        <span style="font-size: 11px; color: rgba(200, 186, 148, 0.8);">${progress.toFixed(1)}%</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: rgba(0, 0, 0, 0.3); border-radius: 3px; overflow: hidden; margin-top: 6px;">
+                        <div style="width: ${progress}%; height: 100%; background: linear-gradient(90deg, var(--gold2), var(--gold)); transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+        `;
+          })
+          .join("");
+
+        container.innerHTML = html;
+      }
+
+      // ========== 渲染USDT增值计划专区 ==========
+      function renderHotSection(projects) {
+        // USDT增值计划专区 - 固定显示USDT增值计划卡片，不再从API加载项目
+        const container = document.getElementById("hotSection");
+        if (!container) return;
+
+        // 固定显示USDT增值计划卡片（已在HTML中定义，这里不需要修改）
+        // 如果需要动态内容，可以在这里添加
+        console.log("[USDT增值计划] 专区已渲染");
+      }
+
+      // ========== 工具函数 ==========
+      function formatMoney(value) {
+        const num = parseFloat(value) || 0;
+        if (num >= 100000000) return (num / 100000000).toFixed(1) + "亿";
+        if (num >= 10000) return (num / 10000).toFixed(1) + "万";
+        return num.toLocaleString("zh-CN", { maximumFractionDigits: 0 });
+      }
+
+      function goToDetail(id) {
+        if (!id) return false;
+        // 使用replace避免历史记录，添加时间戳防止缓存
+        const url = "project-detail.html?id=" + id + "&t=" + Date.now();
+        window.location.replace(url);
+        return false;
+      }
+
+      // ========== 募集资金和参与人数实时更新 ==========
+      function initAmountAndParticipants() {
+        const amountEl = document.getElementById("totalAmount");
+        const participantEl = document.getElementById("participantCount");
+        if (!amountEl || !participantEl) return;
+
+        // 从localStorage获取初始值，如果没有则使用默认值
+        const storageKeyAmount = 'providence_total_amount';
+        const storageKeyParticipants = 'providence_participants';
+        const storageKeyLastUpdate = 'providence_last_update';
+
+        // 初始值
+        let totalAmount = 97538437; // 初始募集资金（去掉一个数字位）
+        let participants = 1234; // 初始参与人数
+        let lastUpdateTime = Date.now();
+
+        // 尝试从localStorage恢复
+        try {
+          const savedAmount = localStorage.getItem(storageKeyAmount);
+          const savedParticipants = localStorage.getItem(storageKeyParticipants);
+          const savedLastUpdate = localStorage.getItem(storageKeyLastUpdate);
+
+          if (savedAmount && savedParticipants && savedLastUpdate) {
+            totalAmount = parseFloat(savedAmount) || 97538437;
+            participants = parseInt(savedParticipants) || 1234;
+            lastUpdateTime = parseInt(savedLastUpdate) || Date.now();
+
+            // 计算从上次更新到现在应该增加的数量（每分钟更新）
+            const now = Date.now();
+            const minutesPassed = Math.floor((now - lastUpdateTime) / (1000 * 60));
+
+            if (minutesPassed > 0) {
+              // 金额保持稳定，不自动增加
+              // totalAmount 保持不变
+
+              // 每分钟增加人数（每天2000-5000人，即每分钟约1.4-3.5人，取平均值2.5人/分钟）
+              // 随机范围：2-4人/分钟
+              const participantIncrease = minutesPassed * (2 + Math.random() * 2);
+              participants += Math.floor(participantIncrease);
+            }
+          }
+        } catch (e) {
+          console.warn('读取localStorage失败:', e);
+        }
+
+        // 格式化金额显示
+        function formatAmount(amount) {
+          return '¥' + Math.floor(amount).toLocaleString('zh-CN');
+        }
+
+        // 格式化人数显示
+        function formatParticipants(count) {
+          return count.toLocaleString('zh-CN');
+        }
+
+        // 闪烁提示元素
+        const amountFlash = document.getElementById("amountFlash");
+        const participantFlash = document.getElementById("participantFlash");
+        const amountValue = document.getElementById("amountValue");
+        const participantValue = document.getElementById("participantValue");
+
+        // 显示闪烁提示
+        function showFlash(element) {
+          if (!element) return;
+          element.style.display = 'inline-block';
+          setTimeout(() => {
+            element.style.display = 'none';
+          }, 2000); // 显示2秒后隐藏
+        }
+
+        // 数字跳动动画
+        function animateNumber(element) {
+          if (!element) return;
+          element.style.transform = 'scale(1.15)';
+          element.style.transition = 'transform 0.3s ease-out';
+          setTimeout(() => {
+            element.style.transform = 'scale(1)';
+          }, 300);
+        }
+
+        // 参与人数绿色提示动画
+        function showParticipantGreenFlash(element) {
+          if (!element) return;
+          const originalColor = element.style.color;
+          element.style.color = '#4ade80'; // 绿色
+          element.style.transition = 'color 0.3s ease';
+          setTimeout(() => {
+            element.style.color = originalColor || '#fff';
+          }, 1500); // 1.5秒后恢复原色
+        }
+
+        // 更新显示
+        function updateDisplay(showAmountFlash = false, showParticipantFlash = false) {
+          if (amountValue) {
+            const oldValue = amountValue.textContent;
+            amountValue.textContent = formatAmount(totalAmount);
+            // 如果值发生变化，添加跳动动画
+            if (oldValue !== amountValue.textContent) {
+              animateNumber(amountValue);
+            }
+          }
+          if (participantValue) {
+            const oldValue = participantValue.textContent;
+            participantValue.textContent = formatParticipants(participants);
+            // 如果值发生变化，添加跳动动画和绿色提示
+            if (oldValue !== participantValue.textContent) {
+              animateNumber(participantValue);
+              showParticipantGreenFlash(participantValue);
+            }
+          }
+
+          // 显示闪烁提示
+          if (showAmountFlash && amountFlash) {
+            showFlash(amountFlash);
+          }
+          if (showParticipantFlash && participantFlash) {
+            showFlash(participantFlash);
+          }
+        }
+
+        // 初始显示
+        updateDisplay();
+
+        // 页面可见性检测：只在页面可见时更新
+        let isPageVisible = true;
+        document.addEventListener('visibilitychange', () => {
+          isPageVisible = !document.hidden;
+        });
+
+        // 持续更新：每3-5秒随机更新一次（页面停留时）
+        let updateInterval = setInterval(() => {
+          if (!isPageVisible) return; // 页面不可见时不更新
+
+          // 随机间隔：3-5秒
+          const randomDelay = 3000 + Math.random() * 2000;
+
+          setTimeout(() => {
+            if (!isPageVisible) return;
+
+            // 金额保持稳定，不自动增加
+            // totalAmount 保持不变
+
+            // 增加人数（每次随机增加1-2人，确保一直增加）
+            const participantIncrease = 1 + Math.random();
+            const oldParticipants = participants;
+            participants += Math.floor(participantIncrease);
+
+            // 确保人数一直增加，如果没增加就强制加1
+            if (participants === oldParticipants) {
+              participants += 1;
+            }
+
+            // 更新显示，只显示人数闪烁提示和跳动动画（金额不闪烁）
+            updateDisplay(false, true);
+
+            // 保存到localStorage（金额保持不变，只保存人数和时间）
+            try {
+              // 金额保持初始值，不更新
+              localStorage.setItem(storageKeyAmount, totalAmount.toString());
+              localStorage.setItem(storageKeyParticipants, participants.toString());
+              localStorage.setItem(storageKeyLastUpdate, Date.now().toString());
+            } catch (e) {
+              console.warn('保存localStorage失败:', e);
+            }
+          }, randomDelay);
+        }, 3000); // 每3秒检查一次，实际更新间隔为3-5秒随机
+
+        // 清理定时器（页面卸载时）
+        window.addEventListener('beforeunload', () => {
+          if (updateInterval) {
+            clearInterval(updateInterval);
+          }
+        });
+      }
+
+      // 页面加载完成后初始化
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAmountAndParticipants);
+      } else {
+        initAmountAndParticipants();
+      }
+    </script>
+
+    <!-- 底部导航栏已移除 -->
+    <script src="page-lifecycle.js?v=1763897782"></script>
+
+  </body>
+</html>

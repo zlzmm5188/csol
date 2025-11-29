@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>VIP权益 - Providence</title>
+    <link rel="stylesheet" href="styles.css?v=1763813622" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(180deg, #1a2332 0%, #0e1621 100%);
+        background-attachment: fixed;
+            min-height: 100vh;
+            padding-bottom: 80px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  padding-top: 60px;}
+
+        /* 顶部导航 */
+        .vip-header {
+            background: linear-gradient(135deg, rgba(14, 43, 68, 0.95), rgba(26, 58, 95, 0.95));
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+
+        .vip-header-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* 容器 */
+        .vip-container {
+            padding: 20px 16px;
+            max-
+
+        }
+
+        /* VIP Banner - 添加闪光效果 */
+        .vip-banner {
+            background: linear-gradient(135deg, #D9B45D, #E6C56E);
+            border-radius: 16px;
+            padding: 30px 20px;
+
+            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(217, 180, 93, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 闪光动画 */
+        .vip-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+            }
+
+            50% {
+                left: 100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        .vip-banner-icon {
+            font-size: 56px;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .vip-banner-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0e2b44;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .vip-banner-desc {
+            font-size: 14px;
+            color: rgba(14, 43, 68, 0.8);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 折叠式板块 */
+        .section-card {
+            background: linear-gradient(135deg, #1a2f42, #152535);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(217, 180, 93, 0.2);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section-card.active {
+            border-color: rgba(217, 180, 93, 0.5);
+            box-shadow: 0 8px 24px rgba(217, 180, 93, 0.2);
+        }
+
+        .section-header {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            transition: background 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .section-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .section-icon {
+            font-size: 28px;
+            filter: drop-shadow(0 0 8px rgba(217, 180, 93, 0.5));
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #D9B45D;
+        }
+
+        .section-toggle {
+            font-size: 24px;
+            color: #D9B45D;
+            transition: transform 0.3s ease;
+
+        }
+
+        .section-card.active .section-toggle {
+            transform: rotate(180deg);
+        }
+
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            padding: 0 20px;
+        }
+
+        .section-card.active .section-content {
+            max-height: 2000px;
+            padding: 0 20px 20px 20px;
+        }
+
+        /* 表格样式（放大） */
+        .data-table {
+
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            font-size: 15px;
+            margin-top: 16px;
+        }
+
+        .data-table th {
+            background: rgba(217, 180, 93, 0.3);
+            color: #D9B45D;
+            padding: 16px 12px;
+            font-size: 16px;
+            font-weight: 700;
+
+            border-bottom: 2px solid rgba(217, 180, 93, 0.4);
+            white-space: nowrap;
+        }
+
+        .data-table td {
+            padding: 16px 12px;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.95);
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            word-break: break-word;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table .highlight {
+            color: #FFD700;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .data-table .vip-level {
+            color: #D9B45D;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .data-table tr:hover {
+            background: rgba(217, 180, 93, 0.08);
+            transition: background 0.2s ease;
+        }
+
+        /* 说明文字（放大） */
+        .table-note {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 16px;
+            line-height: 2;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border-left: 4px solid #D9B45D;
+        }
+
+        .table-note-item {
+            margin: 10px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .table-note-item::before {
+            content: '✓';
+            color: #D9B45D;
+            font-weight: bold;
+            font-size: 16px;
+
+            margin-top: 2px;
+        }
+
+        /* 移动端优化 */
+        @media (max-
+            }
+
+            .section-header {
+                padding: 16px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+
+            .data-table {
+                font-size: 13px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 12px 8px;
+                font-size: 13px;
+            }
+
+            .section-card.active .section-content {
+                padding: 0 16px 16px 16px;
+            }
+        }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+      .brand .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+
+<body>
+    <!-- 顶部导航 -->
+    <div class="vip-header">
+        <div class="back-btn" onclick="history.back()">‹</div>
+        <div class="vip-header-title">VIP会员权益</div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="vip-container">
+        <!-- VIP Banner -->
+        <div class="vip-banner">
+            <div class="vip-banner-icon">👑</div>
+            <div class="vip-banner-title">VIP专属权益</div>
+            <div class="vip-banner-desc">升级VIP，享受更高返佣和额外加息</div>
+        </div>
+
+        <!-- 邀请奖励板块 -->
+        <div class="section-card" onclick="toggleSection(this)">
+            <div class="section-header">
+                <div class="section-header-left">
+                    <span class="section-icon">👥</span>
+                    <span class="section-title">邀请奖励百分比</span>
+                </div>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div id="loading1" class="loading" style="padding:20px;color:rgba(255,255,255,0.6);">
+                    加载中...</div>
+                <table class="data-table" id="inviteTable" style="display:none;">
+                    <thead>
+                        <tr>
+                            <th>会员等级</th>
+                            <th>一级返佣</th>
+                            <th>二级返佣</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inviteTableBody">
+                    </tbody>
+                </table>
+                <div class="table-note" id="inviteNote" style="display:none;">
+                    <div class="table-note-item">根据等级邀请好友，可获得邀请奖励百分比</div>
+                    <div class="table-note-item">一级返佣：直推会员投资时的返佣比例</div>
+                    <div class="table-note-item">二级返佣：一级会员推广的会员投资时的返佣比例</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 会员升级条件与额外加息板块 -->
+        <div class="section-card" onclick="toggleSection(this)">
+            <div class="section-header">
+                <div class="section-header-left">
+                    <span class="section-icon">💰</span>
+                    <span class="section-title">会员升级条件与额外加息</span>
+                </div>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div id="loading2" class="loading" style="padding:20px;color:rgba(255,255,255,0.6);">
+                    加载中...</div>
+                <table class="data-table" id="upgradeTable" style="display:none;">
+                    <thead>
+                        <tr>
+                            <th>会员等级</th>
+                            <th>累计投资</th>
+                            <th>额外加息</th>
+                        </tr>
+                    </thead>
+                    <tbody id="upgradeTableBody">
+                    </tbody>
+                </table>
+                <div class="table-note" id="upgradeNote" style="display:none;">
+                    <div class="table-note-item">当您的累计投资达到对应金额时，自动升级VIP等级</div>
+                    <div class="table-note-item">VIP加息会叠加到所有项目的基础收益率上</div>
+                    <div class="table-note-item">最终收益率 = 项目基础年化 + VIP加息率</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 每日签到积分板块 -->
+        <div class="section-card" onclick="toggleSection(this)">
+            <div class="section-header">
+                <div class="section-header-left">
+                    <span class="section-icon">📅</span>
+                    <span class="section-title">每日签到积分（固定）</span>
+                </div>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div id="loading3" class="loading" style="padding:20px;color:rgba(255,255,255,0.6);">
+                    加载中...</div>
+                <table class="data-table" id="signTable" style="display:none;">
+                    <thead>
+                        <tr>
+                            <th>会员等级</th>
+                            <th>每日签到积分</th>
+                        </tr>
+                    </thead>
+                    <tbody id="signTableBody">
+                    </tbody>
+                </table>
+                <div class="table-note" id="signNote" style="display:none;">
+                    <!-- 说明已移除 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="api-new.js?v=1763813622"></script>
+    <script>
+        // 折叠展开功能
+        function toggleSection(card) {
+            const isActive = card.classList.contains('active');
+
+            // 如果点击的是当前激活的，则关闭
+            if (isActive) {
+                card.classList.remove('active');
+            } else {
+                // 关闭其他所有板块
+                document.querySelectorAll('.section-card').forEach(c => {
+                    c.classList.remove('active');
+                });
+                // 打开当前板块
+                card.classList.add('active');
+
+                // 如果是第一次打开，加载数据
+                const sectionId = card.querySelector('.section-icon').textContent;
+                if (sectionId === '👥' && !card.dataset.loaded1) {
+                    card.dataset.loaded1 = 'true';
+                    renderInviteTable();
+                } else if (sectionId === '💰' && !card.dataset.loaded2) {
+                    card.dataset.loaded2 = 'true';
+                    renderUpgradeTable();
+                } else if (sectionId === '📅' && !card.dataset.loaded3) {
+                    card.dataset.loaded3 = 'true';
+                    renderSignTable();
+                }
+            }
+        }
+
+        // 邀请奖励数据（固定）
+        const inviteRewardData = [
+            { level: 'VIP0', level1: 1, level2: 0 },
+            { level: 'VIP1', level1: 2, level2: 1 },
+            { level: 'VIP2', level1: 3, level2: 2 },
+            { level: 'VIP3', level1: 4, level2: 2 },
+            { level: 'VIP4', level1: 5, level2: 3 },
+            { level: 'VIP5', level1: 5, level2: 4 },
+            { level: 'VIP6', level1: 6, level2: 4 },
+            { level: 'VIP7', level1: 6, level2: 5 },
+            { level: 'VIP8', level1: 7, level2: 5 }
+        ];
+
+        // 升级条件与加息数据（固定）
+        const upgradeData = [
+            { level: 'VIP1', invest: 30000, addRate: 0.05 },
+            { level: 'VIP2', invest: 100000, addRate: 0.1 },
+            { level: 'VIP3', invest: 250000, addRate: 0.12 },
+            { level: 'VIP4', invest: 800000, addRate: 0.15 },
+            { level: 'VIP5', invest: 1500000, addRate: 0.16 },
+            { level: 'VIP6', invest: 3800000, addRate: 0.18 },
+            { level: 'VIP7', invest: 8000000, addRate: 0.23 },
+            { level: 'VIP8', invest: 13000000, addRate: 0.25 }
+        ];
+
+        // 签到积分数据（固定）
+        const signData = [
+            { level: 'VIP0', points: 6 },
+            { level: 'VIP1', points: 10 },
+            { level: 'VIP2', points: 16 },
+            { level: 'VIP3', points: 20 },
+            { level: 'VIP4', points: 30 },
+            { level: 'VIP5', points: 40 },
+            { level: 'VIP6', points: 50 },
+            { level: 'VIP7', points: 60 },
+            { level: 'VIP8', points: 70 }
+        ];
+
+        // 格式化金额
+        function formatAmount(amount) {
+            if (amount >= 100000000) {
+                return (amount / 100000000).toFixed(1) + '亿';
+            }
+            if (amount >= 10000) {
+                return (amount / 10000).toFixed(0) + '万';
+            }
+            return amount.toLocaleString();
+        }
+
+        // 渲染邀请奖励表格
+        function renderInviteTable() {
+            const loading = document.getElementById('loading1');
+            const table = document.getElementById('inviteTable');
+            const tableBody = document.getElementById('inviteTableBody');
+            const tableNote = document.getElementById('inviteNote');
+
+            const rows = inviteRewardData.map(item => `
+            <tr>
+                <td class="vip-level">${item.level}</td>
+                <td class="highlight">${item.level1}%</td>
+                <td>${item.level2}%</td>
+            </tr>
+        `).join('');
+
+            tableBody.innerHTML = rows;
+            loading.style.display = 'none';
+            table.style.display = 'table';
+            tableNote.style.display = 'block';
+        }
+
+        // 渲染升级条件表格
+        function renderUpgradeTable() {
+            const loading = document.getElementById('loading2');
+            const table = document.getElementById('upgradeTable');
+            const tableBody = document.getElementById('upgradeTableBody');
+            const tableNote = document.getElementById('upgradeNote');
+
+            const rows = upgradeData.map(item => `
+            <tr>
+                <td class="vip-level">${item.level}</td>
+                <td>¥${formatAmount(item.invest)}</td>
+                <td class="highlight">+${item.addRate}%</td>
+            </tr>
+        `).join('');
+
+            tableBody.innerHTML = rows;
+            loading.style.display = 'none';
+            table.style.display = 'table';
+            tableNote.style.display = 'block';
+        }
+
+        // 渲染签到积分表格
+        function renderSignTable() {
+            const loading = document.getElementById('loading3');
+            const table = document.getElementById('signTable');
+            const tableBody = document.getElementById('signTableBody');
+            const tableNote = document.getElementById('signNote');
+
+            const rows = signData.map(item => `
+            <tr>
+                <td class="vip-level">${item.level}</td>
+                <td class="highlight">${item.points 积分</td>
+            </tr>
+        `).join('');
+
+            tableBody.innerHTML = rows;
+            loading.style.display = 'none';
+            table.style.display = 'table';
+            tableNote.style.display = 'block';
+        
+    </script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script src="smart-swipe-control.js?v=1763813622"></script>
+
+
+</body>
+
+</html>

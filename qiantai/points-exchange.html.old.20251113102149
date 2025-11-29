@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <title>积分兑换 - Providence</title>
+    <link rel="stylesheet" href="styles.css?v=1762970708">
+    <style>
+        :root {
+            --gold: #c8ba94;
+            --gold2: #f5d771;
+            --ink: #0f172a;
+            --lineD: rgba(255,255,255,0.08);
+            --lineL: #e5e7eb;
+        }
+        
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+        body,
+        p,
+        span,
+        label,
+        input,
+        small,
+        strong,
+        button,
+        .text-default {
+            color: rgba(255,255,255,0.85);
+            -webkit-font-smoothing: antialiased;
+            font-smoothing: antialiased;
+        }
+        
+        html, body {
+            color: rgba(255,255,255,0.85);
+            -webkit-font-smoothing: antialiased;
+            font-smoothing: antialiased;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        body {
+            background: linear-gradient(180deg, #0a1723 0%, #0f1c2a 100%) !important;
+            padding-bottom: 65px !important;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 顶部导航栏 */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, rgba(10,23,35,.95), rgba(10,23,35,.75));
+            backdrop-filter: blur(6px);
+            padding: 3vw 4vw;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--lineD);
+            flex-shrink: 0;
+        }
+        
+        .back-btn {
+            width: 8.5vw;
+            height: 8.5vw;
+            min-width: 32px;
+            min-height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: rgba(255,255,255,.08);
+            color: #fff;
+            font-size: 5vw;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        
+        .brand h1 {
+            margin: 0;
+            font-size: 4.5vw;
+            letter-spacing: .3px;
+            color: #fff;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .history-link {
+            font-size: 3.5vw;
+            color: #fff;
+            text-decoration: none;
+            padding: 1.5vw 3vw;
+            border-radius: 8px;
+            background: rgba(255,255,255,.08);
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+        
+        /* 内容区域 */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 20px;
+        }
+        
+        /* Hero区域 */
+        .hero {
+            padding: 5vw 4vw 4vw;
+            background: linear-gradient(180deg, rgba(10,23,35,.8) 0%, rgba(15,28,42,.6) 100%);
+        }
+        
+        .hero h2 {
+            margin: 0 0 1vw;
+            font-size: 8vw;
+            color: var(--gold2);
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .hero p {
+            margin: 0 0 4vw;
+            color: rgba(255,255,255,0.82);
+            font-size: 3.2vw;
+            text-align: center;
+        }
+        
+        /* 兑换表单 */
+        .section {
+            margin: 3vw 4vw;
+            background: rgba(16, 27, 45, 0.92);
+            border-radius: 12px;
+            padding: 4vw;
+            border: 1px solid rgba(255, 230, 170, 0.3);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+        }
+        
+        .section .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3.5vw;
+        }
+        
+        .section .head h3 {
+            margin: 0;
+            font-size: 4vw;
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .points-balance-inline {
+            display: flex;
+            align-items: baseline;
+            gap: 1vw;
+        }
+        
+        .balance-label {
+            font-size: 3vw;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .balance-value {
+            font-size: 4.5vw;
+            font-weight: 700;
+            color: var(--gold2);
+        }
+        
+        .balance-unit {
+            font-size: 3vw;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .form-group {
+            margin-bottom: 4vw;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 3.8vw;
+            color: #FFFFFF;
+            margin-bottom: 2vw;
+            font-weight: 700;
+            letter-spacing: 0.1vw;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 3.6vw 4vw;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 12px;
+            font-size: 4vw;
+            box-sizing: border-box;
+            color: #1a1a1a;
+            background: #FFFFFF;
+            font-weight: 600;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: rgba(255, 215, 0, 0.9);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 216, 140, 0.3);
+        }
+        
+        .form-group input::placeholder {
+            color: rgba(100, 100, 100, 0.6);
+            font-weight: 400;
+        }
+        
+        .exchange-rate {
+            background: linear-gradient(180deg, rgba(255, 240, 205, 0.08) 0%, rgba(227, 192, 120, 0.06) 100%);
+            padding: 2.6vw;
+            border-radius: 12px;
+            margin: 3vw 0;
+            border: 1px solid rgba(255, 216, 140, 0.55);
+            text-align: center;
+        }
+        
+        .exchange-rate-text {
+            font-size: 3.6vw;
+            color: rgba(255,255,255,0.9);
+            font-weight: 600;
+        }
+        
+        .preview-box {
+            background: linear-gradient(180deg, rgba(255, 240, 205, 0.08) 0%, rgba(227, 192, 120, 0.06) 100%);
+            padding: 2.6vw;
+            border-radius: 12px;
+            margin: 3vw 0 2.6vw;
+            border: 1px solid rgba(255, 216, 140, 0.55);
+            box-shadow: inset 0 0 12px rgba(255, 216, 140, 0.18);
+        }
+        
+        .preview-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .preview-label {
+            font-size: 3.6vw;
+            color: #FFFFFF;
+            font-weight: 800;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+        }
+        
+        .preview-value {
+            font-size: 4.4vw;
+            font-weight: 800;
+            color: #FFD700;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), 0 0 16px rgba(255, 215, 0, 0.5);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 4vw;
+            background: linear-gradient(135deg, #ffeec5 0%, #c9973d 100%);
+            color: rgba(20, 24, 34, 0.95);
+            border: none;
+            border-radius: 12px;
+            font-size: 4.2vw;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 2vw;
+            box-shadow: 0 14px 28px rgba(255, 234, 184, 0.3);
+        }
+        
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* 兑换说明 */
+        .tips-box {
+            margin: 0 4vw 3vw;
+            background: rgba(18, 30, 49, 0.88);
+            border: 1px solid rgba(255, 230, 170, 0.28);
+            border-radius: 12px;
+            padding: 3vw 3.5vw;
+            box-shadow: inset 0 0 18px rgba(0,0,0,0.18);
+        }
+        
+        .tips-box h4 {
+            margin: 0 0 2vw;
+            color: rgba(255,255,255,0.92);
+            font-weight: 600;
+            font-size: 3.5vw;
+        }
+        
+        .tips-box ul {
+            margin: 0;
+            padding-left: 4.5vw;
+        }
+        
+        .tips-box li {
+            font-size: 3vw;
+            color: rgba(255,255,255,0.78);
+            line-height: 1.6;
+            margin-bottom: 1vw;
+        }
+        
+        .tips-box li:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* 平板和大屏适配 */
+        @media (min-width: 768px) {
+            body {
+                padding-bottom: 70px !important;
+            }
+            .topbar {
+                padding: 12px 16px;
+            }
+            .back-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 20px;
+            }
+            .brand h1 {
+                font-size: 18px;
+            }
+            .history-link {
+                font-size: 14px;
+                padding: 6px 12px;
+            }
+            .hero {
+                padding: 20px 16px 16px;
+            }
+            .hero h2 {
+                font-size: 32px;
+                margin-bottom: 4px;
+            }
+            .hero p {
+                font-size: 13px;
+                margin-bottom: 16px;
+            }
+            .section {
+                margin: 12px 16px;
+                padding: 16px;
+            }
+            .section .head {
+                margin-bottom: 14px;
+            }
+            .section .head h3 {
+                font-size: 16px;
+            }
+            .points-balance-inline {
+                gap: 4px;
+            }
+            .balance-label {
+                font-size: 12px;
+            }
+            .balance-value {
+                font-size: 18px;
+            }
+            .balance-unit {
+                font-size: 12px;
+            }
+            .form-group {
+                margin-bottom: 16px;
+            }
+            .form-group label {
+                font-size: 15px;
+                margin-bottom: 8px;
+            }
+            .form-group input,
+            .form-group select {
+                padding: 14px 16px;
+                font-size: 16px;
+            }
+            .exchange-rate {
+                padding: 10px;
+                margin: 12px 0;
+            }
+            .exchange-rate-text {
+                font-size: 14px;
+            }
+            .preview-box {
+                padding: 10px;
+                margin: 12px 0 10px;
+            }
+            .preview-label {
+                font-size: 14px;
+            }
+            .preview-value {
+                font-size: 17px;
+            }
+            .submit-btn {
+                padding: 16px;
+                font-size: 17px;
+                margin-top: 8px;
+            }
+            .tips-box {
+                margin: 0 16px 12px;
+                padding: 12px 14px;
+            }
+            .tips-box h4 {
+                margin-bottom: 8px;
+                font-size: 14px;
+            }
+            .tips-box li {
+                font-size: 12px;
+                margin-bottom: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <div class="topbar">
+        <a href="javascript:history.back()" class="back-btn">‹</a>
+        <div class="brand">
+            <h1>积分兑换</h1>
+        </div>
+        <a href="points-history.html" class="history-link">明细</a>
+    </div>
+
+    <div class="content">
+        <!-- Hero区域 -->
+        <div class="hero">
+            <h2 id="userBalance">¥0.00</h2>
+            <p>可兑换余额（元）</p>
+        </div>
+
+        <!-- 兑换表单 -->
+        <div class="section">
+            <div class="head">
+                <h3>兑换积分</h3>
+                <div class="points-balance-inline">
+                    <span class="balance-label">积分余额</span>
+                    <span class="balance-value" id="pointsBalance">0</span>
+                    <span class="balance-unit">分</span>
+                </div>
+            </div>
+            <form id="exchangeForm">
+                <div class="form-group">
+                    <label>兑换金额</label>
+                    <input type="text" 
+                           inputmode="decimal" 
+                           id="exchangeAmount" 
+                           placeholder="请输入兑换金额" 
+                           autocomplete="off">
+                </div>
+                <div class="exchange-rate">
+                    <div class="exchange-rate-text">兑换比例：¥1 = 10积分</div>
+                </div>
+                <div class="preview-box">
+                    <div class="preview-row">
+                        <span class="preview-label">可兑换积分</span>
+                        <span class="preview-value" id="previewPoints">0分</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>支付密码</label>
+                    <input type="password" 
+                           id="payPassword" 
+                           placeholder="6位支付密码" 
+                           maxlength="6"
+                           autocomplete="new-password">
+                </div>
+                <button type="submit" class="submit-btn">确认兑换</button>
+            </form>
+        </div>
+
+        <!-- 兑换说明 -->
+        <div class="tips-box">
+            <h4>💡 兑换说明</h4>
+            <ul>
+                <li>最低兑换金额 ¥10</li>
+                <li>兑换比例：¥1 = 10积分</li>
+                <li>兑换需要输入支付密码</li>
+                <li>积分兑换后实时到账</li>
+                <li>积分可用于消费抵扣等</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <nav class="tabbar" id="tabbar">
+        <a class="tab" data-tab="home" href="index.html">
+            <div class="ico ico-home"></div>
+            <div class="txt">首页</div>
+        </a>
+        <a class="tab" data-tab="market" href="market.html">
+            <div class="ico ico-finance"></div>
+            <div class="txt">数据</div>
+        </a>
+        <a class="tab" data-tab="project" href="projects.html">
+            <div class="ico ico-market"></div>
+            <div class="txt">项目</div>
+        </a>
+        <a class="tab" data-tab="news" href="messages.html">
+            <div class="ico ico-message"></div>
+            <div class="txt">消息</div>
+        </a>
+        <a class="tab" data-tab="me" href="profile.html">
+            <div class="ico ico-me"></div>
+            <div class="txt">我的</div>
+        </a>
+    </nav>
+
+    <script src="config.js?v=1762970708"></script>
+    <script src="ios-toast.js?v=1762970708"></script>
+    <script>
+        const EXCHANGE_RATE = 10;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!ApiService.auth.ensureLogin()) { return; }
+            loadBalances();
+        });
+        
+        async function loadBalances() {
+            try {
+                const [balanceResult, pointsResult] = await Promise.all([
+                    ApiService.finance.getUserBalance(),
+                    ApiService.points.getBalance()
+                ]);
+                
+                if (balanceResult.code === 1) {
+                    document.getElementById('userBalance').textContent = '¥' + parseFloat(balanceResult.data.balance || 0).toFixed(2);
+                }
+                
+                if (pointsResult.code === 1) {
+                    document.getElementById('pointsBalance').textContent = parseInt(pointsResult.data.points || 0);
+                }
+            } catch (error) {
+                console.error('加载余额失败:', error);
+            }
+        }
+        
+        function updatePreview() {
+            const amount = parseFloat(document.getElementById('exchangeAmount').value) || 0;
+            const points = Math.floor(amount * EXCHANGE_RATE);
+            document.getElementById('previewPoints').textContent = points + '分';
+        }
+        
+        document.getElementById('exchangeAmount').addEventListener('input', updatePreview);
+        
+        document.getElementById('exchangeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const amount = parseFloat(document.getElementById('exchangeAmount').value);
+            const password = document.getElementById('payPassword').value;
+            
+            if (!amount || amount < 10) {
+                showToast('兑换金额不能低于10元', 'error');
+                return;
+            }
+            if (!password) {
+                showToast('请输入支付密码', 'error');
+                return;
+            }
+            
+            try {
+                const result = await ApiService.points.exchange({ 
+                    amount: amount,
+                    pay_password: password
+                });
+                if (result.code === 1) {
+                    showToast('兑换成功', 'success');
+                    document.getElementById('exchangeForm').reset();
+                    updatePreview();
+                    loadBalances();
+                } else {
+                    showToast(result.message || '兑换失败', 'error');
+                }
+            } catch (error) {
+                showToast('操作失败，请重试', 'error');
+            }
+        });
+    </script>
+</body>
+</html>

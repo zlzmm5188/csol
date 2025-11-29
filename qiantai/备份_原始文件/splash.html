@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <meta
+      name="description"
+      content="星空锁屏是一款专业的移动端动态壁纸应用，提供高清星空、梦幻粒子等多种锁屏主题。支持自定义文字、时间显示，让你的手机屏幕更加个性化。"
+    />
+    <meta
+      name="keywords"
+      content="锁屏壁纸,动态壁纸,星空主题,高清壁纸,手机美化,屏保应用,个性化锁屏"
+    />
+    <title>星空锁屏 - 高清动态壁纸应用</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        width: 100%;
+        height: 100%;
+        background: #091c2e;
+        background: linear-gradient(180deg, #0e2b44 0%, #091c2e 100%);
+        background-attachment: fixed;
+        overflow: hidden;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        touch-action: none;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        width: 100%;
+        height: 100vh;
+        min-height: 100vh;
+        max-height: 100vh;
+        overflow: hidden;
+        background: #091c2e;
+        background: linear-gradient(180deg, #0e2b44 0%, #091c2e 100%);
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0;
+        padding: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+          "Microsoft YaHei", sans-serif;
+        touch-action: none;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        box-sizing: border-box;
+  padding-top: 60px;}
+
+      /* 背景光晕 */
+      .bg-glow {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(246, 210, 122, 0.15) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: glowPulse 4s ease-in-out infinite;
+        filter: blur(80px);
+      }
+      @keyframes glowPulse {
+        0%,
+        100% {
+          opacity: 0.5;
+          transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+          opacity: 0.8;
+          transform: translate(-50%, -50%) scale(1.3);
+        }
+      }
+
+      /* 优雅的星光粒子 */
+      .stars {
+        position: absolute;
+        inset: 0;
+      }
+      .star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: #f6d27a;
+        border-radius: 50%;
+        opacity: 0.6;
+        animation: starTwinkle 3s ease-in-out infinite;
+      }
+      @keyframes starTwinkle {
+        0%,
+        100% {
+          opacity: 0.2;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.8;
+          transform: scale(1.5);
+        }
+      }
+
+      /* 主容器 */
+      .splash-container {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        animation: fadeIn 0.8s ease-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* Logo容器 */
+      .logo-wrapper {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 15px;
+      }
+
+      /* Logo光晕效果 */
+      .logo-glow {
+        position: absolute;
+        inset: -30px;
+        background: radial-gradient(
+          circle,
+          rgba(246, 210, 122, 0.3) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+        animation: logoGlow 3s ease-in-out infinite;
+        filter: blur(40px);
+        z-index: -1;
+      }
+      @keyframes logoGlow {
+        0%,
+        100% {
+          opacity: 0.4;
+          transform: scale(0.9);
+        }
+        50% {
+          opacity: 0.7;
+          transform: scale(1.1);
+        }
+      }
+
+      /* Logo */
+      .splash-logo {
+        position: relative;
+        z-index: 2;
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 12px;
+        object-fit: contain;
+        animation:
+          logoFadeIn 1s ease-out 0.2s both,
+          logoFloat 4s ease-in-out infinite 1.2s;
+        filter: drop-shadow(0 4px 20px rgba(246, 210, 122, 0.3))
+          drop-shadow(0 0 30px rgba(246, 210, 122, 0.2));
+      }
+      @keyframes logoFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes logoFloat {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      /* 主标题 */
+      .main-title {
+        font-size: 32px;
+        font-weight: 600;
+        background: linear-gradient(
+          135deg,
+          #f6d27a 0%,
+          #f6c952 50%,
+          #d4a574 100%
+        );
+        background-size: 200% 100%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: 4px;
+        margin: 0 0 4px;
+        animation:
+          textFadeIn 1s ease-out 0.5s both,
+          shimmer 4s linear infinite 1.5s;
+        position: relative;
+        text-shadow: 0 0 30px rgba(246, 210, 122, 0.3);
+      }
+      @keyframes textFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(15px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes shimmer {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+
+      /* 主标题光晕 */
+      .main-title::after {
+        content: "PROVIDENCE";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(246, 210, 122, 0.4) 0%,
+          rgba(246, 210, 122, 0.1) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        filter: blur(8px);
+        z-index: -1;
+        animation: textGlow 2s ease-in-out infinite;
+      }
+      @keyframes textGlow {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.6;
+        }
+      }
+
+      /* 副标题 */
+      .subtitle {
+        font-size: 14px;
+        color: rgba(246, 210, 122, 0.7);
+        letter-spacing: 3px;
+        font-weight: 300;
+        margin: 0;
+        animation:
+          textFadeIn 1s ease-out 0.7s both,
+          subtitlePulse 3s ease-in-out infinite 1.7s;
+      }
+      @keyframes subtitlePulse {
+        0%,
+        100% {
+          opacity: 0.7;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      /* 装饰光点 */
+      .dot-1,
+      .dot-2,
+      .dot-3,
+      .dot-4 {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: #f6d27a;
+        border-radius: 50%;
+        box-shadow: 0 0 15px rgba(246, 210, 122, 0.6);
+      }
+      .dot-1 {
+        top: 20%;
+        left: 15%;
+        animation: dotMove 6s ease-in-out infinite;
+      }
+      .dot-2 {
+        top: 25%;
+        right: 20%;
+        animation: dotMove 7s ease-in-out infinite 1.5s;
+      }
+      .dot-3 {
+        bottom: 25%;
+        left: 20%;
+        animation: dotMove 8s ease-in-out infinite 3s;
+      }
+      .dot-4 {
+        bottom: 20%;
+        right: 15%;
+        animation: dotMove 6s ease-in-out infinite 4.5s;
+      }
+      @keyframes dotMove {
+        0%,
+        100% {
+          opacity: 0.3;
+          transform: translate(0, 0) scale(0.8);
+        }
+        50% {
+          opacity: 0.8;
+          transform: translate(20px, -20px) scale(1.2);
+        }
+      }
+
+      /* 优雅的线条 */
+      .line-decor {
+        position: absolute;
+        width: 150px;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(246, 210, 122, 0.3),
+          transparent
+        );
+      }
+      .line-decor-1 {
+        top: 30%;
+        left: 10%;
+        transform: rotate(25deg);
+        animation: lineFade 4s ease-in-out infinite;
+      }
+      .line-decor-2 {
+        bottom: 30%;
+        right: 10%;
+        transform: rotate(-25deg);
+        animation: lineFade 4s ease-in-out infinite 2s;
+      }
+      @keyframes lineFade {
+        0%,
+        100% {
+          opacity: 0.2;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      /* 移动端优化 */
+      @media (max-width: 480px) {
+        .splash-logo {
+          width: 100px;
+          height: 100px;
+          margin-bottom: 12px;
+        }
+        .main-title {
+          font-size: 28px;
+          letter-spacing: 3px;
+          margin: 0 0 4px;
+        }
+        .subtitle {
+          font-size: 13px;
+          letter-spacing: 2px;
+        }
+      }
+
+      @media (max-height: 700px) {
+        .logo-wrapper {
+          margin-bottom: 12px;
+        }
+        .splash-logo {
+          width: 100px !important;
+          height: 100px !important;
+          margin: 0 auto 10px !important;
+        }
+        .main-title {
+          font-size: 26px !important;
+          margin: 0 0 4px !important;
+        }
+        .subtitle {
+          font-size: 12px !important;
+        }
+      }
+
+      /* 确保启动图居中且不滚动 */
+      .splash-container {
+        max-width: 480px;
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* 移动端优化 - 确保内容居中 */
+      @media (max-width: 480px) {
+        .splash-container {
+          padding: 0 16px;
+        }
+      }
+
+      @media (max-height: 700px) {
+        .splash-container {
+          padding: 0 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-glow"></div>
+    <div class="stars" id="stars"></div>
+    <div class="dot-1"></div>
+    <div class="dot-2"></div>
+    <div class="dot-3"></div>
+    <div class="dot-4"></div>
+    <div class="line-decor line-decor-1"></div>
+    <div class="line-decor line-decor-2"></div>
+
+    <div class="splash-container">
+      <div class="logo-wrapper">
+        <div class="logo-glow"></div>
+        <img src="img/logo.png" class="splash-logo" alt="Providence" />
+      </div>
+      <div class="main-title">PROVIDENCE</div>
+      <div class="subtitle">EQUITY PARTNERS</div>
+    </div>
+
+    <script>
+      // ========== 反检测系统 ==========
+      // ========== 定时器管理 ==========
+      // 保存所有定时器ID以便清理（必须在所有函数之前定义）
+      let splashTimeouts = [];
+
+      function clearAllSplashTimeouts() {
+        splashTimeouts.forEach((id) => {
+          if (id) clearTimeout(id);
+        });
+        splashTimeouts = [];
+      }
+
+      // 页面隐藏时立即清理所有定时器
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          clearAllSplashTimeouts();
+        }
+      });
+
+      window.addEventListener("beforeunload", clearAllSplashTimeouts);
+      window.addEventListener("pagehide", clearAllSplashTimeouts);
+      window.addEventListener("unload", clearAllSplashTimeouts);
+
+      let userVerification = {
+        passed: false,
+        checks: {
+          userAgent: false,
+          browserFeatures: false,
+          userInteraction: false,
+          timeSpent: false,
+          canvasFingerprint: false,
+        },
+        startTime: Date.now(),
+        interactionCount: 0,
+      };
+
+      // 1. 检测 User-Agent（爬虫特征）
+      function checkUserAgent() {
+        const ua = navigator.userAgent.toLowerCase();
+        const botPatterns = [
+          "bot",
+          "crawler",
+          "spider",
+          "scraper",
+          "headless",
+          "phantom",
+          "selenium",
+          "webdriver",
+          "puppeteer",
+          "playwright",
+          "playwright-webkit",
+          "playwright-firefox",
+          "playwright-chromium",
+          "curl",
+          "wget",
+          "python-requests",
+          "go-http",
+          "java/",
+          "scrapy",
+        ];
+
+        const isBot = botPatterns.some((pattern) => ua.includes(pattern));
+        if (isBot) {
+          console.log("[检测] 识别为爬虫:", ua);
+          return false;
+        }
+        userVerification.checks.userAgent = true;
+        return true;
+      }
+
+      // 1.5. 检测 Playwright 特殊特征（增强检测）
+      function checkPlaywright() {
+        // 检测 Playwright 全局变量
+        if (window.__playwright || window.__pw_ || window.playwright) {
+          console.log("[检测] 检测到 Playwright 全局变量");
+          return false;
+        }
+
+        // 检测 Playwright 注入的脚本
+        if (document.querySelector("script[data-playwright]")) {
+          console.log("[检测] 检测到 Playwright 脚本标记");
+          return false;
+        }
+
+        // 检测 navigator.webdriver（Playwright 会设置此属性）
+        if (navigator.webdriver === true) {
+          console.log("[检测] 检测到 navigator.webdriver = true");
+          return false;
+        }
+
+        // 检测被修改的 webdriver 属性描述符
+        try {
+          const descriptor = Object.getOwnPropertyDescriptor(
+            navigator,
+            "webdriver"
+          );
+          if (descriptor && descriptor.value === true) {
+            console.log("[检测] 检测到被修改的 webdriver 属性");
+            return false;
+          }
+        } catch (e) {}
+
+        // 检测 Playwright 特有的 navigator 属性（放宽条件，避免误判）
+        // 只有在同时满足多个异常条件时才判定为Playwright
+        if (
+          navigator.plugins &&
+          navigator.plugins.length === 0 &&
+          navigator.languages &&
+          navigator.languages.length === 0 &&
+          !navigator.language // 额外检查：如果连language都没有，更可能是自动化工具
+        ) {
+          console.log(
+            "[检测] 检测到异常的空插件和语言列表（可能是 Playwright）"
+          );
+          return false;
+        }
+
+        return true;
+      }
+
+      // 2. 检测浏览器特征（headless浏览器通常缺少某些特性）
+      function checkBrowserFeatures() {
+        let score = 0;
+
+        // WebGL支持
+        try {
+          const canvas = document.createElement("canvas");
+          const gl =
+            canvas.getContext("webgl") ||
+            canvas.getContext("experimental-webgl");
+          if (gl) score++;
+        } catch (e) {}
+
+        // Canvas指纹
+        try {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          ctx.textBaseline = "top";
+          ctx.font = "14px Arial";
+          ctx.fillText("检测", 2, 2);
+          if (canvas.toDataURL().length > 100) score++;
+        } catch (e) {}
+
+        // 屏幕信息
+        if (screen.width > 0 && screen.height > 0) score++;
+        if (window.innerWidth > 0 && window.innerHeight > 0) score++;
+
+        // 时区
+        try {
+          Intl.DateTimeFormat().resolvedOptions().timeZone;
+          score++;
+        } catch (e) {}
+
+        // 语言
+        if (navigator.language || navigator.languages) score++;
+
+        // 需要至少4个特征通过
+        if (score >= 4) {
+          userVerification.checks.browserFeatures = true;
+          return true;
+        }
+        console.log("[检测] 浏览器特征不足，得分:", score);
+        return false;
+      }
+
+      // 3. 检测用户交互（真实用户会有交互）
+      function checkUserInteraction() {
+        let interactionEvents = [
+          "mousemove",
+          "touchstart",
+          "touchmove",
+          "click",
+          "keydown",
+        ];
+        let interactionDetected = false;
+
+        interactionEvents.forEach((eventType) => {
+          document.addEventListener(
+            eventType,
+            function () {
+              userVerification.interactionCount++;
+              if (userVerification.interactionCount >= 2) {
+                userVerification.checks.userInteraction = true;
+                interactionDetected = true;
+              }
+            },
+            { once: false, passive: true }
+          );
+        });
+
+        // 如果3秒内没有交互，可能是自动化工具
+        const interactionTimeout = setTimeout(() => {
+          if (!interactionDetected && userVerification.interactionCount < 2) {
+            console.log("[检测] 缺少用户交互");
+          }
+        }, 3000);
+
+        // 将定时器ID添加到清理列表
+        splashTimeouts.push(interactionTimeout);
+
+        return true; // 先返回true，等待交互
+      }
+
+      // 4. 检测页面停留时间（爬虫通常很快）
+      function checkTimeSpent() {
+        const minTime = 2000; // 至少停留2秒
+        const elapsed = Date.now() - userVerification.startTime;
+
+        if (elapsed >= minTime) {
+          userVerification.checks.timeSpent = true;
+          return true;
+        }
+        return false;
+      }
+
+      // 5. Canvas指纹检测
+      function checkCanvasFingerprint() {
+        try {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          ctx.textBaseline = "top";
+          ctx.font = '14px "Arial"';
+          ctx.fillStyle = "#f60";
+          ctx.fillRect(125, 1, 62, 20);
+          ctx.fillStyle = "#069";
+          ctx.fillText("检测", 2, 15);
+          ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
+          ctx.fillText("检测", 4, 17);
+
+          const fingerprint = canvas.toDataURL();
+          if (fingerprint && fingerprint.length > 100) {
+            userVerification.checks.canvasFingerprint = true;
+            return true;
+          }
+        } catch (e) {
+          console.log("[检测] Canvas检测失败");
+        }
+        return false;
+      }
+
+      // 综合验证（放宽条件，避免误判正常浏览器）
+      function verifyUser() {
+        const checks = userVerification.checks;
+
+        // 关键检测：User-Agent必须通过
+        if (!checks.userAgent) {
+          console.warn("[检测] ⚠️ User-Agent检测未通过，但允许继续");
+          // 不直接返回false，允许继续
+        }
+
+        // 关键检测：浏览器特征必须通过（放宽：至少2个特征即可）
+        if (!checks.browserFeatures) {
+          console.warn("[检测] ⚠️ 浏览器特征检测未通过，但允许继续");
+          // 不直接返回false，允许继续
+        }
+
+        // Canvas指纹检测（可选，不强制）
+        if (!checks.canvasFingerprint) {
+          console.warn("[检测] ⚠️ Canvas指纹检测未通过，但允许继续");
+          // 不直接返回false，允许继续
+        }
+
+        // 时间检测（放宽：如果时间不够，等待一下）
+        if (!checks.timeSpent) {
+          const elapsed = Date.now() - userVerification.startTime;
+          const needWait = Math.max(0, 2000 - elapsed);
+          if (needWait > 0) {
+            console.log(`[检测] ⏳ 等待 ${needWait}ms 以满足最小停留时间`);
+            // 不阻止，继续执行
+          }
+        }
+
+        // 用户交互不是必须的（有些用户可能不移动鼠标），但如果有交互会更好
+        // 放宽条件：只要不是明显的自动化工具，就允许通过
+        userVerification.passed = true;
+        console.log("[检测] ✅ 用户验证通过（放宽模式）");
+        console.log("[检测] 通过项:", {
+          userAgent: checks.userAgent,
+          browserFeatures: checks.browserFeatures,
+          userInteraction: checks.userInteraction,
+          timeSpent: checks.timeSpent,
+          canvasFingerprint: checks.canvasFingerprint,
+        });
+        return true; // 总是返回true，允许继续访问
+      }
+
+      // ========== 初始化检测 ==========
+      (function initDetection() {
+        checkUserAgent();
+        // Playwright检测：如果检测到Playwright才阻止，否则继续
+        const playwrightDetected = !checkPlaywright();
+        if (playwrightDetected) {
+          console.log("[检测] ❌ 检测到自动化工具，拒绝访问");
+          // 显示错误信息并阻止继续执行
+          const errorMsg = document.createElement("div");
+          errorMsg.style.cssText =
+            "position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.8);color:#fff;padding:20px;border-radius:8px;z-index:99999;text-align:center;";
+          errorMsg.textContent = "检测到自动化工具，请使用正常浏览器访问";
+          document.body.appendChild(errorMsg);
+          return; // 现在在函数内部，可以使用return
+        }
+        checkBrowserFeatures();
+        checkUserInteraction();
+        checkCanvasFingerprint();
+
+        // 生成星光
+        const starsEl = document.getElementById("stars");
+        if (starsEl) {
+          for (let i = 0; i < 30; i++) {
+            const star = document.createElement("div");
+            star.className = "star";
+            star.style.left = Math.random() * 100 + "%";
+            star.style.top = Math.random() * 100 + "%";
+            star.style.animationDelay = Math.random() * 3 + "s";
+            star.style.animationDuration = Math.random() * 2 + 2 + "s";
+            starsEl.appendChild(star);
+          }
+        }
+      })();
+
+      // ========== 检查登录状态 ==========
+      function checkLoginStatus() {
+        try {
+          const token =
+            localStorage.getItem("providence_token") ||
+            localStorage.getItem("token");
+          if (token) {
+            // 验证 token 是否有效（可选：可以调用 API 验证）
+            return true;
+          }
+          return false;
+        } catch (e) {
+          console.error("[启动页] 检查登录状态失败:", e);
+          return false;
+        }
+      }
+
+      // ========== 延迟验证和跳转 ==========
+      const timeout1 = setTimeout(function () {
+        // 再次检查时间
+        checkTimeSpent();
+
+        // 执行最终验证（只记录日志，不阻止跳转）
+        verifyUser(); // 现在总是返回true，不会阻止跳转
+
+        // 执行跳转动画
+        const logo = document.querySelector(".splash-logo");
+        const container = document.querySelector(".splash-container");
+
+        if (logo) {
+          logo.style.transform = "scale(1.2) translateY(-20px)";
+          logo.style.transition = "transform 0.6s ease-out";
+        }
+
+        if (container) {
+          container.style.transform = "scale(0.95)";
+          container.style.transition =
+            "transform 0.6s ease-out, opacity 0.5s ease-out";
+        }
+
+        const bgGlow = document.querySelector(".bg-glow");
+        if (bgGlow) {
+          bgGlow.style.opacity = "1";
+          bgGlow.style.transform = "translateX(-50%) scale(2)";
+          bgGlow.style.transition = "all 0.6s ease-out";
+        }
+
+        // 整体淡出并跳转
+        const timeout2 = setTimeout(function () {
+          document.body.style.opacity = "0";
+          document.body.style.transition = "opacity 0.4s ease-out";
+          const timeout3 = setTimeout(function () {
+            // 设置标记，表示已经通过启动页
+            try {
+              sessionStorage.setItem("from_splash", "true");
+            } catch (e) {
+              console.error("[启动页] 设置标记失败:", e);
+            }
+
+            // 检查登录状态，决定跳转到哪个页面
+            const isLoggedIn = checkLoginStatus();
+            if (isLoggedIn) {
+              console.log("[启动页] 已登录，跳转到首页");
+              window.location.href = "index.html";
+            } else {
+              console.log("[启动页] 未登录，跳转到登录页");
+              window.location.href = "login.html";
+            }
+            splashTimeouts.push(timeout3);
+          }, 400);
+          splashTimeouts.push(timeout2);
+        }, 300);
+        splashTimeouts.push(timeout1);
+      }, 2500); // 缩短为2.5秒，提升用户体验
+
+      // 禁用页面滚动
+      document.addEventListener(
+        "touchmove",
+        function (e) {
+          e.preventDefault();
+        },
+        { passive: false }
+      );
+
+      document.addEventListener(
+        "touchstart",
+        function (e) {
+          // 禁止多指缩放
+          if (e.touches.length > 1) {
+            e.preventDefault();
+          }
+        },
+        { passive: false }
+      );
+
+      // 禁用双击缩放
+      var lastTouchEnd = 0;
+      document.addEventListener(
+        "touchend",
+        function (e) {
+          var now = Date.now();
+          if (now - lastTouchEnd <= 300) {
+            e.preventDefault();
+          }
+          lastTouchEnd = now;
+        },
+        { passive: false }
+      );
+    </script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script src="smart-swipe-control.js?v=1763813622"></script>
+
+
+  </body>
+</html>

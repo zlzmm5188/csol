@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate, max-age=0"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
+    <meta name="cache-version" content="20251106205000" />
+    <title>邀请好友领888元 - Providence</title>
+    <link rel="icon" href="favicon.ico" />
+    <style>
+      :root {
+        --navy: #0a1929;
+        --gold: #c7b58a;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        position: fixed;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+          sans-serif;
+        background: linear-gradient(
+          180deg,
+          #0a1929 0%,
+          #0e2b44 50%,
+          #1a3a5f 100%
+        ) !important;
+        background-attachment: fixed;
+        color: #fff !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        touch-action: none;
+        padding: 20px;
+      }
+
+      /* 确保背景不被覆盖 */
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          #0a1929 0%,
+          #0e2b44 50%,
+          #1a3a5f 100%
+        );
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      /* 容器 */
+      .container {
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      /* Logo区 */
+      .brand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+
+      .logo {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .brand-name {
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: 3px;
+      }
+
+      .brand-sub {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.75);
+        letter-spacing: 2px;
+      }
+
+      /* 介绍 */
+      .intro {
+        font-size: clamp(15px, 3.8vw, 17px);
+        color: var(--gold);
+        font-weight: 600;
+        line-height: 1.6;
+        margin-bottom: 28px;
+        letter-spacing: 0.5px;
+      }
+
+      /* 红包卡片 */
+      .gift {
+        width: 100%;
+        max-width: 350px;
+        margin: 0 auto 30px;
+        background: linear-gradient(135deg, #ff5770, #ff4757, #e03e4d);
+        border-radius: 20px;
+        padding: 40px 26px;
+        box-shadow: 0 20px 60px rgba(255, 71, 87, 0.5);
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      .gift:active {
+        transform: scale(0.97);
+      }
+
+      /* 金色顶部装饰 */
+      .gift::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 75px;
+        height: 38px;
+        background: linear-gradient(135deg, #d4af37, #ffd700, #d4af37);
+        border-radius: 0 0 38px 38px;
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+      }
+
+      .gift-tag {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 10px;
+      }
+
+      .gift-title {
+        font-size: 17px;
+        font-weight: 700;
+        margin-bottom: 14px;
+      }
+
+      .gift-amount {
+        font-size: 62px;
+        font-weight: 900;
+        color: #ffd700;
+        margin: 20px 0;
+        letter-spacing: -2px;
+        text-shadow: 0 0 35px rgba(255, 215, 0, 1);
+        animation: glow 2.5s ease-in-out infinite;
+      }
+
+      @keyframes glow {
+        0%,
+        100% {
+          text-shadow: 0 0 35px rgba(255, 215, 0, 1);
+        }
+        50% {
+          text-shadow: 0 0 45px rgba(255, 215, 0, 1);
+        }
+      }
+
+      .gift-info {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.85);
+        margin-bottom: 24px;
+      }
+
+      .gift-btn {
+        width: 100%;
+        max-width: 230px;
+        padding: 15px;
+        background: linear-gradient(135deg, #ffd700, #ffed4e);
+        border: none;
+        border-radius: 50px;
+        color: #8b2e39;
+        font-size: 17px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+      }
+
+      .gift-btn:active {
+        transform: scale(0.96);
+      }
+
+      /* 底部说明 */
+      .footer {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.7;
+        margin-top: 10px;
+      }
+
+      /* 金币动画 */
+      .coins {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .coin {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: linear-gradient(135deg, #ffd700, #ffed4e);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 900;
+        color: #8b2e39;
+        box-shadow: 0 2px 8px rgba(255, 215, 0, 0.5);
+        animation: fall var(--duration) cubic-bezier(0.5, 0, 0.5, 1) forwards;
+        animation-delay: var(--delay);
+        opacity: 0;
+      }
+
+      .coin::before {
+        content: "¥";
+      }
+
+      @keyframes fall {
+        0% {
+          opacity: 0;
+          transform: translateY(-110vh) rotate(0deg);
+        }
+        15% {
+          opacity: 1;
+        }
+        85% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(var(--end-y)) translateX(var(--end-x))
+            rotate(var(--end-rotate));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 金币层 -->
+    <div class="coins" id="coins"></div>
+
+    <!-- 主内容 -->
+    <div class="container">
+      <!-- Logo -->
+      <div class="brand">
+        <img
+          src="img/logo.png"
+          alt="P"
+          class="logo"
+          onerror="this.style.display='none'"
+        />
+        <div>
+          <div class="brand-name">PROVIDENCE</div>
+          <div class="brand-sub">EQUITY PARTNERS</div>
+        </div>
+      </div>
+
+      <!-- 介绍 -->
+      <div class="intro">
+        协同发展 · 互惠共赢<br />
+        <br />
+        携手共建财富新格局<br />
+        专注于稳健增值与长期价值创造
+      </div>
+
+      <!-- 红包 -->
+      <div class="gift" id="gift">
+        <div class="gift-tag">🎁 好友专属福利</div>
+        <div class="gift-title">新人体验金</div>
+        <div class="gift-amount">¥888</div>
+        <div class="gift-info">注册即送 · 真实可用 · 收益可提</div>
+        <button class="gift-btn">开始加入</button>
+      </div>
+
+      <!-- 说明 -->
+      <div class="footer">
+        体验金有效期7天 · 可抵扣本金购买项目<br />
+        项目收益可提现 · 体验金到期自动回收<br />
+        © 2025 Providence Equity Partners
+      </div>
+    </div>
+
+    <script>
+      // 金币
+      let n = 0;
+      const layer = document.getElementById("coins");
+
+      function addCoin() {
+        if (n >= 35) return;
+        const c = document.createElement("div");
+        c.className = "coin";
+        c.style.left = 15 + Math.random() * 70 + "%";
+        const base = 50;
+        const stack = Math.floor(n / 7) * 18;
+        const endY = -(base + stack + Math.random() * 20);
+        const endX = (Math.random() - 0.5) * 30;
+        const endR = Math.random() * 360;
+        c.style.setProperty("--end-y", endY + "px");
+        c.style.setProperty("--end-x", endX + "px");
+        c.style.setProperty("--end-rotate", endR + "deg");
+        c.style.setProperty("--duration", 1.5 + Math.random() * 0.8 + "s");
+        c.style.setProperty("--delay", Math.random() * 0.3 + "s");
+        layer.appendChild(c);
+        n++;
+      }
+
+      function loop() {
+        addCoin();
+        setTimeout(loop, 400 + Math.random() * 400);
+      }
+
+      // 邀请码
+      function getCode() {
+        try {
+          const host = window.location.hostname;
+          const parts = host.split(".");
+          if (
+            parts.length >= 3 &&
+            parts[0] !== "www" &&
+            parts[0] !== "4kp3l0iq"
+          ) {
+            return parts[0].toUpperCase();
+          }
+          const p = new URLSearchParams(window.location.search);
+          return (p.get("code") || p.get("invite") || "").toUpperCase();
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function save(code) {
+        if (!code) return;
+        try {
+          localStorage.setItem("invite_code_from_link", code);
+          localStorage.setItem("invite_code", code);
+          console.log("✅ 邀请码已保存:", code);
+        } catch (e) {}
+      }
+
+      // 打开注册或跳转首页
+      function open(e) {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+
+        const box = document.getElementById("gift");
+        const code = getCode();
+
+        console.log("📍 当前邀请码:", code);
+
+        if (code) {
+          save(code);
+          console.log("✅ 邀请码已保存到localStorage");
+        } else {
+          console.warn("⚠️ 未找到邀请码");
+        }
+
+        box.style.transform = "scale(0)";
+        box.style.opacity = "0";
+        box.style.transition = "all 0.6s ease";
+        box.style.pointerEvents = "none";
+
+        // 检查用户是否已登录
+        const token = localStorage.getItem("providence_token");
+
+        setTimeout(() => {
+          if (token) {
+            // 已登录 - 跳转到主站首页（使用主域名）
+            console.log("✅ 用户已登录，跳转到主站首页");
+            window.location.href = "https://4kp3l0iq.top/index.html";
+          } else {
+            // 未登录 - 跳转到注册页
+            console.log("⚠️ 用户未登录，跳转到注册页");
+            window.location.href = "register.html";
+          }
+        }, 600);
+
+        return false;
+      }
+
+      // 初始化
+      document.addEventListener("DOMContentLoaded", function () {
+        const code = getCode();
+        if (code) {
+          save(code);
+          console.log("✅ 页面加载时已保存邀请码:", code);
+        }
+
+        const box = document.getElementById("gift");
+        box.addEventListener("click", open);
+
+        setTimeout(loop, 500);
+
+        document.body.addEventListener("touchmove", (e) => e.preventDefault(), {
+          passive: false,
+        });
+      });
+    </script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script defer src="smart-swipe-control.js?v=1763897782"></script>
+
+
+  </body>
+</html>

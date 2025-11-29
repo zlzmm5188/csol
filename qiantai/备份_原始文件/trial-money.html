@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>新手体验金 | PROVIDENCE</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="design-tokens.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "PingFang SC", Arial, sans-serif;
+        background: var(--gradient-navy);
+        background-size: 200% 200%;
+        animation: gradientShift 15s ease infinite;
+        color: var(--text-inverse);
+        padding-bottom: 70px;
+        min-height: 100vh;
+      }
+
+      @keyframes gradientShift {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      /* 顶部导航 */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: var(--z-sticky);
+        background: rgba(12, 21, 38, 0.85);
+        backdrop-filter: var(--blur-md);
+        border-bottom: 1px solid var(--border-white);
+        padding: 12px 16px;
+      }
+
+      .topbar-inner {
+        
+        
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .back-btn {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: rgba(214, 178, 90, 0.1);
+        color: var(--gold-1);
+        font-size: 20px;
+        text-decoration: none;
+        border: 1px solid var(--border-light);
+        transform: translateZ(0);
+      }
+
+      .back-btn:active {
+        transform: scale(0.95) translateZ(0);
+      }
+
+      .page-title {
+        
+        
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--gold-1);
+      }
+
+      .nav-spacer {
+        width: 32px;
+      }
+
+      /* 主容器 */
+      .container {
+        
+        
+        padding: 16px;
+      }
+
+      /* 红包卡片 - 精致版 */
+      .hongbao-card {
+        position: relative;
+        background: linear-gradient(135deg, #d6452b 0%, #b8331e 100%);
+        border-radius: 16px;
+        padding: 20px;
+        margin: 16px 0;
+        box-shadow:
+          0 12px 28px rgba(214, 69, 43, 0.35),
+          0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        overflow: hidden;
+      }
+
+      /* 红包装饰 */
+      .hongbao-card::before {
+        content: "";
+        position: absolute;
+        top: -30%;
+        right: -10%;
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.12) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+      }
+
+      .hongbao-card::after {
+        content: "";
+        position: absolute;
+        bottom: -20%;
+        left: -10%;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.08) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+      }
+
+      .hongbao-header {
+        
+        position: relative;
+        z-index: 1;
+        margin-bottom: 16px;
+      }
+
+      .hongbao-icon {
+        font-size: 36px;
+        margin-bottom: 8px;
+        display: block;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.2));
+      }
+
+      .hongbao-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.95);
+        margin-bottom: 4px;
+        letter-spacing: 0.3px;
+      }
+
+      .hongbao-subtitle {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.75);
+      }
+
+      .hongbao-amount {
+        
+        position: relative;
+        z-index: 1;
+        margin: 12px 0;
+      }
+
+      .amount-symbol {
+        font-size: 20px;
+        font-weight: 600;
+        color: #ffe8a3;
+        vertical-align: top;
+        margin-right: 2px;
+      }
+
+      .amount-number {
+        font-size: 48px;
+        font-weight: 700;
+        color: #ffe8a3;
+        line-height: 1;
+        font-family: -apple-system-ui-rounded, "SF Pro Rounded", sans-serif;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .hongbao-note {
+        
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.7);
+        position: relative;
+        z-index: 1;
+      }
+
+      /* 规则卡片 - 紧凑版 */
+      .rules-card {
+        background: var(--white);
+        border: 2px solid var(--gold-light);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: var(--shadow-gold);
+      }
+
+      .rules-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .rules-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .rule-item {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .rule-num {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+        background: var(--gradient-gold);
+        color: var(--navy);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .rule-text {
+        
+        font-size: 13px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+
+      .rule-highlight {
+        color: var(--gold-2);
+        font-weight: 600;
+      }
+
+      /* 领取按钮 - iOS风格 */
+      .claim-btn {
+        
+        padding: 15px;
+        background: var(--gradient-gold);
+        color: var(--navy);
+        font-size: 17px;
+        font-weight: 600;
+        border: none;
+        border-radius: 14px;
+        cursor: pointer;
+        transform: translateZ(0);
+        box-shadow: 0 8px 24px rgba(214, 178, 90, 0.4);
+        letter-spacing: 0.5px;
+        transition: all 0.2s;
+      }
+
+      .claim-btn:active {
+        transform: scale(0.97) translateZ(0);
+        box-shadow: 0 4px 16px rgba(214, 178, 90, 0.3);
+      }
+
+      /* 底部导航 */
+      .tabbar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        border-top: 1px solid #e5e7eb;
+        padding: 8px 0 env(safe-area-inset-bottom, 8px);
+        z-index: var(--z-fixed);
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .tab {
+        
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 0;
+        text-decoration: none;
+      }
+
+      .ico {
+        width: 24px;
+        height: 24px;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      .txt {
+        font-size: 10px;
+        color: #8a8a8a;
+      }
+
+      .tab.active .txt {
+        color: var(--gold-1);
+        font-weight: 600;
+      }
+      .brand { display: flex; align-items: center; }
+      .brand .back-btn { flex: 0 0 auto; margin-right: 8px; }
+      .brand .page-title, .brand .page-title, .brand h1 { margin: 0; font-size: 16px; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+  </head>
+
+  <body>
+    <!-- 顶部导航 -->
+    <div class="topbar">
+      <div class="topbar-inner">
+        <a href="index.html" class="back-btn">←</a>
+        <div class="page-title">新手体验金</div>
+        <div class="nav-spacer"></div>
+      </div>
+    </div>
+
+    <!-- 主内容 -->
+    <div class="container">
+      <!-- 红包卡片 -->
+      <div class="hongbao-card">
+        <div class="hongbao-header">
+          <span class="hongbao-icon">🧧</span>
+          <div class="hongbao-title">PROVIDENCE 新手礼包</div>
+          <div class="hongbao-subtitle">新用户专享 · 限领一次</div>
+        </div>
+
+        <div class="hongbao-amount">
+          <span class="amount-symbol">¥</span
+          ><span class="amount-number">888</span>
+        </div>
+
+        <div class="hongbao-note">完成实名认证即可领取</div>
+      </div>
+
+      <!-- 规则说明 -->
+      <div class="rules-card">
+        <div class="rules-title"><span>📋</span> 使用说明</div>
+
+        <div class="rules-list">
+          <div class="rule-item">
+            <div class="rule-num">1</div>
+            <div class="rule-text">
+              限<span class="rule-highlight">实名用户</span>领取，确保账户安全
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <div class="rule-num">2</div>
+            <div class="rule-text">
+              每人限领<span class="rule-highlight">一次</span>，不可重复
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <div class="rule-num">3</div>
+            <div class="rule-text">
+              可抵扣<span class="rule-highlight">888元本金</span>，收益可提现
+            </div>
+          </div>
+
+          <div class="rule-item">
+            <div class="rule-num">4</div>
+            <div class="rule-text">
+              <span class="rule-highlight">7天</span
+              >有效期，项目到期自动回收本金
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 领取按钮 -->
+      <button class="claim-btn" onclick="claimTrialFund()">立即领取</button>
+    </div>
+
+    <!-- 底部导航 -->
+    <nav class="tabbar">
+      <a class="tab" href="index.html">
+        <div class="ico ico-home"></div>
+        <div class="txt">首页</div>
+      </a>
+      <a class="tab" href="projects.html">
+        <div class="ico ico-market"></div>
+        <div class="txt">项目</div>
+      </a>
+      <a class="tab" href="education.html">
+        <div class="ico ico-education"></div>
+        <div class="txt">课堂</div>
+      </a>
+      <a class="tab" href="profile.html">
+        <div class="ico ico-me"></div>
+        <div class="txt">我的</div>
+      </a>
+    </nav>
+
+    <script src="ios-toast.js"></script>
+    <script>
+      async function claimTrialFund() {
+        const btn = document.querySelector(".claim-btn");
+        btn.disabled = true;
+        btn.textContent = "领取中...";
+
+        try {
+          const token = localStorage.getItem("providence_token");
+          if (!token) {
+            showToast("请先登录");
+            setTimeout(() => (window.location.href = "login.html"), 1500);
+            return;
+          }
+
+          const API_BASE =
+            window.API_CONFIG?.baseURL || "https://api.4kp3l0iq.top/api";
+          const response = await fetch(
+            API_BASE + "/index.php/user/trial/claim",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          const data = await response.json();
+
+          if (data.code === 200) {
+            showToast("领取成功！");
+            setTimeout(() => (window.location.href = "profile.html"), 1500);
+          } else {
+            showToast(data.message || "领取失败");
+            btn.disabled = false;
+            btn.textContent = "立即领取";
+          }
+        } catch (error) {
+          console.error("领取体验金失败:", error);
+          showToast("网络错误，请稍后重试");
+          btn.disabled = false;
+          btn.textContent = "立即领取";
+        }
+      }
+    </script>
+  </body>
+</html>

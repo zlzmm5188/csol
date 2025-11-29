@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>登录调试 - Providence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+            background: linear-gradient(135deg, #0e2b44 0%, #1a3a5f 100%);
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #c99b2b;
+        }
+
+        .info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .info h3 {
+            color: #c99b2b;
+            margin-bottom: 10px;
+        }
+
+        .info pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #0b3b5e, #0e4a78);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .log {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .log h3 {
+            color: #c99b2b;
+            margin-bottom: 10px;
+        }
+
+        .log-item {
+            padding: 8px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: monospace;
+        }
+
+        .log-info {
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        .log-success {
+            background: rgba(34, 197, 94, 0.2);
+        }
+
+        .log-error {
+            background: rgba(239, 68, 68, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔧 登录调试工具</h1>
+
+        <div class="info">
+            <h3>当前配置</h3>
+            <pre id="currentConfig">加载中...</pre>
+        </div>
+
+        <div class="info">
+            <h3>登录表单</h3>
+            <div class="form-group">
+                <label>账号</label>
+                <input type="text" id="username" placeholder="输入账号" value="">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" id="password" placeholder="输入密码" value="">
+            </div>
+            <button class="btn" onclick="testLogin()">🧪 测试登录</button>
+            <button class="btn" style="background: linear-gradient(135deg, #6b7280, #4b5563);" onclick="clearLogs()">🗑️
+                清除日志</button>
+        </div>
+
+        <div class="log">
+            <h3>📋 调试日志</h3>
+            <div id="logContainer">
+                <div class="log-item log-info">等待测试...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js?v=1763897782"></script>
+    <script>
+        // 显示当前配置
+        function showCurrentConfig() {
+            const config = {
+                'baseURL': window.API_CONFIG?.baseURL || '未加载',
+                'tokenKey': window.API_CONFIG?.tokenKey || '未加载',
+                'debug': window.API_CONFIG?.debug || false,
+                'API对象': !!window.API ? '✅ 已加载' : '❌ 未加载',
+                'API.user.login': typeof window.API?.user?.login === 'function' ? '✅ 存在' : '❌ 不存在'
+            };
+
+            document.getElementById('currentConfig').textContent = JSON.stringify(config, null, 2);
+
+            addLog('info', '配置已加载: ' + JSON.stringify(config));
+        }
+
+        // 添加日志
+        function addLog(type, message) {
+            const container = document.getElementById('logContainer');
+            const logItem = document.createElement('div');
+            logItem.className = 'log-item log-' + type;
+
+            const time = new Date().toLocaleTimeString();
+            logItem.textContent = `[${time}] ${message}`;
+
+            container.appendChild(logItem);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // 清除日志
+        function clearLogs() {
+            document.getElementById('logContainer').innerHTML = '<div class="log-item log-info">日志已清除</div>';
+        }
+
+        // 测试登录
+        async function testLogin() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!username || !password) {
+                addLog('error', '❌ 请输入账号和密码');
+                return;
+            }
+
+            addLog('info', '━━━━━━━━━━━━━━━━━━━━━━━━');
+            addLog('info', '🚀 开始测试登录');
+            addLog('info', '账号: ' + username);
+            addLog('info', '密码: ' + password.replace(/./g, '*'));
+
+            try {
+                // 方法1: 使用 window.API（推荐）
+                addLog('info', '');
+                addLog('info', '📡 方法1: 使用 window.API.user.login()');
+
+                if (window.API && window.API.user && window.API.user.login) {
+                    const result = await window.API.user.login(username, password);
+                    addLog('success', '✅ API调用成功');
+                    addLog('info', 'Response: ' + JSON.stringify(result, null, 2));
+
+                    if (result.success) {
+                        addLog('success', '✅ 登录成功！');
+                        addLog('info', 'Token: ' + (result.data.access_token || result.data.token));
+                    } else {
+                        addLog('error', '❌ 登录失败: ' + result.msg);
+                    }
+                } else {
+                    addLog('error', '❌ window.API 未加载');
+                }
+
+                // 方法2: 直接 fetch（降级）
+                addLog('info', '');
+                addLog('info', '📡 方法2: 直接使用 fetch()');
+
+                const API_BASE = window.API_CONFIG?.baseURL || 'https://api.4kp3l0iq.top';
+                addLog('info', 'API_BASE: ' + API_BASE);
+
+                const requestData = { username, password, system: 1 };
+                addLog('info', 'Request Data: ' + JSON.stringify(requestData));
+
+                const response = await fetch(API_BASE + '/index.php/login/account', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                addLog('info', 'Status: ' + response.status + ' ' + response.statusText);
+                addLog('info', 'Content-Type: ' + response.headers.get('Content-Type'));
+
+                const text = await response.text();
+                addLog('info', 'Response (raw): ' + text);
+
+                try {
+                    const data = JSON.parse(text);
+                    addLog('success', '✅ JSON 解析成功');
+                    addLog('info', 'Response (parsed): ' + JSON.stringify(data, null, 2));
+
+                    if (data.code === 200) {
+                        addLog('success', '🎉 登录成功！可以跳转了');
+                    } else {
+                        addLog('error', '❌ 登录失败: ' + (data.message || data.msg));
+                    }
+                } catch (e) {
+                    addLog('error', '❌ JSON 解析失败: ' + e.message);
+                }
+
+            } catch (error) {
+                addLog('error', '❌ 请求失败: ' + error.message);
+                console.error('详细错误:', error);
+            }
+        }
+
+        // 页面加载后显示配置
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                showCurrentConfig();
+            }, 500);
+        });
+
+        // 回车登录
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                testLogin();
+            }
+        });
+    </script>
+</body>
+
+</html>

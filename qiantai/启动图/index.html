@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- 应用信息 -->
+    <title>星空锁屏 - 高清动态壁纸</title>
+    <meta name="description" content="星空锁屏是一款精美的动态壁纸应用，提供高清星空、梦幻粒子等多种锁屏主题。支持自定义文字、时间显示，让你的手机屏幕更加个性化。" />
+    <meta name="keywords" content="锁屏壁纸,动态壁纸,星空主题,高清壁纸,手机美化,屏保应用,个性化锁屏" />
+    <meta name="author" content="Providence Design Studio" />
+    <meta name="application-name" content="星空锁屏" />
+
+    <!-- SEO优化 -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="星空锁屏 - 高清动态壁纸应用" />
+    <meta property="og:description" content="精美的星空动态壁纸，打造专属你的个性化锁屏界面" />
+    <meta property="og:site_name" content="星空锁屏" />
+
+    <!-- 应用分类 -->
+    <meta name="category" content="工具,个性化,壁纸" />
+    <meta name="rating" content="general" />
+
+    <!-- PWA支持 -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#000000" />
+
+    <!-- 图标 -->
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+
+    <style>
+      /* 防止页面闪烁 */
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #000;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      #root {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- React根节点 -->
+    <div id="root"></div>
+
+    <!-- 应用初始化脚本 -->
+    <script>
+      // 防止iOS橡皮筋效果
+      document.addEventListener('touchmove', function(e) {
+        if (e.touches.length > 1) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+
+      // 禁止双击缩放
+      let lastTouchEnd = 0;
+      document.addEventListener('touchend', function(e) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+          e.preventDefault();
+        }
+        lastTouchEnd = now;
+      }, false);
+    </script>
+
+    <!-- React应用入口 -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

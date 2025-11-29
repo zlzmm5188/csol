@@ -1,0 +1,698 @@
+{
+  "timestamp": "2025-11-17T07:05:31.642Z",
+  "summary": {
+    "backendRoutes": 86,
+    "frontendAPIs": 37,
+    "issues": {
+      "missing": 9,
+      "incorrect": 0,
+      "unused": 21
+    }
+  },
+  "backendRoutes": {
+    "login/account": "login.php",
+    "login/login/account": "login.php",
+    "login/reg/account": "register.php",
+    "auth/wechat/start": "auth/wechat-start.php",
+    "user/user/index": "user/info.php",
+    "user/user/invite": "user/invite.php",
+    "user/user/setPayPassword": "user/set-pay-password.php",
+    "user/user/checkUsername": "user/check-username.php",
+    "user/user/getFaceDescriptor": "user/get-face-descriptor.php",
+    "user/user/submitFaceForReview": "user/submit-face-review.php",
+    "user/user/checkFaceReview": "user/check-face-review.php",
+    "user/user/resetPassword": "user/reset-password.php",
+    "user/user/verifyFaceReset": "user/verify-face-reset.php",
+    "user/level/list": "vip/list.php",
+    "user/vip/progress": "user/vip-progress.php",
+    "user/vip/info": "user/vip-progress.php",
+    "fund/project/all": "project/list.php",
+    "fund/project/detail": "project/detail.php",
+    "fund/project/add": "project/invest.php",
+    "fund/project/calculate": "project/calculate.php",
+    "fund/order/create": "fund/order-create.php",
+    "user/kyc/submit": "kyc/submit.php",
+    "user/order/list": "order/list.php",
+    "user/project/list": "user/project-list.php",
+    "user/trial/claim": "trial/claim.php",
+    "user/recharge/add": "finance/recharge.php",
+    "user/withdraw/add": "finance/withdraw.php",
+    "user/bank/list": "finance/bank_list.php",
+    "pay/pay/recharge": "pay/recharge.php",
+    "pay/us/recharge": "pay/us-recharge.php",
+    "pay/bank/list": "pay/bank-list.php",
+    "pay/bank/add": "pay/bank-add.php",
+    "pay/bank/del": "pay/bank-del.php",
+    "pay/pay/withdraw": "pay/withdraw.php",
+    "pay/us/info": "pay/usdt-info.php",
+    "user/points/balance": "points/balance.php",
+    "user/points/exchange": "user/points-exchange.php",
+    "user/points/exchange-history": "user/points-exchange-history.php",
+    "user/points/logs": "points/logs.php",
+    "user/sign/info": "user/sign-info.php",
+    "user/sign/sign": "user/sign-do.php",
+    "user/team/team": "user/team-info.php",
+    "user/team/rewards_status": "user/team-rewards-status.php",
+    "user/team/claim_reward": "user/team-claim-reward.php",
+    "user/profit/calendar": "user/profit-calendar.php",
+    "user/transaction/records": "user/transaction-records.php",
+    "user/ribao/info": "user/ribao-info.php",
+    "user/ribao/transfer-in": "user/ribao-transfer-in.php",
+    "user/ribao/transfer-out": "user/ribao-transfer-out.php",
+    "user/ribao/records": "user/ribao-records.php",
+    "upload": "upload.php",
+    "admin/stats": "admin/stats.php",
+    "admin/users": "admin/users.php",
+    "admin/user-set-internal": "admin/user-set-internal.php",
+    "admin/team-tree": "admin/team-tree.php",
+    "admin/user-detail": "admin/user-detail.php",
+    "admin/user-update": "admin/user-update.php",
+    "admin/user-team-tree": "admin/user-team-tree.php",
+    "admin/user-reset-password": "admin/user-reset-password.php",
+    "admin/wallet-logs": "admin/wallet-logs.php",
+    "admin/projects": "admin/projects.php",
+    "admin/project-detail": "admin/project-detail.php",
+    "admin/project-save": "admin/project-save.php",
+    "admin/orders": "admin/orders.php",
+    "admin/order-detail": "admin/order-detail.php",
+    "admin/kyc-approve": "admin/kyc-approve.php",
+    "admin/kyc-reject": "admin/kyc-reject.php",
+    "admin/recharges": "admin/recharges.php",
+    "admin/recharge-approve": "admin/recharge-approve.php",
+    "admin/recharge-reject": "admin/recharge-reject.php",
+    "admin/withdrawals": "admin/withdrawals.php",
+    "admin/withdraw-approve": "admin/withdraw-approve.php",
+    "admin/withdraw-reject": "admin/withdraw-reject.php",
+    "admin/login-logs": "admin/login-logs.php",
+    "admin/ribao/users": "admin/ribao-users.php",
+    "admin/ribao/profits": "admin/ribao-profits.php",
+    "admin/ribao/config": "admin/ribao-config.php",
+    "admin/ribao/config-save": "admin/ribao-config-save.php",
+    "admin/activities": "admin/activities.php",
+    "admin/activity-detail": "admin/activity-detail.php",
+    "admin/activity-save": "admin/activity-save.php",
+    "admin/activity-delete": "admin/activity-delete.php",
+    "admin/articles": "admin/articles.php",
+    "admin/article-detail": "admin/article-detail.php",
+    "admin/article-save": "admin/article-save.php",
+    "admin/article-delete": "admin/article-delete.php"
+  },
+  "frontendAPIs": {
+    "api-keys": [
+      {
+        "file": "/ai-config-panel.html",
+        "line": 338,
+        "original": "\"https://platform.openai.com/api-keys\""
+      }
+    ],
+    "${this.config.apiBase}/chat/completions": [
+      {
+        "file": "/ai-openai.js",
+        "line": 181,
+        "original": "fetch(`/index.php/${this.config.apiBase}/chat/completions`"
+      },
+      {
+        "file": "/ai-openai.js",
+        "line": 334,
+        "original": "fetch(`${this.config.apiBase}/chat/completions`"
+      }
+    ],
+    "user/user/index": [
+      {
+        "file": "/app.js",
+        "line": 77,
+        "original": "API_BASE + '/index.php/user/user/index'"
+      },
+      {
+        "file": "/deposit.js",
+        "line": 71,
+        "original": "API_BASE + '/index.php/user/user/index'"
+      },
+      {
+        "file": "/profile.js",
+        "line": 151,
+        "original": "API_BASE + '/index.php/user/user/index'"
+      },
+      {
+        "file": "/project-detail-tailwind.html",
+        "line": 258,
+        "original": "API_BASE + '/index.php/user/user/index'"
+      },
+      {
+        "file": "/projects.html",
+        "line": 646,
+        "original": "API_BASE + \"/index.php/user/user/index\""
+      },
+      {
+        "file": "/set-pay-password.html",
+        "line": 391,
+        "original": "API_BASE + \"/index.php/user/user/index\""
+      },
+      {
+        "file": "/trial-money-popup.js",
+        "line": 386,
+        "original": "API_BASE + '/index.php/user/user/index'"
+      },
+      {
+        "file": "/vip-level.html",
+        "line": 443,
+        "original": "API_BASE + \"/index.php/user/user/index\""
+      },
+      {
+        "file": "/zone-detail.js",
+        "line": 72,
+        "original": "API_BASE + '/index.php/user/user/index'"
+      }
+    ],
+    "pay/bank/list?page=1": [
+      {
+        "file": "/bank-cards.html",
+        "line": 486,
+        "original": "fetch(`${API_BASE}/index.php/pay/bank/list?page=1`"
+      }
+    ],
+    "pay/bank/del": [
+      {
+        "file": "/bank-cards.html",
+        "line": 604,
+        "original": "fetch(`/index.php/pay/bank/del`"
+      }
+    ],
+    "pay/bank/add": [
+      {
+        "file": "/bank-cards.html",
+        "line": 762,
+        "original": "fetch(`/index.php/pay/bank/add`"
+      }
+    ],
+    "user/sign/info": [
+      {
+        "file": "/checkin.js",
+        "line": 35,
+        "original": "fetch(`${API_BASE}/index.php/user/sign/info`"
+      },
+      {
+        "file": "/daily-checkin-api.js",
+        "line": 65,
+        "original": "API_BASE + '/index.php/user/sign/info'"
+      },
+      {
+        "file": "/daily-checkin.html",
+        "line": 523,
+        "original": "API_BASE + '/index.php/user/sign/info'"
+      }
+    ],
+    "user/sign/sign": [
+      {
+        "file": "/checkin.js",
+        "line": 76,
+        "original": "fetch(`${API_BASE}/index.php/user/sign/sign`"
+      },
+      {
+        "file": "/daily-checkin-api.js",
+        "line": 177,
+        "original": "API_BASE + '/index.php/user/sign/sign'"
+      },
+      {
+        "file": "/daily-checkin.html",
+        "line": 569,
+        "original": "API_BASE + '/index.php/user/sign/sign'"
+      }
+    ],
+    "login/account": [
+      {
+        "file": "/debug-login-request.js",
+        "line": 15,
+        "original": "fetch('https://apis.copla.top/index.php/login/account'"
+      },
+      {
+        "file": "/login-debug.html",
+        "line": 235,
+        "original": "API_BASE + '/index.php/login/account'"
+      },
+      {
+        "file": "/login-standalone.html",
+        "line": 236,
+        "original": "API_BASE + '/index.php/login/account'"
+      },
+      {
+        "file": "/login.js",
+        "line": 147,
+        "original": "API_BASE + '/index.php/login/account'"
+      },
+      {
+        "file": "/login.js",
+        "line": 233,
+        "original": "API_BASE + '/index.php/login/account'"
+      },
+      {
+        "file": "/test-api.html",
+        "line": 78,
+        "original": "API_BASE + \"/index.php/login/account\""
+      }
+    ],
+    "pay/us/info": [
+      {
+        "file": "/deposit.js",
+        "line": 323,
+        "original": "API_BASE + '/index.php/pay/us/info'"
+      },
+      {
+        "file": "/recharge.html",
+        "line": 919,
+        "original": "fetch(`${API_BASE}/index.php/pay/us/info`"
+      },
+      {
+        "file": "/withdraw.html",
+        "line": 931,
+        "original": "fetch(`${API_BASE}/index.php/pay/us/info`"
+      }
+    ],
+    "fund/project/all": [
+      {
+        "file": "/finance.js",
+        "line": 61,
+        "original": "API_BASE + '/index.php/fund/project/all'"
+      },
+      {
+        "file": "/project-detail-tailwind.html",
+        "line": 271,
+        "original": "API_BASE + '/index.php/fund/project/all'"
+      },
+      {
+        "file": "/projects-list.html",
+        "line": 283,
+        "original": "API_BASE + \"/index.php/fund/project/all\""
+      },
+      {
+        "file": "/projects.html",
+        "line": 684,
+        "original": "API_BASE + \"/index.php/fund/project/all\""
+      },
+      {
+        "file": "/test-config.html",
+        "line": 246,
+        "original": "API_BASE + \"/index.php/fund/project/all\""
+      },
+      {
+        "file": "/zone-detail.js",
+        "line": 119,
+        "original": "API_BASE + '/index.php/fund/project/all'"
+      }
+    ],
+    "login/sms/forget": [
+      {
+        "file": "/forgot.js",
+        "line": 43,
+        "original": "API_BASE + '/index.php/login/sms/forget'"
+      }
+    ],
+    "login/sms/forget/account": [
+      {
+        "file": "/forgot.js",
+        "line": 75,
+        "original": "API_BASE + '/index.php/login/sms/forget/account'"
+      }
+    ],
+    "user/user/resetPassword": [
+      {
+        "file": "/forgot.js",
+        "line": 118,
+        "original": "API_BASE + '/index.php/user/user/resetPassword'"
+      },
+      {
+        "file": "/reset-password-local.html",
+        "line": 968,
+        "original": "API_BASE + \"/index.php/user/user/resetPassword\""
+      },
+      {
+        "file": "/reset-password.js",
+        "line": 212,
+        "original": "API_BASE + '/index.php/user/user/resetPassword'"
+      }
+    ],
+    "user/points/balance": [
+      {
+        "file": "/js/points-exchange.js",
+        "line": 60,
+        "original": "fetch(`/index.php/user/points/balance`"
+      }
+    ],
+    "user/points/exchange": [
+      {
+        "file": "/js/points-exchange.js",
+        "line": 201,
+        "original": "fetch(`/index.php/user/points/exchange`"
+      }
+    ],
+    "user/kyc/submit": [
+      {
+        "file": "/kyc-ocr.html",
+        "line": 402,
+        "original": "fetch('/index.php/user/kyc/submit'"
+      }
+    ],
+    "user/user/checkUsername": [
+      {
+        "file": "/login.html",
+        "line": 441,
+        "original": "API_BASE + \"/index.php/user/user/checkUsername\""
+      }
+    ],
+    "login/sms/login": [
+      {
+        "file": "/login.js",
+        "line": 285,
+        "original": "API_BASE + '/index.php/login/sms/login'"
+      }
+    ],
+    "auth/wechat/start?return=": [
+      {
+        "file": "/login.js",
+        "line": 331,
+        "original": "API_BASE + '/index.php/auth/wechat/start?return='"
+      }
+    ],
+    "user/project/list": [
+      {
+        "file": "/my-investments.html",
+        "line": 410,
+        "original": "fetch(`${API_BASE}/index.php/user/project/list`"
+      }
+    ],
+    "fund/project/all?": [
+      {
+        "file": "/profile.js",
+        "line": 277,
+        "original": "API_BASE + '/index.php/fund/project/all?'"
+      }
+    ],
+    "user/vip/progress": [
+      {
+        "file": "/profile.js",
+        "line": 449,
+        "original": "API_BASE + '/index.php/user/vip/progress'"
+      },
+      {
+        "file": "/vip-level.html",
+        "line": 416,
+        "original": "API_BASE + \"/index.php/user/vip/progress\""
+      }
+    ],
+    "user/profit/calendar": [
+      {
+        "file": "/profit-calendar.html",
+        "line": 425,
+        "original": "API_BASE+'/index.php/user/profit/calendar'"
+      },
+      {
+        "file": "/profit-calendar.js",
+        "line": 64,
+        "original": "API_BASE + '/index.php/user/profit/calendar'"
+      }
+    ],
+    "fund/order/create": [
+      {
+        "file": "/project-detail-tailwind.html",
+        "line": 395,
+        "original": "API_BASE + '/index.php/fund/order/create'"
+      }
+    ],
+    "user/transaction/records?page=${currentPage}&pageSize=20": [
+      {
+        "file": "/records.html",
+        "line": 363,
+        "original": "fetch(`${API_BASE}/index.php/user/transaction/records?page=${currentPage}&pageSize=20`"
+      }
+    ],
+    "login/reg/account": [
+      {
+        "file": "/register.js",
+        "line": 342,
+        "original": "API_BASE + '/index.php/login/reg/account'"
+      }
+    ],
+    "user/user/checkFaceReview": [
+      {
+        "file": "/reset-password-local.html",
+        "line": 621,
+        "original": "API_BASE + \"/index.php/user/user/checkFaceReview\""
+      }
+    ],
+    "user/user/submitFaceForReview": [
+      {
+        "file": "/reset-password-local.html",
+        "line": 871,
+        "original": "API_BASE + \"/index.php/user/user/submitFaceForReview\""
+      }
+    ],
+    "user/user/getFaceDescriptor": [
+      {
+        "file": "/reset-password-local.html",
+        "line": 1007,
+        "original": "API_BASE + \"/index.php/user/user/getFaceDescriptor\""
+      }
+    ],
+    "user/user/verifyFaceReset": [
+      {
+        "file": "/reset-password.js",
+        "line": 93,
+        "original": "API_BASE + '/index.php/user/user/verifyFaceReset'"
+      }
+    ],
+    "user/user/setPayPassword": [
+      {
+        "file": "/set-pay-password.html",
+        "line": 520,
+        "original": "API_BASE + \"/index.php/user/user/setPayPassword\""
+      }
+    ],
+    "user/team/rewards_status": [
+      {
+        "file": "/team-rewards.js",
+        "line": 51,
+        "original": "API_BASE + '/index.php/user/team/rewards_status'"
+      }
+    ],
+    "user/team/claim_reward": [
+      {
+        "file": "/team-rewards.js",
+        "line": 164,
+        "original": "API_BASE + '/index.php/user/team/claim_reward'"
+      }
+    ],
+    "user/trial/claim": [
+      {
+        "file": "/trial-money.html",
+        "line": 430,
+        "original": "API_BASE + \"/index.php/user/trial/claim\""
+      }
+    ],
+    "pay/bank/list": [
+      {
+        "file": "/withdraw.html",
+        "line": 847,
+        "original": "fetch(`${API_BASE}/index.php/pay/bank/list`"
+      }
+    ],
+    "pay/pay/withdraw": [
+      {
+        "file": "/withdraw.html",
+        "line": 1039,
+        "original": "fetch(`${API_BASE}/index.php/pay/pay/withdraw`"
+      },
+      {
+        "file": "/withdraw.html",
+        "line": 1131,
+        "original": "fetch(`${API_BASE}/index.php/pay/pay/withdraw`"
+      }
+    ]
+  },
+  "issues": {
+    "missing": [
+      {
+        "path": "api-keys",
+        "usages": [
+          {
+            "file": "/ai-config-panel.html",
+            "line": 338,
+            "original": "\"https://platform.openai.com/api-keys\""
+          }
+        ]
+      },
+      {
+        "path": "${this.config.apiBase}/chat/completions",
+        "usages": [
+          {
+            "file": "/ai-openai.js",
+            "line": 181,
+            "original": "fetch(`/index.php/${this.config.apiBase}/chat/completions`"
+          },
+          {
+            "file": "/ai-openai.js",
+            "line": 334,
+            "original": "fetch(`${this.config.apiBase}/chat/completions`"
+          }
+        ]
+      },
+      {
+        "path": "pay/bank/list?page=1",
+        "usages": [
+          {
+            "file": "/bank-cards.html",
+            "line": 486,
+            "original": "fetch(`${API_BASE}/index.php/pay/bank/list?page=1`"
+          }
+        ]
+      },
+      {
+        "path": "login/sms/forget",
+        "usages": [
+          {
+            "file": "/forgot.js",
+            "line": 43,
+            "original": "API_BASE + '/index.php/login/sms/forget'"
+          }
+        ]
+      },
+      {
+        "path": "login/sms/forget/account",
+        "usages": [
+          {
+            "file": "/forgot.js",
+            "line": 75,
+            "original": "API_BASE + '/index.php/login/sms/forget/account'"
+          }
+        ]
+      },
+      {
+        "path": "login/sms/login",
+        "usages": [
+          {
+            "file": "/login.js",
+            "line": 285,
+            "original": "API_BASE + '/index.php/login/sms/login'"
+          }
+        ]
+      },
+      {
+        "path": "auth/wechat/start?return=",
+        "usages": [
+          {
+            "file": "/login.js",
+            "line": 331,
+            "original": "API_BASE + '/index.php/auth/wechat/start?return='"
+          }
+        ]
+      },
+      {
+        "path": "fund/project/all?",
+        "usages": [
+          {
+            "file": "/profile.js",
+            "line": 277,
+            "original": "API_BASE + '/index.php/fund/project/all?'"
+          }
+        ]
+      },
+      {
+        "path": "user/transaction/records?page=${currentPage}&pageSize=20",
+        "usages": [
+          {
+            "file": "/records.html",
+            "line": 363,
+            "original": "fetch(`${API_BASE}/index.php/user/transaction/records?page=${currentPage}&pageSize=20`"
+          }
+        ]
+      }
+    ],
+    "unused": [
+      {
+        "route": "login/login/account",
+        "file": "login.php"
+      },
+      {
+        "route": "user/user/invite",
+        "file": "user/invite.php"
+      },
+      {
+        "route": "user/level/list",
+        "file": "vip/list.php"
+      },
+      {
+        "route": "user/vip/info",
+        "file": "user/vip-progress.php"
+      },
+      {
+        "route": "fund/project/detail",
+        "file": "project/detail.php"
+      },
+      {
+        "route": "fund/project/add",
+        "file": "project/invest.php"
+      },
+      {
+        "route": "fund/project/calculate",
+        "file": "project/calculate.php"
+      },
+      {
+        "route": "user/order/list",
+        "file": "order/list.php"
+      },
+      {
+        "route": "user/recharge/add",
+        "file": "finance/recharge.php"
+      },
+      {
+        "route": "user/withdraw/add",
+        "file": "finance/withdraw.php"
+      },
+      {
+        "route": "user/bank/list",
+        "file": "finance/bank_list.php"
+      },
+      {
+        "route": "pay/pay/recharge",
+        "file": "pay/recharge.php"
+      },
+      {
+        "route": "pay/us/recharge",
+        "file": "pay/us-recharge.php"
+      },
+      {
+        "route": "user/points/exchange-history",
+        "file": "user/points-exchange-history.php"
+      },
+      {
+        "route": "user/points/logs",
+        "file": "points/logs.php"
+      },
+      {
+        "route": "user/team/team",
+        "file": "user/team-info.php"
+      },
+      {
+        "route": "user/ribao/info",
+        "file": "user/ribao-info.php"
+      },
+      {
+        "route": "user/ribao/transfer-in",
+        "file": "user/ribao-transfer-in.php"
+      },
+      {
+        "route": "user/ribao/transfer-out",
+        "file": "user/ribao-transfer-out.php"
+      },
+      {
+        "route": "user/ribao/records",
+        "file": "user/ribao-records.php"
+      },
+      {
+        "route": "upload",
+        "file": "upload.php"
+      }
+    ],
+    "incorrect": [],
+    "undefined": []
+  }
+}

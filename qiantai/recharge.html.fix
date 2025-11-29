@@ -1,0 +1,13 @@
+/* 确保关键元素可点击 */
+.payment-option,
+.submit-btn,
+.copy-btn,
+button {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+.payment-option:active {
+  transform: scale(0.95);
+  transition: transform 0.1s;
+}

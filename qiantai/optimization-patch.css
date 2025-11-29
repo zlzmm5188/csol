@@ -1,0 +1,225 @@
+/* Providence 系统全面优化 - CSS补丁 */
+/* 应用到 styles.css 末尾 */
+
+/* ========================================
+   任务3: 调整首页会员卡和九宫格位置
+   ======================================== */
+.vipcard {
+    margin-top: -30px !important;
+    margin-bottom: 10px !important;
+}
+
+.market-overview-home {
+    margin-top: -20px !important;
+    position: relative;
+    z-index: 10;
+}
+
+/* ========================================
+   任务4: 首页快讯显示时间和标题
+   ======================================== */
+.news-flash .news-item .news-time {
+    display: inline-block !important;
+    font-size: 12px !important;
+    color: #f4d03f !important;
+    font-weight: 700 !important;
+    min-width: 45px !important;
+    flex-shrink: 0 !important;
+    margin-right: 8px !important;
+}
+
+.news-flash .news-item .news-content {
+    flex: 1 !important;
+    font-size: 14px !important;
+    color: #ffffff !important;
+    line-height: 1.5 !important;
+    font-weight: 500 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* ========================================
+   任务5: 修复数据详情标题栏颜色
+   ======================================== */
+.detail-header,
+.detail-header-ipo,
+.hero-simple {
+    background: linear-gradient(135deg, #0e2b44, #1a3a5f) !important;
+}
+
+.detail-header-title,
+.detail-header-title-ipo,
+.hero-simple .back-btn,
+.detail-header .back-btn {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+}
+
+/* ========================================
+   任务7: 优化九宫格快讯板块
+   ======================================== */
+.grid-item[href="news-flash.html"] .grid-text,
+.grid-item[href="news-flash.html"] .text {
+    font-size: 13px !important;
+    color: rgba(255,255,255,0.9) !important;
+}
+
+/* 去掉关注图标 */
+.news-flash .follow-icon,
+.news-item .follow-btn {
+    display: none !important;
+}
+
+/* ========================================
+   任务8: 优化九宫格日历板块
+   ======================================== */
+.grid-item[href="profit-calendar.html"] .grid-icon,
+.grid-item[href="profit-calendar.html"] .ico {
+    font-size: 32px !important;
+    filter: drop-shadow(0 2px 8px rgba(217,180,93,0.4));
+}
+
+.grid-item[href="profit-calendar.html"] .grid-text,
+.grid-item[href="profit-calendar.html"] .text {
+    font-size: 13px !important;
+    color: rgba(255,255,255,0.95) !important;
+    font-weight: 600 !important;
+}
+
+/* ========================================
+   任务9: 优化九宫格课堂板块
+   ======================================== */
+.grid-item[href="classroom.html"] .grid-icon,
+.grid-item[href="classroom.html"] .ico {
+    font-size: 32px !important;
+    filter: drop-shadow(0 2px 8px rgba(66,153,225,0.4));
+}
+
+.grid-item[href="classroom.html"] .grid-text,
+.grid-item[href="classroom.html"] .text {
+    font-size: 13px !important;
+    color: rgba(255,255,255,0.95) !important;
+    font-weight: 600 !important;
+}
+
+/* ========================================
+   任务10: 优化九宫格签到板块
+   ======================================== */
+.grid-item[href="daily-checkin.html"] .grid-icon,
+.grid-item[href="daily-checkin.html"] .ico {
+    font-size: 32px !important;
+    filter: drop-shadow(0 2px 8px rgba(255,215,0,0.4));
+}
+
+.grid-item[href="daily-checkin.html"] .grid-text,
+.grid-item[href="daily-checkin.html"] .text {
+    font-size: 13px !important;
+    color: rgba(255,255,255,0.95) !important;
+    font-weight: 600 !important;
+}
+
+/* ========================================
+   任务12: 优化profile.html UI
+   ======================================== */
+.profile-hero {
+    background: linear-gradient(135deg, #0e2b44, #1a4a6f) !important;
+    border-radius: 0 0 24px 24px !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important;
+}
+
+.asset-cards {
+    background: linear-gradient(135deg, rgba(217,180,93,0.1), rgba(217,180,93,0.05)) !important;
+    border-radius: 16px !important;
+    padding: 16px !important;
+    margin: 16px !important;
+}
+
+.asset-card-item {
+    background: rgba(255,255,255,0.05) !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(217,180,93,0.2) !important;
+}
+
+.quick-actions-new {
+    background: rgba(255,255,255,0.03) !important;
+}
+
+.quick-btn {
+    background: linear-gradient(135deg, rgba(217,180,93,0.15), rgba(217,180,93,0.08)) !important;
+    border: 1px solid rgba(217,180,93,0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+.quick-btn:hover,
+.quick-btn:active {
+    background: linear-gradient(135deg, rgba(217,180,93,0.25), rgba(217,180,93,0.15)) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(217,180,93,0.3) !important;
+}
+
+.menu-list {
+    background: rgba(255,255,255,0.03) !important;
+}
+
+.menu-item {
+    border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    transition: background 0.3s ease !important;
+}
+
+.menu-item:hover,
+.menu-item:active {
+    background: rgba(217,180,93,0.05) !important;
+}
+
+/* ========================================
+   通用优化
+   ======================================== */
+/* 所有卡片统一圆角 */
+.card,
+.data-card,
+.project-card,
+.ipo-card,
+.invest-card {
+    border-radius: 16px !important;
+}
+
+/* 所有按钮统一样式 */
+.btn,
+.btn-primary,
+.btn-submit {
+    border-radius: 12px !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn:active,
+.btn-primary:active,
+.btn-submit:active {
+    transform: scale(0.98) !important;
+}
+
+/* 所有标题栏统一深蓝色 */
+.page-header,
+.detail-header,
+.hero-simple {
+    background: linear-gradient(135deg, #0e2b44, #1a3a5f) !important;
+}
+
+/* 所有金色文字统一 */
+.gold-text,
+.highlight,
+.vip-amount,
+.profit-value {
+    color: #D9B45D !important;
+}
+
+/* 移动端优化 */
+@media screen and (max-width: 768px) {
+    .vipcard {
+        margin-top: -20px !important;
+    }
+
+    .market-overview-home {
+        margin-top: -15px !important;
+    }
+}

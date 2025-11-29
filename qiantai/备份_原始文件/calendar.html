@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>财经日历 - PROVIDENCE</title>
+    <link rel="icon" href="../favicon.ico" />
+    <link rel="stylesheet" href="styles.css?v=1763813622" />
+    <style>
+        /* Spotlight 滚动效果 */
+        .event-card {
+            transform: scale(0.94) translateZ(0);
+            opacity: 0.6;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform, opacity;
+        }
+
+        .event-card .importance-dot {
+            opacity: 0.6;
+            transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+.brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}      .brand .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+</head>
+
+<body class="page-other">
+    <div id="app">
+        <header class="hero-simple">
+            <div class="hero-top">
+                <a href="index.html" class="back-btn">←</a>
+                <div class="brand"><span class="b1">财经日历</span></div>
+            </div>
+        </header>
+
+        <main class="content-other">
+            <!-- 说明 -->
+            <section class="calendar-info">
+                <div class="info-card">
+                    <div class="info-title">📅 什么是财经日历？</div>
+                    <p>财经日历记录全球重要的经济数据发布和重大事件，帮助投资者了解市场动态，做出明智的投资决策。</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">🔔 重要性说明</div>
+                    <div class="importance-legend">
+                        <div class="legend-item">
+                            <span class="importance-dot high"></span>
+                            <span>高 - 市场影响重大，可能引起市场剧烈波动</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="importance-dot medium"></span>
+                            <span>中 - 值得关注，对特定市场有一定影响</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="importance-dot low"></span>
+                            <span>低 - 一般影响，仅供参考</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-title">💡 为什么要关注财经日历？</div>
+                    <p>经济数据和重大事件是影响金融市场走势的关键因素。提前了解这些信息，可以帮助您：</p>
+                    <ul style="margin:10px 0 0 0;padding-left:20px;line-height:1.8">
+                        <li>把握市场节奏，避免在重要数据发布前后盲目操作</li>
+                        <li>识别投资机会，利用市场波动获取收益</li>
+                        <li>控制风险敞口，在高波动期做好防御准备</li>
+                        <li>理解市场逻辑，提升投资决策的专业性</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 筛选器 -->
+            <section class="calendar-filters">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-type="data">数据</button>
+                    <button class="filter-tab" data-type="event">事件</button>
+                    <button class="filter-tab" data-type="holiday">假期</button>
+                </div>
+
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label class="filter-label">地区</label>
+                        <select class="filter-select" id="regionFilter">
+                            <option value="all">全部</option>
+                            <option value="cn">中国</option>
+                            <option value="us">美国</option>
+                            <option value="eu">欧洲</option>
+                            <option value="jp">日本</option>
+                            <option value="uk">英国</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label">重要性</label>
+                        <select class="filter-select" id="importanceFilter">
+                            <option value="all">全部</option>
+                            <option value="high">高</option>
+                            <option value="medium">中</option>
+                            <option value="low">低</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 日期导航 -->
+            <section class="date-nav">
+                <button class="date-nav-btn" id="prevDay">‹</button>
+                <div class="date-display" id="currentDate">2025-10-17</div>
+                <button class="date-nav-btn" id="nextDay">›</button>
+                <button class="date-today-btn" id="todayBtn">今天</button>
+            </section>
+
+            <!-- 日历事件列表 -->
+            <section class="calendar-events" id="calendarEvents">
+                <!-- 事件加载中 -->
+                <div class="loading-indicator">
+                    <div class="loading-spinner"></div>
+                    <div>加载中...</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 底部导航已移除 -->
+    </div>
+
+    <script defer src="calendar.js?v=1763813622"></script>
+    <script>
+        // Spotlight 滚动效果
+        (function () {
+            // 等待日历事件加载完成
+            const observer = new MutationObserver(function () {
+                const cards = document.querySelectorAll('.event-card');
+                if (cards && cards.length > 0) {
+                    observer.disconnect();
+                    initSpotlight(cards);
+                }
+            });
+
+            observer.observe(document.getElementById('calendarEvents'), {
+                childList: true,
+                subtree: true
+            });
+
+            function initSpotlight(cards) {
+                let dirty = true;
+
+                window.addEventListener('scroll', () => { dirty = true; }, { passive: true });
+                window.addEventListener('touchmove', () => { dirty = true; }, { passive: true });
+
+                function animate() {
+                    if (dirty) {
+                        dirty = false;
+                        const h = window.innerHeight;
+                        const center = h / 2;
+
+                        cards.forEach((card, index) => {
+                            if (index === 0) {
+                                card.style.transform = 'scale(0.94) translateZ(0)';
+                                card.style.opacity = '0.6';
+                                const dots = card.querySelectorAll('.importance-dot');
+                                dots.forEach(d => d.style.opacity = '0.5');
+                                return;
+                            }
+
+                            const rect = card.getBoundingClientRect();
+                            const cardCenter = rect.top + rect.height / 2;
+                            const dist = Math.abs(cardCenter - center);
+                            const ratio = Math.max(0, 1 - dist / (h * 0.6));
+
+                            const scale = 0.94 + ratio * 0.06;
+                            const opacity = 0.6 + ratio * 0.4;
+
+                            card.style.transform = `scale(${scale}) translateZ(0)`;
+                            card.style.opacity = opacity;
+
+                            const dots = card.querySelectorAll('.importance-dot');
+                            dots.forEach(d => d.style.opacity = 0.6 + ratio * 0.4);
+                        });
+                    }
+
+                    requestAnimationFrame(animate);
+                }
+
+                requestAnimationFrame(animate);
+            }
+        })();
+    </script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script defer src="smart-swipe-control.js?v=1763813622"></script>
+
+
+</body>
+
+</html>

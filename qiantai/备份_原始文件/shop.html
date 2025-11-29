@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>积分 | PROVIDENCE</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="styles.css?v=1763813622" />
+    <style>
+      /* 参考IPO详情页的红色主题 */
+      .points-page {
+        background: #f7f8fa;
+        min-height: 100vh;
+        padding-bottom: 20px;
+      }
+
+      /* 顶部深蓝渐变（VIP卡颜色） */
+      .points-hero {
+        background: linear-gradient(180deg, #0e2b44, #091c2e);
+        padding: 50px 20px 25px;
+        position: relative;
+        overflow: hidden;
+        color: #fff;
+      }
+
+      .points-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: transparent;          radial-gradient(
+            circle at top left,
+            rgba(255, 255, 255, 0.08),
+            transparent 60%
+          ),
+          radial-gradient(
+            circle at bottom right,
+            rgba(212, 175, 55, 0.08),
+            transparent 60%
+          );
+        opacity: 0.8;
+      }
+
+      .points-back {
+        position: absolute;
+        left: 16px;
+        top: 16px;
+        color: #fff;
+        font-size: 28px;
+        cursor: pointer;
+      }
+
+      .points-header-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .points-header-row .points-back {
+        position: static;
+        font-size: 32px;
+        cursor: pointer;
+        color: #fff;
+        font-weight: 700;
+
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .points-header-row .points-back:hover {
+        opacity: 0.8;
+        transform: scale(1.1);
+      }
+
+      .points-header-row .points-back:active {
+        transform: scale(0.95);
+      }
+
+      .points-title-text {
+        font-size: 18px;
+        font-weight: 700;
+        color: #fff;
+      }
+
+      .points-balance-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 16px;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .balance-label {
+        font-size: 13px;
+        opacity: 0.8;
+        margin-bottom: 8px;
+      }
+
+      .balance-value {
+        font-size: 42px;
+        font-weight: 700;
+        font-family: -apple-system, sans-serif;
+        color: #f5d771;
+        text-shadow: 0 2px 12px rgba(212, 175, 55, 0.4);
+      }
+
+      .balance-rate {
+        margin-top: 10px;
+        font-size: 13px;
+        opacity: 0.9;
+      }
+
+      /* 积分来源卡片 */
+      .source-section {
+        padding: 16px;
+        background: linear-gradient(180deg, #0e2b44, #091c2e);
+      }
+
+      .source-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #f5d771;
+        margin: 0 0 12px 4px;
+      }
+
+      .source-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+
+      .source-card {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        padding: 12px 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .source-card::before {
+        content: "";
+        position: absolute;
+        top: -15px;
+        right: -15px;
+
+        height: 40px;
+        background: radial-gradient(
+          circle,
+          rgba(212, 175, 55, 0.15),
+          transparent
+        );
+      }
+
+      .source-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .source-icon {
+        font-size: 24px;
+      }
+
+      .source-name {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      .source-points {
+        font-size: 18px;
+        font-weight: 700;
+        color: #f5d771;
+      }
+
+      /* 兑换区域 */
+      .exchange-section {
+        padding: 0 16px 16px;
+      }
+
+      .exchange-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        margin-bottom: 16px;
+      }
+
+      .exchange-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
+      .exchange-icon-big {
+        font-size: 48px;
+      }
+
+      
+
+      .exchange-label-text {
+        font-size: 12px;
+        color: #999;
+      }
+
+      .exchange-label-rate {
+        font-size: 16px;
+        font-weight: 700;
+        color: #d4af37;
+      }
+
+      .exchange-input-wrap {
+        margin-bottom: 16px;
+      }
+
+      .exchange-input {
+
+        padding: 14px;
+        border: 2px solid #f0f0f0;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 600;
+
+        color: #333;
+      }
+
+      .exchange-input:focus {
+        outline: none;
+        border-color: #d4af37;
+      }
+
+      .exchange-result {
+        padding: 14px;
+        background: #fff5f5;
+        border-radius: 12px;
+        margin-bottom: 16px;
+      }
+
+      .result-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+      }
+
+      .result-label {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .result-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .result-value.highlight {
+        font-size: 18px;
+        color: #d4af37;
+      }
+
+      .btn-exchange-red {
+
+        padding: 15px;
+        background: linear-gradient(135deg, #d4af37, #c99b2b);
+        color: #1a1a1a;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+      }
+
+      .btn-exchange-red:active {
+        transform: scale(0.98);
+      }
+
+      /* 兑换记录 */
+      .record-list {
+        padding: 0 16px 16px;
+      }
+
+      .record-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .record-info {
+        flex: 1;
+      }
+
+      .record-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 4px;
+      }
+
+      .record-time {
+        font-size: 12px;
+        color: #999;
+      }
+
+      
+
+      .record-points {
+        font-size: 18px;
+        font-weight: 700;
+        color: #d4af37;
+        margin-bottom: 4px;
+      }
+
+      .record-status {
+        font-size: 12px;
+        color: #52c41a;
+      }
+          .brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }
+          .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+    </style>
+  </head>
+
+  <body>
+    <div id="app" class="points-page">
+      <!-- 顶部积分展示（红色主题） -->
+      <div class="points-hero">
+        <div class="points-header-row">
+          <div class="points-back" onclick="history.back()">‹</div>
+          <div class="points-title-text">我的积分</div>
+        </div>
+        <div class="points-balance-card">
+          <div class="balance-label">当前可用积分</div>
+          <div class="balance-value" id="userPoints">0</div>
+          <div class="balance-rate">
+            兑换比例：<strong>1 积分 = 1 元</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- 积分来源 -->
+      <div class="source-section">
+        <div class="source-title">💎 积分来源</div>
+        <div class="source-grid">
+          <div class="source-card">
+            <div class="source-header">
+              <div class="source-icon">📊</div>
+              <div class="source-name">投资收益</div>
+            </div>
+            <div class="source-points">+100</div>
+          </div>
+          <div class="source-card">
+            <div class="source-header">
+              <div class="source-icon">✅</div>
+              <div class="source-name">每日签到</div>
+            </div>
+            <div class="source-points">+10</div>
+          </div>
+          <div class="source-card">
+            <div class="source-header">
+              <div class="source-icon">👑</div>
+              <div class="source-name">升级VIP</div>
+            </div>
+            <div class="source-points">+500</div>
+          </div>
+          <div class="source-card">
+            <div class="source-header">
+              <div class="source-icon">🎁</div>
+              <div class="source-name">邀请好友</div>
+            </div>
+            <div class="source-points" id="invitePoints">+200</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 兑换现金 -->
+      <div class="exchange-section">
+        <div class="source-title">💰 兑换现金</div>
+        <div class="exchange-card">
+          <div class="exchange-top">
+            <div class="exchange-icon-big">💵</div>
+            <div class="exchange-label">
+              <div class="exchange-label-text">兑换比例</div>
+              <div class="exchange-label-rate">1:1</div>
+            </div>
+          </div>
+
+          <div class="exchange-input-wrap">
+            <input
+              type="number"
+              class="exchange-input"
+              id="exchangeAmount"
+              placeholder="请输入兑换金额"
+              oninput="calculateExchange()"
+            />
+          </div>
+
+          <div
+            class="exchange-result"
+            id="exchangeResult"
+            style="display: none"
+          >
+            <div class="result-row">
+              <div class="result-label">兑换金额</div>
+              <div class="result-value" id="resultAmount">0 元</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">消耗积分</div>
+              <div class="result-value highlight" id="resultPoints">0</div>
+            </div>
+            <div class="result-row">
+              <div class="result-label">剩余积分</div>
+              <div class="result-value" id="resultRemaining">0</div>
+            </div>
+          </div>
+
+          <button class="btn-exchange-red" onclick="handleExchange()">
+            确认兑换
+          </button>
+        </div>
+      </div>
+
+      <!-- 兑换记录 -->
+      <div class="record-list">
+        <div class="source-title">📋 兑换记录</div>
+        <div id="recordList">
+          <div class="record-card">
+            <div class="record-info">
+              <div class="record-title">兑换现金</div>
+              <div class="record-time">2025-10-23 12:30</div>
+            </div>
+            <div class="record-amount">
+              <div class="record-points">-1,000</div>
+              <div class="record-status">已完成</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部导航 -->
+      <!-- 底部导航已移除 -->
+    </div>
+
+    <script src="api-new.js?v=1763813622"></script>
+    <script>
+      let userPoints = 0;
+      const EXCHANGE_RATE = 1; // 1积分=1元
+
+      // 页面加载
+      document.addEventListener("DOMContentLoaded", async function () {
+        await loadUserPoints();
+        await loadInviteConfig();
+        await loadExchangeRecords();
+      });
+
+      // 获取用户积分
+      async function loadUserPoints() {
+        try {
+          const result = await API.user.getInfo();
+          if (result.success && result.data) {
+            userPoints = parseInt(result.data.integral || 0);
+            document.getElementById("userPoints").textContent =
+              formatNumber(userPoints);
+          }
+        } catch (error) {
+          console.error("获取积分失败:", error);
+        }
+      }
+
+      // 获取邀请活动配置（根据VIP等级）
+      async function loadInviteConfig() {
+        try {
+          // 获取用户VIP等级
+          const userResult = await API.user.getInfo();
+          const userVipLevel = userResult.data?.level || 1;
+
+          // 获取配置
+          const response = await fetch(
+            `config.php?action=invite_config&vip=${userVipLevel}`
+          );
+          const result = await response.json();
+
+          if (result.success && result.data) {
+            const totalReward = result.data.total_reward || 200;
+
+            document.getElementById("invitePoints").textContent =
+              "+" + totalReward;
+            document.getElementById("inviteDesc").textContent =
+              `VIP${userVipLevel}专属`;
+          }
+        } catch (error) {
+          console.error("获取配置失败:", error);
+          document.getElementById("invitePoints").textContent = "+200";
+          document.getElementById("inviteDesc").textContent = "VIP专属";
+        }
+      }
+
+      // 计算兑换
+      function calculateExchange() {
+        const amount =
+          parseFloat(document.getElementById("exchangeAmount").value) || 0;
+        const needPoints = Math.ceil(amount * EXCHANGE_RATE);
+        const remaining = userPoints - needPoints;
+
+        if (amount > 0) {
+          document.getElementById("exchangeResult").style.display = "block";
+          document.getElementById("resultAmount").textContent =
+            amount.toFixed(2) + " 元";
+          document.getElementById("resultPoints").textContent =
+            formatNumber(needPoints) + " 积分";
+          document.getElementById("resultRemaining").textContent =
+            formatNumber(Math.max(0, remaining)) + " 积分";
+
+          if (needPoints > userPoints) {
+            document.getElementById("resultRemaining").style.color = "#ff4d4f";
+          } else {
+            document.getElementById("resultRemaining").style.color = "#52c41a";
+          }
+        } else {
+          document.getElementById("exchangeResult").style.display = "none";
+        }
+      }
+
+      // 执行兑换
+      async function handleExchange() {
+        const amount = parseFloat(
+          document.getElementById("exchangeAmount").value
+        );
+        if (!amount || amount <= 0) {
+          showAlert("请输入兑换金额");
+          return;
+        }
+
+        const needPoints = Math.ceil(amount * EXCHANGE_RATE);
+
+        if (needPoints > userPoints) {
+          showAlert(
+            "❌ 积分不足！\n\n需要：" +
+              formatNumber(needPoints) +
+              " 积分\n当前：" +
+              formatNumber(userPoints) +
+              " 积分"
+          );
+          return;
+        }
+
+        const confirmed = await showConfirm(
+          `确认兑换 ${amount} 元？\n将消耗 ${formatNumber(needPoints)} 积分\n\n到账时间：1-3个工作日`
+        );
+        if (!confirmed) {
+          return;
+        }
+
+        try {
+          const result = await http.post("/user/points/exchange", {
+            amount: amount,
+            points: needPoints,
+            type: "cash",
+          });
+
+          if (result.success) {
+            showAlert(
+              "✅ 兑换成功！\n\n兑换金额：" +
+                amount +
+                " 元\n消耗积分：" +
+                formatNumber(needPoints),
+              () => {
+                location.reload();
+              }
+            );
+          } else {
+            showAlert("❌ 兑换失败：" + (result.msg || "请稍后重试"));
+          }
+        } catch (error) {
+          showAlert("❌ 网络错误，请稍后重试");
+        }
+      }
+
+      // 加载兑换记录
+      async function loadExchangeRecords() {
+        try {
+          const response = await fetch(
+            "https://api.4kp3l0iq.top/api/user/points/logs"
+          );
+          const result = await response.json();
+
+          if (result.success && result.data && result.data.length > 0) {
+            const html = result.data
+              .map(
+                (record) => `
+                <div class="record-card">
+                    <div class="record-info">
+                        <div class="record-title">${record.type_text || "兑换现金"}</div>
+                        <div class="record-time">${record.create_time}</div>
+                    </div>
+                    <div class="record-amount">
+                        <div class="record-points">${record.points >= 0 ? "+" : ""}${formatNumber(record.points)}</div>
+                        <div class="record-status">${record.status_text || "已完成"}</div>
+                    </div>
+                </div>
+            `
+              )
+              .join("");
+            document.getElementById("recordList").innerHTML = html;
+          }
+        } catch (error) {
+          console.log("使用默认记录");
+        }
+      }
+
+      // 格式化数字
+      function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      // 自定义提示框
+      function showAlert(message, callback) {
+        const overlay = document.createElement("div");
+        overlay.style.cssText =
+          "position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;";
+
+        const dialog = document.createElement("div");
+        dialog.style.cssText =
+          "background:#fff;border-radius:16px;padding:24px;max-box-shadow:0 8px 32px rgba(0,0,0,0.3);";
+
+        dialog.innerHTML = `
+        <div style="font-size:16px;color:#333;line-height:1.8;white-space:pre-line;margin-bottom:20px;">${message}</div>
+        <button onclick="this.closest('[style*=fixed]').remove();${callback ? "callback()" : ""}"
+            style="padding:12px;background:#d4af37;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;">
+            确定
+        </button>
+    `;
+
+        overlay.appendChild(dialog);
+        document.body.appendChild(overlay);
+
+        if (callback) {
+          const btn = dialog.querySelector("button");
+          btn.onclick = () => {
+            overlay.remove();
+            callback();
+          };
+        }
+      }
+
+      // 自定义确认框
+      function showConfirm(message) {
+        return new Promise((resolve) => {
+          const overlay = document.createElement("div");
+          overlay.style.cssText =
+            "position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;";
+
+          const dialog = document.createElement("div");
+          dialog.style.cssText =
+            "background:#fff;border-radius:16px;padding:24px;max-box-shadow:0 8px 32px rgba(0,0,0,0.3);";
+
+          dialog.innerHTML = `
+            <div style="font-size:16px;color:#333;line-height:1.8;white-space:pre-line;margin-bottom:20px;">${message}</div>
+            <div style="display:flex;gap:12px;">
+                <button class="btn-cancel" style="flex:1;padding:12px;background:#f0f0f0;color:#666;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;">
+                    取消
+                </button>
+                <button class="btn-confirm" style="flex:1;padding:12px;background:#d4af37;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;">
+                    确认
+                </button>
+            </div>
+        `;
+
+          overlay.appendChild(dialog);
+          document.body.appendChild(overlay);
+
+          dialog.querySelector(".btn-cancel").onclick = () => {
+            overlay.remove();
+            resolve(false);
+          };
+
+          dialog.querySelector(".btn-confirm").onclick = () => {
+            overlay.remove();
+            resolve(true);
+          };
+        });
+      }
+    </script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script src="smart-swipe-control.js?v=1763813622"></script>
+
+
+  </body>
+</html>

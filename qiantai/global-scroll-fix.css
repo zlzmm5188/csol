@@ -1,0 +1,76 @@
+/* ================================================
+   全局滚动优化 - 完全禁用橡皮筋，允许正常滚动
+   ================================================ */
+
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* 禁用html滚动 */
+    position: fixed;  /* 固定html防止橡皮筋 */
+    overscroll-behavior: none;
+    -webkit-overscroll-behavior: none;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    position: fixed;  /* 固定body */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden; /* body不滚动 */
+    overscroll-behavior: none;
+    -webkit-overscroll-behavior: none;
+}
+
+/* 主容器负责滚动 */
+.main-container,
+.page-container,
+.container,
+[class*="main"],
+[class*="page"],
+[class*="content"] {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto !important;  /* 容器可滚动 */
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
+    -webkit-overscroll-behavior: none;
+}
+
+/* 如果页面没有容器，给body添加一个伪容器 */
+body:not(:has(.main-container)):not(:has(.page-container)):not(:has(.container)) {
+    overflow-y: auto !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* 防止iOS Safari地址栏影响 */
+@supports (-webkit-touch-callout: none) {
+    html, body {
+        height: -webkit-fill-available;
+    }
+}
+
+/* 禁用所有元素的下拉刷新 */
+body, 
+html,
+.main-container,
+.page-container {
+    overscroll-behavior-y: contain;
+    overscroll-behavior-x: none;
+}

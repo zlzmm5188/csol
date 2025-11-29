@@ -1,0 +1,21 @@
+key: ipo_disciplined_pool
+title: IPO配售·纪律化组合
+language: zh-CN
+category: ipo
+tags: IPO配售,纪律化,精选项目,专业投研
+bodyMd: |
+  本策略专注于**IPO配售机会**的纪律化参与，通过专业投研团队筛选与组合管理，追求长期稳定回报。
+
+  - 项目筛选：仅参与基本面优秀、估值合理的IPO项目
+  - 组合分散：单项目占比不超过 **{{max_invest}}**，降低集中度风险
+  - 持有周期：根据项目特点，灵活调整持有期限，平均 **{{cycle_days}}** 天
+
+variants:
+  - variantKey: A
+    weight: 2
+    bodyMd: |
+      采用**价值发现**策略：深度研究IPO公司基本面，优先参与成长性明确、行业地位稳固的项目。
+  - variantKey: B
+    weight: 1
+    bodyMd: |
+      采用**组合优化**策略：通过多项目组合分散风险，同时把握市场节奏，在合适的时点参与配售。

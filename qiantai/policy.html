@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <!-- APP适配 -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+<title>监管政策 | PROVIDENCE</title>
+<link rel="icon" href="favicon.ico" />
+<link rel="stylesheet" href="styles.css?v=1763897782" />
+<style>
+/* 全局重置 - 移动端和APP适配 */
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    /* 移动端优化 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* 禁止文本选择（移动端） */
+    -webkit-user-select: none;
+    user-select: none;
+    /* 禁止缩放 */
+    touch-action: pan-y;
+}
+
+/* 页面进入动画 - 流畅过渡 */
+body {
+    opacity: 0;
+    animation: pageFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    will-change: opacity;
+}
+
+@keyframes pageFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 页面背景 */
+body {
+    background: transparent,
+        radial-gradient(900px 420px at 120% -10%, rgba(159,139,84,.12), transparent 55%),
+        linear-gradient(180deg, #0a1723 0%, #0a1d2a 45%, #08141f 100%) !important;
+        background-attachment: fixed;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
+    min-height: 100vh;
+}
+
+/* 内容区域进入动画 */
+#app {
+    opacity: 0;
+    animation: contentFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
+    will-change: opacity;
+}
+
+@keyframes contentFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 顶部栏进入动画 */
+.topbar {
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: topbarSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    will-change: opacity, transform;
+}
+
+@keyframes topbarSlideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 顶部栏 - 固定定位，参考 lawyer-team.html 和 projects.html 风格 */
+.topbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    padding: 14px 16px;
+    padding-top: calc(14px + env(safe-area-inset-top, 0));
+    background: rgba(10, 23, 35, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.brand {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    text-decoration: none;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+
+.brand h1 {
+    display: inline-block;
+    margin: 0;
+    white-space: nowrap;
+    flex-shrink: 1;
+    font-size: 18px;
+    letter-spacing: 0.3px;
+    color: var(--gold2, #c7b58a);
+    font-weight: 600;
+}
+
+/* 主标题区 - 移动端和APP适配 */
+.header-section {
+    background: #ffffff;
+    padding: clamp(24px, 5vh, 32px) 16px;
+    padding-top: calc(clamp(24px, 5vh, 32px) + 60px + env(safe-area-inset-top, 0));
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    border-bottom: 4px solid #dc2626;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.main-title {
+    font-size: clamp(21px, 5.2vw, 26px);
+    font-weight: 900;
+    color: #dc2626;
+
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    font-size: clamp(12px, 3vw, 14px);
+    color: #6b7280;
+
+}
+
+/* 内容区 - 移动端和APP适配 */
+.content {
+    padding: 20px 16px;
+    padding-top: calc(60px + env(safe-area-inset-top, 0) + 20px);
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* 分类标题 - 移动端适配 */
+.category {
+    font-size: clamp(15px, 3.8vw, 17px);
+    font-weight: 700;
+    color: #1e40af;
+    margin: clamp(22px, 4.5vh, 28px) 0 clamp(12px, 2.5vh, 16px);
+    padding-left: 10px;
+    border-left: 3px solid #3b82f6;
+    line-height: 1.4;
+    /* 进入动画 */
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: categorySlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    will-change: opacity, transform;
+}
+
+@keyframes categorySlideIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* 文件卡片 - 正式风格，移动端和APP适配 */
+.doc {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid #1e40af;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    width: 100%;
+    box-sizing: border-box;
+    /* 移动端触摸目标优化 */
+    min-height: 60px;
+    display: flex;
+    align-items: flex-start;
+    /* 性能优化 - 使用GPU加速 */
+    transform: translateZ(0);
+    will-change: transform;
+    /* 卡片进入动画 */
+    opacity: 0;
+    animation: cardFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px) translateZ(0);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) translateZ(0);
+    }
+}
+
+/* 卡片延迟动画 - 交错效果 */
+.doc:nth-child(1) { animation-delay: 0.05s; }
+.doc:nth-child(2) { animation-delay: 0.1s; }
+.doc:nth-child(3) { animation-delay: 0.15s; }
+.doc:nth-child(4) { animation-delay: 0.2s; }
+.doc:nth-child(5) { animation-delay: 0.25s; }
+.doc:nth-child(6) { animation-delay: 0.3s; }
+.doc:nth-child(n+7) { animation-delay: 0.35s; }
+
+.doc:hover {
+    background: #f9fafb;
+    border-left-color: #3b82f6;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    transform: translateY(-2px) translateZ(0);
+}
+
+.doc:active {
+    background: #f3f4f6;
+    transform: translateX(2px) translateZ(0);
+}
+
+.doc-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    gap: 0;
+}
+
+.doc-icon {
+    display: none; /* 隐藏图标，统一布局 */
+}
+
+.doc-info {
+    flex: 1;
+    min-width: 0; /* 允许内容收缩 */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.doc-title {
+    font-size: clamp(15px, 4vw, 17px);
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.5;
+    margin: 0 0 10px 0;
+    padding: 0;
+    display: block;
+    word-wrap: break-word;
+    word-break: break-word;
+    /* 移动端优化 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.doc-num {
+    font-size: clamp(12px, 3vw, 13px);
+    color: #6b7280;
+    font-family: 'SimSun', '宋体', monospace;
+    line-height: 1.4;
+    margin: 0;
+    padding: 0;
+}
+
+.doc-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: clamp(12px, 3vw, 13px);
+    color: #6b7280;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    line-height: 1.4;
+    width: 100%;
+}
+
+.doc-date {
+    margin-left: auto;
+    color: #9ca3af;
+    font-size: clamp(12px, 3vw, 13px);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.tag {
+    display: none; /* 隐藏所有蓝色标签 */
+}
+
+.pdf-mark {
+    color: #dc2626;
+    font-weight: 600;
+    font-size: clamp(12px, 3vw, 13px);
+    margin-left: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* 移动端和APP优化 */
+@media screen and (max-width: 480px) {
+    .content {
+        padding: 16px 12px;
+        padding-top: calc(60px + env(safe-area-inset-top, 0) + 16px);
+        padding-left: max(12px, env(safe-area-inset-left));
+        padding-right: max(12px, env(safe-area-inset-right));
+    }
+
+    .header-section {
+        padding: 16px 12px;
+        padding-top: calc(60px + env(safe-area-inset-top, 0) + 16px);
+    }
+
+    .doc {
+        padding: 14px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        min-height: 56px;
+    }
+
+    .category {
+        padding-left: 8px;
+        margin: 20px 0 10px;
+        font-size: 15px;
+    }
+
+    .doc-title {
+        font-size: 15px;
+        line-height: 1.4;
+        margin-bottom: 8px;
+    }
+
+    .doc-meta {
+        font-size: 12px;
+        gap: 8px;
+    }
+
+    .header-section {
+        padding: 20px 12px;
+        padding-top: calc(20px + 60px + env(safe-area-inset-top, 0));
+    }
+
+    .main-title {
+        font-size: 20px;
+    }
+}
+
+/* 小屏幕设备优化 */
+@media screen and (max-width: 360px) {
+    .content {
+        padding: 10px;
+        padding-top: calc(10px + 60px + env(safe-area-inset-top, 0));
+    }
+
+    .doc {
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+
+    .doc-title {
+        font-size: 14px;
+    }
+
+    .doc-meta {
+        font-size: 11px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+}
+
+/* APP端优化 - 安全区域适配 */
+@supports (padding: max(0px)) {
+    .content {
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+}
+
+    .topbar {
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+    }
+}
+
+</style>
+</head>
+<body class="page-other">
+<div id="app">
+    <!-- 固定顶部栏 - 参考 lawyer-team.html 和 projects.html 风格 -->
+    <div class="topbar">
+        <div class="brand">
+            <a href="javascript:void(0);" onclick="history.back(); return false;" class="back-btn">‹</a>
+            <h1>监管政策文件</h1>
+        </div>
+    </div>
+
+    <!-- 主标题 -->
+    <div class="header-section">
+        <h1 class="main-title">私募基金监管政策文件</h1>
+        <p class="subtitle">规范性文件汇编</p>
+    </div>
+
+    <!-- 文件列表 -->
+    <div class="content">
+        <!-- 国务院/证监会 -->
+        <h2 class="category">国务院 · 中国证监会</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-1.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">私募投资基金监督管理条例</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">国务院令第762号</span>
+                        <span>2023-09-01起施行</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-2.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">私募投资基金监督管理办法</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">证监会令第214号</span>
+                        <span>2024-10-01起施行</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-3.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">证券投资基金法</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">主席令第九号</span>
+                        <span>2015年修订</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 基金业协会 -->
+        <h2 class="category">中国证券投资基金业协会</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-4.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">私募投资基金登记备案办法</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">中基协发〔2023〕2号</span>
+                        <span>2023-05-01起施行</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-5.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">私募投资基金信息披露管理办法</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">中基协发〔2023〕3号</span>
+                        <span>2023-05-01起施行</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 业务指引 -->
+        <h2 class="category">业务指引与规范</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-6.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">私募证券投资基金运作指引</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">中基协发〔2024〕15号</span>
+                        <span>2024年发布</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-7.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">私募投资基金募集行为管理办法</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">证监会令第105号</span>
+                        <span>2016年发布</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 投资者保护 -->
+        <h2 class="category">投资者保护</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-8.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">私募投资基金投资者适当性管理指引</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">中基协发〔2024〕8号</span>
+                        <span>2024年发布</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-9.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">私募基金管理人内部控制指引</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">中基协发〔2016〕7号</span>
+                        <span>2016年发布</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 合同指引 -->
+        <h2 class="category">合同指引</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-10.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">私募投资基金合同指引（契约型）</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">中基协发〔2023〕4号</span>
+                        <span>2023年发布</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-11.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">私募投资基金合同指引（公司型、合伙型）</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">中基协发〔2023〕5号</span>
+                        <span>2023年发布</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最新政策解读 -->
+        <h2 class="category">最新政策解读</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-12.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">关于进一步支持境外机构投资者在中国债券市场开展债券回购业务的公告</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">人民银行 证监会 外汇局公告〔2025〕第5号</span>
+                        <span>2025-09-26发布</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-13.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">推动公募基金高质量发展行动方案</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">证监会〔2025〕第12号</span>
+                        <span>2025-05-07发布</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-14.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">关于推动中长期资金入市工作的实施方案</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">中央金融办等六部门联合印发</span>
+                        <span>2025-01-22发布</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-15.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">促进资本市场指数化投资高质量发展行动方案</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">证监会〔2025〕第3号</span>
+                        <span>2025-01-26发布</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 国际证监会组织(IOSCO) -->
+        <h2 class="category">国际证监会组织 (IOSCO)</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-16.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">IOSCO简介</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">国际证券委员会组织</span>
+                        <span>2019年更新</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-17.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">IOSCO监管目标与原则</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">国际监管标准</span>
+                        <span>核心准则</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-18.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">IOSCO多边谅解备忘录</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">跨境监管合作</span>
+                        <span>信息共享机制</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-19.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">IOSCO工作动态</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">最新工作进展</span>
+                        <span>持续更新</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-20.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">IOSCO公开文件</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">标准与指引文件</span>
+                        <span>文件库</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 行政许可 -->
+        <h2 class="category">行政许可</h2>
+
+        <div class="doc" onclick="openDoc('policy-detail-21.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">证券公司设立审批</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">行政许可事项</span>
+                        <span>许可事项</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-22.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">基金管理公司设立审批</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">行政许可事项</span>
+                        <span>许可事项</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-23.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">证券投资咨询机构设立审批</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">行政许可事项</span>
+                        <span>许可事项</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="doc" onclick="openDoc('policy-detail-24.html')">
+            <div class="doc-head">
+                <div class="doc-info">
+                    <div class="doc-title">证券公司业务范围许可</div>
+                    <div class="doc-meta">
+                        <span class="doc-num">行政许可事项</span>
+                        <span>许可事项</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <!-- 底部导航已移除 -->
+</div>
+
+<script>
+// 打开政策详情（本地页面，避免外部链接安全警告）
+function openDoc(page) {
+    if (!page) return;
+    // 添加页面过渡效果
+    document.body.style.opacity = '0';
+    document.body.style.transition = 'opacity 0.2s ease';
+    setTimeout(() => {
+    window.location.href = page;
+    }, 200);
+}
+
+// 优化页面进入流畅度
+document.addEventListener('DOMContentLoaded', function() {
+    // 预加载关键资源
+    if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => {
+            // 预加载字体
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.as = 'style';
+            link.href = 'styles.css';
+            document.head.appendChild(link);
+        });
+    }
+
+    // 优化滚动性能
+    if ('scrollBehavior' in document.documentElement.style) {
+        document.documentElement.style.scrollBehavior = 'smooth';
+    }
+});
+
+</script>
+    <script src="page-lifecycle.js?v=1763897782"></script>
+    <script src="smart-swipe-control.js?v=1763897782"></script>
+
+
+</body>
+</html>

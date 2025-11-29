@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover" />
+    <!-- iOS状态栏配色 - 深色主题 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#0a1020" />
+    <title>每日签到 - Providence</title>
+    <link rel="stylesheet" href="styles.css?v=1763813622" />
+    <!-- ✅ 统一Token管理模块 -->
+    <!-- <script src="api-config.js?v=1763813622"></script> (已包含在api-new.js) -->
+    <!-- <script defer src="token-manager.js?v=1763813622"></script> (已包含在api-new.js) -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: pan-y;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            touch-action: pan-y !important;
+            -ms-touch-action: pan-y !important;
+            overscroll-behavior: none !important;
+            -webkit-overscroll-behavior: none !important;
+        }
+
+        body {
+            background-image: url('assets/a180d44deaf8c.jpg');
+            background-size: cover;
+            background-position: center top 0px;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            position: fixed;
+            width: 100%;
+            left: 0;
+            top: 0;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        body>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 顶部 - 毛玻璃效果 */
+        /* 顶部 - 固定在顶部 */
+        .top {
+            position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 1000 !important;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 16, 32, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: max(12px, env(safe-area-inset-top)) 16px 20px;
+            z-index: 1000;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .top::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(120% 180% at -10% -20%, rgba(255, 255, 255, 0.1), transparent 65%),
+                radial-gradient(140% 160% at 110% -10%, rgba(255, 255, 255, 0.05), transparent 58%);
+            pointer-events: none;
+        }
+
+        .top-bar {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+
+        .back-btn:active {
+            transform: scale(0.92);
+            background: rgba(232, 201, 145, 0.15);
+        }
+
+        .page-title, .brand h1 {
+            margin: 0;
+            display: inline-block;
+            white-space: nowrap;
+            flex: 1;
+            text-align: center;
+            font-size: clamp(17px, 4.2vw, 19px);
+            font-weight: 600;
+            color: #e8c991;
+        }
+
+        .refresh-btn {
+            color: #fff;
+            font-size: clamp(20px, 5vw, 24px);
+            width: clamp(38px, 9.5vw, 42px);
+            height: clamp(38px, 9.5vw, 42px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s;
+        }
+
+        .refresh-btn:active {
+            transform: scale(0.92) rotate(180deg);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* 签到概览卡片 */
+        .overview {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(10px, 2.5vw, 14px);
+        }
+
+        .ocard {
+            text-align: center;
+        }
+
+        .olabel {
+            font-size: clamp(12px, 3vw, 13px);
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: clamp(6px, 1.5vw, 8px);
+            font-weight: 500;
+        }
+
+        .ovalue {
+            font-size: clamp(20px, 5vw, 24px);
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .ovalue.gold {
+            color: #fbbf24;
+            text-shadow: 0 2px 6px rgba(251, 191, 36, 0.6);
+        }
+
+        /* 内容区 */
+        .main {
+            padding: 16px;
+            padding-top: clamp(160px, 40vw, 180px);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: relative;
+            z-index: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: none;
+            padding-bottom: 20px;
+        }
+
+        /* 月份导航 */
+        .month-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 16px;
+
+        }
+
+        .mnav {
+            color: #D9B45D;
+            font-size: 26px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(217, 180, 93, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid rgba(217, 180, 93, 0.3);
+        }
+
+        .mnav:active {
+            transform: scale(0.9)
+        }
+
+        .mname {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            min-width: 150px;
+            text-align: center;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        /* 签到日历 - 透明背景 */
+        .cal {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: clamp(20px, 5vw, 24px) clamp(12px, 3vw, 16px);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+            position: relative;
+            max-width: 100%;
+            width: 100%;
+            margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .cal-head {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            margin-bottom: clamp(8px, 2vw, 12px);
+        }
+
+        .cal-th {
+            text-align: center;
+            font-size: clamp(13px, 3.2vw, 15px);
+            color: rgba(255, 255, 255, 0.9);
+            padding: clamp(8px, 2vw, 10px) 0;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .cal-th:first-child,
+        .cal-th:last-child {
+            color: #D9B45D;
+            text-shadow: 0 2px 6px rgba(217, 180, 93, 0.8);
+        }
+
+        .cal-body {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: clamp(8px, 2vw, 10px);
+        }
+
+        .cal-cell {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: clamp(10px, 2.5vw, 12px);
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: clamp(45px, 11vw, 55px);
+        }
+
+        .cal-cell:active {
+            transform: scale(0.92);
+        }
+
+        .cal-cell.other {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cal-cell.today {
+            background: rgba(251, 191, 36, 0.3);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(251, 191, 36, 0.6);
+            box-shadow: 0 2px 12px rgba(251, 191, 36, 0.4);
+        }
+
+        /* 已签到 */
+        .cal-cell.signed {
+            background: rgba(16, 185, 129, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .cal-cell.signed.today {
+            background: rgba(16, 185, 129, 0.3);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(16, 185, 129, 0.8);
+            box-shadow: 0 2px 12px rgba(16, 185, 129, 0.5);
+        }
+
+        .cnum {
+            font-size: clamp(16px, 4vw, 20px);
+            color: #fff;
+            font-weight: 800;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .cal-cell.other .cnum {
+            color: rgba(255, 255, 255, 0.4);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .cval {
+            font-size: clamp(10px, 2.5vw, 12px);
+            color: #fbbf24;
+            font-weight: 700;
+            margin-top: 3px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 签到勾选标记 */
+        .check-mark {
+            position: absolute;
+            top: clamp(3px, 1vw, 5px);
+            right: clamp(3px, 1vw, 5px);
+            width: clamp(14px, 3.5vw, 18px);
+            height: clamp(14px, 3.5vw, 18px);
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: clamp(9px, 2.2vw, 11px);
+            font-weight: bold;
+        }
+
+        /* 签到按钮 */
+        .checkin-btn-wrap {
+            margin-top: clamp(20px, 5vw, 24px);
+            display: flex;
+            justify-content: center;
+        }
+
+        .checkin-btn {
+            padding: clamp(14px, 3.5vw, 16px) clamp(48px, 12vw, 60px);
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border-radius: clamp(22px, 5.5vw, 26px);
+            color: #fff;
+            font-size: clamp(16px, 4vw, 18px);
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(251, 191, 36, 0.4);
+            transition: all 0.3s;
+        }
+
+        .checkin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
+        }
+
+        .checkin-btn:active {
+            transform: translateY(0);
+        }
+
+        .checkin-btn:disabled {
+            background: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* iOS原生风格弹窗 */
+        .ios-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background: #fff;
+            border-radius: 13px;
+            max-width: 270px;
+            z-index: 9999;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .ios-toast.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: auto;
+        }
+
+        .ios-toast-title {
+            font-size: 17px;
+            font-weight: 400;
+            color: #000;
+            text-align: center;
+            padding: 20px 20px 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .ios-toast-message {
+            font-size: 13px;
+            color: #000;
+            text-align: center;
+            line-height: 1.4;
+            padding: 0 20px 20px;
+            letter-spacing: -0.01em;
+            border-bottom: 0.5px solid #d1d1d6;
+        }
+
+        .ios-toast-buttons {
+            display: flex;
+            border-top: 0.5px solid #d1d1d6;
+        }
+
+        .ios-toast-button {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 13px 0;
+            background: none;
+            border: none;
+            font-size: 17px;
+            font-weight: 400;
+            color: #007aff;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+        }
+
+        .ios-toast-button.only-button {
+            border-top: 0.5px solid #d1d1d6;
+        }
+
+        .ios-toast-button:active {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+.brand { display: flex; flex-direction: row; align-items: center; gap: 8px; white-space: nowrap; justify-content: flex-start; }      .brand .back-btn {
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    background: rgba(232, 201, 145, 0.15) !important;
+    border: 1px solid rgba(232, 201, 145, 0.3) !important;
+    color: #e8c991 !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}
+.back-btn:active {
+    transform: scale(0.95) !important;
+}      .brand .page-title, .page-title, .brand h1 { margin: 0; display: inline-block; white-space: nowrap; flex: 0 1 auto; }
+
+        /* 确保弹窗在最顶层 */
+        .ios-toast-overlay,
+        #iosToastOverlay {
+            z-index: 999999 !important;
+            position: fixed !important;
+        }
+
+        .ios-toast,
+        #iosToast {
+            z-index: 1000000 !important;
+            position: fixed !important;
+        }
+    </style>
+    <script>
+      // 禁止左右滑动手势（防止浏览器前进/后退）
+      document.addEventListener('touchstart', function(e) {
+        if (e.touches.length > 1) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+
+      let lastTouchEnd = 0;
+      document.addEventListener('touchend', function(e) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+          e.preventDefault();
+        }
+        lastTouchEnd = now;
+      }, false);
+
+      // 禁止水平滑动
+      let startX = 0;
+      let startY = 0;
+      document.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].pageX;
+        startY = e.touches[0].pageY;
+      }, { passive: true });
+
+      document.addEventListener('touchmove', function(e) {
+        const moveX = e.touches[0].pageX;
+        const moveY = e.touches[0].pageY;
+        const diffX = Math.abs(moveX - startX);
+        const diffY = Math.abs(moveY - startY);
+
+        // 如果水平移动大于垂直移动，阻止默认行为（禁止左右滑动）
+        if (diffX > diffY && diffX > 10) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+    </script>
+</head>
+
+<body>
+
+    <div class="top">
+        <div class="top-bar">
+            <div class="back-btn" onclick="history.back()">‹</div>
+            <div class="page-title">每日签到</div>
+        </div>
+
+        <div class="overview">
+            <div class="ocard">
+                <div class="olabel">今日积分</div>
+                <div class="ovalue gold" id="todayPoints">+0</div>
+            </div>
+            <div class="ocard">
+                <div class="olabel">连续签到</div>
+                <div class="ovalue" id="continuousDays">0天</div>
+            </div>
+            <div class="ocard">
+                <div class="olabel">本月签到</div>
+                <div class="ovalue" id="monthCount">0次</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+
+        <div class="month-nav">
+            <div class="mnav" onclick="prevMonth()">‹</div>
+            <div class="mname" id="monthName">2025年 11月</div>
+            <div class="mnav" onclick="nextMonth()">›</div>
+        </div>
+
+        <div class="cal">
+            <div class="cal-head">
+                <div class="cal-th">日</div>
+                <div class="cal-th">一</div>
+                <div class="cal-th">二</div>
+                <div class="cal-th">三</div>
+                <div class="cal-th">四</div>
+                <div class="cal-th">五</div>
+                <div class="cal-th">六</div>
+            </div>
+            <div class="cal-body" id="calBody"></div>
+        </div>
+
+        <div class="checkin-btn-wrap">
+            <button class="checkin-btn" id="checkinBtn" onclick="doCheckin()">立即签到</button>
+        </div>
+
+    </div>
+
+    <!-- iOS原生风格弹窗 -->
+    <div class="ios-toast" id="iosToast">
+        <div class="ios-toast-title" id="iosToastTitle"></div>
+        <div class="ios-toast-message" id="iosToastMessage"></div>
+        <div class="ios-toast-buttons">
+            <div class="ios-toast-button only-button" id="iosToastConfirm">确定</div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.API_CONFIG?.baseURL || 'https://api.4kp3l0iq.top/api';
+        let year = new Date().getFullYear(), month = new Date().getMonth() + 1;
+        let signData = {}; // 签到数据：{date: {signed: true, points: 10}}
+        let signInfo = {}; // 签到信息
+        let userData = { token: localStorage.getItem('providence_token') || '' };
+
+        // iOS原生风格弹窗
+        function showToast(title, message) {
+            const toast = document.getElementById('iosToast');
+            const titleEl = document.getElementById('iosToastTitle');
+            const msgEl = document.getElementById('iosToastMessage');
+            const confirmBtn = document.getElementById('iosToastConfirm');
+
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+            toast.classList.add('show');
+
+            confirmBtn.onclick = () => {
+                toast.classList.remove('show');
+            };
+        }
+
+        // 加载签到信息
+        async function loadSignInfo() {
+            try {
+                const response = await fetch(API_BASE + '/user/sign/info', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'token': userData.token
+                    }
+                });
+                const data = await response.json();
+                console.log('[签到] API响应:', data);
+
+                if (data.code === 1 && data.data) {
+                    signInfo = data.data;
+                    updateOverview(data.data);
+                    // 更新按钮状态
+                    const btn = document.getElementById('checkinBtn');
+                    if (data.data.is_signed) {
+                        btn.disabled = true;
+                        btn.textContent = '今日已签到';
+                    } else {
+                        btn.disabled = false;
+                        btn.textContent = '立即签到 +' + data.data.today_points + '积分';
+                    }
+                }
+            } catch (error) {
+                console.error('[签到] 加载签到信息失败:', error);
+            }
+        }
+
+        // 更新顶部统计
+        function updateOverview(data) {
+            document.getElementById('todayPoints').textContent = '+' + (data.today_points || 0);
+            document.getElementById('continuousDays').textContent = (data.continuous_days || 0) + '天';
+            document.getElementById('monthCount').textContent = (data.month_sign_count || 0) + '次';
+
+            console.log('[签到] 更新总览:', data);
+        }
+
+        // 执行签到
+        async function doCheckin() {
+            const btn = document.getElementById('checkinBtn');
+            if (btn.disabled) return;
+
+            try {
+                btn.disabled = true;
+                btn.textContent = '签到中...';
+
+                const response = await fetch(API_BASE + '/user/sign/sign', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'token': userData.token
+                    }
+                });
+
+                const text = await response.text();
+                console.log('[签到] 原始响应:', text.substring(0, 200));
+
+                // 检查是否是HTML错误页面
+                if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html') || text.includes('系统发生错误')) {
+                    console.error('[签到] 服务器返回HTML错误页面');
+                    showToast('签到失败', '服务器错误，请稍后重试或联系客服');
+                    btn.disabled = false;
+                    btn.textContent = '立即签到';
+                    return;
+                }
+
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    console.error('[签到] JSON解析失败:', e);
+                    showToast('签到失败', '服务器返回格式错误');
+                    btn.disabled = false;
+                    btn.textContent = '立即签到';
+                    return;
+                }
+
+                console.log('[签到] 签到响应:', data);
+
+                if (data.code === 1) {
+                    showToast('签到成功', data.message || data.msg || '恭喜您，获得' + signInfo.today_points + '积分');
+                    // 重新加载数据
+                    setTimeout(() => {
+                        loadData();
+                    }, 1500);
+                } else {
+                    showToast('签到失败', data.message || data.msg || '请稍后重试');
+                    btn.disabled = false;
+                    btn.textContent = '立即签到';
+                }
+            } catch (error) {
+                console.error('[签到] 签到失败:', error);
+                showToast('签到失败', '网络错误，请稍后重试');
+                btn.disabled = false;
+                btn.textContent = '立即签到';
+            }
+        }
+
+        function render() {
+            const first = new Date(year, month - 1, 1).getDay();
+            const days = new Date(year, month, 0).getDate();
+            const body = document.getElementById('calBody');
+            body.innerHTML = '';
+            document.getElementById('monthName').textContent = `${year}年 ${month}月`;
+
+            // 上月空格
+            for (let i = 0; i < first; i++) {
+                const c = document.createElement('div');
+                c.className = 'cal-cell other';
+                body.appendChild(c);
+            }
+
+            const today = new Date();
+            const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+            for (let d = 1; d <= days; d++) {
+                const c = document.createElement('div');
+                const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                const isToday = dateStr === todayStr;
+                const dayData = signData[dateStr] || {};
+                const signed = dayData.signed || false;
+
+                c.className = `cal-cell ${isToday ? 'today' : ''} ${signed ? 'signed' : ''}`;
+                c.innerHTML = `<div class="cnum">${d}</div>${signed ? '<div class="check-mark">✓</div>' : ''}`;
+                c.onclick = () => {
+                    if (signed) {
+                        showToast(`${month}月${d}日`, `已签到\n获得积分：${dayData.points || 0}`);
+                    } else {
+                        showToast(`${month}月${d}日`, '未签到');
+                    }
+                };
+                body.appendChild(c);
+            }
+
+            // 如果是当前月，标记今天之前的日期为已签到（模拟）
+            if (year === today.getFullYear() && month === today.getMonth() + 1 && signInfo.month_sign_count > 0) {
+                // 这里应该从后端获取具体哪些天签到了
+                // 暂时只标记今天
+                if (signInfo.is_signed) {
+                    signData[todayStr] = { signed: true, points: signInfo.today_points || 0 };
+                }
+                render(); // 重新渲染
+            }
+        }
+
+        function prevMonth() {
+            month--;
+            if (month < 1) { month = 12; year-- }
+            render();
+        }
+
+        function nextMonth() {
+            month++;
+            if (month > 12) { month = 1; year++ }
+            render();
+        }
+
+        function loadData() {
+            loadSignInfo().then(() => {
+                render();
+            });
+        }
+
+        // 初始化
+        loadData();
+    </script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script defer src="smart-swipe-control.js?v=1763813622"></script>
+
+
+</body>
+
+</html>

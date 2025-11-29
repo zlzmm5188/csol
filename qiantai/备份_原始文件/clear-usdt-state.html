@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>清除USDT卡片状态</title>
+</head>
+<body>
+    <h1>清除USDT卡片状态</h1>
+    <button onclick="clearState()">清除状态</button>
+    <div id="result"></div>
+
+    <script>
+    function clearState() {
+        const oldState = localStorage.getItem('flip_card_usdt_state');
+        localStorage.removeItem('flip_card_usdt_state');
+        document.getElementById('result').innerHTML =
+            '<p>旧状态: ' + (oldState || '无') + '</p>' +
+            '<p>已清除，请返回 profile.html 刷新页面</p>' +
+            '<a href="profile.html">返回Profile页面</a>';
+    }
+
+    // 显示当前状态
+    const currentState = localStorage.getItem('flip_card_usdt_state');
+    document.getElementById('result').innerHTML =
+        '<p>当前状态: ' + (currentState || '无（将使用默认值balance）') + '</p>';
+    </script>
+    <script src="page-lifecycle.js?v=1763813622"></script>
+    <script defer src="smart-swipe-control.js?v=1763813622"></script>
+
+
+</body>
+</html>

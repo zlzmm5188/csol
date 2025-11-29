@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <title>邀请好友测试 - 可滚动</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
+            overscroll-behavior: none;
+        }
+        
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
+            background: linear-gradient(180deg, #0a1723, #08141f);
+            overscroll-behavior: none;
+        }
+        
+        /* 可滚动容器 */
+        .scroll-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: none;
+        }
+        
+        .topbar {
+            position: sticky;
+            top: 0;
+            padding: 14px 16px;
+            background: rgba(10, 23, 35, 0.95);
+            backdrop-filter: blur(20px);
+            color: #fff;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            z-index: 100;
+        }
+        
+        .content {
+            padding: 20px;
+            color: #fff;
+        }
+        
+        .block {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 12px;
+            min-height: 150px;
+        }
+        
+        h1 { color: #ffd700; }
+        
+        .status {
+            position: fixed;
+            top: 60px;
+            right: 10px;
+            background: rgba(255,215,0,0.9);
+            color: #000;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <!-- 可滚动容器 -->
+    <div class="scroll-container">
+        <div class="topbar">
+            <div onclick="history.back()">← 返回</div>
+        </div>
+        
+        <div class="status" id="status">滚动: 0px</div>
+        
+        <div class="content">
+            <h1>📜 邀请好友 - 滚动测试</h1>
+            <p>这个页面演示正确的滚动方式</p>
+            
+            <div class="block">
+                <h2>✅ 测试块 1</h2>
+                <p>html和body固定，容器可滚动</p>
+            </div>
+            
+            <div class="block">
+                <h2>✅ 测试块 2</h2>
+                <p>禁用橡皮筋效果</p>
+            </div>
+            
+            <div class="block">
+                <h2>✅ 测试块 3</h2>
+                <p>继续向下滚动...</p>
+            </div>
+            
+            <div class="block">
+                <h2>✅ 测试块 4</h2>
+                <p>应该能看到滚动条移动</p>
+            </div>
+            
+            <div class="block">
+                <h2>✅ 测试块 5</h2>
+                <p>还能继续滚动</p>
+            </div>
+            
+            <div class="block">
+                <h2>✅ 测试块 6</h2>
+                <p>到底部了吗？</p>
+            </div>
+            
+            <div class="block" style="margin-bottom: 80px;">
+                <h2>✅ 测试完成</h2>
+                <p>如果能看到这里 = 滚动成功！</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.querySelector('.scroll-container');
+        container.addEventListener('scroll', () => {
+            document.getElementById('status').textContent = '滚动: ' + Math.round(container.scrollTop) + 'px';
+        });
+        
+        console.log('[滚动测试] 页面已加载');
+    </script>
+</body>
+</html>

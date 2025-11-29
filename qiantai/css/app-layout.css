@@ -1,0 +1,176 @@
+/**
+ * App 布局样式 - 原生 App 体验
+ * 实现固定顶部导航栏、固定底部 TabBar、内容独立滚动
+ *
+ * ⚠️ 注意：此样式只应用于使用 .app-content 的页面
+ * 启动页和登录页不使用此样式，保持独立布局
+ */
+
+/* 关键：关闭 body 滚动 - 只对使用 app-content 的页面生效 */
+body:has(.app-content),
+body .app-content {
+  /* 通过 :has() 选择器，只影响包含 .app-content 的 body */
+}
+
+/* 固定顶部导航栏 */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: linear-gradient(
+    180deg,
+    rgba(14, 43, 68, 0.98) 0%,
+    rgba(9, 28, 46, 0.95) 100%
+  );
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(232, 201, 145, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  height: 60px; /* 固定高度 */
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+/* 页面内容区域 - 独立滚动 */
+.app-content {
+  position: fixed;
+  top: 60px; /* 顶部导航栏高度 */
+  left: 0;
+  right: 0;
+  bottom: 60px; /* 底部 TabBar 高度 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  background: linear-gradient(180deg, #0e2b44, #091c2e);
+  padding: 0;
+  margin: 0;
+}
+
+/* 固定底部 TabBar */
+.app-tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(14, 43, 68, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(232, 201, 145, 0.15);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
+  height: 60px; /* 固定高度 */
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0;
+  margin: 0;
+}
+
+/* TabBar 项目样式 */
+.app-tabbar .tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.2s;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.app-tabbar .tab.active {
+  color: #e8c991;
+}
+
+.app-tabbar .tab .ico {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.app-tabbar .tab .text {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* 响应式调整 */
+@media (max-width: 480px) {
+  .app-header {
+    height: 56px;
+    padding: 0 12px;
+  }
+
+  .app-content {
+    top: 56px;
+    bottom: 56px;
+  }
+
+  .app-tabbar {
+    height: 56px;
+  }
+}
+
+/* 安全区域适配（iPhone X 等） */
+@supports (padding: max(0px)) {
+  .app-header {
+    padding-top: max(0px, env(safe-area-inset-top));
+  }
+
+  .app-tabbar {
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+    height: calc(60px + max(0px, env(safe-area-inset-bottom)));
+  }
+
+  .app-content {
+    bottom: calc(60px + max(0px, env(safe-area-inset-bottom)));
+  }
+}
+/* 固定顶部标题栏 */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  z-index: 999;
+  background: #0b0c10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* 固定底部导航栏 */
+.app-tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 999;
+  background: #0b0c10;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* 主体内容滚动区域 */
+.app-content {
+  position: fixed;
+  top: 56px;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}

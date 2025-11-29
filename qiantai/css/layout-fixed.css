@@ -1,0 +1,341 @@
+/**
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Providence 标准布局结构 - 固定导航栏系统
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ *
+ * 核心原则：
+ * 1. 顶部导航栏和底部Tabbar使用 position: fixed 固定在视口
+ * 2. 主内容区单独滚动，不影响导航栏
+ * 3. 使用 padding 为导航栏预留空间，避免内容被遮挡
+ * 4. 支持安全区域适配 (safe-area-inset)
+ *
+ * 标准布局结构：
+ * <div class="app-wrapper">
+ *   <div class="top-nav fixed-header">顶部导航</div>
+ *   <div class="main-content scrollable">主内容区</div>
+ *   <div class="bottom-tabbar tabbar">底部导航</div>
+ * </div>
+ *
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   1. 全局布局容器
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* 禁止body滚动，只允许内容区滚动 */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none; /* 防止过度滚动 */
+}
+
+.app-wrapper,
+#app,
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100); /* 移动端100vh修复 */
+    position: relative;
+    /* 确保fixed子元素相对于正确的容器 */
+    transform: none !important;
+    perspective: none !important;
+    filter: none !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   2. 顶部导航栏 - 固定在顶部
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.fixed-header,
+.top-nav,
+.header-fixed {
+    position: fixed !important;
+    position: -webkit-fixed !important; /* iOS Safari */
+    top: 0 !important;
+    top: env(safe-area-inset-top, 0) !important; /* 刘海屏适配 */
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 1000 !important;
+
+    /* 确保在父容器transform下也能fixed */
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    will-change: transform !important;
+
+    /* 背景和样式 */
+    background: linear-gradient(180deg, rgba(14, 43, 68, 0.98) 0%, rgba(9, 28, 46, 0.95) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 标准顶部导航栏高度 */
+.fixed-header {
+    height: 50px;
+    padding: 12px 16px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   3. 底部导航栏 (Tabbar) - 固定在底部
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+body .tabbar,
+html .tabbar,
+#app .tabbar,
+.tabbar,
+.bottom-tabbar,
+.bottom-nav,
+.navbar-fixed {
+    /* 核心：固定在视口底部，不随页面滚动 */
+    position: fixed !important;
+    position: -webkit-fixed !important;
+    bottom: 0 !important;
+    bottom: env(safe-area-inset-bottom, 0) !important; /* 底部安全区 */
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 999 !important; /* 低于顶部导航 */
+
+    /* 确保在父容器transform下也能fixed */
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    will-change: transform !important;
+    margin: 0 !important;
+
+    /* 背景和样式 */
+    background: linear-gradient(180deg, rgba(11, 59, 94, 0.95) 0%, rgba(8, 44, 71, 0.98) 100%);
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+
+    /* 防止手势冲突 */
+    touch-action: manipulation !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    overscroll-behavior: none !important;
+}
+
+/* 标准底部导航栏高度 */
+.tabbar {
+    height: 60px;
+    /* 加上安全区高度 */
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   4. 主内容区 - 独立滚动
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.main-content,
+.scrollable,
+.content-wrapper,
+main {
+    /* 布局 */
+    flex: 1;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+
+    /* 为导航栏预留空间 */
+    padding-top: 50px; /* 顶部导航高度 */
+    padding-top: calc(50px + env(safe-area-inset-top, 0)); /* 加安全区 */
+    padding-bottom: 60px; /* 底部导航高度 */
+    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0)); /* 加安全区 */
+
+    /* 高度计算 */
+    height: 100%;
+    min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
+
+    /* 确保滚动流畅 */
+    will-change: scroll-position;
+    overscroll-behavior: contain;
+    box-sizing: border-box;
+}
+
+/* 页面内容容器 */
+#app {
+    padding-top: 60px; /* 为固定标题栏留出空间 */
+    padding-bottom: 80px; /* 为底部导航栏留出空间 */
+    /* 适配安全区 */
+    padding-top: calc(60px + env(safe-area-inset-top, 0));
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0));
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   5. 移动端100vh修复 (iOS Safari地址栏问题)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* JavaScript设置: */
+/*
+function setVH() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', setVH);
+setVH();
+*/
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   6. 页面特定调整
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* 没有顶部导航栏的页面 */
+.no-header .main-content,
+.no-header #app {
+    padding-top: 0 !important;
+    padding-top: env(safe-area-inset-top, 0) !important;
+}
+
+/* 没有底部导航栏的页面 */
+.no-tabbar .main-content,
+.no-tabbar #app {
+    padding-bottom: 0 !important;
+    padding-bottom: env(safe-area-inset-bottom, 0) !important;
+}
+
+/* 全屏页面 (登录、注册等) */
+.fullscreen {
+    padding: 0 !important;
+}
+
+.fullscreen .tabbar,
+.fullscreen .fixed-header {
+    display: none !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   7. 调试辅助
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* 调试模式：显示导航栏边界 */
+.debug-layout .fixed-header {
+    outline: 2px solid red;
+}
+
+.debug-layout .tabbar {
+    outline: 2px solid blue;
+}
+
+.debug-layout .main-content {
+    outline: 2px dashed green;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   8. 响应式适配
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* 平板端 */
+@media (min-width: 768px) {
+    .fixed-header {
+        height: 60px;
+    }
+
+    .tabbar {
+        height: 70px;
+    }
+
+    .main-content,
+    #app {
+        padding-top: 60px;
+        padding-bottom: 70px;
+    }
+}
+
+/* 桌面端 */
+@media (min-width: 1024px) {
+    /* 桌面端可能不需要底部导航 */
+    .tabbar {
+        display: none;
+    }
+
+    .main-content,
+    #app {
+        padding-bottom: 0;
+    }
+}
+
+/* 横屏模式 */
+@media (orientation: landscape) {
+    .fixed-header {
+        height: 45px;
+    }
+
+    .tabbar {
+        height: 50px;
+    }
+
+    .main-content,
+    #app {
+        padding-top: 45px;
+        padding-bottom: 50px;
+    }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   9. 兼容性修复
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* iOS Safari */
+@supports (-webkit-touch-callout: none) {
+    body {
+        height: -webkit-fill-available;
+    }
+
+    .app-wrapper,
+    #app {
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* Android Chrome */
+@supports not (-webkit-touch-callout: none) {
+    /* Android特定样式 */
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   使用示例
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HTML结构:
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="layout-fixed.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- 顶部导航 (固定) -->
+        <div class="fixed-header">
+            <h1>页面标题</h1>
+        </div>
+
+        <!-- 主内容区 (可滚动) -->
+        <div class="main-content" id="app">
+            <div>大量内容...</div>
+            <div>大量内容...</div>
+            <div>大量内容...</div>
+        </div>
+
+        <!-- 底部导航 (固定) -->
+        <nav class="tabbar">
+            <a class="tab">首页</a>
+            <a class="tab">项目</a>
+            <a class="tab">我的</a>
+        </nav>
+    </div>
+
+    <script src="layout-helper.js"></script>
+</body>
+</html>
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
