@@ -71,7 +71,7 @@ function generateSign(params) {
 
     // 3. 拼接字符串：key1=value1&key2=value2&...&key=商户密钥
     let signStr = '';
-    for (key of sortedKeys) {
+    for (const key of sortedKeys) {
         signStr += `${key}=${signParams[key]}&`;
     }
     signStr += `key=${PAYMENT_CONFIG.apiKey}`;
@@ -136,7 +136,7 @@ async function createPayment(params) {
 
         try {
             const formData = new URLSearchParams();
-            for (key in requestParams) {
+            for (const key in requestParams) {
                 formData.append(key, requestParams[key]);
             }
 
@@ -174,20 +174,18 @@ async function createPayment(params) {
             console.warn('⚠️ 表单格式请求失败，尝试JSON格式:', formError);
 
             try {
-            response = await fetch(PAYMENT_CONFIG.payGateway, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                response = await fetch(PAYMENT_CONFIG.payGateway, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestParams)
+                });
+                result = await response.json();
             } catch (err) {
                 console.error(err);
                 if (typeof showToast === "function") showToast("网络异常，请稍后重试");
             }
-                },
-                body: JSON.stringify(requestParams)
-            });
-
-            result = await response.json();
         }
 
         console.log('📥 创建支付订单响应:', result);
@@ -223,7 +221,7 @@ async function createPayment(params) {
  */
 async function queryPayment(orderNo) {
     // 根据文档，查询订单的参数可能不同，先使用通用参数
-    requestParams = {
+    const requestParams = {
         merchantCode: PAYMENT_CONFIG.merchantId,  // 商户号
         merchantOrderNo: orderNo                   // 商户订单号
     };
@@ -238,12 +236,12 @@ async function queryPayment(orderNo) {
 
     try {
         // 使用表单格式查询
-        formData = new URLSearchParams();
-        for (key in requestParams) {
+        const formData = new URLSearchParams();
+        for (const key in requestParams) {
             formData.append(key, requestParams[key]);
         }
 
-        response = await fetch(PAYMENT_CONFIG.queryGateway, {
+        const response = await fetch(PAYMENT_CONFIG.queryGateway, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -251,7 +249,7 @@ async function queryPayment(orderNo) {
             body: formData.toString()
         });
 
-        result = await response.json();
+        const result = await response.json();
 
         console.log('📥 查询支付订单响应:', result);
 
