@@ -7,9 +7,18 @@ export default [
       'backups/**',
       'lib/**',
       '启动图/**',
+      '备份_原始文件/**',
+      'js-final-fix-backup-*/**',
+      'tools/api-generator.js',  // Has complex template literals with markdown
       '*.min.js',
       '*.bak',
-      '*.backup'
+      '*.backup',
+      '*.broken',
+      '*.broken.*',
+      '*.old.*',
+      '*.temp',
+      '*.zip',
+      '*.tar.gz'
     ]
   },
   {
@@ -18,6 +27,7 @@ export default [
       ecmaVersion: 2022,
       sourceType: 'module',
       globals: {
+        // Browser globals
         window: 'readonly',
         document: 'readonly',
         console: 'readonly',
@@ -40,7 +50,100 @@ export default [
         Number: 'readonly',
         Boolean: 'readonly',
         RegExp: 'readonly',
-        Error: 'readonly'
+        Error: 'readonly',
+        URLSearchParams: 'readonly',
+        FormData: 'readonly',
+        File: 'readonly',
+        Blob: 'readonly',
+        Event: 'readonly',
+        location: 'readonly',
+        navigator: 'readonly',
+        alert: 'readonly',
+        confirm: 'readonly',
+        AbortController: 'readonly',
+        encodeURIComponent: 'readonly',
+        decodeURIComponent: 'readonly',
+        btoa: 'readonly',
+        atob: 'readonly',
+        Image: 'readonly',
+        URL: 'readonly',
+        Map: 'readonly',
+        Set: 'readonly',
+        WeakMap: 'readonly',
+        WeakSet: 'readonly',
+        Symbol: 'readonly',
+        Proxy: 'readonly',
+        Reflect: 'readonly',
+        requestAnimationFrame: 'readonly',
+        cancelAnimationFrame: 'readonly',
+
+        // Project-specific globals (defined in other files)
+        API_CONFIG: 'readonly',
+        API_MAP: 'readonly',
+        ApiClient: 'readonly',
+        ApiService: 'readonly',
+        TokenManager: 'readonly',
+        TokenService: 'readonly',
+        httpClient: 'readonly',
+        AIService: 'readonly',
+        AI_CONFIG: 'readonly',
+        AI_OPENAI: 'readonly',
+        AI_RULES_ENGINE: 'readonly',
+        AI_SERVICE_LOCAL: 'readonly',
+        AIChatAPI: 'readonly',
+        showToast: 'readonly',
+        matchKnowledge: 'readonly',
+
+        // Node.js globals (for tools)
+        process: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+        module: 'readonly',
+        require: 'readonly',
+        exports: 'readonly',
+        Buffer: 'readonly',
+
+        // Additional browser globals
+        screen: 'readonly',
+        MutationObserver: 'readonly',
+        IntersectionObserver: 'readonly',
+        ResizeObserver: 'readonly',
+        performance: 'readonly',
+        history: 'readonly',
+        WebSocket: 'readonly',
+        AudioContext: 'readonly',
+        Notification: 'readonly',
+        TextDecoder: 'readonly',
+        TextEncoder: 'readonly',
+        FileReader: 'readonly',
+        getComputedStyle: 'readonly',
+        CSS: 'readonly',
+        AbortSignal: 'readonly',
+
+        // External libraries (loaded via script tags)
+        Tesseract: 'readonly',
+        CryptoJS: 'readonly',
+        TelegramAPI: 'readonly',
+
+        // DOM globals
+        Node: 'readonly',
+        Element: 'readonly',
+        HTMLElement: 'readonly',
+        Document: 'readonly',
+        Window: 'readonly',
+        Response: 'readonly',
+        Request: 'readonly',
+        Headers: 'readonly',
+
+        // Application-specific globals
+        userData: 'writable',
+        API: 'readonly',
+        http: 'readonly',
+        loadUserData: 'readonly',
+        containerId: 'readonly',
+        showConfirm: 'readonly',
+        LoginHandler: 'readonly',
+        event: 'readonly'
       }
     },
     rules: {

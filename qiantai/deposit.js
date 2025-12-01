@@ -144,9 +144,10 @@
                     console.error('加载USDT汇率失败:', error);
                 }
             }
-                }
-            }
+        } catch (error) {
+            console.error('loadUsdtRate失败:', error);
         }
+    }
 
     // 充值方式选择
     document.querySelectorAll('.payment-method-card').forEach(card => {
@@ -617,7 +618,7 @@
             if (!confirmed) return;
 
             try {
-                // const token = localStorage.getItem(TOKEN_KEY);
+                const token = localStorage.getItem('providence_token');
                 submitBtn.disabled = true;
                 submitBtn.textContent = '处理中...';
 
@@ -832,5 +833,4 @@
                 voucherUploadArea: !!voucherUploadArea
             });
         });
-    }) ();
-}
+    })();

@@ -214,10 +214,11 @@ const AI_OPENAI = {
             const data = await response.json();
             const aiResponse = data.choices[0].message.content;
 
-// console.log('📥 OpenAI响应成功:', { // 性能优化：已注释
-                tokens: data.usage?.total_tokens || 0,
-                responseLength: aiResponse.length
-            });
+            // 性能优化：已注释
+            // console.log('📥 OpenAI响应成功:', {
+            //     tokens: data.usage?.total_tokens || 0,
+            //     responseLength: aiResponse.length
+            // });
 
             // 保存到历史
             this.conversationHistory.push({

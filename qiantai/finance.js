@@ -348,7 +348,7 @@ function initTabSwitching() {
  */
 function viewDetail(type, code) {
     // 阻止默认行为和事件冒泡
-    if (event) {
+    if (typeof event !== 'undefined' && event) {
         event.preventDefault();
         event.stopPropagation();
     }
