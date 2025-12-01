@@ -446,7 +446,10 @@ body {
                 userData.currentLevel
               );
 
-              console.log("[VIP等级] 使用VipUpgradeService:", { vipInfo, progress });
+              // Debug logging (only in development)
+              if (window.API_CONFIG?.debug) {
+                console.log("[VIP等级] 使用VipUpgradeService:", { vipInfo, progress });
+              }
 
               // 更新显示
               updateUpgradeHint();

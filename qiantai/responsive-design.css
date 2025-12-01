@@ -209,7 +209,8 @@ html, body {
 
 /* Grid with auto-fit for flexible columns */
 .grid-auto-fit {
-  grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+  --min-column-width: 140px;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-column-width), 1fr));
 }
 
 /* ==============================================
