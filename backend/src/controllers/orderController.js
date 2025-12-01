@@ -7,7 +7,7 @@ import { sendSuccess, sendError, generateOrderNo } from '../utils/response.js';
 export const getUserOrders = async (req, res) => {
   try {
     const { page = 1, pageSize = 20, status } = req.query;
-    const skip = (parseInt(page) - 1) * parseInt(pageSize);
+    const skip = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
 
     const where = { userId: req.user.id };
     if (status) where.status = status;
@@ -15,7 +15,7 @@ export const getUserOrders = async (req, res) => {
     const [orders, total] = await Promise.all([
       prisma.order.findMany({
         skip,
-        take: parseInt(pageSize),
+        take: parseInt(pageSize, 10),
         where,
         include: {
           product: {
@@ -34,8 +34,8 @@ export const getUserOrders = async (req, res) => {
     return sendSuccess(res, {
       list: orders,
       pagination: {
-        page: parseInt(page),
-        pageSize: parseInt(pageSize),
+        page: parseInt(page, 10),
+        pageSize: parseInt(pageSize, 10),
         total
       }
     });
@@ -54,7 +54,7 @@ export const getOrderById = async (req, res) => {
     const { id } = req.params;
 
     const order = await prisma.order.findUnique({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(id, 10) },
       include: {
         product: true,
         user: {
@@ -100,7 +100,7 @@ export const createOrder = async (req, res) => {
 
     // Get product
     const product = await prisma.product.findUnique({
-      where: { id: parseInt(productId) }
+      where: { id: parseInt(productId, 10) }
     });
 
     if (!product) {
@@ -137,8 +137,9 @@ export const createOrder = async (req, res) => {
     const vipBonus = vipConfig ? Number(vipConfig.interestAdd) : 0;
     const aprFinal = Number(product.baseAPR) + vipBonus;
 
-    // Calculate estimated earnings
-    const estimatedEarning = (investAmount * aprFinal * product.cycleDays) / 36500;
+    // Calculate estimated earnings (APR is percentage, divide by 100 and 365 days)
+    const DAYS_PER_YEAR_PERCENT = 36500; // 365 days * 100 (for percentage conversion)
+    const estimatedEarning = (investAmount * aprFinal * product.cycleDays) / DAYS_PER_YEAR_PERCENT;
 
     // Calculate end date
     const startDate = new Date();
@@ -151,7 +152,7 @@ export const createOrder = async (req, res) => {
         data: {
           orderNo: generateOrderNo(),
           userId: req.user.id,
-          productId: parseInt(productId),
+          productId: parseInt(productId, 10),
           amount: investAmount,
           aprFinal,
           cycleDays: product.cycleDays,
@@ -167,7 +168,7 @@ export const createOrder = async (req, res) => {
         }
       }),
       prisma.product.update({
-        where: { id: parseInt(productId) },
+        where: { id: parseInt(productId, 10) },
         data: {
           raisedAmount: { increment: investAmount }
         }
@@ -196,16 +197,16 @@ export const createOrder = async (req, res) => {
 export const getAllOrders = async (req, res) => {
   try {
     const { page = 1, pageSize = 20, status, userId } = req.query;
-    const skip = (parseInt(page) - 1) * parseInt(pageSize);
+    const skip = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
 
     const where = {};
     if (status) where.status = status;
-    if (userId) where.userId = parseInt(userId);
+    if (userId) where.userId = parseInt(userId, 10);
 
     const [orders, total] = await Promise.all([
       prisma.order.findMany({
         skip,
-        take: parseInt(pageSize),
+        take: parseInt(pageSize, 10),
         where,
         include: {
           product: {
@@ -232,8 +233,8 @@ export const getAllOrders = async (req, res) => {
     return sendSuccess(res, {
       list: orders,
       pagination: {
-        page: parseInt(page),
-        pageSize: parseInt(pageSize),
+        page: parseInt(page, 10),
+        pageSize: parseInt(pageSize, 10),
         total
       }
     });

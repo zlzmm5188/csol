@@ -222,12 +222,12 @@ export const getBalance = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   try {
     const { page = 1, pageSize = 20 } = req.query;
-    const skip = (parseInt(page) - 1) * parseInt(pageSize);
+    const skip = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
 
     const [users, total] = await Promise.all([
       prisma.user.findMany({
         skip,
-        take: parseInt(pageSize),
+        take: parseInt(pageSize, 10),
         select: {
           id: true,
           uid: true,
@@ -247,8 +247,8 @@ export const getAllUsers = async (req, res) => {
     return sendSuccess(res, {
       list: users,
       pagination: {
-        page: parseInt(page),
-        pageSize: parseInt(pageSize),
+        page: parseInt(page, 10),
+        pageSize: parseInt(pageSize, 10),
         total
       }
     });
@@ -267,7 +267,7 @@ export const getUserById = async (req, res) => {
     const { id } = req.params;
 
     const user = await prisma.user.findUnique({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(id, 10) },
       select: {
         id: true,
         uid: true,
@@ -307,7 +307,7 @@ export const deleteUser = async (req, res) => {
     const { id } = req.params;
 
     await prisma.user.delete({
-      where: { id: parseInt(id) }
+      where: { id: parseInt(id, 10) }
     });
 
     return sendSuccess(res, null, 'User deleted successfully');

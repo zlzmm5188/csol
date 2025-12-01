@@ -26,7 +26,7 @@ export const getVipLevelById = async (req, res) => {
     const { level } = req.params;
 
     const vipLevel = await prisma.vipLevel.findUnique({
-      where: { level: parseInt(level) }
+      where: { level: parseInt(level, 10) }
     });
 
     if (!vipLevel) {
@@ -54,7 +54,7 @@ export const createVipLevel = async (req, res) => {
 
     const vipLevel = await prisma.vipLevel.create({
       data: {
-        level: parseInt(level),
+        level: parseInt(level, 10),
         name,
         investAmount: parseFloat(investAmount),
         interestAdd: interestAdd ? parseFloat(interestAdd) : 0,
@@ -90,7 +90,7 @@ export const updateVipLevel = async (req, res) => {
     if (commissionL2 !== undefined) updateData.commissionL2 = parseFloat(commissionL2);
 
     const vipLevel = await prisma.vipLevel.update({
-      where: { level: parseInt(level) },
+      where: { level: parseInt(level, 10) },
       data: updateData
     });
 
@@ -113,7 +113,7 @@ export const deleteVipLevel = async (req, res) => {
     const { level } = req.params;
 
     await prisma.vipLevel.delete({
-      where: { level: parseInt(level) }
+      where: { level: parseInt(level, 10) }
     });
 
     return sendSuccess(res, null, 'VIP level deleted successfully');

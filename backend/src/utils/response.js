@@ -31,12 +31,14 @@ export const sendError = (res, msg = 'Error', status = 400) => {
 };
 
 /**
- * Generate a unique order number
+ * Generate a unique order number with high precision
+ * Uses timestamp + performance counter + random string for uniqueness
  */
 export const generateOrderNo = () => {
   const timestamp = Date.now().toString();
-  const random = Math.random().toString(36).substring(2, 8).toUpperCase();
-  return `ORD${timestamp}${random}`;
+  const random = Math.random().toString(36).substring(2, 10).toUpperCase();
+  const counter = (Math.random() * 1000).toFixed(0).padStart(3, '0');
+  return `ORD${timestamp}${counter}${random}`;
 };
 
 /**

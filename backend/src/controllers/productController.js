@@ -7,7 +7,7 @@ import { sendSuccess, sendError } from '../utils/response.js';
 export const getAllProducts = async (req, res) => {
   try {
     const { page = 1, pageSize = 20, category, status } = req.query;
-    const skip = (parseInt(page) - 1) * parseInt(pageSize);
+    const skip = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
 
     const where = {};
     if (category) where.category = category;
@@ -16,7 +16,7 @@ export const getAllProducts = async (req, res) => {
     const [products, total] = await Promise.all([
       prisma.product.findMany({
         skip,
-        take: parseInt(pageSize),
+        take: parseInt(pageSize, 10),
         where,
         orderBy: { createdAt: 'desc' }
       }),
@@ -26,8 +26,8 @@ export const getAllProducts = async (req, res) => {
     return sendSuccess(res, {
       list: products,
       pagination: {
-        page: parseInt(page),
-        pageSize: parseInt(pageSize),
+        page: parseInt(page, 10),
+        pageSize: parseInt(pageSize, 10),
         total
       }
     });
@@ -46,7 +46,7 @@ export const getProductById = async (req, res) => {
     const { id } = req.params;
 
     const product = await prisma.product.findUnique({
-      where: { id: parseInt(id) }
+      where: { id: parseInt(id, 10) }
     });
 
     if (!product) {
@@ -90,10 +90,10 @@ export const createProduct = async (req, res) => {
         subtitle,
         category,
         baseAPR: parseFloat(baseAPR),
-        cycleDays: parseInt(cycleDays),
-        minInvest: parseInt(minInvest),
-        totalAmount: totalAmount ? parseInt(totalAmount) : null,
-        managerId: managerId ? parseInt(managerId) : null,
+        cycleDays: parseInt(cycleDays, 10),
+        minInvest: parseInt(minInvest, 10),
+        totalAmount: totalAmount ? parseInt(totalAmount, 10) : null,
+        managerId: managerId ? parseInt(managerId, 10) : null,
         strategyMd,
         riskStyle,
         keywords
@@ -135,18 +135,18 @@ export const updateProduct = async (req, res) => {
     if (subtitle !== undefined) updateData.subtitle = subtitle;
     if (category !== undefined) updateData.category = category;
     if (baseAPR !== undefined) updateData.baseAPR = parseFloat(baseAPR);
-    if (cycleDays !== undefined) updateData.cycleDays = parseInt(cycleDays);
-    if (minInvest !== undefined) updateData.minInvest = parseInt(minInvest);
-    if (totalAmount !== undefined) updateData.totalAmount = parseInt(totalAmount);
-    if (raisedAmount !== undefined) updateData.raisedAmount = parseInt(raisedAmount);
+    if (cycleDays !== undefined) updateData.cycleDays = parseInt(cycleDays, 10);
+    if (minInvest !== undefined) updateData.minInvest = parseInt(minInvest, 10);
+    if (totalAmount !== undefined) updateData.totalAmount = parseInt(totalAmount, 10);
+    if (raisedAmount !== undefined) updateData.raisedAmount = parseInt(raisedAmount, 10);
     if (status !== undefined) updateData.status = status;
-    if (managerId !== undefined) updateData.managerId = parseInt(managerId);
+    if (managerId !== undefined) updateData.managerId = parseInt(managerId, 10);
     if (strategyMd !== undefined) updateData.strategyMd = strategyMd;
     if (riskStyle !== undefined) updateData.riskStyle = riskStyle;
     if (keywords !== undefined) updateData.keywords = keywords;
 
     const product = await prisma.product.update({
-      where: { id: parseInt(id) },
+      where: { id: parseInt(id, 10) },
       data: updateData
     });
 
@@ -169,7 +169,7 @@ export const deleteProduct = async (req, res) => {
     const { id } = req.params;
 
     await prisma.product.delete({
-      where: { id: parseInt(id) }
+      where: { id: parseInt(id, 10) }
     });
 
     return sendSuccess(res, null, 'Product deleted successfully');

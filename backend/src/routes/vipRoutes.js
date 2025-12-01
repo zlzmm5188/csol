@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/auth.js';
+import { generalLimiter, strictLimiter } from '../middleware/rateLimiter.js';
 import {
   getAllVipLevels,
   getVipLevelById,
@@ -11,18 +12,18 @@ import {
 
 const router = Router();
 
-// Public routes
-router.get('/config', getAllVipLevels);
-router.get('/levels', getAllVipLevels);
-router.get('/levels/:level', getVipLevelById);
+// Public routes (with general rate limiting)
+router.get('/config', generalLimiter, getAllVipLevels);
+router.get('/levels', generalLimiter, getAllVipLevels);
+router.get('/levels/:level', generalLimiter, getVipLevelById);
 
 // Protected routes
-router.get('/progress', authenticate, getUserVipProgress);
-router.get('/level', authenticate, getUserVipProgress);
+router.get('/progress', generalLimiter, authenticate, getUserVipProgress);
+router.get('/level', generalLimiter, authenticate, getUserVipProgress);
 
-// Admin routes
-router.post('/levels', authenticate, createVipLevel);
-router.put('/levels/:level', authenticate, updateVipLevel);
-router.delete('/levels/:level', authenticate, deleteVipLevel);
+// Admin routes (with strict rate limiting)
+router.post('/levels', strictLimiter, authenticate, createVipLevel);
+router.put('/levels/:level', strictLimiter, authenticate, updateVipLevel);
+router.delete('/levels/:level', strictLimiter, authenticate, deleteVipLevel);
 
 export default router;

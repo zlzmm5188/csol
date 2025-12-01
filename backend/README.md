@@ -8,6 +8,7 @@ A Node.js backend service with Express.js for the CSOL/Providence platform, prov
 - **JWT Authentication** - Secure token-based authentication
 - **Prisma ORM** - Type-safe database access with MySQL support
 - **CORS Support** - Configurable cross-origin resource sharing
+- **Rate Limiting** - Built-in protection against brute force and abuse
 - **Error Handling** - Centralized error handling with standardized responses
 
 ## 📋 Prerequisites
@@ -454,7 +455,8 @@ backend/
 │   │   ├── orderController.js    # Order business logic
 │   │   └── vipController.js      # VIP business logic
 │   ├── middleware/
-│   │   └── auth.js           # JWT authentication
+│   │   ├── auth.js           # JWT authentication
+│   │   └── rateLimiter.js    # Rate limiting middleware
 │   ├── routes/
 │   │   ├── userRoutes.js     # User API routes
 │   │   ├── productRoutes.js  # Product API routes
@@ -479,7 +481,7 @@ backend/
 1. **Change JWT_SECRET** in production - Use a strong, random secret
 2. **Configure CORS properly** - Limit origins in production
 3. **Use HTTPS** in production
-4. **Implement rate limiting** for production deployment
+4. **Rate limiting is enabled** - Authentication endpoints: 5 req/min, General: 100 req/15min, Strict: 10 req/15min
 5. **Add input validation** as needed for your use case
 
 ---

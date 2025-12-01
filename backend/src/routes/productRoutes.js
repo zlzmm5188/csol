@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/auth.js';
+import { generalLimiter, strictLimiter } from '../middleware/rateLimiter.js';
 import {
   getAllProducts,
   getProductById,
@@ -10,13 +11,13 @@ import {
 
 const router = Router();
 
-// Public routes
-router.get('/', getAllProducts);
-router.get('/:id', getProductById);
+// Public routes (with general rate limiting)
+router.get('/', generalLimiter, getAllProducts);
+router.get('/:id', generalLimiter, getProductById);
 
-// Protected routes (admin only)
-router.post('/', authenticate, createProduct);
-router.put('/:id', authenticate, updateProduct);
-router.delete('/:id', authenticate, deleteProduct);
+// Protected routes (admin only, with strict rate limiting)
+router.post('/', strictLimiter, authenticate, createProduct);
+router.put('/:id', strictLimiter, authenticate, updateProduct);
+router.delete('/:id', strictLimiter, authenticate, deleteProduct);
 
 export default router;
