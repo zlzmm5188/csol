@@ -850,7 +850,7 @@ async function calculateProfit() {
     }, 500);
 }
 
-// 购买项目
+// 购买项目 - 使用投资工作流服务
 async function investProject() {
     const projectId = getUrlParam('id');
     const amountInput = document.getElementById('investAmount');
@@ -900,46 +900,74 @@ async function investProject() {
     }
 
     try {
-        const API_BASE = window.API_CONFIG?.baseURL || 'https://api.4kp3l0iq.top';
-
-        // 生成幂等性键
-        const idempotencyKey = 'INV_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-
-        const response = await fetch(`${API_BASE}/fund/api/project/add`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Token': token,
-                'Idempotency-Key': idempotencyKey
-            },
-            body: JSON.stringify({
-                project_id: parseInt(projectId),
+        // 使用投资工作流服务（如果可用）
+        if (window.InvestmentWorkflowService) {
+            const result = await window.InvestmentWorkflowService.executeWorkflow({
+                projectId: parseInt(projectId),
                 amount: amount,
                 currency: currentProject.currency || 'CNY'
-            })
-        });
+            });
 
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
+            if (result.success) {
+                // 显示投资成功及附加信息
+                let successMsg = '投资成功！';
+                if (result.vipLevel && result.vipLevel.upgraded) {
+                    successMsg = `投资成功！恭喜升级到 VIP${result.vipLevel.qualified}`;
+                }
+                showToast(successMsg, 2500);
 
-        const data = await response.json();
+                // 清空输入框
+                amountInput.value = '';
+                const calcResult = document.getElementById('calcResult');
+                if (calcResult) calcResult.style.display = 'none';
 
-        if (data.code === 1) {
-            showToast('投资成功！', 2000);
-            // 清空输入框
-            amountInput.value = '';
-            document.getElementById('calcResult').style.display = 'none';
+                // 刷新余额
+                await loadUserBalance();
 
-            // 刷新余额
-            await loadUserBalance();
-
-            // 延迟跳转到订单页面
-            setTimeout(() => {
-                window.location.href = 'orders.html';
-            }, 2000);
+                // 延迟跳转到订单页面
+                setTimeout(() => {
+                    window.location.href = 'orders.html';
+                }, 2500);
+            } else {
+                throw new Error(result.error || '投资失败');
+            }
         } else {
-            showToast(data.msg || '投资失败', 3000);
+            // 降级方案：直接调用API
+            const API_BASE = window.API_CONFIG?.baseURL || 'https://api.4kp3l0iq.top';
+            const idempotencyKey = 'INV_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+            const response = await fetch(`${API_BASE}/fund/api/project/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Token': token,
+                    'Idempotency-Key': idempotencyKey
+                },
+                body: JSON.stringify({
+                    project_id: parseInt(projectId),
+                    amount: amount,
+                    currency: currentProject.currency || 'CNY'
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+
+            if (data.code === 1) {
+                showToast('投资成功！', 2000);
+                amountInput.value = '';
+                const calcResult = document.getElementById('calcResult');
+                if (calcResult) calcResult.style.display = 'none';
+                await loadUserBalance();
+                setTimeout(() => {
+                    window.location.href = 'orders.html';
+                }, 2000);
+            } else {
+                showToast(data.msg || '投资失败', 3000);
+            }
         }
     } catch (err) {
         console.error('[Invest] 投资失败:', err);
