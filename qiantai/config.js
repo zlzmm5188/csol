@@ -1,7 +1,7 @@
 // =============================================
 // Providence 统一网络层 - 重构版
-// 版本: 3.0-REFACTORED
-// 日期: 2025-11-20
+// 版本: 3.1-ENHANCED
+// 日期: 2025-12-01
 // =============================================
 
 // ===================================
@@ -13,8 +13,100 @@ window.API_CONFIG = {
     adminURL: 'https://admin.4kp3l0iq.top',
     tokenKey: 'providence_token',
     timeout: 10000,  // 从15秒减少到10秒
-    debug: false  // 生产环境关闭调试
+    debug: false,  // 生产环境关闭调试
+    maxLogEntries: 100  // 最大日志条目数
 };
+
+// ===================================
+// 统一错误日志系统
+// ===================================
+const ErrorLogger = {
+    logs: [],
+
+    /**
+     * 记录错误日志
+     * @param {string} level - 日志级别 (error, warn, info)
+     * @param {string} category - 分类 (HTTP, TOKEN, APP等)
+     * @param {string} message - 错误消息
+     * @param {Object} context - 上下文信息
+     */
+    log(level, category, message, context = {}) {
+        const entry = {
+            timestamp: new Date().toISOString(),
+            level,
+            category,
+            message,
+            context,
+            url: window.location.href
+        };
+
+        this.logs.push(entry);
+
+        // 限制日志数量
+        if (this.logs.length > API_CONFIG.maxLogEntries) {
+            this.logs.shift();
+        }
+
+        // 输出到控制台
+        const logPrefix = `[${category}]`;
+        if (level === 'error') {
+            console.error(logPrefix, message, context);
+        } else if (level === 'warn') {
+            console.warn(logPrefix, message, context);
+        } else if (API_CONFIG.debug) {
+            console.log(logPrefix, message, context);
+        }
+    },
+
+    error(category, message, context) {
+        this.log('error', category, message, context);
+    },
+
+    warn(category, message, context) {
+        this.log('warn', category, message, context);
+    },
+
+    info(category, message, context) {
+        this.log('info', category, message, context);
+    },
+
+    /**
+     * 获取所有日志
+     */
+    getLogs() {
+        return [...this.logs];
+    },
+
+    /**
+     * 清除日志
+     */
+    clear() {
+        this.logs = [];
+    },
+
+    /**
+     * 获取错误统计
+     */
+    getStats() {
+        const stats = {
+            total: this.logs.length,
+            errors: 0,
+            warnings: 0,
+            byCategory: {}
+        };
+
+        this.logs.forEach(entry => {
+            if (entry.level === 'error') stats.errors++;
+            if (entry.level === 'warn') stats.warnings++;
+            stats.byCategory[entry.category] = (stats.byCategory[entry.category] || 0) + 1;
+        });
+
+        return stats;
+    }
+};
+
+// 导出到全局
+window.ErrorLogger = ErrorLogger;
 
 // ===================================
 // 语言安全读取函数
@@ -159,14 +251,17 @@ class UnifiedHttpClient {
             try {
                 result = text ? JSON.parse(text) : {};
             } catch (err) {
-                if (this.debug) {
-                    console.error('[HTTP] JSON解析失败:', err, text.substring(0, 100));
-                }
+                ErrorLogger.error('HTTP', 'JSON解析失败', {
+                    url,
+                    method,
+                    responseText: text.substring(0, 200),
+                    error: err.message
+                });
                 throw new Error('响应解析失败: ' + text.substring(0, 50));
             }
 
             // 统一响应格式
-            return {
+            const normalizedResponse = {
                 status: response.status,
                 ok: response.ok,
                 data: result,
@@ -174,10 +269,30 @@ class UnifiedHttpClient {
                 code: result.code,
                 msg: result.msg || result.message
             };
+
+            // 检查Token过期 (code: -1 + 登录相关消息 或 HTTP 401)
+            if (response.status === 401 ||
+                (result.code === -1 && normalizedResponse.msg &&
+                 (normalizedResponse.msg.includes('登录') ||
+                  normalizedResponse.msg.includes('token') ||
+                  normalizedResponse.msg.includes('Token') ||
+                  normalizedResponse.msg.includes('未授权')))) {
+                ErrorLogger.warn('TOKEN', 'Token过期或无效，清除登录状态', { url });
+                TokenService.removeToken();
+
+                // 触发登录过期事件，让页面可以选择处理方式
+                if (typeof window !== 'undefined') {
+                    window.dispatchEvent(new CustomEvent('token-expired', {
+                        detail: { url, response: normalizedResponse }
+                    }));
+                }
+            }
+
+            return normalizedResponse;
         } catch (error) {
             // 处理网络连接错误
             if (error.name === 'TypeError' && (error.message.includes('Failed to fetch') || error.message.includes('ERR_CONNECTION_REFUSED'))) {
-                console.warn(`[HTTP] 网络连接失败: ${url}`, error.message);
+                ErrorLogger.warn('HTTP', '网络连接失败', { url, error: error.message });
                 // 返回一个统一的错误响应格式，避免页面崩溃
                 return {
                     status: 0,
@@ -188,8 +303,10 @@ class UnifiedHttpClient {
                 };
             }
             if (error.name === 'AbortError') {
+                ErrorLogger.warn('HTTP', '请求超时', { url, timeout: this.timeout });
                 throw new Error('请求超时');
             }
+            ErrorLogger.error('HTTP', '请求异常', { url, error: error.message });
             throw error;
         } finally {
             clearTimeout(timeoutId);

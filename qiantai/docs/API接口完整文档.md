@@ -702,16 +702,53 @@ headers: {
 
 ## ⚠️ 注意事项
 
-1. **API 基础地址**: 所有接口使用 `https://apis.copla.top` 作为基础地址
-2. **路径前缀**: 所有接口路径必须以 `/index.php/` 开头
+1. **API 基础地址**: 前端配置文件 `config.js` 中设置 `https://api.4kp3l0iq.top` 作为基础地址
+2. **路径格式**: RESTful API 路径以 `/api/` 开头（如 `/api/user/info`）
 3. **CORS**: 后端已配置 CORS，支持跨域请求
-4. **错误处理**: 统一使用 `code: 1` 表示成功，`code: -1` 表示失败
-5. **Token 失效**: 当 Token 失效时，会自动清除并跳转到登录页（部分接口在白名单中除外）
+4. **响应格式**: 统一使用 `code` 字段表示状态
+   - `code: 0` 或 `code: 1` 或 `code: 200` 表示成功
+   - `code: -1` 表示失败
+   - `code: 401` 表示未授权/Token过期
+5. **Token 失效**: 当 Token 失效时，前端会触发 `token-expired` 事件，页面可监听此事件处理登录过期
+
+---
+
+## 🛡️ 错误处理
+
+### 前端错误处理机制
+
+前端使用统一的错误日志系统 `ErrorLogger`，可用于调试和监控：
+
+```javascript
+// 获取错误日志
+const logs = ErrorLogger.getLogs();
+
+// 获取统计信息
+const stats = ErrorLogger.getStats();
+// { total: 10, errors: 2, warnings: 3, byCategory: { HTTP: 5, TOKEN: 2 } }
+
+// 监听Token过期事件
+window.addEventListener('token-expired', (event) => {
+    console.log('Token过期，URL:', event.detail.url);
+    // 跳转登录页
+    window.location.href = 'login.html';
+});
+```
+
+### 常见错误码
+
+| 错误码 | 含义 | 处理方式 |
+|-------|------|---------|
+| 0 / 1 / 200 | 请求成功 | 正常处理数据 |
+| -1 | 业务逻辑错误 | 显示错误消息 |
+| 401 | 未授权/Token过期 | 清除Token，跳转登录 |
+| 500 | 服务器内部错误 | 提示用户稍后重试 |
 
 ---
 
 ## 📝 更新日志
 
+- **2025-12-01**: 增加错误处理文档，更新API基础地址配置说明
 - **2025-01-17**: 初始版本，整理所有前台和后端接口
 - **2025-01-17**: 修复所有 API 路径错误，统一使用 `/index.php/` 前缀
 
@@ -719,6 +756,6 @@ headers: {
 
 ## 🔗 相关文档
 
-- 后端路由文件: `/www/wwwroot/copla/providence-admin/api/index.php`
-- 前端配置: `/www/wwwroot/copla/providence/config.js`
-- API 检查脚本: `/www/wwwroot/copla/providence/check-api-errors.sh`
+- 前端配置文件: `config.js` - 统一网络层和Token管理
+- API映射表: `API_MAP.js` - API路径映射
+- 错误拦截器: `error-interceptor.js` - 全局错误处理
