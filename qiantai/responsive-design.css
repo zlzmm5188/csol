@@ -1,0 +1,528 @@
+/**
+ * Responsive Design Improvements
+ * Ensures mobile and PC compatibility with compact layouts
+ *
+ * Goals:
+ * - Make backend fully responsive for both mobile and PC devices
+ * - Compact mobile layouts with optimized buttons and blocks
+ * - Avoid large whitespace and excessive scrolling
+ * - Prevent text from occupying disproportionate space
+ */
+
+/* ==============================================
+   CSS Custom Properties for Responsive Design
+   ============================================== */
+:root {
+  /* Responsive spacing */
+  --spacing-xs: clamp(4px, 1vw, 8px);
+  --spacing-sm: clamp(8px, 2vw, 12px);
+  --spacing-md: clamp(12px, 3vw, 16px);
+  --spacing-lg: clamp(16px, 4vw, 24px);
+  --spacing-xl: clamp(24px, 5vw, 32px);
+
+  /* Responsive font sizes */
+  --font-xs: clamp(10px, 2.5vw, 12px);
+  --font-sm: clamp(12px, 3vw, 14px);
+  --font-md: clamp(14px, 3.5vw, 16px);
+  --font-lg: clamp(16px, 4vw, 20px);
+  --font-xl: clamp(20px, 5vw, 28px);
+  --font-xxl: clamp(24px, 6vw, 36px);
+
+  /* Button sizes */
+  --btn-height-sm: clamp(32px, 8vw, 40px);
+  --btn-height-md: clamp(40px, 10vw, 48px);
+  --btn-height-lg: clamp(48px, 12vw, 56px);
+
+  /* Card padding */
+  --card-padding-sm: clamp(8px, 2vw, 12px);
+  --card-padding-md: clamp(12px, 3vw, 16px);
+  --card-padding-lg: clamp(16px, 4vw, 20px);
+
+  /* Border radius */
+  --radius-sm: clamp(4px, 1vw, 6px);
+  --radius-md: clamp(8px, 2vw, 12px);
+  --radius-lg: clamp(12px, 3vw, 16px);
+  --radius-xl: clamp(16px, 4vw, 24px);
+}
+
+/* ==============================================
+   Base Responsive Styles
+   ============================================== */
+
+/* Prevent horizontal overflow */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Responsive container */
+.responsive-container {
+  width: 100%;
+  max-width: 100%;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+  box-sizing: border-box;
+}
+
+/* PC max-width constraint */
+@media (min-width: 768px) {
+  .responsive-container {
+    max-width: 768px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-container {
+    max-width: 1024px;
+  }
+}
+
+/* ==============================================
+   Responsive Buttons
+   ============================================== */
+
+/* Base button styles */
+.btn-responsive {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--btn-height-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Small button */
+.btn-responsive-sm {
+  min-height: var(--btn-height-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-xs);
+}
+
+/* Large button */
+.btn-responsive-lg {
+  min-height: var(--btn-height-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: var(--font-md);
+}
+
+/* Full-width button on mobile */
+.btn-responsive-full {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .btn-responsive-full {
+    width: auto;
+    min-width: 200px;
+  }
+}
+
+/* Button active state for mobile */
+.btn-responsive:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+/* ==============================================
+   Responsive Cards
+   ============================================== */
+
+.card-responsive {
+  background: var(--surface, #fff);
+  border-radius: var(--radius-lg);
+  padding: var(--card-padding-md);
+  margin-bottom: var(--spacing-md);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Compact card for mobile */
+.card-compact {
+  padding: var(--card-padding-sm);
+  border-radius: var(--radius-md);
+}
+
+/* Card header */
+.card-header-responsive {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+/* Card content */
+.card-content-responsive {
+  font-size: var(--font-sm);
+  line-height: 1.6;
+}
+
+/* ==============================================
+   Responsive Grid System
+   ============================================== */
+
+.grid-responsive {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+/* 2 columns on mobile, 4 on tablet+  */
+.grid-2-4 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 768px) {
+  .grid-2-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 1 column on mobile, 2 on tablet, 3 on desktop */
+.grid-1-2-3 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 576px) {
+  .grid-1-2-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .grid-1-2-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Grid with auto-fit for flexible columns */
+.grid-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+}
+
+/* ==============================================
+   Responsive Tables
+   ============================================== */
+
+.table-responsive-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: var(--spacing-md);
+}
+
+.table-responsive {
+  width: 100%;
+  min-width: 500px; /* Ensures table doesn't collapse */
+  border-collapse: collapse;
+  font-size: var(--font-sm);
+}
+
+.table-responsive th,
+.table-responsive td {
+  padding: var(--spacing-sm);
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  white-space: nowrap;
+}
+
+.table-responsive th {
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Compact table for mobile */
+@media (max-width: 576px) {
+  .table-responsive th,
+  .table-responsive td {
+    padding: var(--spacing-xs);
+    font-size: var(--font-xs);
+  }
+}
+
+/* ==============================================
+   Responsive Forms
+   ============================================== */
+
+.form-group-responsive {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-label-responsive {
+  display: block;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+  color: var(--text, #222);
+}
+
+.form-input-responsive {
+  width: 100%;
+  height: var(--btn-height-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-md);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: var(--radius-md);
+  background: var(--surface, #fff);
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input-responsive:focus {
+  outline: none;
+  border-color: var(--primary, #0b3b5e);
+  box-shadow: 0 0 0 3px rgba(11, 59, 94, 0.1);
+}
+
+/* ==============================================
+   Responsive Typography
+   ============================================== */
+
+/* Prevent text from being too large on any viewport */
+.text-responsive {
+  font-size: var(--font-md);
+  line-height: 1.5;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.text-responsive-sm {
+  font-size: var(--font-sm);
+}
+
+.text-responsive-lg {
+  font-size: var(--font-lg);
+}
+
+/* Constrain text length for readability */
+.text-max-width {
+  max-width: 65ch;
+}
+
+/* Truncate text with ellipsis */
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Multi-line truncation */
+.text-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.text-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ==============================================
+   Responsive Spacing Utilities
+   ============================================== */
+
+.p-responsive { padding: var(--spacing-md); }
+.px-responsive { padding-left: var(--spacing-md); padding-right: var(--spacing-md); }
+.py-responsive { padding-top: var(--spacing-md); padding-bottom: var(--spacing-md); }
+.m-responsive { margin: var(--spacing-md); }
+.mx-responsive { margin-left: var(--spacing-md); margin-right: var(--spacing-md); }
+.my-responsive { margin-top: var(--spacing-md); margin-bottom: var(--spacing-md); }
+
+.gap-responsive { gap: var(--spacing-md); }
+.gap-sm-responsive { gap: var(--spacing-sm); }
+.gap-lg-responsive { gap: var(--spacing-lg); }
+
+/* ==============================================
+   Compact Mobile Optimizations
+   ============================================== */
+
+@media (max-width: 576px) {
+  /* Reduce all spacing on small screens */
+  :root {
+    --spacing-xs: 4px;
+    --spacing-sm: 6px;
+    --spacing-md: 10px;
+    --spacing-lg: 14px;
+    --spacing-xl: 20px;
+  }
+
+  /* Compact card layout */
+  .card-responsive {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+  }
+
+  /* Smaller buttons */
+  .btn-responsive {
+    min-height: 36px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  /* Compact form inputs */
+  .form-input-responsive {
+    height: 40px;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  /* Reduce grid gaps */
+  .grid-responsive {
+    gap: 10px;
+  }
+
+  /* Stack items vertically when needed */
+  .stack-on-mobile {
+    flex-direction: column !important;
+  }
+
+  /* Full width on mobile */
+  .full-width-mobile {
+    width: 100% !important;
+  }
+}
+
+/* ==============================================
+   Prevent Large Whitespace
+   ============================================== */
+
+/* Remove excessive margins and padding */
+.no-excessive-space > * {
+  margin-top: 0;
+  margin-bottom: var(--spacing-sm);
+}
+
+.no-excessive-space > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Tight spacing for lists */
+.list-compact {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list-compact > li {
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.list-compact > li:last-child {
+  border-bottom: none;
+}
+
+/* ==============================================
+   Flex Utilities for Responsive Layout
+   ============================================== */
+
+.flex-responsive {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.flex-between {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-start {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.flex-1 {
+  flex: 1;
+  min-width: 0; /* Prevents flex items from overflowing */
+}
+
+/* ==============================================
+   Accessibility Improvements
+   ============================================== */
+
+/* Touch target size (minimum 44x44px for accessibility) */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Focus visible styles */
+:focus-visible {
+  outline: 2px solid var(--primary, #0b3b5e);
+  outline-offset: 2px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==============================================
+   Dark Mode Support (matches existing theme)
+   ============================================== */
+
+@media (prefers-color-scheme: dark) {
+  .card-responsive {
+    background: rgba(16, 27, 45, 0.92);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .form-input-responsive {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
+
+  .form-input-responsive:focus {
+    border-color: #e8c991;
+    box-shadow: 0 0 0 3px rgba(232, 201, 145, 0.2);
+  }
+}
+
+/* ==============================================
+   Print Styles
+   ============================================== */
+
+@media print {
+  .card-responsive {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+
+  .btn-responsive {
+    display: none;
+  }
+}

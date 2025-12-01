@@ -124,7 +124,23 @@ async function loadBonusTable() {
     if (!container) return;
 
     try {
-        // 团队管理奖积分奖励配置（更新后的数据）
+        // 使用 TeamRewardService（如果可用）
+        let teamStats = null;
+        let allTiers = [];
+
+        if (window.TeamRewardService) {
+            try {
+                teamStats = await window.TeamRewardService.getTeamStats();
+                allTiers = window.TeamRewardService.getAllTiersWithStatus(
+                    teamStats.level1Count,
+                    teamStats.teamInvest
+                );
+            } catch (e) {
+                console.warn('[TeamRewards] Service call failed:', e);
+            }
+        }
+
+        // 团队管理奖积分奖励配置（作为降级数据）
         const bonusLevels = {
             3: { min_invest: 80000, points: 2000 },
             5: { min_invest: 150000, points: 3900 },
@@ -137,24 +153,64 @@ async function loadBonusTable() {
             1000: { min_invest: 98000000, points: 380000 }
         };
 
-        let tableHtml = '<table class="bonus-table"><thead><tr><th>下级成员</th><th>累计投资</th><th>积分奖励</th></tr></thead><tbody>';
+        let tableHtml = '<table class="bonus-table"><thead><tr><th>下级成员</th><th>累计投资</th><th>积分奖励</th><th>状态</th></tr></thead><tbody>';
 
-        Object.keys(bonusLevels).sort((a, b) => parseInt(a) - parseInt(b)).forEach(level => {
-            const config = bonusLevels[level];
-            const memberCount = parseInt(level);
-            const investAmount = config.min_invest || 0;
-            const rewardPoints = config.points || 0;
+        if (allTiers.length > 0) {
+            // 使用 TeamRewardService 提供的数据
+            allTiers.forEach(tier => {
+                const statusClass = tier.qualified ? 'qualified' : '';
+                const statusText = tier.qualified ? '✓ 已达成' : '未达成';
 
-            tableHtml += `
-                <tr>
-                    <td>${memberCount}人</td>
-                    <td>¥${formatMoney(investAmount)}</td>
-                    <td>${formatNumber(rewardPoints)}</td>
-                </tr>
-            `;
-        });
+                tableHtml += `
+                    <tr class="${statusClass}">
+                        <td>${tier.minMembers}人</td>
+                        <td>¥${formatMoney(tier.minInvest)}</td>
+                        <td>${formatNumber(tier.points)}</td>
+                        <td style="color: ${tier.qualified ? '#25d0a6' : '#6b7a8a'};">${statusText}</td>
+                    </tr>
+                `;
+            });
+        } else {
+            // 降级：使用静态配置
+            Object.keys(bonusLevels).sort((a, b) => parseInt(a) - parseInt(b)).forEach(level => {
+                const config = bonusLevels[level];
+                const memberCount = parseInt(level);
+                const investAmount = config.min_invest || 0;
+                const rewardPoints = config.points || 0;
+
+                tableHtml += `
+                    <tr>
+                        <td>${memberCount}人</td>
+                        <td>¥${formatMoney(investAmount)}</td>
+                        <td>${formatNumber(rewardPoints)}</td>
+                        <td style="color: #6b7a8a;">-</td>
+                    </tr>
+                `;
+            });
+        }
 
         tableHtml += '</tbody></table>';
+
+        // 添加团队统计信息（如果可用）
+        if (teamStats && teamStats.level1Count > 0) {
+            const statsHtml = `
+                <div style="margin-top: 16px; padding: 12px; background: rgba(232, 201, 145, 0.1); border-radius: 8px; border: 1px solid rgba(232, 201, 145, 0.3);">
+                    <div style="font-size: 14px; color: #e8c991; margin-bottom: 8px;">📊 我的团队</div>
+                    <div style="display: flex; justify-content: space-around; text-align: center;">
+                        <div>
+                            <div style="font-size: 20px; font-weight: 700; color: #fff;">${teamStats.level1Count}</div>
+                            <div style="font-size: 12px; color: rgba(255,255,255,0.6);">直推成员</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 20px; font-weight: 700; color: #fff;">¥${formatMoney(teamStats.teamInvest)}</div>
+                            <div style="font-size: 12px; color: rgba(255,255,255,0.6);">团队投资</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            tableHtml = statsHtml + tableHtml;
+        }
+
         container.innerHTML = tableHtml;
     } catch (error) {
         console.error('加载奖金表格失败:', error);

@@ -10,6 +10,7 @@
     <title>会员等级 - Providence</title>
     <link rel="icon" href="favicon.ico" />
     <link rel="stylesheet" href="styles.css?v=1763897782" />
+    <link rel="stylesheet" href="responsive-design.css?v=1763897782" />
     <style>
 
 * {
@@ -432,7 +433,31 @@ body {
         }
 
         try {
-          // 尝试获取VIP进度
+          // 优先使用 VipUpgradeService（如果可用）
+          if (window.VipUpgradeService) {
+            try {
+              const vipInfo = await window.VipUpgradeService.getCurrentVipInfo();
+              userData.currentLevel = vipInfo.currentLevel;
+              userData.currentInvest = vipInfo.cumulativeInvest;
+
+              // 获取升级进度
+              const progress = window.VipUpgradeService.calculateUpgradeProgress(
+                userData.currentInvest,
+                userData.currentLevel
+              );
+
+              console.log("[VIP等级] 使用VipUpgradeService:", { vipInfo, progress });
+
+              // 更新显示
+              updateUpgradeHint();
+              highlightCurrentLevel();
+              return;
+            } catch (serviceErr) {
+              console.warn("[VIP等级] VipUpgradeService调用失败:", serviceErr);
+            }
+          }
+
+          // 降级方案：直接调用API
           const response = await fetch(
             API_BASE + "/user/vip/progress",
             {
@@ -500,6 +525,29 @@ body {
 
         if (!upgradeTextEl || !upgradeTargetEl) return;
 
+        // 使用 VipUpgradeService 计算升级进度（如果可用）
+        if (window.VipUpgradeService) {
+          const progress = window.VipUpgradeService.calculateUpgradeProgress(
+            userData.currentInvest,
+            userData.currentLevel
+          );
+
+          if (progress.isMaxLevel) {
+            upgradeTextEl.textContent = "已达到最高等级";
+            upgradeTargetEl.textContent = "VIP8";
+            upgradeTargetEl.style.color = "#10b981";
+          } else if (progress.remaining > 0) {
+            upgradeTextEl.textContent = `距离升级 ${progress.nextLevel.name} 还差`;
+            upgradeTargetEl.textContent = formatMoney(progress.remaining) + "元";
+          } else {
+            upgradeTextEl.textContent = "已满足升级条件";
+            upgradeTargetEl.textContent = progress.nextLevel.name;
+            upgradeTargetEl.style.color = "#10b981";
+          }
+          return;
+        }
+
+        // 降级方案
         if (userData.currentLevel >= 8) {
           upgradeTextEl.textContent = "已达到最高等级";
           upgradeTargetEl.textContent = "VIP8";
@@ -543,6 +591,7 @@ body {
         });
       }
     </script>
+    <script src="service-loader.js?v=1763897782"></script>
     <script src="page-lifecycle.js?v=1763897782"></script>
 
   </body>
