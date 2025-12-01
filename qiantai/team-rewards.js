@@ -124,32 +124,33 @@ async function loadBonusTable() {
     if (!container) return;
 
     try {
-        // 团队管理奖积分奖励配置（更新后的数据）
+        // 团队管理奖奖励配置（基于需求规范）
+        // 下级成员  累计投资      奖励
         const bonusLevels = {
-            3: { min_invest: 80000, points: 2000 },
-            5: { min_invest: 150000, points: 3900 },
-            10: { min_invest: 500000, points: 12000 },
-            20: { min_invest: 1500000, points: 35000 },
-            50: { min_invest: 3800000, points: 50000 },
-            100: { min_invest: 8800000, points: 75000 },
-            200: { min_invest: 15000000, points: 150000 },
-            500: { min_invest: 58000000, points: 200000 },
-            1000: { min_invest: 98000000, points: 380000 }
+            3: { min_invest: 80000, reward: 1800 },
+            5: { min_invest: 150000, reward: 2500 },
+            10: { min_invest: 500000, reward: 8800 },
+            20: { min_invest: 1500000, reward: 18000 },
+            50: { min_invest: 3800000, reward: 25000 },
+            100: { min_invest: 8800000, reward: 38000 },
+            200: { min_invest: 15000000, reward: 66000 },
+            500: { min_invest: 58000000, reward: 100000 },
+            1000: { min_invest: 98000000, reward: 180000 }
         };
 
-        let tableHtml = '<table class="bonus-table"><thead><tr><th>下级成员</th><th>累计投资</th><th>积分奖励</th></tr></thead><tbody>';
+        let tableHtml = '<table class="bonus-table"><thead><tr><th>下级成员</th><th>累计投资</th><th>奖励</th></tr></thead><tbody>';
 
         Object.keys(bonusLevels).sort((a, b) => parseInt(a) - parseInt(b)).forEach(level => {
             const config = bonusLevels[level];
             const memberCount = parseInt(level);
             const investAmount = config.min_invest || 0;
-            const rewardPoints = config.points || 0;
+            const rewardAmount = config.reward || 0;
 
             tableHtml += `
                 <tr>
                     <td>${memberCount}人</td>
                     <td>¥${formatMoney(investAmount)}</td>
-                    <td>${formatNumber(rewardPoints)}</td>
+                    <td>¥${formatNumber(rewardAmount)}</td>
                 </tr>
             `;
         });
